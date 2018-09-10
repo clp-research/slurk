@@ -105,7 +105,7 @@ class Layout:
     def _tag(self, name, attributes=None, close=True, content=None, indent=0):
         html = ' ' * indent + "<{}{}".format(name, self._attributes(attributes))
         if content:
-            html += ">\n{}".format(self._node(content, indent=indent + 2))
+            html += ">\n{}".format(self._node(content, indent=indent + 4))
             if close:
                 html += "{}</{}".format(' ' * indent, name)
         elif close:
@@ -115,22 +115,22 @@ class Layout:
                 html += "></{}".format(name)
         return html + ">\n"
 
-    def html(self):
+    def html(self, indent=0):
         if "html" not in self._data:
             return ""
 
-        return self._node(self._data['html'], indent=0)
+        return self._node(self._data['html'], indent=indent)
 
-    def css(self):
+    def css(self, indent=0):
         if "css" not in self._data:
             return ""
 
         css = ""
         for name, properties in self._data["css"].items():
-            css += "{} {{\n".format(name)
+            css += ' ' * indent + "{} {{\n".format(name)
             for prop, value in properties.items():
-                css += "  {}: {};\n".format(prop, value)
-            css += "}\n\n"
+                css += ' ' * indent + "    {}: {};\n".format(prop, value)
+            css += ' ' * indent + "}\n\n"
         return css
 
     def __repr__(self):

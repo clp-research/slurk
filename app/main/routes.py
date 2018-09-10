@@ -92,8 +92,8 @@ def chat():
     default_layout = config['templates'].get('default-layout')
     if default_layout:
         layout = Layout.from_json_file(default_layout)
-        html = layout.html()
-        css = layout.css()
+        html = layout.html(indent=8)
+        css = layout.css(indent=12)
     else:
         html = ""
         css = ""
@@ -119,8 +119,8 @@ def test():
         return ""
     return render_template('layout.html',
                            title=name,
-                           html=layout.html(),
-                           css=layout.css()
+                           html=layout.html(indent=8),
+                           css=layout.css(indent=12)
                            )
 
 
