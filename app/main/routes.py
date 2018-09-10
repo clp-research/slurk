@@ -111,6 +111,19 @@ def chat():
                            )
 
 
+@main.route('/test', methods=['GET', 'POST'])
+def test():
+    name = request.args.get("layout", None) if request.method == 'GET' else None
+    layout = Layout.from_json_file(name)
+    if not name:
+        return ""
+    return render_template('layout.html',
+                           title=name,
+                           html=layout.html(),
+                           css=layout.css()
+                           )
+
+
 # @login_required
 @main.route('/logout', methods=['GET', 'POST'])
 def logout():
