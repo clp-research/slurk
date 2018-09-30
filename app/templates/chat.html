@@ -171,7 +171,7 @@
             }
 
             $(document).ready(function(){
-                $("#current-image").hide();
+                {#$("#current-image").hide();#}
                 $('#latency').hide();
                 $('#user-list').hide();
                 socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/chat');
@@ -314,6 +314,9 @@
 	            });
             });
         </script>
+        <style>
+            {{ css|safe }}
+        </style>
     </head>
     <body>
 		<header>
@@ -325,14 +328,8 @@
 			</nav>
 		</header>
         <div id="sidebar">
-            <div id="image-area">
-              <b id="status-text"></b>
-              <br><br>
-              <img id="current-image" src='' width="500" height="400" />
-            </div>
-            <div id="status-box"></div>
-            <div id="typing-area"></div>
-		      </div>
+            {{ html|safe }}
+        </div>
 		<div id="content">
 	        <div id="chat-area"></div>
 		</div>

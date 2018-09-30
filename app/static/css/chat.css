@@ -77,11 +77,6 @@ header .users {
     overflow-y: scroll;
 }
 
-#image-area {
-    align-content: left;
-    margin: 50px 20px 15px;
-}
-
 #chat-area {
     padding: 0 0 50px;
     margin: 10px 0 15px;
