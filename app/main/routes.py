@@ -1,9 +1,12 @@
+import os
+
 from flask import redirect, url_for, render_template, request, jsonify, abort
 
 from .Room import Room
 from .Permissions import Permissions
 from .Task import Task
 from .Token import Token
+from .Layout import Layout
 from . import main
 from .forms import LoginForm, TokenGenerationForm
 from .User import User
@@ -85,6 +88,10 @@ def chat():
 
     if name == '' or room == '':
         return redirect(url_for('.index'))
+
+    layout = Layout.from_json_file(config['templates'].get('chat-content') or "single_image")
+    print(layout.html())
+    print(layout.css())
     return render_template('chat.html',
                            name=name,
                            room=room.label(),
@@ -93,7 +100,9 @@ def chat():
                            refresh_threshold=config['client']['refresh-threshold'],
                            refresh_start=config['client']['refresh-start'],
                            refresh_max=config['client']['refresh-max'],
-                           ping_pong_latency_checks=config['client']['ping-pong-latency-checks']
+                           ping_pong_latency_checks=config['client']['ping-pong-latency-checks'],
+                           html=layout.html(),
+                           css=layout.css(),
                            )
 
 
