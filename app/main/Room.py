@@ -37,6 +37,20 @@ class Room:
         db.get_cursor().execute('UPDATE Room SET Label = ? WHERE Id = ?;', (label, self.id()))
         db.commit()
 
+    def layout(self):
+        c = Database().get_cursor()
+        c.execute("SELECT Layout FROM Room WHERE Id = ?;", (self.id(),))
+        fetch = c.fetchone()
+        return fetch[0] if fetch and fetch[0] else None
+
+    def set_layout(self, layout):
+        if not isinstance(layout, str):
+            raise TypeError(f"Object of type `str` expected, however type `{type(layout)}` was passed")
+
+        db = Database()
+        db.get_cursor().execute('UPDATE Room SET Layout = ? WHERE Id = ?;', (layout, self.id()))
+        db.commit()
+
     def read_only(self):
         c = Database().get_cursor()
         c.execute("SELECT ReadOnly FROM Room WHERE Id = ?;", (self.id(),))
@@ -138,6 +152,7 @@ class Room:
             'id': self.id(),
             'name': self.name(),
             'label': self.label(),
+            'layout': self.layout(),
             'read_only': self.read_only(),
             'show_users': self.show_users(),
             'show_latency': self.show_latency(),
@@ -153,11 +168,13 @@ class Room:
         return cls(id) if c.fetchone()[0] != 0 else None
 
     @classmethod
-    def create(cls, name, label, read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True, static=False):
+    def create(cls, name, label, layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True, static=False):
         if not isinstance(name, str):
             raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
         if not isinstance(label, str):
             raise TypeError(f"Object of type `str` expected, however type `{type(label)}` was passed")
+        if not isinstance(layout, str):
+            raise TypeError(f"Object of type `str` expected, however type `{type(layout)}` was passed")
         if not isinstance(read_only, bool):
             raise TypeError(f"Object of type `bool` expected, however type `{type(read_only)}` was passed")
         if not isinstance(show_users, bool):
@@ -175,9 +192,8 @@ class Room:
 
         db = Database()
         c = db.get_cursor()
-        print(f"Room.create({name}, {label})")
-        c.execute('INSERT OR REPLACE INTO Room(`Name`, `Label`, `ReadOnly`, `ShowUsers`, `ShowLatency`, `ShowInput`, `ShowHistory`, `ShowInteractionArea`, `Static`) '
-                  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);', (name, label, read_only, show_users, show_latency, show_input, show_history, show_interaction_area, static))
+        c.execute('INSERT OR REPLACE INTO Room(`Name`, `Label`, `Layout`, `ReadOnly`, `ShowUsers`, `ShowLatency`, `ShowInput`, `ShowHistory`, `ShowInteractionArea`, `Static`) '
+                  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', (name, label, layout, read_only, show_users, show_latency, show_input, show_history, show_interaction_area, static))
         db.commit()
         c.execute("SELECT Id FROM Room WHERE Name = ?;", (name,))
         fetch = c.fetchone()

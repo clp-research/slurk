@@ -43,6 +43,7 @@ class Database:
                        Id           INTEGER PRIMARY KEY AUTOINCREMENT,
                        Name         TEXT NOT NULL,
                        Label        TEXT NOT NULL,
+                       Layout       TEXT,
                        ReadOnly     INTEGER DEFAULT 0 NOT NULL,
                        ShowUsers    INTEGER DEFAULT 1 NOT NULL,
                        ShowLatency  INTEGER DEFAULT 1 NOT NULL,
@@ -127,8 +128,8 @@ class Database:
 
         self.create_task("meetup", 2)
         self.create_task("None", -1)
-        self.create_room("Waiting Room", read_only=True, show_users=False, show_latency=False)
-        self.create_room("Test Room", read_only=False, show_users=True, show_latency=True)
+        self.create_room("Waiting Room", layout="waiting_room", read_only=True, show_users=False, show_latency=False)
+        self.create_room("Test Room", layout="test_room", read_only=False, show_users=True, show_latency=True)
         self.db.commit()
 
     def get_cursor(self):
@@ -158,13 +159,13 @@ class Database:
         c.execute('INSERT OR IGNORE INTO Task(`Name`, `Users`) VALUES (?, ?);', (name, required_users))
         self.db.commit()
 
-    def create_room(self, name, read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True):
+    def create_room(self, name, layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True):
         c = self.db.cursor()
         c.execute('SELECT COUNT(*) FROM Room WHERE Name = ?', (name,))
         if c.fetchone()[0] == 0:
             c.execute('INSERT OR IGNORE INTO '
-                      'Room(`Name`, `Label`, `ReadOnly`, `ShowUsers`, `ShowLatency`, `ShowInput`, `ShowHistory`, `ShowInteractionArea`, `Static`) '
-                      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1);', (name, name, read_only, show_users, show_latency, show_input, show_history, show_interaction_area))
+                      'Room(`Name`, `Label`, `Layout`, `ReadOnly`, `ShowUsers`, `ShowLatency`, `ShowInput`, `ShowHistory`, `ShowInteractionArea`, `Static`) '
+                      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1);', (name, name, layout, read_only, show_users, show_latency, show_input, show_history, show_interaction_area))
             self.db.commit()
 
     def rooms(self):
