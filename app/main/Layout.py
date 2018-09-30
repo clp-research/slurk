@@ -7,18 +7,31 @@ FAST_CLOSE = ["img"]
 class Layout:
     @classmethod
     def from_json(cls, json_data):
+        """
+        Create a layout from the give JSON string
+        :param json_data: the json_data to create the layout from
+        :return: the Layout
+        """
         print(json_data)
         return cls(json.loads(json_data))
 
     @classmethod
-    def from_json_file(cls, path: str):
-        if not path:
+    def from_json_file(cls, name: str):
+        """
+        Create a layout from the give file name. The file must lie in `app/static/layouts` and the extension
+        must be omitted.
+
+        Example: ``Layout.from_json_file("Meetup")``
+        :param name: the file name of the json file without extensions
+        :return: the Layout
+        """
+        if not name:
             return None
-        if not isinstance(path, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(path)}` was passed")
+        if not isinstance(name, str):
+            raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
 
         layout_path = \
-            os.path.dirname(os.path.realpath(__file__)) + "/../static/layouts/" + path + ".json"
+            os.path.dirname(os.path.realpath(__file__)) + "/../static/layouts/" + name + ".json"
 
         print("layout path:", layout_path)
 
@@ -116,12 +129,22 @@ class Layout:
         return html + ">\n"
 
     def html(self, indent=0):
+        """
+        Creates html from the Layout.
+        :param indent: indent the html by this value
+        :return: the html
+        """
         if "html" not in self._data:
             return ""
 
         return self._node(self._data['html'], indent=indent)
 
     def css(self, indent=0):
+        """
+        Creates css from the Layout.
+        :param indent: indent the css by this value
+        :return: the css
+        """
         if "css" not in self._data:
             return ""
 
