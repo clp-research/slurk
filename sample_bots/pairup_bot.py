@@ -97,8 +97,6 @@ class ChatNamespace(BaseNamespace):
             self.emit("update_info", {'receiver_id': user_id,
                                       'text': "Patience, we are waiting for another player...",
                                       })
-            self.emit('command', {'room': data['user']['latest_room']['id'],
-                                  'data': ['new_image', "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"]})
             tasks[task_id]['users'].add(user_id)
             if user_id not in REG:
                 REG[user_id] = user

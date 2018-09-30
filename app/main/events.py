@@ -11,6 +11,7 @@ from .Token import Token
 from .Room import Room, ROOMS
 from .User import User
 from .Permissions import Permissions
+from .Layout import Layout
 from .. import socketio
 
 from .. import config
@@ -171,7 +172,15 @@ def open_task_room(data):
         if 'interaction_area' in data['hide']:
             show_interaction_area = False
 
+    layout = data.get('layout')
+    if not layout:
+        if Layout.from_json_file(data['label']):
+            layout = data['label']
+        else:
+            layout = ""
+
     room = Room.create(data['name'], data['label'],
+                       layout=layout,
                        read_only=read_only,
                        show_users=show_users,
                        show_latency=show_latency,

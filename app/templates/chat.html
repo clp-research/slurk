@@ -195,6 +195,10 @@
                     self_room = data.room.id;
 
                     console.log("joined room:", data);
+                    if (data.html !== "")
+                        $("#sidebar").html(data.html);
+                    if (data.css !== "")
+                        $("#custom-styles").html(data.css);
                     $("#chat-area").empty();
                     users = {};
                     data.users.forEach(function (user) {
@@ -314,7 +318,7 @@
 	            });
             });
         </script>
-        <style>
+        <style id="custom-styles">
             {{ css|safe }}
         </style>
     </head>

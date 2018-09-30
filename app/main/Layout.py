@@ -1,7 +1,6 @@
 import os
 import json
 
-
 FAST_CLOSE = ["img"]
 
 
@@ -13,14 +12,21 @@ class Layout:
 
     @classmethod
     def from_json_file(cls, path: str):
+        if not path:
+            return None
         if not isinstance(path, str):
             raise TypeError(f"Object of type `str` expected, however type `{type(path)}` was passed")
 
         layout_path = \
             os.path.dirname(os.path.realpath(__file__)) + "/../static/layouts/" + path + ".json"
 
-        with open(layout_path) as json_data:
-            return cls(json.load(json_data))
+        print("layout path:", layout_path)
+
+        try:
+            with open(layout_path) as json_data:
+                return cls(json.load(json_data))
+        except FileNotFoundError:
+            return None
 
     def _node(self, node, indent=0):
         if not node:
@@ -31,23 +37,33 @@ class Layout:
 
         html = ""
         for entry in node:
-            if entry["type"] == "area":
+            if isinstance(entry, str):
+                html += entry
+                continue
+
+            attributes = [(k, v) for k, v in entry.items() if k != "type" and k != "content"]
+            if entry["type"] == "area" or entry["type"] == "div":
                 html += self._tag("div",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
-            elif entry["type"] == "break":
+            elif entry["type"] == "break" or entry["type"] == "br":
                 html += self._tag("br",
                                   indent=indent,
                                   close=False)
-            elif entry["type"] == "bold":
+            elif entry["type"] == "bold" or entry["type"] == "b":
                 html += self._tag("b",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
-            elif entry["type"] == "image":
+            elif entry["type"] == "emphasize" or entry["type"] == "em":
+                html += self._tag("em",
+                                  attributes=attributes,
+                                  content=entry.get("content"),
+                                  indent=indent)
+            elif entry["type"] == "image" or entry["type"] == "img":
                 html += self._tag("img",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class')), ("src", entry.get("source")), ("width", entry.get("width")), ("height", entry.get("height"))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
             elif entry["type"] == "table":
@@ -55,14 +71,20 @@ class Layout:
                                   attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
                                   content=entry.get("content"),
                                   indent=indent)
-            elif entry["type"] == "row":
+            elif entry["type"] == "row" or entry["type"] == "tr":
                 html += self._tag("tr",
                                   attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
                                   content=entry.get("content"),
                                   indent=indent)
-            elif entry["type"] == "cell":
+            elif entry["type"] == "cell" or entry["type"] == "td":
                 html += self._tag("td",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class')), ("colspan", entry.get('colspan'))],
+                                  attributes=[("id", entry.get('id')), ("class", entry.get('class')),
+                                              ("colspan", entry.get('colspan'))],
+                                  content=entry.get("content"),
+                                  indent=indent)
+            elif entry["type"] == "plain" or entry["type"] == "pre":
+                html += self._tag("pre",
+                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
                                   content=entry.get("content"),
                                   indent=indent)
         return html
@@ -83,7 +105,7 @@ class Layout:
     def _tag(self, name, attributes=None, close=True, content=None, indent=0):
         html = ' ' * indent + "<{}{}".format(name, self._attributes(attributes))
         if content:
-            html += ">\n{}".format(self._node(content, indent=indent+2))
+            html += ">\n{}".format(self._node(content, indent=indent + 2))
             if close:
                 html += "{}</{}".format(' ' * indent, name)
         elif close:
@@ -110,7 +132,6 @@ class Layout:
                 css += "  {}: {};\n".format(prop, value)
             css += "}\n\n"
         return css
-
 
     def __repr__(self):
         return json.dumps(self._data, indent=4)

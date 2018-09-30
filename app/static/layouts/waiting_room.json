@@ -1,26 +1,11 @@
 {
   "html": [
+    "This is the waiting room. See ",
     {
-      "type": "area",
-      "id": "image-area",
-      "content": [
-        {
-          "type": "bold",
-          "id": "status-text",
-          "content": "Status Text"
-        },
-        {
-          "type": "break"
-        },
-        {
-          "type": "image",
-          "id": "current-image",
-          "source": "https://avatars0.githubusercontent.com/u/20286820?s=460&v=4",
-          "width": 500,
-          "height": 400
-        }
-      ]
+      "type": "emphasize",
+      "content": "layouts/waiting_room.json"
     },
+    " to modify",
     {
       "type": "area",
       "id": "status-box"

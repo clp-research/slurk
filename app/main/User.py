@@ -8,6 +8,7 @@ from .Token import Token
 from .database import Database
 from .Room import Room, ROOMS
 from .Logger import Logger
+from .Layout import Layout
 
 
 logged_users = {}
@@ -118,8 +119,17 @@ class User(UserMixin):
             'room': room.serialize(),
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name())
+        layout = Layout.from_json_file(room.layout())
+        if layout:
+            html = layout.html()
+            css = layout.css()
+        else:
+            html = None,
+            css = None
         sio.emit('joined_room', {
             'room': room.serialize(),
+            'html': html,
+            'css': css,
             'users': users,
             'history': history,
             'self': self.serialize(),
