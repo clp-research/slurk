@@ -1,0 +1,87 @@
+body, html {
+    background: #B9BABB;
+}
+
+.login-page {
+    background: #dbdbdb;
+	border: 1px solid #ebebeb;
+	box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
+    width: 320px;
+    padding: 8%;
+    margin: 80px auto auto;
+    border-radius: 40px;
+}
+
+.login-page h1:before,
+.login-page h1:after {
+	content: "";
+	height: 1px;
+	position: absolute;
+	top: 10px;
+	width: 30%;
+}
+.login-page h1:after {
+	background: #666666;
+	background: -moz-linear-gradient(left, #666666 0%, #EEEEEE 100%);
+	background: -webkit-linear-gradient(left,  #666666 0%,#EEEEEE 100%);
+	background: -o-linear-gradient(left,  #666666 0%,#EEEEEE 100%);
+	background: -ms-linear-gradient(left,  #666666 0%,#EEEEEE 100%);
+	background: linear-gradient(left,  #666666 0%,#EEEEEE 100%);
+    right: 0;
+}
+.login-page h1:before {
+	background: #666666;
+	background: -moz-linear-gradient(right,  #666666 0%, #EEEEEE 100%);
+	background: -webkit-linear-gradient(right,  #666666 0%,#EEEEEE 100%);
+	background: -o-linear-gradient(right,  #666666 0%,#EEEEEE 100%);
+	background: -ms-linear-gradient(right,  #666666 0%,#EEEEEE 100%);
+	background: linear-gradient(right,  #666666 0%,#EEEEEE 100%);
+    left: 0;
+}
+.login-page h1 {
+    text-align: center;
+	color: #666666;
+	font-weight: bold;
+    font-size: 24px;
+	letter-spacing: -0.05em;
+	line-height: 20px;
+	margin: 10px 0 30px;
+}
+
+.login-page .login-form {
+    position: relative;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+input {
+  border: none;
+  border-radius: 5px;
+  box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
+}
+
+.login-page .login-form form input[type=text] {
+  outline: 0;
+  width: 100%;
+  background: #E3E3E3;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.login-page .login-form form input[type=submit] {
+  text-transform: uppercase;
+  font-size: medium;
+  outline: 0;
+  background: #007656;
+  width: 100%;
+  color: #FFFFFF;
+  padding: 15px;
+  cursor: pointer;
+}
+.login-page .login-form form input[type=submit]:hover,
+.login-page .login-form form input[type=submit]:active,
+.login-page .login-form form input[type=submit]:focus {
+  background: #008a68;
+}
