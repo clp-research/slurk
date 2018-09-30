@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. Getting participants from Amazon Mechanical Turk &mdash; slurk 0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="6. Deploying the system" href="slurk_deployment.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">6. Deploying the system</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Getting participants from Amazon Mechanical Turk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-and-publishing-hits">7.1. Building and Publishing HITs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reviewing-hits-extracting-data">7.2. Reviewing HITs, Extracting data</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>7. Getting participants from Amazon Mechanical Turk</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_amt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-participants-from-amazon-mechanical-turk">
+<span id="slurk-amt"></span><h1>7. Getting participants from Amazon Mechanical Turk<a class="headerlink" href="#getting-participants-from-amazon-mechanical-turk" title="Permalink to this headline">¶</a></h1>
+<p>The main purpose of Slurk is to allow collection of big data on crowd sourcing platforms such as Amazon
+Mechanical Turk (AMT). In this section we will explain how to use Slurk’s functionality in order to publish
+human intelligence tasks (HITs) on AMT, retrieve results and metadata about AMT workers, accept or reject submitted tasks,
+and send payments taking into account dialogue data stored in Slurk.</p>
+<p>The process behind transferring data from AMT to Slurk can be presented as a scheme on the image below.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/slurk_amt.png"><img alt="_images/slurk_amt.png" src="_images/slurk_amt.png" style="width: 362.4px; height: 162.0px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.1 </span><span class="caption-text">Slurk-AMT integration</span></p>
+</div>
+<p>Basically, with each HIT we publish a link, which allows workers to enter Slurk.
+These links can be used multiple times, guaranteeing that if worker decides to return the task,
+it will be accessible for the others to complete. Also it significantly reduces amount of time spent for
+the analysis of returned HITs, since they can be simply ignored because they were never completed.</p>
+<p>Before publishing our tasks on AMT, we activate Slurk along with two bots: multi bot and minimal bot.
+Their task is monitor activity of workers joining the rooms, and move them between rooms,
+issue commands, etc.</p>
+<p>Once player clicks the link, a new browser window opens with Slurk in it. After the task is completed,
+Slurk stores data corresponding to the concrete room in a separate .log file. Information about login tokens
+is stored in the MySQL database, which can be used to, for example, invalidate links, which are used by
+malicious players to enter Slurk outside of AMT. With this, we make sure that retrieved data cannot be harmed
+in any way.</p>
+<div class="section" id="building-and-publishing-hits">
+<h2>7.1. Building and Publishing HITs<a class="headerlink" href="#building-and-publishing-hits" title="Permalink to this headline">¶</a></h2>
+<p>In AMT setting, requester (HIT publisher) needs to specify the format that will be used to display HITs to workers.
+Slurk uses HTMLQuestion scheme <a class="footnote-reference" href="#id2" id="id1">[1]</a> as it allows requesters to have more control over the data collection, putting less
+efforts into the process of embedding application with AMT.
+In your XML template you will have to specify structure of your task. It can be a slideshow, a simple HTML webpage with the list
+of instructions, or even a video.</p>
+<p>Each HIT must have meta information: title, author, description, reward, lifetime in seconds, etc.
+These parameters are visible to the workers and can significantly speed up your data collection process.
+For example, imagine that you want to restrict access to your tasks for players, who might provide you with low quality data.
+Along with meta information, you would pass one Qualification Requirement to AMT, making your HITs available for preview/acceptance
+only to those workers who completed 5000 or more HITs. Such qualification would most likely increase the quality of your data.</p>
+<p>In the case of Slurk, it is important to make sure that each of your HITs contains link to access the application.
+This link is not presented to the workers when previewing the HIT, and becomes visible once they accept the task.
+Links have to be generated with the separate Python script, that accesses your running Slurk application, and generates as many links
+as you want to have for your task.
+Each link is later embedded into the HTML of a HIT webpage, and also can be non-/visible depending on the situation.
+In particular, if worker decides to preview the HIT, he will see the following on the display:</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/amt_preview.png"><img alt="_images/amt_preview.png" src="_images/amt_preview.png" style="width: 641.4px; height: 452.4px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.2 </span><span class="caption-text">HIT Preview page for Slurk</span></p>
+</div>
+<p>Once the HIT accepted, game link is displayed to the player:</p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="_images/amt_accept.png"><img alt="_images/amt_accept.png" src="_images/amt_accept.png" style="width: 640.8px; height: 429.59999999999997px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.3 </span><span class="caption-text">HIT Accept page for Slurk</span></p>
+</div>
+<p>Given Slurk, meta information and XML structure of your HITs along with qualification requirements, you can publish your tasks on
+either AMT Sandbox (testing environment on AMT) or AMT itself.</p>
+</div>
+<div class="section" id="reviewing-hits-extracting-data">
+<h2>7.2. Reviewing HITs, Extracting data<a class="headerlink" href="#reviewing-hits-extracting-data" title="Permalink to this headline">¶</a></h2>
+<p>As Figures above indicate, players are required to type a special game token into the respective field.
+This game token is produced by the bots, and allows you to associate a worker with the provided data.
+Slurk is also able to store dialogues in the format of logs along with the MySQL database, which contains
+information about all elements of the game (tokens, users, etc.). Here we will briefly describe how we analyse
+received data and what it contains.</p>
+<p>In general, players get a game token in the Waiting Room if they were not paired up with another worker.
+It helps us to differentiate between workers who actually participated in the dialogue task and those, who were only waiting
+for someone to join the game:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/token_wb.png"><img alt="_images/token_wb.png" src="_images/token_wb.png" style="width: 313.8px; height: 265.2px;" /></a>
+</div>
+<p>Upon task completion, players also receive a special game token, which indicates that they have completed the task.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/token_gm.png"><img alt="_images/token_gm.png" src="_images/token_gm.png" style="width: 320.25px; height: 111.75px;" /></a>
+</div>
+<p>These tokens are stored in the log files, which contain all information about the game process. The structure of
+logs in Slurk is build in .json format. Each event (sending images or messages, issuing commands) is stored as a
+separate dictionary inside the log file. Slurk is able to track rooms and players along with the type of event (joining,
+sending, etc.) and timestamps. Some of these messages contain a game token that has been given to the workers.
+In order to pay for their job, we compare these tokens in the log files with the tokens which were submitted to AMT.</p>
+<p>It is nature of your task that defines what you have to consider when paying for your HITs. You can rely on time workers spent in the room
+until the token has been sent to them, or even on the number of utterances which were produced in a dialogue: all of these elements
+can be wrapped up, and with the help of AMT API used to define the amount of (bonus) payment.</p>
+<p>In the end we have all necessary elements for analysing our data: log files and database with information about players and tokens.
+Additionally, with the help of several simple scripts, we are able to pay workers depending on the game token that they have submitted.</p>
+<hr class="docutils" />
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For more information on AMT HTMLQuestion Data Scheme, please visit <a class="reference external" href="https://docs.aws.amazon.com/AWSMechTurk/latest/AWSMturkAPI/ApiReference_HTMLQuestionArticle.html">the official documentation</a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="slurk_deployment.html" class="btn btn-neutral" title="6. Deploying the system" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, DSG Bielefeld.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.5',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

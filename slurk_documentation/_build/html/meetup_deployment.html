@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MeetUp: how to deploy &mdash; slurk 0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">6. Deploying the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">7. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>MeetUp: how to deploy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/meetup_deployment.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="meetup-how-to-deploy">
+<span id="meetup-depl"></span><h1>MeetUp: how to deploy<a class="headerlink" href="#meetup-how-to-deploy" title="Permalink to this headline">¶</a></h1>
+<p>The MeetUp task is dependent on displayed images, this is why the first step would be to
+download the <a class="reference external" href="http://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20k image dataset</a>. You will need training set in particular.
+Navigate to your <cite>/media</cite> folder and arrange the image dataset there. This location will be used in Nginx server blocks.</p>
+<p>If you want to use SSL connection, please make a new directory <cite>certificates</cite> in the project directory,
+and populate it with your certificate and certificate key <a class="footnote-reference" href="#id3" id="id1">[1]</a>. Do not forget to restrict permissions to this directory
+so that it can be only readable and accessible, but not writable.</p>
+<p>Create a new file in your Nginx directory <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nano</span> <span class="pre">/etc/nginx/snippets/certs.conf</span></code>
+and set <code class="docutils literal notranslate"><span class="pre">ssl_certificate</span></code> and <code class="docutils literal notranslate"><span class="pre">ssl_certificate_key</span></code> directives there. Your <code class="docutils literal notranslate"><span class="pre">certs.conf</span></code> should look similar
+to the next block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssl_certificate</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">project</span><span class="o">/</span><span class="n">certificates</span><span class="o">/</span><span class="n">cert</span><span class="o">.</span><span class="n">pem</span><span class="p">;</span>
+<span class="n">ssl_certificate_key</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">project</span><span class="o">/</span><span class="n">certificates</span><span class="o">/</span><span class="n">key</span><span class="o">.</span><span class="n">pem</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>You also need to configure strong encryption settings for SSL connection.
+Please execute <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nano</span> <span class="pre">/etc/nginx/snippets/ssl-params.conf</span></code> and specify next parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssl_protocols</span> <span class="n">TLSv1</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">1</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span><span class="p">;</span>
+<span class="n">ssl_prefer_server_ciphers</span> <span class="n">on</span><span class="p">;</span>
+<span class="n">ssl_ciphers</span> <span class="s2">&quot;EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH&quot;</span><span class="p">;</span>
+<span class="n">ssl_ecdh_curve</span> <span class="n">secp384r1</span><span class="p">;</span>
+<span class="n">ssl_session_cache</span> <span class="n">shared</span><span class="p">:</span><span class="n">SSL</span><span class="p">:</span><span class="mi">10</span><span class="n">m</span><span class="p">;</span>
+<span class="n">ssl_session_tickets</span> <span class="n">off</span><span class="p">;</span>
+<span class="n">ssl_stapling</span> <span class="n">on</span><span class="p">;</span>
+<span class="n">ssl_stapling_verify</span> <span class="n">on</span><span class="p">;</span>
+
+<span class="n">resolver</span> <span class="mf">8.8</span><span class="o">.</span><span class="mf">8.8</span> <span class="mf">8.8</span><span class="o">.</span><span class="mf">4.4</span> <span class="n">valid</span><span class="o">=</span><span class="mi">300</span><span class="n">s</span><span class="p">;</span>
+<span class="n">resolver_timeout</span> <span class="mi">5</span><span class="n">s</span><span class="p">;</span>
+
+<span class="n">add_header</span> <span class="n">Strict</span><span class="o">-</span><span class="n">Transport</span><span class="o">-</span><span class="n">Security</span> <span class="s2">&quot;max-age=63072000; includeSubdomains; preload&quot;</span><span class="p">;</span>
+<span class="n">add_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Frame</span><span class="o">-</span><span class="n">Options</span> <span class="n">DENY</span><span class="p">;</span>
+<span class="n">add_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="o">-</span><span class="n">Options</span> <span class="n">nosniff</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>For more information, address <a class="reference external" href="http://nginx.org/en/docs/http/configuring_https_servers.html">Nginx’s HTTPS configuration</a>.</p>
+<p>The next step would be to create a new server block where our Nginx will serve image directory.
+Open a new server block in your default nginx configuration file, which can be found in <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>server {
+
+    listen 8000 ssl http2 default_server;
+    listen [::]:8000 ssl http2 default_server;
+
+    include snippets/certs.conf;
+    include snippets/ssl-params.conf;
+
+    location / {
+            root /media/ADE20K_2016_07_26/;
+            autoindex on;
+            try_files $uri $uri/ =404;
+               }
+
+      }
+</pre></div>
+</div>
+<p>This block takes SSL certificate and its key along with location of images, and serves it on the port 8000.</p>
+<p>Do not forget to build symlinks between two directories: <cite>sites-available</cite> and <cite>sites-enabled</cite>, where the first one is used
+to store your server configuration, while the latter enables your block. This can be done via the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">default</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Check if you UFW is active and allow incoming connections for the port that you use to serve images <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
+<p>If everything has been set up properly, you will be able to access images by visiting <code class="docutils literal notranslate"><span class="pre">host:8000</span></code>, depending on your host.
+At the moment, all images are accessible <a class="reference external" href="https://dsg.lili.uni-bielefeld.de:8000">here</a>.</p>
+<hr class="docutils" />
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>In some circumstances you might need to remove encryption from certificate private key. In this case, please use <code class="docutils literal notranslate"><span class="pre">openssl</span></code> to generate a new certificate key.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, DSG Bielefeld.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.5',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

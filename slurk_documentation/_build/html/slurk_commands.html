@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Slurk Commands &mdash; slurk 0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">6. Deploying the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">7. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Slurk Commands</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_commands.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="slurk-commands">
+<span id="id1"></span><h1>Slurk Commands<a class="headerlink" href="#slurk-commands" title="Permalink to this headline">¶</a></h1>
+<p>Slurk is based on <a class="reference external" href="https://flask-socketio.readthedocs.io/en/latest/">flask-SocketIO</a>,
+that is responsible for execution of clients’ commands and their proper realisation.</p>
+<p>If a message starts with a <cite>/</cite>, it is interpreted as a client command for communication
+with the server. We will first analyse generally available client commands,
+and then move on to the server commands, which are
+needed for communication between bots and Slurk.</p>
+<div class="section" id="client-commands">
+<h2>Client Commands<a class="headerlink" href="#client-commands" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the commands registered by bots <a class="footnote-reference" href="#id4" id="id2">[1]</a> , the following commands are also available for chatting:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><cite>/new_image &lt;image-url&gt; [room]</cite></dt>
+<dd><ul class="first last">
+<li>A new image is sent to a room</li>
+<li><cite>&lt;image-url&gt;</cite> specifies the URL for the new image</li>
+<li>The image is then displayed for the clients in the room on the righthand side</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>/listen_to &lt;name&gt;</cite></dt>
+<dd><ul class="first last">
+<li>A command of listening to commands in the targeted room</li>
+<li>If a client sends the command <cite>name</cite>, this client receives the command together with the entered parameters.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="server-commands">
+<h2>Server Commands<a class="headerlink" href="#server-commands" title="Permalink to this headline">¶</a></h2>
+<p>Bots communicate with the server using the server commands.
+The commands are divided into two namespaces: <cite>login</cite> and <cite>chat</cite>.</p>
+<p>The parameters are to be passed as a dictionary.</p>
+<div class="section" id="login-namespace">
+<h3>Login Namespace<a class="headerlink" href="#login-namespace" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><cite>connect_with_token &lt;name&gt; &lt;room&gt; [token]</cite></dt>
+<dd><ul class="first last">
+<li>The client connects to a room</li>
+<li><cite>name</cite>: name of the client to be connected (e.g. “Bot-XY”)</li>
+<li><cite>room</cite>: room to which the client should connect</li>
+<li><cite>token</cite>: authentication-token</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="chat-namespace">
+<h3>Chat Namespace<a class="headerlink" href="#chat-namespace" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><cite>my_ping</cite></dt>
+<dd><ul class="first last">
+<li>A new event <a class="footnote-reference" href="#id5" id="id3">[2]</a> (<cite>my_pong</cite>) is generated with the current bot</li>
+<li>As an example, this command can be used to check latency level</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>disconnect</cite></dt>
+<dd><ul class="first last">
+<li>Closes connection with the client</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>receive_sid</cite></dt>
+<dd><ul class="first last">
+<li>The new event <cite>acquire_sid</cite> is created</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>log [params…]</cite></dt>
+<dd><ul class="first last">
+<li>All parameters are written to the current log file</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>text &lt;msg&gt; [receiver]</cite></dt>
+<dd><ul class="first last">
+<li>A text message is sent</li>
+<li><cite>msg</cite>: the message to be sent</li>
+<li><cite>receiver</cite>: message recipient. This can be a room or a session ID of the player.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>command &lt;name&gt; [params…]</cite></dt>
+<dd><ul class="first last">
+<li>The command is either executed or forwarded to the respective listeners.</li>
+<li><cite>name</cite>: name of the command</li>
+<li><cite>params</cite>: parameter to the command</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>clients</cite></dt>
+<dd><ul class="first last">
+<li>The event <cite>active_users</cite> is created</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>For information on bot-specific commands, please check REFERENCE</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td><cite>Events</cite> are internal processes which are active within commands. For more please refer to REFERENCE</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, DSG Bielefeld.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.5',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
