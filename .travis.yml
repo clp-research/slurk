@@ -5,6 +5,7 @@ install:
     - pip install sphinx_rtd_theme
 
 script: (cd docs && make html)
+after_success: touch docs/_build/html/.nojekyll
 
 deploy:
   provider: pages
