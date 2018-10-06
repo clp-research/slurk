@@ -13,3 +13,5 @@ deploy:
   local_dir: docs/_build/html
   github-token: $GH_TOKEN
   keep-history: true
+  on:
+    branch: master
