@@ -1,0 +1,17 @@
+language: python
+
+install:
+    - pip install sphinx
+    - pip install sphinx_rtd_theme
+
+script: (cd docs && make html)
+after_success: touch docs/_build/html/.nojekyll
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  local_dir: docs/_build/html
+  github-token: $GH_TOKEN
+  keep-history: true
+  on:
+    branch: master
