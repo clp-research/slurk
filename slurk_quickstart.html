@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Quickstart &mdash; slurk 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Pairing up participants and running multiple rooms (and bots)" href="slurk_multibots.html" />
+    <link rel="prev" title="2. Installation" href="slurk_installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-a-basic-test-of-the-server">3.1. “Hello World”: A basic test of the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">3.2. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chatting-with-a-bot-and-giving-commands">3.3. Chatting with a bot, and giving commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examining-the-log-files">3.4. Examining the log files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">6. Deploying the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">7. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>3. Quickstart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart">
+<span id="slurk-quickstart"></span><h1>3. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hello-world-a-basic-test-of-the-server">
+<h2>3.1. “Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
+<p>Start <em>slurk</em> with:</p>
+<ul class="simple">
+<li><cite>python chat.py</cite></li>
+</ul>
+<p>This will start the flask server in development mode. You will later learn how to start a production server.</p>
+<p>In the following, we will assume that you used the defaults in <cite>config.ini</cite> so that the app is served on localhost port 5000 (<cite>127.0.0.1:5000</cite>).</p>
+<p>If you now go to <a class="reference external" href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>, you should see the login window, asking for two items, prefilled with “Name” and “None”. The first asks for a name under which you will be identified in the chat, and the second asks for a token.. which you don’t have yet.</p>
+<p>To get a token, you will need to generate one by going to <a class="reference external" href="http://127.0.0.1:5000/token">http://127.0.0.1:5000/token</a>. On that page, fill in the fields as follows:</p>
+<ul class="simple">
+<li>Source: Web</li>
+<li>Room: Test Room</li>
+<li>Task: None</li>
+<li>Reusable: &lt;check&gt;</li>
+<li>Count: 1</li>
+</ul>
+<p>(Note: What is happening behind the curtain is that entries are created in the user database, with attributes as specified here. <cite>Room</cite> fixes where the user that is logging in with the created token start, <cite>Task</cite> specifies the tasks that this user is allowed to do, <cite>Reusable</cite> specifies whether a token can be used for more than one login, and <cite>Count</cite> creates as many tokens. <cite>Source</cite> doesn’t really have a function at the moment; any string will do here.)</p>
+<p>After you submit this form, you should see a long alphanumeric string as a response. Copy this string (the token) over to the login page. Enter whatever Name you like and this copied token, and click “enter chatroom”.</p>
+<p>This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).</p>
+<div class="figure align-center" id="id1">
+<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span></p>
+</div>
+<p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.</p>
+<p>(But one additional thing before we move on: If you repeat the steps above while keeping the chat server alive, you will notice that you will end up in the same room which shows the chat history of the previously created user which now however is orphaned, as you have your new identity. The reason for that is the websocket connection that is created by the server is tied to the browser, and was kept alive. If you want to start fresh, you need to kill the chat server and restart again.)</p>
+<p>TODO: Double check. Is that true? Or is there another way to start with a fresh empty test room w/o killing the chat server?</p>
+</div>
+<div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
+<span id="twobrowsers"></span><h2>3.2. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an addtional token and, <strong>from a different web browser</strong>, log in with that token. You should now see both identities in the respective chat windows, and you should be able to talk with your two selves across these browsers. Hurray!</p>
+<p>(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network], this might work across machines, and so you can have a chat with an actual different person.)</p>
+<p>This has demonstrated the very basic capabilities – providing a chat environment –, but so far there hasn’t been any use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
+</div>
+<div class="section" id="chatting-with-a-bot-and-giving-commands">
+<h2>3.3. Chatting with a bot, and giving commands<a class="headerlink" href="#chatting-with-a-bot-and-giving-commands" title="Permalink to this headline">¶</a></h2>
+<p>Kill the server (if it’s still running) and start it again:</p>
+<ul class="simple">
+<li><cite>python chat.py</cite></li>
+</ul>
+<p>Now before we log onto the server in the way described above, let us create a bot user and let it log on first.</p>
+<p>Bots also need tokens. Let us directly create all tokens we need. Go to <a class="reference external" href="http://127.0.0.1:5000/token">http://127.0.0.1:5000/token</a>, and fill in:</p>
+<ul class="simple">
+<li>Source: Web</li>
+<li>Room: Test Room</li>
+<li>Task: None</li>
+<li>Reusable: &lt;check&gt;</li>
+<li>Count: 3</li>
+</ul>
+<p>That is, we create three tokens in one go.</p>
+<p>Copy the first one, and use it to do the following, in a new terminal window (<cite>minimal.py</cite> lives in <cite>sample_bots</cite>):</p>
+<ul class="simple">
+<li><cite>python minimal.py</cite> <em>&lt;TOKEN&gt;</em></li>
+</ul>
+<p>In the terminal window where you started the chat server, you should see a message stating that <cite>minimal bot has connected</cite>. (In the window of the chat bot, you will see some JSON structures that will be explained TODO:ELSEWHERE.)</p>
+<p>Now start two browsers and log in as two different users (let’s call them <cite>A</cite> and <cite>B</cite>), as described above in <a class="reference internal" href="#twobrowsers"><span class="std std-ref">“Hello World” – “Hello Other Browser”: Testing with two browsers</span></a>. The list of users in the top right corner of the window should now indicate that besides <cite>A</cite> and <cite>B</cite> there is also a user called <cite>minimal bot</cite>.</p>
+<p>So far, nothing else has changed really. (Except that you now get a glimpse of what’s happening behind the scenes, as the <cite>minimal bot</cite> prints all messages that pass through the room to its <cite>STDOUT</cite> [i.e., into the terminal window where it was started].)</p>
+<p>But now that the bot is in the room, we can issue <em>commands</em> to it. Try the  following in <cite>A</cite>’s chat (the leading <cite>/</cite> is important):</p>
+<ul class="simple">
+<li><cite>/new_image_public</cite></li>
+</ul>
+<p>You should notice three things:</p>
+<ul class="simple">
+<li>In both chat windows, an image has appeared in the display area (which up to now has been empty).</li>
+<li>In <cite>A</cite>’s chat history, the command is shown in italics.</li>
+<li>In <cite>B</cite>’s chat history, the command is not shown at all.</li>
+</ul>
+<p>This demonstrates some important features of slurk and the interaction with bots: Bots can react to commands; the interaction between a user and the bot is private by default; and bots can control the display area.</p>
+<p>Now type the following, as <cite>B</cite> for a change:</p>
+<ul class="simple">
+<li><cite>/new_image_private</cite></li>
+</ul>
+<p>Now only the image shown for <cite>B</cite> should have changed and you should be seeing something similar to <a class="reference internal" href="#screenshot-privimage"><span class="std std-numref">Fig. 3.2</span></a>. This demonstrates another important feature: the display area can be controlled per user; that is, different users can be shown different material in that area. This makes it possible to set up tasks where the users may not in fact be seeing the same image.</p>
+<div class="figure align-center" id="id2">
+<span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/minimal_private_images.png"><img alt="_images/minimal_private_images.png" src="_images/minimal_private_images.png" style="width: 708.6px; height: 510.0px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Example interaction with the minimal bot</span></p>
+</div>
+</div>
+<div class="section" id="examining-the-log-files">
+<h2>3.4. Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
+<p>The point of all this, however, is not just to make interaction <em>possible</em>, it is to <em>record</em> these interactions to be able to later study them or train models on them. In the directory <cite>log/</cite> where you started the chat server, you should now find logfiles, named with the time stamp and the name of the room. These files contain, as a JSON list, most of the events that the server handled, including all the messages that were sent. This should contain the information that you need for your particular purposes.</p>
+<p>TODO: Provide example script that extracts the utterances in a parlAI style representation?</p>
+<p>This concludes the quick start. We now can be reasonably confident that the setup is working on your machine; and you also got a first introduction to the basic concepts. But what we have seen so far would only allow us to run a single room at a time. That may already be all you want if you conduct experiments locally with participants that you bring into the lab. If you want to make use of crowdsourcing, though, you will want to be able to automatically pair up participants and create task rooms for each pair. This will be explained in the next section.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="4. Pairing up participants and running multiple rooms (and bots)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="slurk_installation.html" class="btn btn-neutral" title="2. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, DSG Bielefeld
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
