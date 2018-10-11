@@ -335,10 +335,8 @@
 	            });
             });
         </script>
-        <script type="text/javascript" charset="utf-8" id="custom-scripts">{{ scripts | safe }}</script>
-        <style id="custom-styles">
-{{ css|safe }}
-        </style>
+        <script type="text/javascript" charset="utf-8" id="custom-scripts"></script>
+        <style id="custom-styles"></style>
     </head>
     <body>
 		<header>
@@ -349,9 +347,7 @@
             <span id="user-list" class="users">Users: <span id="users"></span></span>
 			</nav>
 		</header>
-        <div id="sidebar">
-{{ html|safe }}
-        </div>
+        <div id="sidebar"></div>
 		<div id="content">
 	        <div id="chat-area"></div>
 		</div>
