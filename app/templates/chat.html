@@ -42,10 +42,10 @@
                 history.forEach(function(element) {
                     switch (element["type"]) {
                         case "text":
-                            submit_message(element["user"], element["timestamp"], element["msg"], element["receiver_id"] !== null, false);
+                            display_message(element["user"], element["timestamp"], element["msg"], element["receiver_id"] !== null, false);
                             break;
                         case "command":
-                            submit_message(self_user, element["timestamp"], element["command"], true, false);
+                            display_message(self_user, element["timestamp"], element["command"], true, false);
                             break;
                         case "status":
                             console.log("status:", element);
@@ -58,7 +58,7 @@
                     set_image(latest_image);
             }
 
-            function submit_message(sender, time, message, privateMessage, skipSelf) {
+            function display_message(sender, time, message, privateMessage, skipSelf) {
                 if (skipSelf === undefined) {
                     skipSelf = true;
                 }
@@ -90,7 +90,7 @@
                 append(text);
             }
 
-            function submit_image(sender, time, url, width, height, privateMessage, skipSelf) {
+            function display_image(sender, time, url, width, height, privateMessage, skipSelf) {
                 if (skipSelf === undefined) {
                     skipSelf = true;
                 }
