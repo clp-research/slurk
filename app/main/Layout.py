@@ -1,6 +1,7 @@
 import os
 import json
-import urllib.request, urllib.error
+import urllib.request
+import urllib.error
 
 FAST_CLOSE = ["img"]
 
@@ -179,13 +180,21 @@ class Layout:
                "        if (text === '') \n" \
                "            return;\n" \
                "        let current_room = self_room;\n" \
+               "        let current_user = self_user;\n" \
+               "        let current_timestamp = new Date().getTime();\n" \
                         + content + '\n' \
                "    }\n" \
                "});\n"
 
+    @staticmethod
+    def _verify(content: str):
+        return content.count("{") == content.count("}")
+
     def _create_script(self, trigger: str, content: str):
+        if not self._verify(content):
+            return ""
         if trigger == "incoming-message":
-            return self._socket("message", content)
+            return self._socket("message", "if (self_user.id == data.user.id) return;"+content)
         if trigger == "submit-message":
             return self._submit(content)
         print("unknown trigger:", trigger)

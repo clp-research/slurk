@@ -58,19 +58,13 @@
                     set_image(latest_image);
             }
 
-            function display_message(sender, time, message, privateMessage, skipSelf) {
-                if (skipSelf === undefined) {
-                    skipSelf = true;
-                }
+            function display_message(sender, time, message, privateMessage) {
                 if (self_user === undefined) {
                     return;
                 }
 
                 let classes = "";
                 if (self_user.id === sender.id) {
-                    if (skipSelf) {
-                        return;
-                    }
                     classes += "self";
                 } else {
                     classes += "other";
@@ -90,20 +84,13 @@
                 append(text);
             }
 
-            function display_image(sender, time, url, width, height, privateMessage, skipSelf) {
-                if (skipSelf === undefined) {
-                    skipSelf = true;
-                }
-
+            function display_image(sender, time, url, width, height, privateMessage) {
                 if (self_user === undefined) {
                     return;
                 }
 
                 let classes = "";
                 if (self_user.id === sender.id) {
-                    if (skipSelf) {
-                        return;
-                    }
                     classes += "self";
                 } else {
                     classes += "other";
@@ -134,17 +121,14 @@
             }
 
             function submit_text(room, text) {
-                display_message({ id: self_user.id }, undefined, text, false, false);
                 socket.emit('text', {room: self_room, msg: text});
             }
 
             function submit_image(room, url, width, height) {
-                display_image({ id: self_user.id }, undefined, url, width, height, false, false);
                 socket.emit('image', {room: self_room, image: url, width: width, height: height});
             }
 
             function submit_command(room, parameter) {
-                display_message({ id: self_user.id }, undefined, parameter.join(' '), true, false);
                 socket.emit('command', {room: room, data: parameter});
             }
 
