@@ -11,26 +11,26 @@
                 return "Are you sure you want to leave? Your may not completed the task after reloading or closing the page";
             };
 
-            var socket;
-            var typing = {};
-            var self_user = undefined;
-            var self_room = undefined;
-            var invalid_ping_times = 0;
-            var pings_received = 0;
-            var history_received = false;
-            var users = {};
+            let socket;
+            let typing = {};
+            let self_user = undefined;
+            let self_room = undefined;
+            let invalid_ping_times = 0;
+            let pings_received = 0;
+            let history_received = false;
+            let users = {};
             let print_history = undefined;
 
             function getTime(timestamp) {
                 if (typeof timestamp === "undefined")
                     return new Date().getHours() + ':' +  new Date().getMinutes();
-                var currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
+                let currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
                 return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0"+currentDate.getMinutes() : ""+currentDate.getMinutes());
             }
 
             function append(text) {
 	            $('#chat-area').append(text);
-	            var content = $('#content');
+	            let content = $('#content');
                 content.animate({scrollTop: content.prop("scrollHeight")}, 0);
             }
 
@@ -101,7 +101,7 @@
             }
 
             function display_info(time, message) {
-                var text = '<li class="notification">' +
+                let text = '<li class="notification">' +
                     '  <p>'+message+'</p>' +
                     '  <time>'+getTime(time)+'</time>' +
                     '</li>';
@@ -162,13 +162,13 @@
                 $('#latency').hide();
                 $('#user-list').hide();
                 socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/chat');
-                var startTime;
-                var ping_pong_times = [];
+                let startTime;
+                let ping_pong_times = [];
                 window.setInterval(function () {
                     startTime = (new Date).getTime();
                     socket.emit("my_ping");
-                    var date = new Date();
-                    for (var sid in typing) {
+                    let date = new Date();
+                    for (let sid in typing) {
                         if (typing[sid]['date'].getSeconds() + 3 < date.getSeconds())
                             delete typing[sid];
                     }
@@ -199,20 +199,20 @@
                         print_history(data["history"]);
                         history_received = true;
                     }
-                    var room = data.room;
+                    let room = data.room;
                     $("#room").text(room.label)
                 });
 
                 socket.on("my_pong", function () {
                     pings_received += 1;
 
-                    var latency = (new Date).getTime() - startTime;
+                    let latency = (new Date).getTime() - startTime;
                     ping_pong_times.push(latency);
                     ping_pong_times = ping_pong_times.slice(- {{ ping_pong_latency_checks }} );
-                    var sum = 0;
-                    for (var i = 0; i < ping_pong_times.length; ++i)
+                    let sum = 0;
+                    for (let i = 0; i < ping_pong_times.length; ++i)
                         sum += ping_pong_times[i];
-                    var ping = $("#ping");
+                    let ping = $("#ping");
                     ping.text(Math.round(10 * sum / ping_pong_times.length)/10);
 
                     if (parseFloat(ping.text()) >= {{ refresh_threshold }} && pings_received >= {{ refresh_start }}) {
@@ -229,7 +229,7 @@
                         return;
 	                switch (data.type) {
                         case "join":
-                            var user = data.user;
+                            let user = data.user;
                             if (user.id !== self_user) {
                                 users[user.id] = user.name;
                                 updateUsers();
