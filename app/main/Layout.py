@@ -169,9 +169,25 @@ class Layout:
     def _socket(event: str, content: str):
         return "$(document).ready(function(){socket.on('"+event+"', function(data) {"+content+"});});"
 
+    @staticmethod
+    def _submit(content: str):
+        return "$('#text').keypress(function(e) {\n" \
+               "    let code = e.keyCode || e.which;\n" \
+               "    if (code === 13) {\n" \
+               "        let text = $(e.target).val();\n" \
+               "        $(e.target).val('');\n" \
+               "        if (text === '') \n" \
+               "            return;\n" \
+               "        let current_room = self_room;\n" \
+                        + content + '\n' \
+               "    }\n" \
+               "});\n"
+
     def _create_script(self, trigger: str, content: str):
         if trigger == "incoming-message":
             return self._socket("message", content)
+        if trigger == "submit-message":
+            return self._submit(content)
         print("unknown trigger:", trigger)
         return ""
 
@@ -200,6 +216,8 @@ class Layout:
             except FileNotFoundError:
                 print("Could not find script:", script_file)
                 continue
+
+        print(script)
 
         return script
 

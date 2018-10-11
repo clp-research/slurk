@@ -7,7 +7,7 @@
         {
           "type": "bold",
           "id": "status-text",
-          "content": "Status Text"
+          "content": "This is a test room, have fun!"
         },
         {
           "type": "break"
@@ -37,6 +37,7 @@
     }
   },
   "scripts": {
-    "incoming-message": "display-message"
+    "incoming-message": "display-message",
+    "submit-message": "send-message"
   }
 }
