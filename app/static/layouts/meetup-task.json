@@ -35,5 +35,8 @@
       "align-content": "left",
       "margin": "50px 20px 15px"
     }
+  },
+  "scripts": {
+    "incoming-message": "display-message"
   }
 }

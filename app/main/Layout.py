@@ -1,5 +1,6 @@
 import os
 import json
+import urllib.request, urllib.error
 
 FAST_CLOSE = ["img"]
 
@@ -12,17 +13,17 @@ class Layout:
         :param json_data: the json_data to create the layout from
         :return: the Layout
         """
-        print(json_data)
         return cls(json.loads(json_data))
 
     @classmethod
     def from_json_file(cls, name: str):
         """
-        Create a layout from the give file name. The file must lie in `app/static/layouts` and the extension
-        must be omitted.
+        Create a layout from the give file name. The file must be either a URL or
+        lie in `app/static/layouts` and the extension. For the latter, the file
+        extension must be omitted.
 
         Example: ``Layout.from_json_file("Meetup")``
-        :param name: the file name of the json file without extensions
+        :param name: the url or the file name
         :return: the Layout
         """
         if not name:
@@ -30,13 +31,21 @@ class Layout:
         if not isinstance(name, str):
             raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
 
+        print("loading layout", name)
+
+        try:
+            with urllib.request.urlopen(name) as url:
+                print("loading layout from", url)
+                return cls(json.loads(url.read().decode()))
+        except :
+            pass
+
         layout_path = \
             os.path.dirname(os.path.realpath(__file__)) + "/../static/layouts/" + name + ".json"
 
-        print("layout path:", layout_path)
-
         try:
             with open(layout_path) as json_data:
+                print("loading layout from", layout_path)
                 return cls(json.load(json_data))
         except FileNotFoundError:
             return None
@@ -155,6 +164,44 @@ class Layout:
                 css += ' ' * indent + "    {}: {};\n".format(prop, value)
             css += ' ' * indent + "}\n\n"
         return css
+
+    @staticmethod
+    def _socket(event: str, content: str):
+        return "$(document).ready(function(){socket.on('"+event+"', function(data) {"+content+"});});"
+
+    def _create_script(self, trigger: str, content: str):
+        if trigger == "incoming-message":
+            return self._socket("message", content)
+        print("unknown trigger:", trigger)
+        return ""
+
+    def script(self):
+        """
+        Creates a script from the Layout.
+        :return: the script
+        """
+        if "scripts" not in self._data:
+            return ""
+
+        script = ""
+        for trigger, script_file in self._data['scripts'].items():
+            try:
+                with urllib.request.urlopen(script_file) as url:
+                    script += self._create_script(trigger, url.read().decode("utf-8")) + "\n\n\n"
+            except:
+                pass
+
+            plugin_path = \
+                os.path.dirname(os.path.realpath(__file__)) + "/../static/plugins/" + script_file + ".js"
+
+            try:
+                with open(plugin_path) as script_content:
+                    script += self._create_script(trigger, script_content.read()) + "\n\n\n"
+            except FileNotFoundError:
+                print("Could not find script:", script_file)
+                continue
+
+        return script
 
     def __repr__(self):
         return json.dumps(self._data, indent=4)

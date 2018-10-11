@@ -90,13 +90,19 @@ def chat():
         return redirect(url_for('.index'))
 
     default_layout = config['templates'].get('default-layout')
+
+    html = ""
+    css = ""
+    scripts = ""
     if default_layout:
         layout = Layout.from_json_file(default_layout)
-        html = layout.html(indent=8)
-        css = layout.css(indent=12)
-    else:
-        html = ""
-        css = ""
+        if layout:
+            print("layout loaded")
+            html = layout.html(indent=8)
+            css = layout.css(indent=12)
+            scripts = layout.script()
+        else:
+            print("layout not loaded")
     return render_template('chat.html',
                            name=name,
                            room=room.label(),
@@ -108,6 +114,7 @@ def chat():
                            ping_pong_latency_checks=config['client']['ping-pong-latency-checks'],
                            html=html,
                            css=css,
+                           scripts=scripts,
                            )
 
 
@@ -120,7 +127,8 @@ def test():
     return render_template('layout.html',
                            title=name,
                            html=layout.html(indent=8),
-                           css=layout.css(indent=12)
+                           css=layout.css(indent=12),
+                           script=layout.script(),
                            )
 
 

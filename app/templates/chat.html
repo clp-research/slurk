@@ -42,10 +42,10 @@
                 history.forEach(function(element) {
                     switch (element["type"]) {
                         case "text":
-                            message(element["user"], getTime(element["timestamp"]), element["msg"], element["receiver_id"] !== null, false);
+                            submit_message(element["user"], element["timestamp"], element["msg"], element["receiver_id"] !== null, false);
                             break;
                         case "command":
-                            message(self_user, getTime(element["timestamp"]), element["command"], true, false);
+                            submit_message(self_user, element["timestamp"], element["command"], true, false);
                             break;
                         case "status":
                             console.log("status:", element);
@@ -58,55 +58,81 @@
                     set_image(latest_image);
             }
 
-        function message(sender, time, message, privateMessage, skipSelf) {
-              if (typeof self_user === "undefined")
-                  return;
-              var classes = "";
-              if (self_user.id === sender.id) {
-                  if (skipSelf) return;
-                  classes += "self";
-              } else {
-                  classes += "other";
-              }
-              if (privateMessage)
-                  classes += " private";
-              var text = "<li class='"+classes+"'>" +
-                         "  <div class='message-box'>" +
-                         "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
-                         "      <time>"+time+"</time>" +
-                         "    </div>" +
-                         "    <span class='msg'>"+message+"</span>" +
-                         "  </div>" +
-                         "</li>";
-              append(text);
-        }
+            function submit_message(sender, time, message, privateMessage, skipSelf) {
+                if (skipSelf === undefined) {
+                    skipSelf = true;
+                }
+                if (self_user === undefined) {
+                    return;
+                }
 
-        function image(sender, time, url, width, height, privateMessage, skipSelf) {
-              if (typeof self_user === "undefined")
-                  return;
-              var classes = "", w = " width=200", h = " height=200";
-              if (self_user.id === sender.id) {
-                  if (skipSelf) return;
-                  classes += "self";
-              } else {
-                  classes += "other";
-              }
-              if (privateMessage)
-                  classes += " private";
-              if (width !== null)
-                  w = " width="+width;
-              if (height !== null)
-                  h = " height="+height;
-              var text = "<li class='"+classes+"'>" +
-                         "  <div class='message-box'>" +
-                         "    <div class='user'>" +
-                         "      <time>"+time+"</time>" +
-                         "    </div>" +
-                         "    <img src="+url+w+h+"/>" +
-                         "  </div>" +
-                         "</li>";
-              append(text);
-        }
+                let classes = "";
+                if (self_user.id === sender.id) {
+                    if (skipSelf) {
+                        return;
+                    }
+                    classes += "self";
+                } else {
+                    classes += "other";
+                }
+
+                if (privateMessage) {
+                    classes += " private";
+                }
+                let text = "<li class='"+classes+"'>" +
+                           "  <div class='message-box'>" +
+                           "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
+                           "      <time>"+getTime(time)+"</time>" +
+                           "    </div>" +
+                           "    <span class='msg'>"+message+"</span>" +
+                           "  </div>" +
+                           "</li>";
+                append(text);
+            }
+
+            function submit_image(sender, time, url, width, height, privateMessage, skipSelf) {
+                if (skipSelf === undefined) {
+                    skipSelf = true;
+                }
+
+                if (self_user === undefined) {
+                    return;
+                }
+
+                let classes = "";
+                if (self_user.id === sender.id) {
+                    if (skipSelf) {
+                        return;
+                    }
+                    classes += "self";
+                } else {
+                    classes += "other";
+                }
+                if (privateMessage) {
+                    classes += " private";
+                }
+
+                let w = " width=200";
+                if (width !== null) {
+                    w = " width=" + width;
+                }
+
+                let h = " height=200";
+                if (height !== null) {
+                    h = " height=" + height;
+                }
+
+                let text = "<li class='" + classes + "'>" +
+                           "  <div class='message-box'>" +
+                           "    <div class='user'>" +
+                           "      <time>" + time + "</time>" +
+                           "    </div>" +
+                           "    <img src=" + url + w + h + "/>" +
+                           "  </div>" +
+                           "</li>";
+                append(text);
+            }
+
 
         function display_own_message(time, message, privateMessage) {
               var classes = "self";
@@ -199,6 +225,8 @@
                         $("#sidebar").html(data.html);
                     if (data.css !== "")
                         $("#custom-styles").html(data.css);
+                    if (data.script !== "")
+                        $("#custom-scripts").html(data.script);
                     $("#chat-area").empty();
                     users = {};
                     data.users.forEach(function (user) {
@@ -263,17 +291,6 @@
                     $('#chat-area').empty()
                 });
 
-                socket.on('message', function(data) {
-                    console.log("Message:", data);
-                    if (data["image"] !== undefined) {
-                        console.log("image");
-                        image(data.user, getTime(data.timestamp), data.image, data.width, data.height, data.privateMessage, true);
-                    } else {
-                        console.log("message");
-                        message(data.user, getTime(data.timestamp), data.msg, data.privateMessage, true);
-                    }
-                });
-
                 socket.on('update_permissions', function (data) {
                     updatePermissions(data.permissions)
                 });
@@ -318,6 +335,7 @@
 	            });
             });
         </script>
+        <script type="text/javascript" charset="utf-8" id="custom-scripts">{{ scripts | safe }}</script>
         <style id="custom-styles">
 {{ css|safe }}
         </style>
