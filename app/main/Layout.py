@@ -187,16 +187,27 @@ class Layout:
                "});\n"
 
     @staticmethod
+    def _history(content: str):
+        return "print_history = function(history) {" \
+               "    history.forEach(function(element) {\n" \
+                        + content + '\n' \
+               "    })\n" \
+               "}\n"
+
+    @staticmethod
     def _verify(content: str):
         return content.count("{") == content.count("}")
 
     def _create_script(self, trigger: str, content: str):
         if not self._verify(content):
+            print("invalid script for", trigger)
             return ""
         if trigger == "incoming-message":
             return self._socket("message", "if (self_user.id == data.user.id) return;"+content)
         if trigger == "submit-message":
             return self._submit(content)
+        if trigger == "print-history":
+            return self._history(content)
         print("unknown trigger:", trigger)
         return ""
 

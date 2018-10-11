@@ -38,6 +38,7 @@
   },
   "scripts": {
     "incoming-message": "display-message",
-    "submit-message": "send-message"
+    "submit-message": "send-message",
+    "print-history": "intercept-history"
   }
 }

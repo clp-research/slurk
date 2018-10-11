@@ -10,7 +10,7 @@ if (text.match("^/")) {
     display_image(current_user, current_timestamp, text.substr(6), 300, 300, false);
 } else {
     // text: string
-    submit_command(["intercept", text]);
+    submit_text(text);
     // user: dict, timestamp: int, text: string, private: bool
     display_message(current_user, current_timestamp, text, false);
 }

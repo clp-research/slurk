@@ -37,6 +37,8 @@
     }
   },
   "scripts": {
-    "incoming-message": "display-message"
+    "incoming-message": "display-message",
+    "submit-message": "send-message",
+    "print-history": "plain-history"
   }
 }

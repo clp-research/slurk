@@ -19,6 +19,7 @@
             var pings_received = 0;
             var history_received = false;
             var users = {};
+            let print_history = undefined;
 
             function getTime(timestamp) {
                 if (typeof timestamp === "undefined")
@@ -35,27 +36,6 @@
 
             function set_image(url) {
                 $('#current-image').attr('src', url).show();
-            }
-
-            function print_history(history) {
-                var latest_image = null;
-                history.forEach(function(element) {
-                    switch (element["type"]) {
-                        case "text":
-                            display_message(element["user"], element["timestamp"], element["msg"], element["receiver_id"] !== null, false);
-                            break;
-                        case "command":
-                            display_message(self_user, element["timestamp"], element["command"], true, false);
-                            break;
-                        case "status":
-                            console.log("status:", element);
-                            break;
-                        case "new_image":
-                            latest_image = element["url"]
-                    }
-                });
-                if (latest_image !== null)
-                    set_image(latest_image);
             }
 
             function display_message(sender, time, message, privateMessage) {
@@ -215,7 +195,7 @@
                     });
                     updateUsers();
                     updatePermissions(data.permissions);
-                    if (!history_received) {
+                    if (!history_received && print_history !== undefined) {
                         print_history(data["history"]);
                         history_received = true;
                     }
