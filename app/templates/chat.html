@@ -120,16 +120,16 @@
                 append(text);
             }
 
-            function submit_text(room, text) {
+            function submit_text(text) {
                 socket.emit('text', {room: self_room, msg: text});
             }
 
-            function submit_image(room, url, width, height) {
+            function submit_image(url, width, height) {
                 socket.emit('image', {room: self_room, image: url, width: width, height: height});
             }
 
-            function submit_command(room, parameter) {
-                socket.emit('command', {room: room, data: parameter});
+            function submit_command(parameter) {
+                socket.emit('command', {room: self_room, data: parameter});
             }
 
             function info(message, time) {
