@@ -100,6 +100,14 @@
                 append(text);
             }
 
+            function display_info(time, message) {
+                var text = '<li class="notification">' +
+                    '  <p>'+message+'</p>' +
+                    '  <time>'+getTime(time)+'</time>' +
+                    '</li>';
+                append(text);
+            }
+
             function submit_text(text) {
                 socket.emit('text', {room: self_room, msg: text});
             }
@@ -112,17 +120,9 @@
                 socket.emit('command', {room: self_room, data: parameter});
             }
 
-            function info(message, time) {
-                var text = '<li class="notification">' +
-                           '  <p>'+message+'</p>' +
-                           '  <time>'+time+'</time>' +
-                           '</li>';
-                append(text);
-            }
-
             function updateUsers() {
-                var current_users = "You";
-                for (var idx in users) {
+                let current_users = "You";
+                for (const idx in users) {
                     current_users += ", " + users[idx];
                 }
                 $('#users').empty().append('<span>'+current_users+'</span>');
@@ -240,10 +240,10 @@
                             updateUsers();
                             break;
                         case "new_image":
-	                        info('You have received a new image!', getTime(data.timestamp));
+	                        display_info(data.timestamp, 'You have received a new image!');
 	                        break;
                         case "undefined_command":
-	                        info('Command could not be recognized!', getTime(data.timestamp));
+	                        display_info(data.timestamp, 'Command could not be recognized!');
 	                        break;
                     }
                 });

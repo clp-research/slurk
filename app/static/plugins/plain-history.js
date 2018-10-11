@@ -6,7 +6,6 @@ switch (element["type"]) {
         display_message(self_user, element["timestamp"], element["command"], true);
         break;
     case "status":
-        console.log("status:", element);
         break;
     case "new_image":
         set_image(latest_image)
