@@ -123,13 +123,16 @@ class User(UserMixin):
         if layout:
             html = layout.html()
             css = layout.css()
+            script = layout.script()
         else:
-            html = None,
+            html = None
             css = None
+            script = None
         sio.emit('joined_room', {
             'room': room.serialize(),
             'html': html,
             'css': css,
+            'script': script,
             'users': users,
             'history': history,
             'self': self.serialize(),

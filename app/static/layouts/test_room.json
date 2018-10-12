@@ -1,0 +1,44 @@
+{
+  "html": [
+    {
+      "type": "area",
+      "id": "image-area",
+      "content": [
+        {
+          "type": "bold",
+          "id": "status-text",
+          "content": "This is a test room, have fun!"
+        },
+        {
+          "type": "break"
+        },
+        {
+          "type": "image",
+          "id": "current-image",
+          "src": "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
+          "width": 500,
+          "height": 400
+        }
+      ]
+    },
+    {
+      "type": "area",
+      "id": "status-box"
+    },
+    {
+      "type": "area",
+      "id": "typing-area"
+    }
+  ],
+  "css": {
+    "#image-area": {
+      "align-content": "left",
+      "margin": "50px 20px 15px"
+    }
+  },
+  "scripts": {
+    "incoming-message": "display-message",
+    "submit-message": "send-message",
+    "print-history": "intercept-history"
+  }
+}

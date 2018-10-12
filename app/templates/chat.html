@@ -11,25 +11,26 @@
                 return "Are you sure you want to leave? Your may not completed the task after reloading or closing the page";
             };
 
-            var socket;
-            var typing = {};
-            var self_user = undefined;
-            var self_room = undefined;
-            var invalid_ping_times = 0;
-            var pings_received = 0;
-            var history_received = false;
-            var users = {};
+            let socket;
+            let typing = {};
+            let self_user = undefined;
+            let self_room = undefined;
+            let invalid_ping_times = 0;
+            let pings_received = 0;
+            let history_received = false;
+            let users = {};
+            let print_history = undefined;
 
             function getTime(timestamp) {
                 if (typeof timestamp === "undefined")
                     return new Date().getHours() + ':' +  new Date().getMinutes();
-                var currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
+                let currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
                 return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0"+currentDate.getMinutes() : ""+currentDate.getMinutes());
             }
 
             function append(text) {
 	            $('#chat-area').append(text);
-	            var content = $('#content');
+	            let content = $('#content');
                 content.animate({scrollTop: content.prop("scrollHeight")}, 0);
             }
 
@@ -37,105 +38,91 @@
                 $('#current-image').attr('src', url).show();
             }
 
-            function print_history(history) {
-                var latest_image = null;
-                history.forEach(function(element) {
-                    switch (element["type"]) {
-                        case "text":
-                            message(element["user"], getTime(element["timestamp"]), element["msg"], element["receiver_id"] !== null, false);
-                            break;
-                        case "command":
-                            message(self_user, getTime(element["timestamp"]), element["command"], true, false);
-                            break;
-                        case "status":
-                            console.log("status:", element);
-                            break;
-                        case "new_image":
-                            latest_image = element["url"]
-                    }
-                });
-                if (latest_image !== null)
-                    set_image(latest_image);
-            }
+            function display_message(sender, time, message, privateMessage) {
+                if (self_user === undefined) {
+                    return;
+                }
 
-        function message(sender, time, message, privateMessage, skipSelf) {
-              if (typeof self_user === "undefined")
-                  return;
-              var classes = "";
-              if (self_user.id === sender.id) {
-                  if (skipSelf) return;
-                  classes += "self";
-              } else {
-                  classes += "other";
-              }
-              if (privateMessage)
-                  classes += " private";
-              var text = "<li class='"+classes+"'>" +
-                         "  <div class='message-box'>" +
-                         "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
-                         "      <time>"+time+"</time>" +
-                         "    </div>" +
-                         "    <span class='msg'>"+message+"</span>" +
-                         "  </div>" +
-                         "</li>";
-              append(text);
-        }
+                let classes = "";
+                if (self_user.id === sender.id) {
+                    classes += "self";
+                } else {
+                    classes += "other";
+                }
 
-        function image(sender, time, url, width, height, privateMessage, skipSelf) {
-              if (typeof self_user === "undefined")
-                  return;
-              var classes = "", w = " width=200", h = " height=200";
-              if (self_user.id === sender.id) {
-                  if (skipSelf) return;
-                  classes += "self";
-              } else {
-                  classes += "other";
-              }
-              if (privateMessage)
-                  classes += " private";
-              if (width !== null)
-                  w = " width="+width;
-              if (height !== null)
-                  h = " height="+height;
-              var text = "<li class='"+classes+"'>" +
-                         "  <div class='message-box'>" +
-                         "    <div class='user'>" +
-                         "      <time>"+time+"</time>" +
-                         "    </div>" +
-                         "    <img src="+url+w+h+"/>" +
-                         "  </div>" +
-                         "</li>";
-              append(text);
-        }
-
-        function display_own_message(time, message, privateMessage) {
-              var classes = "self";
-
-              if (privateMessage)
-                  classes += " private";
-
-              var text = "<li class='"+classes+"'>" +
-                         "  <div class='message-box'>" +
-                         "    <div class='user'>You"+
-                         "      <time>"+time+"</time>" +
-                         "    </div>" +
-                         "    <span class='msg'>"+message+"</span>" +
-                         "  </div>" +
-                         "</li>";
-              append(text);
-        }
-
-            function info(message, time) {
-                var text = '<li class="notification">' +
-                           '  <p>'+message+'</p>' +
-                           '  <time>'+time+'</time>' +
-                           '</li>';
+                if (privateMessage) {
+                    classes += " private";
+                }
+                let text = "<li class='"+classes+"'>" +
+                           "  <div class='message-box'>" +
+                           "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
+                           "      <time>"+getTime(time)+"</time>" +
+                           "    </div>" +
+                           "    <span class='msg'>"+message+"</span>" +
+                           "  </div>" +
+                           "</li>";
                 append(text);
             }
 
+            function display_image(sender, time, url, width, height, privateMessage) {
+                if (self_user === undefined) {
+                    return;
+                }
+
+                let classes = "";
+                if (self_user.id === sender.id) {
+                    classes += "self";
+                } else {
+                    classes += "other";
+                }
+                if (privateMessage) {
+                    classes += " private";
+                }
+
+                let w = " width=200";
+                if (width !== null) {
+                    w = " width=" + width;
+                }
+
+                let h = " height=200";
+                if (height !== null) {
+                    h = " height=" + height;
+                }
+
+                let text = "<li class='" + classes + "'>" +
+                           "  <div class='message-box'>" +
+                           "    <div class='user'>" +
+                           "      <time>" + getTime(time) + "</time>" +
+                           "    </div>" +
+                           "    <img src=" + url + w + h + "/>" +
+                           "  </div>" +
+                           "</li>";
+                append(text);
+            }
+
+            function display_info(time, message) {
+                let text = '<li class="notification">' +
+                    '  <p>'+message+'</p>' +
+                    '  <time>'+getTime(time)+'</time>' +
+                    '</li>';
+                append(text);
+            }
+
+            function submit_text(text) {
+                socket.emit('text', {room: self_room, msg: text});
+            }
+
+            function submit_image(url, width, height) {
+                socket.emit('image', {room: self_room, image: url, width: width, height: height});
+            }
+
+            function submit_command(parameter) {
+                socket.emit('command', {room: self_room, data: parameter});
+            }
+
             function updateUsers() {
-                var current_users = "You";
-                for (var idx in users) {
+                let current_users = "You";
+                for (const idx in users) {
                     current_users += ", " + users[idx];
                 }
                 $('#users').empty().append('<span>'+current_users+'</span>');
@@ -175,13 +162,13 @@
                 $('#latency').hide();
                 $('#user-list').hide();
                 socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/chat');
-                var startTime;
-                var ping_pong_times = [];
+                let startTime;
+                let ping_pong_times = [];
                 window.setInterval(function () {
                     startTime = (new Date).getTime();
                     socket.emit("my_ping");
-                    var date = new Date();
-                    for (var sid in typing) {
+                    let date = new Date();
+                    for (let sid in typing) {
                         if (typing[sid]['date'].getSeconds() + 3 < date.getSeconds())
                             delete typing[sid];
                     }
@@ -199,6 +186,8 @@
                         $("#sidebar").html(data.html);
                     if (data.css !== "")
                         $("#custom-styles").html(data.css);
+                    if (data.script !== "")
+                        $("#custom-scripts").html(data.script);
                     $("#chat-area").empty();
                     users = {};
                     data.users.forEach(function (user) {
@@ -206,24 +195,24 @@
                     });
                     updateUsers();
                     updatePermissions(data.permissions);
-                    if (!history_received) {
+                    if (!history_received && print_history !== undefined) {
                         print_history(data["history"]);
                         history_received = true;
                     }
-                    var room = data.room;
+                    let room = data.room;
                     $("#room").text(room.label)
                 });
 
                 socket.on("my_pong", function () {
                     pings_received += 1;
 
-                    var latency = (new Date).getTime() - startTime;
+                    let latency = (new Date).getTime() - startTime;
                     ping_pong_times.push(latency);
                     ping_pong_times = ping_pong_times.slice(- {{ ping_pong_latency_checks }} );
-                    var sum = 0;
-                    for (var i = 0; i < ping_pong_times.length; ++i)
+                    let sum = 0;
+                    for (let i = 0; i < ping_pong_times.length; ++i)
                         sum += ping_pong_times[i];
-                    var ping = $("#ping");
+                    let ping = $("#ping");
                     ping.text(Math.round(10 * sum / ping_pong_times.length)/10);
 
                     if (parseFloat(ping.text()) >= {{ refresh_threshold }} && pings_received >= {{ refresh_start }}) {
@@ -240,7 +229,7 @@
                         return;
 	                switch (data.type) {
                         case "join":
-                            var user = data.user;
+                            let user = data.user;
                             if (user.id !== self_user) {
                                 users[user.id] = user.name;
                                 updateUsers();
@@ -251,27 +240,16 @@
                             updateUsers();
                             break;
                         case "new_image":
-	                        info('You have received a new image!', getTime(data.timestamp));
+	                        display_info(data.timestamp, 'You have received a new image!');
 	                        break;
                         case "undefined_command":
-	                        info('Command could not be recognized!', getTime(data.timestamp));
+	                        display_info(data.timestamp, 'Command could not be recognized!');
 	                        break;
                     }
                 });
 
                 socket.on('clear_chat_area', function() {
                     $('#chat-area').empty()
-                });
-
-                socket.on('message', function(data) {
-                    console.log("Message:", data);
-                    if (data["image"] !== undefined) {
-                        console.log("image");
-                        image(data.user, getTime(data.timestamp), data.image, data.width, data.height, data.privateMessage, true);
-                    } else {
-                        console.log("message");
-                        message(data.user, getTime(data.timestamp), data.msg, data.privateMessage, true);
-                    }
                 });
 
                 socket.on('update_permissions', function (data) {
@@ -286,41 +264,10 @@
                     console.log("New image:", data);
                     set_image(data['url']);
 	            });
-
-	            $('#text').keypress(function(e) {
-	                // socket.emit('keypress');
-	                var code = e.keyCode || e.which;
-	                if (code === 13) { // Return key
-	                    var text = $(e.target).val();
-	                    $(e.target).val('');
-	                    if (text === '')
-	                        return;
-
-                        var currentDate = new Date();
-                        var time = currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0"+currentDate.getMinutes() : ""+currentDate.getMinutes());
-
-	                    if (text.match("^/")) {
-				            append("<li class='command'>" +
-                                   "  <div class='message-box'>" +
-							       "    <div class='user'>You"+
-				                   "      <time>"+time+"</time>" +
-				                   "    </div>" +
-						           "    <span class='msg'>"+text.substr(1)+"</span>" +
-						           "  </div>" +
-                                   "</li>");
-                            console.log({data: text.substr(1).split(' ')});
-	                        socket.emit('command', {room: self_room, data: text.substr(1).split(' ')});
-	                    } else {
-                            display_own_message(time, text, false);
-	                        socket.emit('text', {room: self_room, msg: text});
-                        }
-	                }
-	            });
             });
         </script>
-        <style id="custom-styles">
-{{ css|safe }}
-        </style>
+        <script type="text/javascript" charset="utf-8" id="custom-scripts"></script>
+        <style id="custom-styles"></style>
     </head>
     <body>
 		<header>
@@ -331,9 +278,7 @@
             <span id="user-list" class="users">Users: <span id="users"></span></span>
 			</nav>
 		</header>
-        <div id="sidebar">
-{{ html|safe }}
-        </div>
+        <div id="sidebar"></div>
 		<div id="content">
 	        <div id="chat-area"></div>
 		</div>

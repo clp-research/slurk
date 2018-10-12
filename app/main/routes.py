@@ -89,14 +89,6 @@ def chat():
     if name == '' or room == '':
         return redirect(url_for('.index'))
 
-    default_layout = config['templates'].get('default-layout')
-    if default_layout:
-        layout = Layout.from_json_file(default_layout)
-        html = layout.html(indent=8)
-        css = layout.css(indent=12)
-    else:
-        html = ""
-        css = ""
     return render_template('chat.html',
                            name=name,
                            room=room.label(),
@@ -106,8 +98,6 @@ def chat():
                            refresh_start=config['client']['refresh-start'],
                            refresh_max=config['client']['refresh-max'],
                            ping_pong_latency_checks=config['client']['ping-pong-latency-checks'],
-                           html=html,
-                           css=css,
                            )
 
 
@@ -120,7 +110,8 @@ def test():
     return render_template('layout.html',
                            title=name,
                            html=layout.html(indent=8),
-                           css=layout.css(indent=12)
+                           css=layout.css(indent=12),
+                           script=layout.script(),
                            )
 
 

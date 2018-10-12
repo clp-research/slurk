@@ -35,5 +35,10 @@
       "align-content": "left",
       "margin": "50px 20px 15px"
     }
+  },
+  "scripts": {
+    "incoming-message": "display-message",
+    "submit-message": "send-message",
+    "print-history": "plain-history"
   }
 }
