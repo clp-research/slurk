@@ -45,7 +45,7 @@ def mouse_position(data):
     emit('mouse_position', {
         'type': data.get('type'),
         'coordinates': data.get('coordinates'),
-        'element': data['element'],
+        'element': data.get('element'),
         'user': current_user.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=Room.from_id(data['room']).name())
