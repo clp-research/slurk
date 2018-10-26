@@ -43,7 +43,7 @@ def request_new_image(_name, room, data):
 @socketio.on('mousePosition', namespace='/chat')
 def mouse_position(data):
     emit('mouse_position', {
-        'type': data['type'],
+        'type': data.get('type'),
         'coordinates': data['coordinates'],
         'element': data['element'],
         'user': current_user.serialize(),
