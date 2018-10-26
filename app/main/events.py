@@ -44,7 +44,7 @@ def request_new_image(_name, room, data):
 def mouse_position(data):
     emit('mouse_position', {
         'type': data.get('type'),
-        'coordinates': data['coordinates'],
+        'coordinates': data.get('coordinates'),
         'element': data['element'],
         'user': current_user.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
