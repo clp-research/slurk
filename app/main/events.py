@@ -17,6 +17,20 @@ from .. import socketio
 from .. import config
 
 
+# cola nazia: functions added: show_new_image
+@socketio.on('show', namespace='/chat')
+@login_required
+def show_new_image(_name, room, data):
+    #how many categories at minimum?
+    if len(data[0]) >= 1:
+       emit('show_image', {
+           'images': data[0], # "list of lists" where each list contains cls_name + img_names
+           'question': data[1],
+           'user': current_user.serialize(),
+           'timestamp': timegm(datetime.now().utctimetuple())
+       }, room=room.name())
+       log({'type': "show_image", 'room': room.id(), 'images': data[0], 'question': data[1]})
+
 def request_new_image(_name, room, data):
     if len(data) < 1:
         return
@@ -375,6 +389,7 @@ def command(message):
 
     def get_command_function(command_string):
         return {
+            'show_image': show_new_image,     #nazia
             'new_image': request_new_image,
             'listen_to': listen_to
         }.get(command_string, None)
