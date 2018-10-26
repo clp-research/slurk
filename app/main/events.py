@@ -42,10 +42,15 @@ def request_new_image(_name, room, data):
 
 @socketio.on('mousePosition', namespace='/chat')
 def mouse_position(data):
+    """
+    Emit an event 'mouse_position' to pass the coordinates of user clicks
+    or mouse movement (specified via 'type') within an HTML element
+    (specified via 'element').
+    """
     emit('mouse_position', {
-        'type': data['type'],
-        'coordinates': data['coordinates'],
-        'element': data['element'],
+        'type': data.get('type'),
+        'coordinates': data.get('coordinates'),
+        'element': data.get('element'),
         'user': current_user.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=Room.from_id(data['room']).name())
