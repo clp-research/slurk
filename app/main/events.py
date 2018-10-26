@@ -40,20 +40,11 @@ def request_new_image(_name, room, data):
         }, room=room.name())
         log({'type': "new_image", 'room': room.id(), 'url': data[0]})
 
-@socketio.on('mouseMove', namespace='/chat')
-def mouse_move(data):#    emit('drawLine', data['coordinates'], room=Room.from_id(data['room']).name())
-    emit('mouse_move', {
-        'coords' : data['coordinates'][0],
-        'coords_prev' : data['coordinates'][1],
-        'user': current_user.serialize(),
-        'timestamp': timegm(datetime.now().utctimetuple()),
-    }, room=Room.from_id(data['room']).name())
-
-@socketio.on('mouseClick', namespace='/chat')
-def mouse_click(data):
-    emit('mouse_click', {
-        'x': data['coordinates']['x'],
-        'y': data['coordinates']['y'],
+@socketio.on('mousePosition', namespace='/chat')
+def mouse_position(data):
+    emit('mouse_position', {
+        'type': data['type'],
+        'coordinates': data['coordinates'],
         'element': data['element'],
         'user': current_user.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
