@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title>{{ title }}: {{ room }}</title>
+        <!-- <title>{{ title }}: {{ room }}</title> -->
+        <title>{{ title }}</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}" />
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}" />
@@ -11,164 +12,220 @@
                 return "Are you sure you want to leave? Your may not completed the task after reloading or closing the page";
             };
 
-            let socket;
-            let typing = {};
-            let self_user = undefined;
-            let self_room = undefined;
-            let invalid_ping_times = 0;
-            let pings_received = 0;
-            let history_received = false;
-            let users = {};
-            let print_history = undefined;
+            var socket;
+            var typing = {};
+            var self_user = undefined;
+            var self_room = undefined;
+            var invalid_ping_times = 0;
+            var pings_received = 0;
+            var history_received = false;
+            var users = {};
 
             function getTime(timestamp) {
                 if (typeof timestamp === "undefined")
                     return new Date().getHours() + ':' +  new Date().getMinutes();
-                let currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
+                var currentDate = new Date((timestamp + new Date().getTimezoneOffset()*60)*1000);
                 return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0"+currentDate.getMinutes() : ""+currentDate.getMinutes());
             }
 
             function append(text) {
 	            $('#chat-area').append(text);
-	            let content = $('#content');
+	            var content = $('#content');
                 content.animate({scrollTop: content.prop("scrollHeight")}, 0);
             }
 
-            function set_image(url) {
-                $('#current-image').attr('src', url).show();
+            // Zoom function: when you click on a picture
+            // this function gets called; the picture with its 
+            // original size will pop up
+            function zoom(image) {
+                var zoom_bg = document.getElementById('zoom');
+                zoom_bg.style.display = "block";
+                var url = image.getAttribute('src')
+                var image = `<img src=` + url + `>`;
+                $('#new_image').empty();
+				$('#new_image').append(image);
             }
+            
+            // Zoom close: click on the zoomed in picture or on
+            // the transparent bg to close it again
+            function close_zoom() {
+                var zoom_bg = document.getElementById('zoom');
+                zoom_bg.style.display = "none";
+            }
+            
+            // generate an html-table which contains all images + captions
+            // change parameters "images, imgtext" to "data" later
+            function show_local_image(data, question) {
+				
+                // this is the format of data we need to generate the table
+                var test = [
+                                ['Black_footed_Albatross', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0014_89.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0065_796068.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0026_796095.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0033_796086.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0040_796066.jpg'],
+                                ['Western_Grebe', 
+                                'cola_images/real\\Western_Grebe\\Western_Grebe_0093_36193.jpg', 
+                                'cola_images/real\\Western_Grebe\\Western_Grebe_0075_36435.jpg', 
+                                'cola_images/real\\Western_Grebe\\Western_Grebe_0028_36196.jpg', 
+                                'cola_images/real\\Western_Grebe\\Western_Grebe_0009_36477.jpg', 
+                                'cola_images/real\\Western_Grebe\\Western_Grebe_0061_36181.jpg'],
+                                ['Black_footed_Albatross', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0014_89.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0065_796068.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0026_796095.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0033_796086.jpg', 
+                                'cola_images/real\\Black_footed_Albatross\\Black_Footed_Albatross_0040_796066.jpg']
+                            ];
+                
+                // this is the format of data we need to generate the text
+                var ttest = [ 
+                              "1 Mary moved to the bathroom.",
+                              "2 Sandra journeyed to the bedroom.",
+                              "3 Mary got the football there.",
+                              "4 John went to the kitchen.",
+                              "5 Mary went back to the kitchen.",
+                              "6 Mary went back to the garden.",
+                              "7 Where is the football?"
+                           ];
 
-            function display_message(sender, time, message, privateMessage) {
-                if (self_user === undefined) {
-                    return;
-                }
+                // data = ttest;
 
-                let classes = "";
-                if (self_user.id === sender.id) {
-                    classes += "self";
+                $('#image-area').empty();
+                $('#show-area').empty();
+
+                var i;
+                var j;
+                var text = "";
+				var rows = "";
+                var cells = "";
+
+                if (typeof data[0] == "string") {
+                    for (i = 0; i < data.length; i++) {
+                        text += '<br><p align="center">' + data[i] + '</p><br>'    
+                    }
+                    $('#show-area').append('<br><h3 style="padding:30px">' + question + '</h3>');
+                    $('#show-area').append(text);
                 } else {
-                    classes += "other";
-                }
+                   // for each list in data:
+				    for (i = 0; i < data.length; i++) {
+                        // for each element in the list:
+                        for (j = 0; j < data[i].length; j++) {
+                            // if it is the first element, then it is the caption;
+                            // otherwise it is an image-path
+                            if (j == 0) {
+                                rows += '<tr class="row">' +
+										    '<td class="caption" colspan="5">' +
+											    '<b>' + data[i][j] + '</b>' +
+										    '</td>' +
+                                        '</tr>'
+                            } else {
+                                var url = "{{ url_for('static', filename='this') }}".replace('this', data[i][j]);
+                                cells += '<td class="image">' + 
+											    '<img class="zoomed_out" onclick="zoom(this)" ' + 
+											    `src=` + url   + ` height="128" width="128">` + 
+										      '</td>'
+                            }
+                        }
+                        rows += '<tr>' + cells + '</tr>';
+                        cells = "";
+                    }
+                    // create table with all rows generated above
+				    var table = '<table class="table">' + rows + '</table>';
+                    $('#show-area').append('<br><h3 style="padding:30px">' + question + '</h3>');
+				    $('#show-area').append(table);
+                }; 
+            }
 
-                if (privateMessage) {
-                    classes += " private";
-                }
-                let text = "<li class='"+classes+"'>" +
-                           "  <div class='message-box'>" +
-                           "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
-                           "      <time>"+getTime(time)+"</time>" +
-                           "    </div>" +
-                           "    <span class='msg'>"+message+"</span>" +
-                           "  </div>" +
-                           "</li>";
+            function print_history(history) {
+                var latest_image = null;
+                history.forEach(function(element) {
+                    switch (element["type"]) {
+                        case "text":
+                            message(element["user"], getTime(element["timestamp"]), element["msg"], element["receiver_id"] !== null, false);
+                            break;
+                        case "command":
+                            message(self_user, getTime(element["timestamp"]), element["command"], true, false);
+                            break;
+                        case "status":
+                            console.log("status:", element);
+                            break;
+                        case "new_image":
+                            latest_image = element["url"]
+                    }
+                });
+                if (latest_image !== null)
+                    set_image(latest_image);
+            }
+
+            function message(sender, time, message, privateMessage, skipSelf) {
+                  if (typeof self_user === "undefined")
+                      return;
+                  var classes = "";
+                  if (self_user.id === sender.id) {
+                      if (skipSelf) return;
+                      classes += "self";
+                  } else {
+                      classes += "other";
+                  }
+                  if (privateMessage)
+                      classes += " private";
+                  var text = "<li class='"+classes+"'>" +
+                             "  <div class='message-box'>" +
+                             "    <div class='user'>"+(self_user.id === sender.id ? "You" : sender.name)+
+                             "      <time>"+time+"</time>" +
+                             "    </div>" +
+                             "    <span class='msg'>"+message+"</span>" +
+                             "  </div>" +
+                             "</li>";
+                  append(text);
+            }
+
+            function display_own_message(time, message, privateMessage) {
+                  var classes = "self";
+
+                  if (privateMessage)
+                      classes += " private";
+
+                  var text = "<li class='"+classes+"'>" +
+                             "  <div class='message-box'>" +
+                             "    <div class='user'>You"+
+                             "      <time>"+time+"</time>" +
+                             "    </div>" +
+                             "    <span class='msg'>"+message+"</span>" +
+                             "  </div>" +
+                             "</li>";
+                  append(text);
+            }
+
+            function info(message, time) {
+                var text = '<li class="notification">' +
+                           '  <p>'+message+'</p>' +
+                           '  <time>'+time+'</time>' +
+                           '</li>';
                 append(text);
-            }
-
-            function display_image(sender, time, url, width, height, privateMessage) {
-                if (self_user === undefined) {
-                    return;
-                }
-
-                let classes = "";
-                if (self_user.id === sender.id) {
-                    classes += "self";
-                } else {
-                    classes += "other";
-                }
-                if (privateMessage) {
-                    classes += " private";
-                }
-
-                let w = " width=200";
-                if (width !== null) {
-                    w = " width=" + width;
-                }
-
-                let h = " height=200";
-                if (height !== null) {
-                    h = " height=" + height;
-                }
-
-                let text = "<li class='" + classes + "'>" +
-                           "  <div class='message-box'>" +
-                           "    <div class='user'>" +
-                           "      <time>" + getTime(time) + "</time>" +
-                           "    </div>" +
-                           "    <img src=" + url + w + h + "/>" +
-                           "  </div>" +
-                           "</li>";
-                append(text);
-            }
-
-            function display_info(time, message) {
-                let text = '<li class="notification">' +
-                    '  <p>'+message+'</p>' +
-                    '  <time>'+getTime(time)+'</time>' +
-                    '</li>';
-                append(text);
-            }
-
-            function submit_text(text) {
-                socket.emit('text', {room: self_room, msg: text});
-            }
-
-            function submit_image(url, width, height) {
-                socket.emit('image', {room: self_room, image: url, width: width, height: height});
-            }
-
-            function submit_command(parameter) {
-                socket.emit('command', {room: self_room, data: parameter});
             }
 
             function updateUsers() {
-                let current_users = "You";
-                for (const idx in users) {
+                var current_users = "You";
+                for (var idx in users) {
                     current_users += ", " + users[idx];
                 }
                 $('#users').empty().append('<span>'+current_users+'</span>');
             }
 
-            function updatePermissions(permissions) {
-                console.log("new permissions:", permissions);
-                if (permissions.write) {
-                    $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
-                } else {
-                    $('#text').prop('readonly', true).prop('placeholder', 'You don\'t have the permissions to write in this room.');
-                }
-                if (permissions.see_latency)
-                    $('#latency').show();
-                else
-                    $('#latency').hide();
-                if (permissions.see_users)
-                    $('#user-list').show();
-                else
-                    $('#user-list').hide();
-                if (permissions.see_input)
-                    $('#type-area').show();
-                else
-                    $('#type-area').hide();
-                if (permissions.see_history)
-                    $('#chat-area').show();
-                else
-                    $('#chat-area').hide();
-                if (permissions.see_interaction_area)
-                    $('#sidebar').show();
-                else
-                    $('#sidebar').hide();
-            }
-
             $(document).ready(function(){
-                {#$("#current-image").hide();#}
                 $('#latency').hide();
                 $('#user-list').hide();
                 socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/chat');
-                let startTime;
-                let ping_pong_times = [];
+                var startTime;
+                var ping_pong_times = [];
                 window.setInterval(function () {
                     startTime = (new Date).getTime();
                     socket.emit("my_ping");
-                    let date = new Date();
-                    for (let sid in typing) {
+                    var date = new Date();
+                    for (var sid in typing) {
                         if (typing[sid]['date'].getSeconds() + 3 < date.getSeconds())
                             delete typing[sid];
                     }
@@ -176,43 +233,50 @@
                 }, 1000);
 
                 socket.on('joined_room', function (data) {
-                    console.log("permissions: ", data.permissions);
                     self_user = data.self;
                     self_user.name = "You";
                     self_room = data.room.id;
 
                     console.log("joined room:", data);
-                    if (data.html !== "")
-                        $("#sidebar").html(data.html);
-                    if (data.css !== "")
-                        $("#custom-styles").html(data.css);
-                    if (data.script !== "")
-                        $("#custom-scripts").html(data.script);
                     $("#chat-area").empty();
                     users = {};
                     data.users.forEach(function (user) {
                         users[user.id] = user.name;
                     });
                     updateUsers();
-                    updatePermissions(data.permissions);
-                    if (!history_received && print_history !== undefined) {
+                    if (!history_received) {
                         print_history(data["history"]);
                         history_received = true;
                     }
-                    let room = data.room;
+                    var room = data.room;
+                    if (!room.read_only) {
+                        $('#text').prop('readonly', false);
+                        $('#text').prop('placeholder', 'Enter your message here!');
+                    } else {
+                        $('#text').prop('readonly', true);
+                        $('#text').prop('placeholder', 'You do not have the permissions to write in this room.');
+                    }
+                    if (room.show_latency)
+                        $('#latency').show();
+                    else
+                        $('#latency').hide();
+                    if (room.show_users)
+                        $('#user-list').show();
+                    else
+                        $('#user-list').hide();
                     $("#room").text(room.label)
                 });
 
                 socket.on("my_pong", function () {
                     pings_received += 1;
 
-                    let latency = (new Date).getTime() - startTime;
+                    var latency = (new Date).getTime() - startTime;
                     ping_pong_times.push(latency);
                     ping_pong_times = ping_pong_times.slice(- {{ ping_pong_latency_checks }} );
-                    let sum = 0;
-                    for (let i = 0; i < ping_pong_times.length; ++i)
+                    var sum = 0;
+                    for (var i = 0; i < ping_pong_times.length; ++i)
                         sum += ping_pong_times[i];
-                    let ping = $("#ping");
+                    var ping = $("#ping");
                     ping.text(Math.round(10 * sum / ping_pong_times.length)/10);
 
                     if (parseFloat(ping.text()) >= {{ refresh_threshold }} && pings_received >= {{ refresh_start }}) {
@@ -229,7 +293,7 @@
                         return;
 	                switch (data.type) {
                         case "join":
-                            let user = data.user;
+                            var user = data.user;
                             if (user.id !== self_user) {
                                 users[user.id] = user.name;
                                 updateUsers();
@@ -240,45 +304,98 @@
                             updateUsers();
                             break;
                         case "new_image":
-	                        display_info(data.timestamp, 'You have received a new image!');
+	                        info('You have received a new image!', getTime(data.timestamp));
 	                        break;
                         case "undefined_command":
-	                        display_info(data.timestamp, 'Command could not be recognized!');
+	                        info('Command could not be recognized!', getTime(data.timestamp));
 	                        break;
                     }
                 });
 
-                socket.on('clear_chat_area', function() {
-                    $('#chat-area').empty()
+                socket.on('message', function(data) {
+                    console.log("Message:", data);
+                    message(data.user, getTime(data.timestamp), data.msg, data.privateMessage, true);
                 });
 
-                socket.on('update_permissions', function (data) {
-                    updatePermissions(data.permissions)
-                });
+                // show_image
+	            socket.on('show_image', function(data) {
+                    console.log("Show image with text:", data);
+                    //show_local_image(data['images'], data['imgtext']);
+                    show_local_image(data['images'], data['question'])
+	            });
 
-                socket.on('update_info_text', function (data) {
-                    $("#status-text").text(data.text)
-                });
+	            $('#text').keypress(function(e) {
+	                // socket.emit('keypress');
+	                var code = e.keyCode || e.which;
+	                if (code === 13) { // Return key
+	                    var text = $(e.target).val();
+	                    $(e.target).val('');
+	                    if (text === '')
+	                        return;
 
-	            socket.on('new_image', function(data) {
-                    console.log("New image:", data);
-                    set_image(data['url']);
+                        var currentDate = new Date();
+                        var time = currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0"+currentDate.getMinutes() : ""+currentDate.getMinutes());
+
+	                    if (text.match("^/")) {
+				            append("<li class='command'>" +
+                                   "  <div class='message-box'>" +
+							       "    <div class='user'>You"+
+				                   "      <time>"+time+"</time>" +
+				                   "    </div>" +
+						           "    <span class='msg'>"+text.substr(1)+"</span>" +
+						           "  </div>" +
+                                   "</li>");
+                            console.log({data: text.substr(1).split(' ')});
+	                        socket.emit('command', {room: self_room, data: text.substr(1).split(' ')});
+	                    } else {
+                            display_own_message(time, text, false);
+	                        socket.emit('text', {room: self_room, msg: text});
+                        }
+	                }
 	            });
             });
         </script>
-        <script type="text/javascript" charset="utf-8" id="custom-scripts"></script>
-        <style id="custom-styles"></style>
     </head>
     <body>
 		<header>
 			<nav>
 		    <h1 class="name">{{ heading }}</h1>
-		    <h2 class="room" id="room">{{ room }}</h2>
+		    <!-- <h2 class="room" id="room">{{ room }}</h2> -->
             <span id="latency" class="latency">Latency: <span id="ping">999</span> ms</span>
             <span id="user-list" class="users">Users: <span id="users"></span></span>
-			</nav>
+			<!-- Help box -->
+            <button class="tooltip">HELP
+                <div class="tooltiptext">
+                    <p><u>Commands to use in this game:</u></p><br>
+                    <!-- You can change the font color with the <font>-tag -->
+                    <p><b><font color="red">/answer <i>...class description here...</font></i></b><br><br>
+                    For example, /agree category 'xyz' has black body and white wings <br>
+                    (i.e. definition of a class based on the observation)<br>
+                    This command can be used multiple times until both the players reach an agreement.
+                    </p><br><br>
+                    <p><b><font color="red">/agree</font></b><br><br>
+                    This command can be used only once<br>
+                    for final submission by one of the players.<br>
+                    Players can use this command only when they reach an agreement.<br>
+                    </p>
+                </div>
+            </button>
+            </nav>
 		</header>
-        <div id="sidebar"></div>
+        <div class="sidebar" id="sidebar">
+            <!-- For the zooming functionality -->
+            <div id="zoom" class="zoom"  onclick="close_zoom()">
+                <div id="new_image" class="zoom_content"></div>
+            </div>
+			<div id="image-area">
+				<b> Patience, we are waiting for another player. </b><br><br>
+				<img src='https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif' width="400" height="300" />
+				<br>
+			</div>
+			<div id="show-area"></div>
+            <div id="status-box"></div>
+            <div id="typing-area"></div>
+		</div>
 		<div id="content">
 	        <div id="chat-area"></div>
 		</div>
