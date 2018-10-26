@@ -1,6 +1,5 @@
 let trackingArea = "#current-image"
 let mouse = {
-    click: false,
     move: false,
     pos: {x:false, y:false}
 };
@@ -16,7 +15,7 @@ function emitPosition(a) {
         socket.emit('mousePosition', {
             type:'move',
             coordinates:mouse.pos,
-            element:trackingArea,
+            element:a,
             room:self_room
         });
         mouse.move = false;
