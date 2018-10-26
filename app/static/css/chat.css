@@ -12,22 +12,27 @@ html, body {
 header, footer {
     min-width: 600px;
     width: 100%;
-    background: #007656;
+    /*background: #007656;*/
+    background: #115E91;
     box-sizing: border-box;
 }
 
 header{
     position: fixed;
     height: 80px;
-    border-bottom: #007656 solid 1px;
-    box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
+    /*border-bottom: #007656 solid 1px;*/
+    border-bottom: #115E91 solid 1px;
+    box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0, rgba(0,0,0,0.09804) 0 1px 2px 0;
+    /* z-index added to show help box on top */
+    z-index: 10;
 }
-
 header .name {
     margin: 0 auto 3px;
     color: #E5E5E5;
     text-align: center;
     font-size: xx-large;
+    /* add padding */
+    padding-top: 20px;
 }
 header .room {
     margin: 0 auto 3px;
@@ -62,25 +67,128 @@ header .users {
     position: fixed;
     top: 80px;
     right: 0;
-    width: 55%;
+    width: 70%;
     min-width: 300px;
     height: calc(100% - 80px - 60px);
     border-right: medium groove inherit;
+	overflow-y: scroll;
+	overflow-x: scroll;
 }
 
 #content {
     position: fixed;
     top: 80px;
     left: 0;
-    width: 45%;
+    width: 30%;
     height: calc(100% - 80px - 60px);
     overflow-y: scroll;
 }
+
+#image-area {
+	margin-left: 30px;
+	margin-top: 30px;
+}
+
+/* --- Help Box --- */
+
+header .tooltip {
+    top: 45px;
+    right: 2px;
+    position: absolute;
+}
+
+.tooltip {
+    display: inline-block;
+}
+
+/* Here you can change the bg-color, 
+font-size, font-color, etc. of the help box */
+.tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    font-size: 15px;
+    color: #fff;
+    width: 500px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 6px;
+    
+    /* Position the tooltip */
+    position: absolute;
+    top: -5px;
+    right: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+/* ----- show-TABLE ------ */
+
+#show-area {
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+	width: 900px;
+	/*background-color: rgb(173, 235, 173);*/
+	background-color: rgb(182, 226, 226);
+}
+
+.table {
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	width: 840px;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.caption {
+	text-align: center;
+	padding: 20px;
+	font-size: 20px;
+}
+
+.image {
+	width: 156px;
+	height: 156px;
+	padding: 10px;
+	text-align: center;
+}
+
+/* --- ZOOMING - START ---- */
+
+.zoomed_out {
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.zoom {
+    display: none;
+    margin: auto;
+    position: absolute;
+    padding-top: 200px;
+    left: 0;
+    right: 0;
+    width: 900px;
+    height: 650px;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.zoom_content {
+    text-align: center;
+}
+
+/* ZOOMING - END */
 
 #chat-area {
     padding: 0 0 50px;
     margin: 10px 0 15px;
 }
+
 #chat-area li {
     padding: 0.5rem;
     overflow: hidden;
@@ -108,7 +216,6 @@ header .users {
     background: #c2c2c2;
     color: #000;
 }
-
 
 .self, .command {
     justify-content: flex-end;
