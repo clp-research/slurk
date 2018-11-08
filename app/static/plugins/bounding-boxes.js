@@ -38,9 +38,9 @@ context.lineWidth = 2;
 
 function getPosition (evt) {
     /*
-    assign the cursor position within #canvas to mouse.pos
+    assign the cursor position within canvas to mouse.pos
     */
-    canvas_position = $('#canvas').offset();
+    canvas_position = $(canvas).offset();
     mouse.pos.x = evt.clientX - canvas_position.left;
     mouse.pos.y = evt.clientY - canvas_position.top;
 }
