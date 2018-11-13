@@ -7,10 +7,6 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/jquery-3.2.1.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/socket.io-2.0.3.min.js') }}"></script>
         <script type="text/javascript" charset="utf-8">
-            window.onbeforeunload = function() {
-                return "Are you sure you want to leave? Your may not completed the task after reloading or closing the page";
-            };
-
             let socket;
             let typing = {};
             let self_user = undefined;
