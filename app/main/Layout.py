@@ -228,6 +228,8 @@ class Layout:
             return self._history(content)
         if trigger == "document-ready":
             return self._document_ready(content)
+        if trigger == "plain":
+            return content
         print("unknown trigger:", trigger)
         return ""
 
