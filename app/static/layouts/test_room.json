@@ -32,7 +32,7 @@
         {
           "type": "button",
           "content": "Click me!",
-          "onclick": "alert(\"Hello World!\");"
+          "onclick": "doMyStuff();"
         }
       ]
     },
@@ -54,6 +54,7 @@
   "scripts": {
     "incoming-message": "display-message",
     "submit-message": "send-message",
-    "print-history": "intercept-history"
+    "print-history": "intercept-history",
+    "plain": "do-my-stuff"
   }
 }
