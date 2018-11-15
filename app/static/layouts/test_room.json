@@ -18,6 +18,21 @@
           "src": "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
           "width": 500,
           "height": 400
+        },
+        {
+          "type": "break"
+        },
+        {
+          "type": "span",
+          "content": "This is a span!"
+        },
+        {
+          "type": "break"
+        },
+        {
+          "type": "button",
+          "content": "Click me!",
+          "onclick": "alert(\"Hello World!\");"
         }
       ]
     },

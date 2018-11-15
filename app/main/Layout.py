@@ -70,6 +70,11 @@ class Layout:
                                   attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
+            elif entry["type"] == "span":
+                html += self._tag("span",
+                                  attributes=attributes,
+                                  content=entry.get("content"),
+                                  indent=indent)
             elif entry["type"] == "break" or entry["type"] == "br":
                 html += self._tag("br",
                                   indent=indent,
@@ -91,23 +96,27 @@ class Layout:
                                   indent=indent)
             elif entry["type"] == "table":
                 html += self._tag("table",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
             elif entry["type"] == "row" or entry["type"] == "tr":
                 html += self._tag("tr",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
+                                  attributes=attributes,
+                                  content=entry.get("content"),
+                                  indent=indent)
+            elif entry["type"] == "button":
+                html += self._tag("button",
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
             elif entry["type"] == "cell" or entry["type"] == "td":
                 html += self._tag("td",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class')),
-                                              ("colspan", entry.get('colspan'))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
             elif entry["type"] == "plain" or entry["type"] == "pre":
                 html += self._tag("pre",
-                                  attributes=[("id", entry.get('id')), ("class", entry.get('class'))],
+                                  attributes=attributes,
                                   content=entry.get("content"),
                                   indent=indent)
             elif entry["type"] == "audio":
