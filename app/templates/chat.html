@@ -190,12 +190,27 @@
                 self_room = data.room.id;
 
                 console.log("joined room:", data);
-                if (data.html !== "")
-                    $("#sidebar").html(data.html);
-                if (data.css !== "")
-                    $("#custom-styles").html(data.css);
-                if (data.script !== "")
-                    $("#custom-scripts").html(data.script);
+                if (data.layout.html !== "") {
+                    $("#sidebar").html(data.layout.html);
+                }
+                if (data.layout.css !== "") {
+                    $("#custom-styles").html(data.layout.css);
+                }
+                if (data.layout.script !== "") {
+                    $("#custom-scripts").html(data.layout.script);
+                }
+                if (data.layout.title !== "") {
+                    document.title = data.layout.title;
+                } else {
+                    document.title = 'Slurk';
+                }
+                $("#title").text(document.title);
+                if (data.layout.subtitle !== "") {
+                    $("#subtitle").text(data.layout.subtitle);
+                } else {
+                    $("#subtitle").text(data.room.label);
+                }
+
                 $("#chat-area").empty();
                 users = {};
                 data.users.forEach(function (user) {
@@ -207,8 +222,6 @@
                     print_history(data["history"]);
                     history_received = true;
                 }
-                let room = data.room;
-                $("#room").text(room.label)
             });
 
             socket.on("my_pong", function () {
@@ -274,8 +287,8 @@
 <body>
     <header>
         <nav>
-            <h1 class="name">{{ heading }}</h1>
-            <h2 class="room" id="room">{{ room }}</h2>
+            <h1 id="title"></h1>
+            <h2 id="subtitle"></h2>
             <span id="latency" class="latency">Latency: <span id="ping">999</span> ms</span>
             <span id="user-list" class="users">Users: <span id="current-users"></span></span>
         </nav>

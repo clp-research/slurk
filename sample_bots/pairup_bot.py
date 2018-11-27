@@ -34,7 +34,8 @@ def notify(user):
                                         f'so be patient, please...',
                                  'receiver_id': user_id})
 
-    notifications[user_id] = Timer(2, give_waiting_room_token, kwargs={"user": user})
+    notifications[user_id] = Timer(
+        2, give_waiting_room_token, kwargs={"user": user})
     notifications[user_id].start()
 
 
@@ -45,15 +46,15 @@ def give_waiting_room_token(user):
     token = confirmation_code(user, "waiting")
     chat_namespace.emit('text', {'msg': 'Unfortunately, we couldn\'t find a partner for you. You can wait for '
                                         'someone to enter the game, but we will pay only for the time you spent '
-                                        'in the room until the moment you receive\ this message.',
+                                        'in the room until the moment you receive this message.',
                                  'receiver_id': user_id})
     chat_namespace.emit('text', {'msg': 'However, once you leave this room, you have to enter the following token '
                                         'into the field on the HIT webpage. Please enter the token and close the '
                                         'Waiting Room webpage.',
                                  'receiver_id': user_id})
     chat_namespace.emit('text', {'msg': 'Here\'s your token: {}'
-                        .format(format(f'{token}' + ''.join(random.choices(string.ascii_uppercase + string.digits,
-                                                                           k=6)))),
+                                 .format(format(f'{token}' + ''.join(random.choices(string.ascii_uppercase + string.digits,
+                                                                                    k=6)))),
                                  'receiver_id': user_id})
     del notifications[user_id]
     del REG[user_id]
@@ -62,19 +63,17 @@ def give_waiting_room_token(user):
 def confirmation_code(user, gamestate):
     if gamestate == 'waiting':
         token = str(user['token']['uuid']) + "-03"
-        chat_namespace.emit('log', {'type': "confirmation_log", 'message': token, 'room': user['latest_room']['id']})
+        chat_namespace.emit('log', {
+                            'type': "confirmation_log", 'message': token, 'room': user['latest_room']['id']})
         return token[:-3]  # user shouldn't see appendix / gamestate
 
 
 class ChatNamespace(BaseNamespace):
-    def on_message(self, data):
-        print(data)
-
     def on_joined_room(self, data):
-        print(data)
         self.emit("update_info", {'room': data['room']['id'],
                                   'text': "Patience, we are waiting for another player..."})
-        self.emit("command", {'room': data['room']['id'], 'data': ['listen_to', 'reset_meetups']})
+        self.emit("command", {'room': data['room']['id'], 'data': [
+                  'listen_to', 'reset_meetups']})
         self.emit('command', {'room': data['room']['id'],
                               'data': ['new_image', "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"]})
 
@@ -88,26 +87,25 @@ class ChatNamespace(BaseNamespace):
             return
         task_id = task['id']
 
-        print(data)
-
         if task_id not in tasks:
             tasks[task_id] = {'task': task, 'users': set({}), 'rooms': 0}
 
         if data['type'] == 'join':
+            print("new user: {}".format(data["user"]["name"]))
             self.emit("update_info", {'receiver_id': user_id,
                                       'text': "Patience, we are waiting for another player...",
                                       })
             tasks[task_id]['users'].add(user_id)
             if user_id not in REG:
                 REG[user_id] = user
-                notifications[user_id] = Timer(3, notify, kwargs={"user": user})
+                notifications[user_id] = Timer(
+                    10, notify, kwargs={"user": user})
                 notifications[user_id].start()
         elif data['type'] == 'leave':
+            print("user {} left".format(data["user"]["name"]))
             tasks[task_id]['users'].discard(user_id)
         else:
             return
-
-        print(tasks)
 
         if len(tasks[task_id]['users']) == tasks[task_id]['task']['users']:
             tasks[task_id]['rooms'] += 1
@@ -119,7 +117,8 @@ class ChatNamespace(BaseNamespace):
                 if user and user in notifications:
                     notifications[user].cancel()
                 clients.append(user)
-                print("move user", user, "to room", room, tasks[task_id]['rooms'])
+                print("move user", user, "to room",
+                      room, tasks[task_id]['rooms'])
                 used_ids[user] = room
                 self.emit("moveUser", {
                     'room': room,
@@ -130,7 +129,7 @@ class ChatNamespace(BaseNamespace):
                                          "name": room,
                                          "label": label.title(),
                                          "users": clients,
-                                         "layout": "meetup-task",
+                                         "layout": "meetup_task",
                                          "hide": []})
             tasks[task_id]['users'].clear()
 
@@ -163,6 +162,7 @@ if __name__ == '__main__':
 
     with SocketIO(args.chat_host, args.chat_port) as socketIO:
         login_namespace = socketIO.define(LoginNamespace, '/login')
-        login_namespace.emit('connectWithToken', {'token': args.token, 'name': "ConciergeBot"})
+        login_namespace.emit('connectWithToken', {
+                             'token': args.token, 'name': "ConciergeBot"})
         chat_namespace = socketIO.define(ChatNamespace, '/chat')
         socketIO.wait()

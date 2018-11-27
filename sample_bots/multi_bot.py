@@ -10,6 +10,7 @@ chat_namespace = None
 users = {}
 self_id = None
 
+
 def add_user(room, id):
     global users
 
@@ -39,23 +40,24 @@ class ChatNamespace(BaseNamespace):
     @staticmethod
     def on_status(data):
         global users
-        print("status:", data)
 
         if data['user']['id'] != self_id:
             add_user(data['room']['id'], data['user']['id'])
 
     def on_new_task_room(self, data):
         print("hello!!! I have been triggered!")
-        print("new task room:", data)
         if data['task']['name'] != 'meetup':
             return
 
         room = data['room']
         print("Joining room", room['name'])
         self.emit('join_task', {'room': room['id']})
-        self.emit("command", {'room': room['id'], 'data': ['listen_to', 'new_image_private']})
-        self.emit("command", {'room': room['id'], 'data': ['listen_to', 'new_image_public']})
-        self.emit("command", {'room': room['id'], 'data': ['listen_to', 'end_meetup']})
+        self.emit("command", {'room': room['id'], 'data': [
+                  'listen_to', 'new_image_private']})
+        self.emit("command", {'room': room['id'], 'data': [
+                  'listen_to', 'new_image_public']})
+        self.emit("command", {'room': room['id'], 'data': [
+                  'listen_to', 'end_meetup']})
 
     def on_new_image_public(self, data):
         print("requested new public image:", data)
@@ -103,5 +105,6 @@ if __name__ == '__main__':
 
     with SocketIO(args.chat_host, args.chat_port) as socketIO:
         login_namespace = socketIO.define(LoginNamespace, '/login')
-        login_namespace.emit('connectWithToken', {'token': args.token, 'name': "MultiBot"})
+        login_namespace.emit('connectWithToken', {
+                             'token': args.token, 'name': "MultiBot"})
         socketIO.wait()

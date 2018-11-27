@@ -1,4 +1,5 @@
 from .database import Database
+from .Layout import Layout
 
 ROOMS = dict()
 
@@ -17,7 +18,8 @@ class Room:
 
     def set_name(self, name):
         if not isinstance(name, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(name)}` was passed")
 
         db = Database()
         db.get_cursor().execute('UPDATE Room SET Name = ? WHERE Id = ?;', (name, self.id()))
@@ -31,21 +33,23 @@ class Room:
 
     def set_label(self, label):
         if not isinstance(label, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(label)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(label)}` was passed")
 
         db = Database()
         db.get_cursor().execute('UPDATE Room SET Label = ? WHERE Id = ?;', (label, self.id()))
         db.commit()
 
-    def layout(self):
+    def layout_path(self):
         c = Database().get_cursor()
         c.execute("SELECT Layout FROM Room WHERE Id = ?;", (self.id(),))
         fetch = c.fetchone()
         return fetch[0] if fetch and fetch[0] else None
 
-    def set_layout(self, layout):
+    def set_layout_path(self, layout):
         if not isinstance(layout, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(layout)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(layout)}` was passed")
 
         db = Database()
         db.get_cursor().execute('UPDATE Room SET Layout = ? WHERE Id = ?;', (layout, self.id()))
@@ -59,10 +63,12 @@ class Room:
 
     def set_read_only(self, read_only):
         if not isinstance(read_only, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(read_only)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(read_only)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('UPDATE Room SET ReadOnly = ? WHERE Id = ?;', (read_only, self.id()))
+        db.get_cursor().execute(
+            'UPDATE Room SET ReadOnly = ? WHERE Id = ?;', (read_only, self.id()))
         db.commit()
 
     def show_users(self):
@@ -73,10 +79,12 @@ class Room:
 
     def set_show_users(self, show_users):
         if not isinstance(show_users, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_users)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_users)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('UPDATE Room SET ShowUsers = ? WHERE Id = ?;', (show_users, self.id()))
+        db.get_cursor().execute(
+            'UPDATE Room SET ShowUsers = ? WHERE Id = ?;', (show_users, self.id()))
         db.commit()
 
     def show_latency(self):
@@ -87,50 +95,12 @@ class Room:
 
     def set_show_latency(self, show_latency):
         if not isinstance(show_latency, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_latency)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_latency)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('UPDATE Room SET ShowLatency = ? WHERE Id = ?;', (show_latency, self.id()))
-        db.commit()
-
-    def show_input(self):
-        c = Database().get_cursor()
-        c.execute("SELECT ShowInput FROM Room WHERE TokenId = ? AND RoomId = ?;",
-                  (self._token, self._room))
-        fetch = c.fetchone()
-        return fetch[0] != 0 if fetch and fetch[0] else False
-
-    def set_show_input(self, show_input):
-        db = Database()
-        db.get_cursor().execute('UPDATE Room SET ShowInput = ? WHERE TokenId = ? AND RoomId = ?;',
-                                (show_input, self._token, self._room))
-        db.commit()
-
-    def show_history(self):
-        c = Database().get_cursor()
-        c.execute("SELECT ShowHistory FROM Room WHERE TokenId = ? AND RoomId = ?;",
-                  (self._token, self._room))
-        fetch = c.fetchone()
-        return fetch[0] != 0 if fetch and fetch[0] else False
-
-    def set_show_history(self, show_history):
-        db = Database()
-        db.get_cursor().execute('UPDATE Room SET ShowHistory = ? WHERE TokenId = ? AND RoomId = ?;',
-                                (show_history, self._token, self._room))
-        db.commit()
-
-    def show_interaction_area(self):
-        c = Database().get_cursor()
-        c.execute("SELECT ShowInteractionArea FROM Room WHERE TokenId = ? AND RoomId = ?;",
-                  (self._token, self._room))
-        fetch = c.fetchone()
-        return fetch[0] != 0 if fetch and fetch[0] else False
-
-    def set_show_interaction_area(self, show_interaction_area):
-        db = Database()
-        db.get_cursor().execute('UPDATE Room SET ShowInteractionArea = ? '
-                                'WHERE TokenId = ? AND RoomId = ?;',
-                                (show_interaction_area, self._token, self._room))
+        db.get_cursor().execute('UPDATE Room SET ShowLatency = ? WHERE Id = ?;',
+                                (show_latency, self.id()))
         db.commit()
 
     def static(self):
@@ -141,7 +111,8 @@ class Room:
 
     def set_static(self, static):
         if not isinstance(static, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(static)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(static)}` was passed")
 
         db = Database()
         db.get_cursor().execute('UPDATE Room SET Static = ? WHERE Id = ?;', (static, self.id()))
@@ -152,7 +123,7 @@ class Room:
             'id': self.id(),
             'name': self.name(),
             'label': self.label(),
-            'layout': self.layout(),
+            'layout_path': self.layout_path(),
             'read_only': self.read_only(),
             'show_users': self.show_users(),
             'show_latency': self.show_latency(),
@@ -161,7 +132,8 @@ class Room:
     @classmethod
     def from_id(cls, id):
         if not isinstance(id, int) and not isinstance(id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
 
         c = Database().get_cursor()
         c.execute('SELECT COUNT(*) FROM Room WHERE Id = ?', (int(id),))
@@ -170,25 +142,35 @@ class Room:
     @classmethod
     def create(cls, name, label, layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True, static=False):
         if not isinstance(name, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(name)}` was passed")
         if not isinstance(label, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(label)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(label)}` was passed")
         if not isinstance(layout, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(layout)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(layout)}` was passed")
         if not isinstance(read_only, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(read_only)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(read_only)}` was passed")
         if not isinstance(show_users, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_users)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_users)}` was passed")
         if not isinstance(show_latency, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_latency)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_latency)}` was passed")
         if not isinstance(show_input, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_input)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_input)}` was passed")
         if not isinstance(show_history, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_history)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_history)}` was passed")
         if not isinstance(show_interaction_area, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(show_interaction_area)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(show_interaction_area)}` was passed")
         if not isinstance(static, bool):
-            raise TypeError(f"Object of type `bool` expected, however type `{type(static)}` was passed")
+            raise TypeError(
+                f"Object of type `bool` expected, however type `{type(static)}` was passed")
 
         db = Database()
         c = db.get_cursor()
@@ -210,7 +192,8 @@ class Room:
 
     def __init__(self, id):
         if not isinstance(id, int) and not isinstance(id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
 
         self._id = int(id)
 

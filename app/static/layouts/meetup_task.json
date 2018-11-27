@@ -1,19 +1,19 @@
 {
   "html": [
     {
-      "type": "area",
+      "layout-type": "div",
       "id": "image-area",
-      "content": [
+      "layout-content": [
         {
-          "type": "bold",
-          "id": "status-text",
-          "content": "Status Text"
+          "layout-type": "b",
+          "layout-content": "Status Text",
+          "id": "status-text"
         },
         {
-          "type": "break"
+          "layout-type": "br"
         },
         {
-          "type": "image",
+          "layout-type": "image",
           "id": "current-image",
           "src": "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
           "width": 500,
@@ -22,11 +22,11 @@
       ]
     },
     {
-      "type": "area",
+      "layout-type": "div",
       "id": "status-box"
     },
     {
-      "type": "area",
+      "layout-type": "div",
       "id": "typing-area"
     }
   ],
@@ -39,7 +39,6 @@
   "scripts": {
     "incoming-message": "display-message",
     "submit-message": "send-message",
-    "print-history": "plain-history",
-    "document-ready": "ask-reload"
+    "print-history": "plain-history"
   }
 }
