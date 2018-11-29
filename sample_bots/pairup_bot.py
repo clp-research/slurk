@@ -83,7 +83,7 @@ class ChatNamespace(BaseNamespace):
         self.emit('set_text', {
             'room': data['room']['id'],
             'id': "status-box",
-            'value': "Waiting for other players..."
+            'text': "Waiting for other players..."
         })
 
     def on_status(self, data):

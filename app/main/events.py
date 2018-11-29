@@ -329,9 +329,9 @@ def set_text(data):
 
     :param data: A dictionary with the following fields:
         - ``id``: The id to be updated
-        - ``value``: The value for the attribute
-        - ``receiver_id`` (Optional): Sends the attribute to this receiver only
-        - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
+        - ``text``: The value for the attribute
+        - ``receiver_id`` (Optional): Sends the text to this receiver only
+        - ``room`` (Optional): Sends the text to this room. Either ``receiver_id`` or ``room`` is required.
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
@@ -341,8 +341,8 @@ def set_text(data):
     if 'id' not in data:
         print("`set_text` requires `id`")
         return
-    if 'value' not in data:
-        print("`set_text` requires `value`")
+    if 'text' not in data:
+        print("`set_text` requires `text`")
         return
     if 'receiver_id' in data:
         user = User.from_id(data['receiver_id'])
@@ -361,12 +361,12 @@ def set_text(data):
         'user': sender.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
         'id': data['id'],
-        'value': data['value'],
+        'text': data['text'],
         }, room=target)
     log({'type': "set_text_updated",
          'room': room.id(),
          'id': data['id'],
-         'value': data['value'],
+         'text': data['text'],
          'receiver': receiver_id
          })
 

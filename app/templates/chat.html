@@ -278,7 +278,7 @@
 
             socket.on('text_update', function (data) {
                 console.log("Text updated:", data);
-                $('#'+data.id).text(data.value).show();
+                $('#'+data.id).text(data.text).show();
             });
         });
     </script>
