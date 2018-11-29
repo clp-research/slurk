@@ -74,8 +74,17 @@ class ChatNamespace(BaseNamespace):
                                   'text': "Patience, we are waiting for another player..."})
         self.emit("command", {'room': data['room']['id'], 'data': [
                   'listen_to', 'reset_meetups']})
-        self.emit('command', {'room': data['room']['id'],
-                              'data': ['new_image', "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"]})
+        self.emit('set_attribute', {
+            'room': data['room']['id'],
+            'id': "current-image",
+            'attribute': "src",
+            'value': "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"
+        })
+        self.emit('set_text', {
+            'room': data['room']['id'],
+            'id': "status-box",
+            'value': "Waiting for other players..."
+        })
 
     def on_status(self, data):
         global tasks, notifications, REG, used_ids

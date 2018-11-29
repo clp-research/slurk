@@ -61,14 +61,24 @@ class ChatNamespace(BaseNamespace):
 
     def on_new_image_public(self, data):
         print("requested new public image:", data)
-        self.emit('command', {'room': data['room']['id'],
-                              'data': ['new_image', "https://picsum.photos/400/200?" + str(randint(1, 200000000))]})
+
+        self.emit('set_attribute', {
+            'room': data['room']['id'],
+            'id': "current-image",
+            'attribute': "src",
+            'value': "https://picsum.photos/400/200?" + str(randint(1, 200000000))
+        })
 
     def on_new_image_private(self, data):
         print("requested new private image:", data)
-        self.emit('command', {'room': data['room']['id'],
-                              'data': ['new_image', "https://picsum.photos/400/200?" + str(randint(1, 200000000)),
-                                       data['user']['id']]})
+
+        self.emit('set_attribute', {
+            'room': data['room']['id'],
+            'id': "current-image",
+            'attribute': "src",
+            'receiver_id': data['user']['id'],
+            'value': "https://picsum.photos/400/200?" + str(randint(1, 200000000))
+        })
 
     def on_end_meetup(self, data):
         print(data)

@@ -18,6 +18,7 @@ from .. import config
 
 
 def request_new_image(_name, room, data):
+    print("WARNING: using the new_image command is deprecated. Call `set_attribute` directly instead")
     if len(data) < 1:
         return
 
@@ -210,7 +211,7 @@ def invalidate_token(data):
 
 @socketio.on('text', namespace='/chat')
 @login_required
-def text(data):
+def message_text(data):
     if 'receiver_id' in data:
         user = User.from_id(data['receiver_id'])
         print(f"private message: {data['msg']}")
@@ -230,13 +231,13 @@ def text(data):
         }, room=Room.from_id(data['room']).name())
         log({'type': 'text', 'msg': data['msg'], 'room': data['room']})
     else:
-        print("`text` requires `room` and optionally `receiver_id` as parameters")
+        print("`text` requires `room` or `receiver_id` as parameters")
         return
 
 
 @socketio.on('image', namespace='/chat')
 @login_required
-def image(data):
+def message_image(data):
     if 'receiver_id' in data:
         user = User.from_id(data['receiver_id'])
         print(f"private image: {data['image']}")
@@ -260,8 +261,114 @@ def image(data):
         }, room=Room.from_id(data['room']).name())
         log({'type': 'image', 'msg': data['image'], 'room': data['room']})
     else:
-        print("`image` requires `room` and optionally `receiver_id` as parameters")
+        print("`image` requires `room` or `receiver_id` as parameters")
         return
+
+
+@socketio.on('set_attribute', namespace='/chat')
+@login_required
+def set_attribute(data):
+    """
+    Sets a javascript attribute by id to a new value.
+
+    :param data: A dictionary with the following fields:
+        - ``id``: The id to be updated
+        - ``attribute``: The attribute to be updated
+        - ``value``: The value for the attribute
+        - ``receiver_id`` (Optional): Sends the attribute to this receiver only
+        - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
+        - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+    """
+
+    sender = current_user if 'sender_id' not in data else User.from_id(
+        data['sender_id'])
+
+    if 'id' not in data:
+        print("`set_attribute` requires `id`")
+        return
+    if 'attribute' not in data:
+        print("`set_attribute` requires `attribute`")
+        return
+    if 'value' not in data:
+        print("`set_attribute` requires `value`")
+        return
+    if 'receiver_id' in data:
+        user = User.from_id(data['receiver_id'])
+        room = user.latest_room()
+        receiver_id = data['receiver_id']
+        target = User.from_id(receiver_id).sid()
+    elif 'room' in data:
+        room = Room.from_id(data['room'])
+        receiver_id = None
+        target = room.name()
+    else:
+        print("`set_attribute` requires `room` or `receiver_id`")
+        return
+
+    emit('attribute_update', {
+        'user': sender.serialize(),
+        'timestamp': timegm(datetime.now().utctimetuple()),
+        'id': data['id'],
+        'attribute': data['attribute'],
+        'value': data['value'],
+        }, room=target)
+    log({'type': "attribute_updated",
+         'room': room.id(),
+         'id': data['id'],
+         'attribute': data['attribute'],
+         'value': data['value'],
+         'receiver': receiver_id
+         })
+
+
+@socketio.on('set_text', namespace='/chat')
+@login_required
+def set_text(data):
+    """
+    Sets a html text element  by id to a new value.
+
+    :param data: A dictionary with the following fields:
+        - ``id``: The id to be updated
+        - ``value``: The value for the attribute
+        - ``receiver_id`` (Optional): Sends the attribute to this receiver only
+        - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
+        - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+    """
+
+    sender = current_user if 'sender_id' not in data else User.from_id(
+        data['sender_id'])
+
+    if 'id' not in data:
+        print("`set_text` requires `id`")
+        return
+    if 'value' not in data:
+        print("`set_text` requires `value`")
+        return
+    if 'receiver_id' in data:
+        user = User.from_id(data['receiver_id'])
+        room = user.latest_room()
+        receiver_id = data['receiver_id']
+        target = User.from_id(receiver_id).sid()
+    elif 'room' in data:
+        room = Room.from_id(data['room'])
+        receiver_id = None
+        target = room.name()
+    else:
+        print("`set_text` requires `room` or `receiver_id`")
+        return
+
+    emit('text_update', {
+        'user': sender.serialize(),
+        'timestamp': timegm(datetime.now().utctimetuple()),
+        'id': data['id'],
+        'value': data['value'],
+        }, room=target)
+    log({'type': "set_text_updated",
+         'room': room.id(),
+         'id': data['id'],
+         'value': data['value'],
+         'receiver': receiver_id
+         })
 
 
 @socketio.on('update_info', namespace='/chat')

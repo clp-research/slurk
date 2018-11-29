@@ -31,10 +31,6 @@
             content.animate({ scrollTop: content.prop("scrollHeight") }, 0);
         }
 
-        function set_image(url) {
-            $('#current-image').attr('src', url).show();
-        }
-
         function display_message(sender, time, message, privateMessage) {
             if (self_user === undefined) {
                 return;
@@ -270,13 +266,19 @@
                 updatePermissions(data.permissions)
             });
 
-            socket.on('update_info_text', function (data) {
-                $("#status-text").text(data.text)
-            });
-
             socket.on('new_image', function (data) {
                 console.log("New image:", data);
-                set_image(data['url']);
+                $('#'+data.id).attr('src', data.url).show();
+            });
+
+            socket.on('attribute_update', function (data) {
+                console.log("Attribute updated:", data);
+                $('#'+data.id).attr(data.attribute, data.value).show();
+            });
+
+            socket.on('text_update', function (data) {
+                console.log("Text updated:", data);
+                $('#'+data.id).text(data.value).show();
             });
         });
     </script>
