@@ -30,10 +30,13 @@ def request_new_image(_name, room, data):
         emit('new_image', {
             'url': data[0],
             'user': current_user.serialize(),
-            'timestamp': timegm(datetime.now().utctimetuple())
+            'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=receiver.sid())
-        log({'type': "new_image", 'room': room.id(),
-             'url': data[0], 'receiver': receiver.id()})
+        log({'type': "new_image",
+             'room': room.id(),
+             'url': data[0],
+             'receiver': receiver.id(),
+             })
     else:
         emit('new_image', {
             'url': data[0],
@@ -272,9 +275,9 @@ def set_attribute(data):
     Sets a javascript attribute by id to a new value.
 
     :param data: A dictionary with the following fields:
-        - ``id``: The id to be updated
+        - ``id``: The id of the element, which is going to be updated
         - ``attribute``: The attribute to be updated
-        - ``value``: The value for the attribute
+        - ``value``: The value to be set for the given attribute
         - ``receiver_id`` (Optional): Sends the attribute to this receiver only
         - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
@@ -311,7 +314,7 @@ def set_attribute(data):
         'id': data['id'],
         'attribute': data['attribute'],
         'value': data['value'],
-        }, room=target)
+    }, room=target)
     log({'type': "attribute_updated",
          'room': room.id(),
          'id': data['id'],
@@ -328,8 +331,8 @@ def set_text(data):
     Sets a html text element  by id to a new value.
 
     :param data: A dictionary with the following fields:
-        - ``id``: The id to be updated
-        - ``text``: The value for the attribute
+        - ``id``: The id of the text element, which is going to be updated
+        - ``text``: The text to be set
         - ``receiver_id`` (Optional): Sends the text to this receiver only
         - ``room`` (Optional): Sends the text to this room. Either ``receiver_id`` or ``room`` is required.
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
@@ -362,7 +365,7 @@ def set_text(data):
         'timestamp': timegm(datetime.now().utctimetuple()),
         'id': data['id'],
         'text': data['text'],
-        }, room=target)
+    }, room=target)
     log({'type': "set_text_updated",
          'room': room.id(),
          'id': data['id'],
