@@ -7,6 +7,4 @@ switch (element["type"]) {
         break;
     case "status":
         break;
-    case "new_image":
-        set_image(latest_image)
 }

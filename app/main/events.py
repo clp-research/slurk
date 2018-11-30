@@ -18,6 +18,7 @@ from .. import config
 
 
 def request_new_image(_name, room, data):
+    print("WARNING: using the new_image command is deprecated. Call `set_attribute` directly instead")
     if len(data) < 1:
         return
 
@@ -29,9 +30,13 @@ def request_new_image(_name, room, data):
         emit('new_image', {
             'url': data[0],
             'user': current_user.serialize(),
-            'timestamp': timegm(datetime.now().utctimetuple())
+            'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=receiver.sid())
-        log({'type': "new_image", 'room': room.id(), 'url': data[0], 'receiver': receiver.id()})
+        log({'type': "new_image",
+             'room': room.id(),
+             'url': data[0],
+             'receiver': receiver.id(),
+             })
     else:
         emit('new_image', {
             'url': data[0],
@@ -39,6 +44,7 @@ def request_new_image(_name, room, data):
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name())
         log({'type': "new_image", 'room': room.id(), 'url': data[0]})
+
 
 @socketio.on('mousePosition', namespace='/chat')
 def mouse_position(data):
@@ -55,9 +61,12 @@ def mouse_position(data):
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=Room.from_id(data['room']).name())
 
+
 @socketio.on('transferFilePath', namespace='/chat')
 def file_transfer(data):
-    emit('file_path', {'type': data['type'], 'file': data['file']}, room=Room.from_id(data['room']).name())
+    emit('file_path', {'type': data['type'], 'file': data['file']}, room=Room.from_id(
+        data['room']).name())
+
 
 @socketio.on('connectWithToken', namespace='/login')
 def connect_with_token(data):
@@ -68,7 +77,8 @@ def connect_with_token(data):
 
     user = User.login(name, token)
     if not user:
-        emit("login_status", {'success': False, 'message': 'Invalid token or username'})
+        emit("login_status", {'success': False,
+                              'message': 'Invalid token or username'})
     else:
         emit("login_status", {'success': True, 'message': ''})
 
@@ -102,7 +112,8 @@ def join_room(data):
 @socketio.on('leave_room', namespace='/chat')
 @login_required
 def leave_room(data):
-    User.from_id(data['user'] if 'user' in data else current_user.id()).leave_room(Room.from_id(data['room']))
+    User.from_id(data['user'] if 'user' in data else current_user.id()).leave_room(
+        Room.from_id(data['room']))
 
 
 @socketio.on('disconnect', namespace='/chat')
@@ -125,7 +136,8 @@ def log(data):
     if isinstance(room, int) or isinstance(room, str):
         data['room'] = Room.from_id(room).serialize()
     elif not isinstance(room, Room):
-        raise TypeError(f"Object of type `int`, `str` or `Room` expected, however type `{type(room)}` was passed")
+        raise TypeError(
+            f"Object of type `int`, `str` or `Room` expected, however type `{type(room)}` was passed")
 
     if room not in ROOMS:
         print("Could not log")
@@ -202,7 +214,7 @@ def invalidate_token(data):
 
 @socketio.on('text', namespace='/chat')
 @login_required
-def text(data):
+def message_text(data):
     if 'receiver_id' in data:
         user = User.from_id(data['receiver_id'])
         print(f"private message: {data['msg']}")
@@ -211,7 +223,8 @@ def text(data):
             'user': current_user.serialize(),
             'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=user.sid())
-        log({'type': 'text', 'msg': data['msg'], 'room': user.latest_room().id(), 'receiver': data['receiver_id']})
+        log({'type': 'text', 'msg': data['msg'], 'room': user.latest_room(
+        ).id(), 'receiver': data['receiver_id']})
     elif 'room' in data:
         print(f"room message: {data['msg']}")
         emit('message', {
@@ -221,13 +234,13 @@ def text(data):
         }, room=Room.from_id(data['room']).name())
         log({'type': 'text', 'msg': data['msg'], 'room': data['room']})
     else:
-        print("`text` requires `room` and optionally `receiver_id` as parameters")
+        print("`text` requires `room` or `receiver_id` as parameters")
         return
 
 
 @socketio.on('image', namespace='/chat')
 @login_required
-def image(data):
+def message_image(data):
     if 'receiver_id' in data:
         user = User.from_id(data['receiver_id'])
         print(f"private image: {data['image']}")
@@ -238,7 +251,8 @@ def image(data):
             'height': data['width'] if 'width' in data else None,
             'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=user.sid())
-        log({'type': 'image', 'msg': data['image'], 'room': user.latest_room().id(), 'receiver': data['receiver_id']})
+        log({'type': 'image', 'msg': data['image'], 'room': user.latest_room(
+        ).id(), 'receiver': data['receiver_id']})
     elif 'room' in data:
         print(f"room image: {data['image']}")
         emit('message', {
@@ -250,8 +264,114 @@ def image(data):
         }, room=Room.from_id(data['room']).name())
         log({'type': 'image', 'msg': data['image'], 'room': data['room']})
     else:
-        print("`image` requires `room` and optionally `receiver_id` as parameters")
+        print("`image` requires `room` or `receiver_id` as parameters")
         return
+
+
+@socketio.on('set_attribute', namespace='/chat')
+@login_required
+def set_attribute(data):
+    """
+    Sets a javascript attribute by id to a new value.
+
+    :param data: A dictionary with the following fields:
+        - ``id``: The id of the element, which is going to be updated
+        - ``attribute``: The attribute to be updated
+        - ``value``: The value to be set for the given attribute
+        - ``receiver_id`` (Optional): Sends the attribute to this receiver only
+        - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
+        - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+    """
+
+    sender = current_user if 'sender_id' not in data else User.from_id(
+        data['sender_id'])
+
+    if 'id' not in data:
+        print("`set_attribute` requires `id`")
+        return
+    if 'attribute' not in data:
+        print("`set_attribute` requires `attribute`")
+        return
+    if 'value' not in data:
+        print("`set_attribute` requires `value`")
+        return
+    if 'receiver_id' in data:
+        user = User.from_id(data['receiver_id'])
+        room = user.latest_room()
+        receiver_id = data['receiver_id']
+        target = User.from_id(receiver_id).sid()
+    elif 'room' in data:
+        room = Room.from_id(data['room'])
+        receiver_id = None
+        target = room.name()
+    else:
+        print("`set_attribute` requires `room` or `receiver_id`")
+        return
+
+    emit('attribute_update', {
+        'user': sender.serialize(),
+        'timestamp': timegm(datetime.now().utctimetuple()),
+        'id': data['id'],
+        'attribute': data['attribute'],
+        'value': data['value'],
+    }, room=target)
+    log({'type': "attribute_updated",
+         'room': room.id(),
+         'id': data['id'],
+         'attribute': data['attribute'],
+         'value': data['value'],
+         'receiver': receiver_id
+         })
+
+
+@socketio.on('set_text', namespace='/chat')
+@login_required
+def set_text(data):
+    """
+    Sets a html text element  by id to a new value.
+
+    :param data: A dictionary with the following fields:
+        - ``id``: The id of the text element, which is going to be updated
+        - ``text``: The text to be set
+        - ``receiver_id`` (Optional): Sends the text to this receiver only
+        - ``room`` (Optional): Sends the text to this room. Either ``receiver_id`` or ``room`` is required.
+        - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+    """
+
+    sender = current_user if 'sender_id' not in data else User.from_id(
+        data['sender_id'])
+
+    if 'id' not in data:
+        print("`set_text` requires `id`")
+        return
+    if 'text' not in data:
+        print("`set_text` requires `text`")
+        return
+    if 'receiver_id' in data:
+        user = User.from_id(data['receiver_id'])
+        room = user.latest_room()
+        receiver_id = data['receiver_id']
+        target = User.from_id(receiver_id).sid()
+    elif 'room' in data:
+        room = Room.from_id(data['room'])
+        receiver_id = None
+        target = room.name()
+    else:
+        print("`set_text` requires `room` or `receiver_id`")
+        return
+
+    emit('text_update', {
+        'user': sender.serialize(),
+        'timestamp': timegm(datetime.now().utctimetuple()),
+        'id': data['id'],
+        'text': data['text'],
+    }, room=target)
+    log({'type': "set_text_updated",
+         'room': room.id(),
+         'id': data['id'],
+         'text': data['text'],
+         'receiver': receiver_id
+         })
 
 
 @socketio.on('update_info', namespace='/chat')
@@ -261,12 +381,14 @@ def update_info(data):
     if 'receiver_id' in data:
         target_id = data['receiver_id']
         if not isinstance(target_id, int) and not isinstance(target_id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(target_id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(target_id)}` was passed")
         target = User.from_id(target_id).sid()
     elif 'room' in data:
         target_id = data['room']
         if not isinstance(target_id, int) and not isinstance(target_id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(target_id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(target_id)}` was passed")
         target = Room.from_id(target_id).name()
     else:
         print("Updating info requires either a receiver id or a target")
@@ -284,7 +406,8 @@ def join_task(data):
 
     room = data['room']
     if not isinstance(room, int) and not isinstance(room, str):
-        raise TypeError(f"Object of type `int` or `str` expected, however type `{type(room)}` was passed")
+        raise TypeError(
+            f"Object of type `int` or `str` expected, however type `{type(room)}` was passed")
 
     current_user.join_room(Room.from_id(room))
 
@@ -308,9 +431,11 @@ def get_permissions(data):
         return
 
     if not isinstance(data['room'], int) and not isinstance(data['room'], str):
-        raise TypeError(f"Object of type `int` or `str` expected, however type `{type(data['room'])}` was passed")
+        raise TypeError(
+            f"Object of type `int` or `str` expected, however type `{type(data['room'])}` was passed")
     if not isinstance(data['user'], int) and not isinstance(data['user'], str):
-        raise TypeError(f"Object of type `int` or `str` expected, however type `{type(data['user'])}` was passed")
+        raise TypeError(
+            f"Object of type `int` or `str` expected, however type `{type(data['user'])}` was passed")
     room = Room.from_id(data['room'])
     user = User.from_id(data['user'])
 
@@ -332,9 +457,11 @@ def update_permissions(data):
         return
 
     if not isinstance(data['room'], int) and not isinstance(data['room'], str):
-        raise TypeError(f"Object of type `int` or `str` expected, however type `{type(data['room'])}` was passed")
+        raise TypeError(
+            f"Object of type `int` or `str` expected, however type `{type(data['room'])}` was passed")
     if not isinstance(data['user'], int) and not isinstance(data['user'], str):
-        raise TypeError(f"Object of type `int` or `str` expected, however type `{type(data['user'])}` was passed")
+        raise TypeError(
+            f"Object of type `int` or `str` expected, however type `{type(data['user'])}` was passed")
     room = Room.from_id(data['room'])
     user = User.from_id(data['user'])
 
@@ -363,8 +490,6 @@ def update_permissions(data):
 @socketio.on('command', namespace='/chat')
 @login_required
 def command(message):
-    global listeners
-
     if 'room' not in message:
         return
     room = Room.from_id(message['room'])
@@ -395,13 +520,15 @@ def command(message):
                 'timestamp': timegm(datetime.now().utctimetuple())
             }, room=request.sid)
 
-    log({'type': 'command', 'room': room.id(), 'command': message['data'][0], 'data': message['data'][1:]})
+    log({'type': 'command', 'room': room.id(),
+         'command': message['data'][0], 'data': message['data'][1:]})
 
 
 @socketio.on('keypress', namespace='/chat')
 @login_required
 def keypress():
-    emit('start_typing', {'user': current_user.serialize()}, room=current_user.room())
+    emit('start_typing', {'user': current_user.serialize()},
+         room=current_user.room())
 
 
 @socketio.on('clear_chat', namespace='/chat')

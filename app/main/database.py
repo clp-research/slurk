@@ -36,7 +36,8 @@ class Database:
                         Users INTEGER NOT NULL,
                         Name  TEXT NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS Task_Name_idx ON Task(Name);""")
+        c.execute(
+            """CREATE UNIQUE INDEX IF NOT EXISTS Task_Name_idx ON Task(Name);""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS Room
                      (
@@ -52,7 +53,8 @@ class Database:
                        ShowInteractionArea INTEGER DEFAULT 1 NOT NULL,
                        Static       INTEGER DEFAULT 0 NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS Room_Name_idx ON Room(Name);""")
+        c.execute(
+            """CREATE UNIQUE INDEX IF NOT EXISTS Room_Name_idx ON Room(Name);""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS UserRoom
                      (
@@ -68,7 +70,8 @@ class Database:
                                    ON DELETE CASCADE,
                        Joined  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS User_Name_idx ON UserRoom(UserId, RoomId);""")
+        c.execute(
+            """CREATE UNIQUE INDEX IF NOT EXISTS User_Name_idx ON UserRoom(UserId, RoomId);""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS SessionId
                      (
@@ -81,7 +84,8 @@ class Database:
                        SessionId TEXT NOT NULL,
                        Updated   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS SessionId_idx ON SessionId(SessionId);""")
+        c.execute(
+            """CREATE UNIQUE INDEX IF NOT EXISTS SessionId_idx ON SessionId(SessionId);""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS Token_Room_Permissions
                      (
@@ -103,7 +107,7 @@ class Database:
                        ShowHistory INTEGER DEFAULT 1 NOT NULL,
                        ShowInteractionArea INTEGER DEFAULT 1 NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS Token_Room_Permissions_idx 
+        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS Token_Room_Permissions_idx
                      ON Token_Room_Permissions(TokenId, RoomId);""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS Token
@@ -124,12 +128,15 @@ class Database:
                                      ON DELETE CASCADE,
                        Valid     INTEGER DEFAULT 1 NOT NULL
                      );""")
-        c.execute("""CREATE UNIQUE INDEX IF NOT EXISTS Token_Uuid_idx ON Token(Uuid);""")
+        c.execute(
+            """CREATE UNIQUE INDEX IF NOT EXISTS Token_Uuid_idx ON Token(Uuid);""")
 
         self.create_task("meetup", 2)
         self.create_task("None", -1)
-        self.create_room("Waiting Room", layout="waiting_room", read_only=True, show_users=False, show_latency=False)
-        self.create_room("Test Room", layout="test_room", read_only=False, show_users=True, show_latency=True)
+        self.create_room("Waiting Room", layout="waiting_room",
+                         read_only=True, show_users=False, show_latency=False)
+        self.create_room("Test Room", layout="test_room",
+                         read_only=False, show_users=True, show_latency=True)
         self.db.commit()
 
     def get_cursor(self):
@@ -156,7 +163,8 @@ class Database:
 
     def create_task(self, name, required_users):
         c = self.db.cursor()
-        c.execute('INSERT OR IGNORE INTO Task(`Name`, `Users`) VALUES (?, ?);', (name, required_users))
+        c.execute('INSERT OR IGNORE INTO Task(`Name`, `Users`) VALUES (?, ?);',
+                  (name, required_users))
         self.db.commit()
 
     def create_room(self, name, layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True):
@@ -195,7 +203,8 @@ class Database:
             return False
 
         # reuseable and used:
-        c.execute('SELECT COUNT(*) FROM User WHERE TokenId = ? AND Name = ?', (id, name))
+        c.execute(
+            'SELECT COUNT(*) FROM User WHERE TokenId = ? AND Name = ?', (id, name))
         return c.fetchone()[0] != 0
 
     def user_exist(self, id):
@@ -209,7 +218,8 @@ class Database:
         if not self.user_matches_token(name, token):
             return None
 
-        c.execute('UPDATE Token SET Used = 1 WHERE Uuid = ? AND (Used = 0 OR Reuseable != 0);', (token,))
+        c.execute(
+            'UPDATE Token SET Used = 1 WHERE Uuid = ? AND (Used = 0 OR Reuseable != 0);', (token,))
         if c.rowcount != 1:
             return None
         c.execute('SELECT Id FROM Token WHERE Uuid = ?', (token,))

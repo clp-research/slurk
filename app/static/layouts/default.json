@@ -1,0 +1,9 @@
+{
+    "subtitle": "Default Room",
+    "html": [
+        {
+            "layout-type": "h1",
+            "layout-content": "This is the default layout. Please provide a layout for this room!"
+        }
+    ]
+}

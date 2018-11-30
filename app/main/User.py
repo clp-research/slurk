@@ -36,10 +36,12 @@ class User(UserMixin):
 
     def set_token(self, token: Token):
         if not isinstance(token, Token):
-            raise TypeError(f"Object of type `Token` expected, however type `{type(token)}` was passed")
+            raise TypeError(
+                f"Object of type `Token` expected, however type `{type(token)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('UPDATE User SET TokenId = ? WHERE Id = ?;', (token.id(), self.id()))
+        db.get_cursor().execute(
+            'UPDATE User SET TokenId = ? WHERE Id = ?;', (token.id(), self.id()))
         db.commit()
 
     def name(self):
@@ -50,7 +52,8 @@ class User(UserMixin):
 
     def set_name(self, name: str):
         if not isinstance(name, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(name)}` was passed")
 
         db = Database()
         db.get_cursor().execute('UPDATE User SET Name = ? WHERE Id = ?;', (name, self.id()))
@@ -58,13 +61,15 @@ class User(UserMixin):
 
     def sid(self):
         c = Database().get_cursor()
-        c.execute('SELECT SessionId FROM SessionId WHERE UserId = ? ORDER BY Updated DESC LIMIT 1;', (self.id(),))
+        c.execute(
+            'SELECT SessionId FROM SessionId WHERE UserId = ? ORDER BY Updated DESC LIMIT 1;', (self.id(),))
         fetch = c.fetchone()
         return fetch[0] if fetch and fetch[0] else None
 
     def set_sid(self, sid: str):
         if not isinstance(sid, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(sid)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(sid)}` was passed")
 
         db = Database()
         db.get_cursor().execute('INSERT OR REPLACE INTO SessionId(`UserId`, `SessionId`) VALUES(?, ?);',
@@ -79,15 +84,18 @@ class User(UserMixin):
 
     def set_latest_room(self, latest_room: Room):
         if not isinstance(latest_room, Room):
-            raise TypeError(f"Object of type `Room` expected, however type `{type(latest_room)}` was passed")
+            raise TypeError(
+                f"Object of type `Room` expected, however type `{type(latest_room)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('UPDATE User SET LatestRoom = ? WHERE Id = ?;', (latest_room.id(), self.id()))
+        db.get_cursor().execute('UPDATE User SET LatestRoom = ? WHERE Id = ?;',
+                                (latest_room.id(), self.id()))
         db.commit()
 
     def join_room(self, room: Room):
         if not isinstance(room, Room):
-            raise TypeError(f"Object of type `Room` expected, however type `{type(room)}` was passed")
+            raise TypeError(
+                f"Object of type `Room` expected, however type `{type(room)}` was passed")
 
         db = Database()
         db.get_cursor().execute('INSERT OR REPLACE INTO UserRoom(`UserId`, `RoomId`) VALUES (?, ?);',
@@ -103,7 +111,8 @@ class User(UserMixin):
                 'listeners': {}
             }
 
-        users = [User.from_id(id).serialize() for id in ROOMS[room.id()]['users']]
+        users = [User.from_id(id).serialize()
+                 for id in ROOMS[room.id()]['users']]
         ROOMS[room.id()]['users'][self.id()] = self
 
         history = []
@@ -119,39 +128,33 @@ class User(UserMixin):
             'room': room.serialize(),
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name())
-        layout = Layout.from_json_file(room.layout())
-        if layout:
-            html = layout.html()
-            css = layout.css()
-            script = layout.script()
-        else:
-            html = None
-            css = None
-            script = None
+
         sio.emit('joined_room', {
             'room': room.serialize(),
-            'html': html,
-            'css': css,
-            'script': script,
+            'layout': Layout.from_json_file(room.layout_path()).serialize(),
             'users': users,
             'history': history,
             'self': self.serialize(),
             'permissions': Permissions(self.token(), room).serialize()
         }, room=self.sid())
-        ROOMS[room.id()]['log'].append({'type': "join", 'user': self.serialize(), 'room': room.serialize()})
+        ROOMS[room.id()]['log'].append(
+            {'type': "join", 'user': self.serialize(), 'room': room.serialize()})
         print(self.name(), "joined room:", room.name())
 
     def leave_room(self, room: Room):
         if not isinstance(room, Room):
-            raise TypeError(f"Object of type `Room` expected, however type `{type(room)}` was passed")
+            raise TypeError(
+                f"Object of type `Room` expected, however type `{type(room)}` was passed")
 
         db = Database()
-        db.get_cursor().execute('DELETE FROM UserRoom WHERE UserId = ? AND RoomId = ?;', (self.id(), room.id()))
+        db.get_cursor().execute(
+            'DELETE FROM UserRoom WHERE UserId = ? AND RoomId = ?;', (self.id(), room.id()))
         db.commit()
         sio.leave_room(room.name(), self.sid())
         sio.emit('left_room', {'room': room.serialize()}, room=self.sid())
 
-        ROOMS[room.id()]['log'].append({'type': "leave", 'user': self.serialize(), 'room': room.serialize()})
+        ROOMS[room.id()]['log'].append(
+            {'type': "leave", 'user': self.serialize(), 'room': room.serialize()})
         print(self.name(), "left room:", room.name())
 
         if room.id() in ROOMS:
@@ -174,10 +177,12 @@ class User(UserMixin):
 
     def in_room(self, room: Room):
         if not isinstance(room, Room):
-            raise TypeError(f"Object of type `Room` expected, however type `{type(room)}` was passed")
+            raise TypeError(
+                f"Object of type `Room` expected, however type `{type(room)}` was passed")
 
         c = Database().get_cursor()
-        c.execute('SELECT COUNT(*) FROM UserRoom WHERE UserId = ? AND RoomId = ?', (self.id(), room.id()))
+        c.execute('SELECT COUNT(*) FROM UserRoom WHERE UserId = ? AND RoomId = ?',
+                  (self.id(), room.id()))
         fetch = c.fetchone()
         return Room(fetch[0]) if fetch[0] else None
 
@@ -194,7 +199,8 @@ class User(UserMixin):
     @classmethod
     def from_id(cls, id):
         if not isinstance(id, int) and not isinstance(id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
 
         global logged_users
         if id not in logged_users:
@@ -206,7 +212,8 @@ class User(UserMixin):
     @classmethod
     def from_sid(cls, sid: str):
         if not isinstance(sid, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(sid)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(sid)}` was passed")
 
         c = Database().get_cursor()
         c.execute('SELECT UserId FROM SessionId WHERE SessionId = ?', (sid,))
@@ -218,16 +225,19 @@ class User(UserMixin):
         if not token:
             return None
         if not isinstance(name, str):
-            raise TypeError(f"Object of type `str` expected, however type `{type(name)}` was passed")
+            raise TypeError(
+                f"Object of type `str` expected, however type `{type(name)}` was passed")
         if not isinstance(token, Token):
-            raise TypeError(f"Object of type `Token` expected, however type `{type(token)}` was passed")
+            raise TypeError(
+                f"Object of type `Token` expected, however type `{type(token)}` was passed")
 
         if not token.valid():
             return None
 
         db = Database()
         c = db.get_cursor()
-        c.execute('INSERT INTO User(`TokenId`, `Name`) VALUES (?, ?);', (token.id(), name))
+        c.execute('INSERT INTO User(`TokenId`, `Name`) VALUES (?, ?);',
+                  (token.id(), name))
         db.commit()
 
         user = cls(c.lastrowid)
@@ -239,6 +249,7 @@ class User(UserMixin):
 
     def __init__(self, id: int):
         if not isinstance(id, int) and not isinstance(id, str):
-            raise TypeError(f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
+            raise TypeError(
+                f"Object of type `int` or `str` expected, however type `{type(id)}` was passed")
 
         self._id = int(id)
