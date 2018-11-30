@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Deploying the system &mdash; slurk 1.0 documentation</title>
+  <title>7. Deploying the system &mdash; slurk 1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
-    <link rel="prev" title="5. Writing your own bots" href="slurk_bots.html" /> 
+    <link rel="next" title="8. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
+    <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -87,14 +87,15 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Deploying the system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general-description-and-requirements">6.1. General description and requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#serving-slurk-with-gunicorn">6.2. Serving Slurk with Gunicorn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuring-nginx">6.3. Configuring Nginx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Deploying the system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-description-and-requirements">7.1. General description and requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#serving-slurk-with-gunicorn">7.2. Serving Slurk with Gunicorn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-nginx">7.3. Configuring Nginx</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">7. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -140,7 +141,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>6. Deploying the system</li>
+      <li>7. Deploying the system</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,9 +161,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="deploying-the-system">
-<span id="slurk-deployment"></span><h1>6. Deploying the system<a class="headerlink" href="#deploying-the-system" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-deployment"></span><h1>7. Deploying the system<a class="headerlink" href="#deploying-the-system" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="general-description-and-requirements">
-<h2>6.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h2>
+<h2>7.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h2>
 <p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
 with SSL connection.</p>
 <p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
@@ -174,7 +175,7 @@ with SSL connection.</p>
 Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine <a class="footnote-reference" href="#id7" id="id2">[2]</a>.</p>
 </div>
 <div class="section" id="serving-slurk-with-gunicorn">
-<h2>6.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h2>
+<h2>7.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h2>
 <p>You can serve our Flask application on a permanent basis.
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
 the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
@@ -255,7 +256,7 @@ CGroup: /system.slice/chat.service
 </div>
 </div>
 <div class="section" id="configuring-nginx">
-<h2>6.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h2>
+<h2>7.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h2>
 <p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
 First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">chat</span>
@@ -356,10 +357,10 @@ If you choose incorrect one, the application will not be accessible from outside
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="7. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="8. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_bots.html" class="btn btn-neutral" title="5. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_bots.html" class="btn btn-neutral" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
