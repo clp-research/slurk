@@ -19,11 +19,13 @@ Bots can modify layouts in two ways: Setting texts and altering attribute values
 
 For this, two functions are provided:
 
-- ``set_attribute``: Sets a javascript attribute by id to a new value. Those are the fields, which may be passed:
+- ``set_attribute``: Sets a javascript attribute to a new value. Those are the fields, which may be passed:
 
-    - ``id``: The id of the element, which is going to be updated
     - ``attribute``: The attribute to be updated
     - ``value``: The value to be set for the given attribute
+    - ``id`` (Optional): The id of the element, which is going to be updated
+    - ``class`` (Optional): The class of the element, which is going to be updated
+    - ``element`` (Optional): The element type, which is going to be updated. Either ``id``, ``class`` or ``element`` is required.
     - ``receiver_id`` (Optional): Sends the attribute to this receiver only
     - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required
     - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
