@@ -374,6 +374,56 @@ def set_text(data):
          })
 
 
+@socketio.on('add_class', namespace='/chat')
+@login_required
+def add_class(data):
+    """
+    Adds the html class to an element by id.
+
+    :param data: A dictionary with the following fields:
+        - ``id``: The id of the element, which is going to be updated
+        - ``class``: The class to be added
+        - ``receiver_id`` (Optional): Adds the class for this receiver only
+        - ``room`` (Optional): Adds the class for all users in this room. Either ``receiver_id`` or ``room`` is required.
+        - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+    """
+
+    sender = current_user if 'sender_id' not in data else User.from_id(
+        data['sender_id'])
+
+    if 'id' not in data:
+        print("`add_class` requires `id`")
+        return
+    if 'class' not in data:
+        print("`add_class` requires `class`")
+        return
+    if 'receiver_id' in data:
+        user = User.from_id(data['receiver_id'])
+        room = user.latest_room()
+        receiver_id = data['receiver_id']
+        target = User.from_id(receiver_id).sid()
+    elif 'room' in data:
+        room = Room.from_id(data['room'])
+        receiver_id = None
+        target = room.name()
+    else:
+        print("`add_class` requires `room` or `receiver_id`")
+        return
+
+    emit('class_add', {
+        'user': sender.serialize(),
+        'timestamp': timegm(datetime.now().utctimetuple()),
+        'id': data['id'],
+        'class': data['class'],
+    }, room=target)
+    log({'type': "class_added",
+         'room': room.id(),
+         'id': data['id'],
+         'class': data['class'],
+         'receiver': receiver_id
+         })
+
+
 @socketio.on('update_info', namespace='/chat')
 @login_required
 def update_info(data):
