@@ -268,17 +268,27 @@
 
             socket.on('new_image', function (data) {
                 console.log("New image:", data);
-                $('#'+data.id).attr('src', data.url).show();
+                $('#' + data.id).attr('src', data.url).show();
             });
 
             socket.on('attribute_update', function (data) {
                 console.log("Attribute updated:", data);
-                $('#'+data.id).attr(data.attribute, data.value).show();
+                $('#' + data.id).attr(data.attribute, data.value).show();
+            });
+
+            socket.on('class_add', function (data) {
+                console.log("Class added:", data);
+                $('#' + data.id).addClass(data.class);
+            });
+
+            socket.on('class_remove', function (data) {
+                console.log("Class removed:", data);
+                $('#' + data.id).removeClass(data.class);
             });
 
             socket.on('text_update', function (data) {
                 console.log("Text updated:", data);
-                $('#'+data.id).text(data.text).show();
+                $('#' + data.id).text(data.text).show();
             });
         });
     </script>
