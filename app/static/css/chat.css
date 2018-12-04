@@ -141,7 +141,6 @@ header .users {
     min-width: 50px;
     padding: 10px;
     border-radius: 2px;
-    word-break: break-all;
 }
 .message-box .user {
     font-size: 14px;
