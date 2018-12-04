@@ -273,7 +273,12 @@
 
             socket.on('attribute_update', function (data) {
                 console.log("Attribute updated:", data);
-                $('#' + data.id).attr(data.attribute, data.value).show();
+                if (data.id)
+                    $('#' + data.id).attr(data.attribute, data.value).show();
+                if (data.class)
+                    $('.' + data.class).attr(data.attribute, data.value).show();
+                if (data.element)
+                    $(data.element).attr(data.attribute, data.value).show();
             });
 
             socket.on('class_add', function (data) {
