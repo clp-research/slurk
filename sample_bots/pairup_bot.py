@@ -80,6 +80,11 @@ class ChatNamespace(BaseNamespace):
             'attribute': "src",
             'value': "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"
         })
+        self.emit('remove_class', {
+            'room': data['room']['id'],
+            'id': "current-image",
+            'class': "hidden"
+        })
         self.emit('set_text', {
             'room': data['room']['id'],
             'id': "status-box",
@@ -101,9 +106,22 @@ class ChatNamespace(BaseNamespace):
 
         if data['type'] == 'join':
             print("new user: {}".format(data["user"]["name"]))
-            self.emit("update_info", {'receiver_id': user_id,
-                                      'text': "Patience, we are waiting for another player...",
-                                      })
+            self.emit('set_attribute', {
+                'receiver_id': user_id,
+                'id': "current-image",
+                'attribute': "src",
+                'value': "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif"
+            })
+            self.emit('remove_class', {
+                'receiver_id': user_id,
+                'id': "current-image",
+                'class': "hidden"
+            })
+            self.emit('set_text', {
+                'receiver_id': user_id,
+                'id': "status-box",
+                'text': "Patience, we are waiting for another player..."
+            })
             tasks[task_id]['users'].add(user_id)
             if user_id not in REG:
                 REG[user_id] = user

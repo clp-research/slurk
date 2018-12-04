@@ -9,6 +9,10 @@ html, body {
     position: relative;
 }
 
+.hidden {
+    display: none
+}
+
 header, footer {
     min-width: 600px;
     width: 100%;
