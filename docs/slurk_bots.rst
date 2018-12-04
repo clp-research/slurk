@@ -34,6 +34,20 @@ For this, two functions are provided:
     - ``receiver_id`` (Optional): Sends the text to this receiver only
     - ``room`` (Optional): Sends the text to this room. Either ``receiver_id`` or ``room`` is required
     - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+- ``add_class``: Adds the html class to an element by id. Those are the fields, which may be passed:
+
+    - ``id``: The id of the element, which is going to be updated
+    - ``text``: The class to be added
+    - ``receiver_id`` (Optional): Adds the class for this receiver only
+    - ``room`` (Optional): Adds the class for all receivers in this room. Either ``receiver_id`` or ``room`` is required
+    - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
+- ``remove_class``: Removes the html class from an element by id. Those are the fields, which may be passed:
+
+    - ``id``: The id of the element, which is going to be updated
+    - ``text``: The class to be removed
+    - ``receiver_id`` (Optional): Removes the class for this receiver only
+    - ``room`` (Optional): Removes the class for all receivers in this room. Either ``receiver_id`` or ``room`` is required
+    - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
 
 If you want to change an image for example, you may use something like this:
 
