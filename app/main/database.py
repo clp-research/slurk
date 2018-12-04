@@ -1,14 +1,23 @@
 import sqlite3
 from flask import g
 
-DATABASE = 'botsi.db'
+from .. import config
 
 
 class Database:
     def __init__(self):
         self.db = getattr(g, '_database', None)
+        self._database_name = getattr(
+            g, '_database_name', config["server"].get("database"))
+        if not self._database_name:
+            print(
+                "WARNING: No database specified in config. Using default name: `botsi.db`")
+            self._database_name = "botsi.db"
+            setattr(g, "_database_name", self._database_name)
+
         if self.db is None:
-            self.db = g._database = sqlite3.connect(DATABASE, timeout=10)
+            self.db = g._database = sqlite3.connect(
+                self._database_name, timeout=10)
             self._ensure_database()
 
     def _ensure_database(self):
