@@ -272,12 +272,14 @@ def message_image(data):
 @login_required
 def set_attribute(data):
     """
-    Sets a javascript attribute by id to a new value.
+    Sets a javascript attribute to a new value.
 
     :param data: A dictionary with the following fields:
-        - ``id``: The id of the element, which is going to be updated
         - ``attribute``: The attribute to be updated
         - ``value``: The value to be set for the given attribute
+        - ``id`` (Optional): The id of the element, which is going to be updated
+        - ``class`` (Optional): The class of the element, which is going to be updated
+        - ``element`` (Optional): The element type, which is going to be updated. Either ``id``, ``class`` or ``element`` is required.
         - ``receiver_id`` (Optional): Sends the attribute to this receiver only
         - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required.
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
@@ -286,8 +288,8 @@ def set_attribute(data):
     sender = current_user if 'sender_id' not in data else User.from_id(
         data['sender_id'])
 
-    if 'id' not in data:
-        print("`set_attribute` requires `id`")
+    if 'id' not in data and 'class' not in data and 'element' not in data:
+        print("`set_attribute` requires `id`, `class` or `element`")
         return
     if 'attribute' not in data:
         print("`set_attribute` requires `attribute`")
@@ -311,13 +313,17 @@ def set_attribute(data):
     emit('attribute_update', {
         'user': sender.serialize(),
         'timestamp': timegm(datetime.now().utctimetuple()),
-        'id': data['id'],
+        'id': data.get('id'),
+        'class': data.get('class'),
+        'element': data.get('element'),
         'attribute': data['attribute'],
         'value': data['value'],
     }, room=target)
     log({'type': "attribute_updated",
          'room': room.id(),
-         'id': data['id'],
+         'id': data.get('id'),
+         'class': data.get('class'),
+         'element': data.get('element'),
          'attribute': data['attribute'],
          'value': data['value'],
          'receiver': receiver_id
