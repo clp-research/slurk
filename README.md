@@ -1,8 +1,6 @@
 Botsi
 =====
 
-Please find the German documentation below. 
-
 This project provides the server and the web client for the Botsi project to the
 Order.
 
