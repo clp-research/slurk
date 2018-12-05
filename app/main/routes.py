@@ -19,37 +19,45 @@ from .. import config
 def token():
     source = request.args.get("source", None) if request.method == 'GET' else None
     room = request.args.get("room", None) if request.method == 'GET' else None
+    if room:
+        room = int(room)
     task = request.args.get("task", None) if request.method == 'GET' else None
+    if task:
+        task = int(task)
     count = request.args.get("count", None) if request.method == 'GET' else None
+    if count:
+        count = int(count)
+    key = request.args.get("key", None) if request.method == 'GET' else None
 
-    if room and task:
-        output = ""
-        if not source:
-            source = ''
-        for i in range(0, count or 1):
-            if i > 0:
-                output += ";"
-            output += Token.create(source, room, task).uuid()
-        return output
-
-    form = TokenGenerationForm()
-    form.room.choices = [(room.id(), room.name()) for room in Room.list()]
-    form.task.choices = [(task.id(), task.name()) for task in Task.list()]
+    form = TokenGenerationForm(task=task or 0, count=count or 1, source=source or "", key=key or "", room=room or 1)
     if form.is_submitted():
-        output = ""
-        for i in range(0, form.count.data):
-            source = form.source.data
-            room = Room.from_id(form.room.data)
-            task = Task.from_id(form.task.data)
-            output += Token.create(source, room, task).uuid()
-            output += "<br />"
-        return output
-    return render_template('token.html', form=form, title=config['templates']['token-title'])
+        source = form.source.data or ""
+        room = form.room.data
+        task = form.task.data
+        count = form.count.data
+        key = form.key.data
+    elif not (room and task and key):
+        form.room.choices = [(room.id(), room.name()) for room in Room.list()]
+        form.task.choices = [(task.id(), task.name()) for task in Task.list()]
+        return render_template('token.html',
+                               form=form,
+                               title=config['templates']['token-title'],
+                               )
+
+    if key != config["server"]["secret-key"]:
+        return "Invalid password"
+    output = ""
+    for i in range(0, count or 1):
+        output += Token.create(source or "", Room.from_id(room), Task.from_id(task)).uuid()
+        output += "<br />"
+    return output
+
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    login_token = request.args.get("token", None) if request.method == 'GET' else None
+    login_token = request.args.get(
+        "token", None) if request.method == 'GET' else None
     name = request.args.get("name", None) if request.method == 'GET' else None
 
     token_invalid = False
@@ -67,7 +75,8 @@ def index():
         if user:
             return redirect(url_for('.chat'))
         else:
-            form.token.errors.append("The token is either expired, was already used or isn't correct at all.")
+            form.token.errors.append(
+                "The token is either expired, was already used or isn't correct at all.")
     if name:
         form.name.data = name
     return render_template('index.html', form=form, token=login_token, token_invalid=token_invalid,
@@ -103,7 +112,8 @@ def chat():
 
 @main.route('/test', methods=['GET', 'POST'])
 def test():
-    name = request.args.get("layout", None) if request.method == 'GET' else None
+    name = request.args.get(
+        "layout", None) if request.method == 'GET' else None
     layout = Layout.from_json_file(name)
     if not name:
         return ""
