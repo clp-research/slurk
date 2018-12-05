@@ -196,6 +196,28 @@
 </ul>
 </div></blockquote>
 </li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">add_class</span></code>: Adds the html class to an element by id. Those are the fields, which may be passed:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">id</span></code>: The id of the element, which is going to be updated</li>
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The class to be added</li>
+<li><code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> (Optional): Adds the class for this receiver only</li>
+<li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Adds the class for all receivers in this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
+<li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">remove_class</span></code>: Removes the html class from an element by id. Those are the fields, which may be passed:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">id</span></code>: The id of the element, which is going to be updated</li>
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The class to be removed</li>
+<li><code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> (Optional): Removes the class for this receiver only</li>
+<li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Removes the class for all receivers in this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
+<li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
+</ul>
+</div></blockquote>
+</li>
 </ul>
 <p>If you want to change an image for example, you may use something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;set_attribute&#39;</span><span class="p">,</span> <span class="p">{</span>
