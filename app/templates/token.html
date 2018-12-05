@@ -32,7 +32,7 @@
                     </tr>
                     <tr>
                         <td><label for="key">Key</label></td>
-                        <td>{{ form.key() }}</td>
+                        <td>{{ form.key(placeholder="secret-key from config.ini") }}</td>
                     </tr>
                 </table>
                 {{ form.submit() }}
