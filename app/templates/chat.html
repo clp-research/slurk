@@ -127,7 +127,7 @@
 
         function updateUsers() {
             let current_users = "You";
-            for (const idx in users) {
+            for (var idx in users) {
                 current_users += ", " + users[idx];
             }
             $('#current-users').text(current_users);
