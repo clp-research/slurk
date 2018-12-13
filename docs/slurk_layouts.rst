@@ -75,3 +75,68 @@ Additional, some functions are guarantied to exist:
 - ``submit_text(text)``
 - ``submit_image(url, width, height)``
 - ``submit_command(parameter)``
+
+Plugin development in practice
+------------------------------
+
+You can use plugins to implement additional client-side functionality to Slurk. The steps neccessary to do this are illustrated below, using the example of a simple mechanism for capturing mouse clicks. Creating and injecting a new plugin consists of the following steps:
+
+1)  Choosing an appropriate trigger
+
+    Depending on the functionality you want to add to Slurk, you can choose between different triggers. Mouse clicks neither depend on messages nor the chat history, therefore the trigger ``"document-ready"`` is used.
+
+2)  Creating the plugin file
+
+    Create a new JavaScript file and save it in the directory */app/static/plugins*, using an appropriate name (e.g. "mouse-clicks.js").
+
+    Add the necessary code to the file:
+
+      .. codeblock:: javascript
+
+          var mousePos = {x:undefined, y:undefined};
+          var offset;
+
+          function getPosition (e, area) {
+              offset = $(area).offset();
+              mousePos.x = e.clientX - offset.left;
+              mousePos.y = e.clientY - offset.top;
+              }
+
+          $("#current-image").click(function(evt){
+              getPosition(evt, "#current-image");
+              socket.emit('mousePosition', {
+                  type:'click',
+                  element:"#current-image",
+                  coordinates:mousePos,
+                  room:self_room
+              });
+          });
+
+3)  Injecting the plugin
+
+    Inject your plugin to Slurk by adding trigger and plugin (without the file extension) to the ``"script"`` dictionary in the layout file you're using:
+
+      .. codeblock:: json
+
+        "script": {
+          "document-ready": "mouse-clicks"
+        }
+
+    The JavaScript code is now embedded as follows:
+
+    .. codeblock:: javascript
+
+        $(document).ready(function(){
+
+          var mousePosition = {x:undefined, y:undefined};
+          var offset;
+
+          function getPosition (e, area) {
+            [...]
+          }
+
+          $("#current-image").click(function(evt){
+            [...]
+          });
+
+        });
