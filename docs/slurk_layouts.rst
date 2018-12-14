@@ -76,6 +76,163 @@ Additional, some functions are guarantied to exist:
 - ``submit_image(url, width, height)``
 - ``submit_command(parameter)``
 
+
+******************************
+Layout development in practice
+******************************
+
+Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with existing ones.
+
+The following steps demonstrate how to build your own layout, using snippets from the layout for the *CoLA*-game as examples.
+
+1. Customizing the existing ``waiting_room`` layout
+-------------------------------------------------
+
+First of all, you should consider checking whether you want to modify the ``waiting_room`` layout which will be loaded by default when the Waiting Room is created (*see app/main/database.py, line 136*).
+
+*EXAMPLE:*
+
+The CoLA waiting room is supposed to have a different title (2), a different image (12) and a blue theme (23):
+
+    .. code-block:: json
+       :linenos:
+
+        {
+          "title": "CoLA - Waiting Room",
+          "subtitle": "Waiting for another player...",
+          "html": [
+            {
+              "layout-type": "div",
+              "id": "image-area",
+              "layout-content": [
+                {
+                  "layout-type": "image",
+                  "id": "current-image",
+                  "src": "https://dsg.lili.uni-bielefeld.de:8000/cola_data/The-Waiting-Room.jpg",
+                  "width": 500,
+                  "height": 400
+                }
+              ]
+            },
+            ...
+          ],
+          "css": {
+            ...,
+            "header, footer": {
+              "background": "#115E91"
+            },
+            ...
+          },
+          "scripts": {
+            ...
+          }
+        }
+
+
+
+2. The Main Layout
+------------------
+
+The main layout defines **your** chatroom and it will be loaded as soon as a *New Task Room* is opened.
+By default, the ``pairup-bot`` will load the ``meetup_task``-layout. 
+In order to use yours you need to replace "meetup_task" with the name of your layout (*see pairup_bot.py, line 159*).
+Here it would be "cola_task".
+
+*EXAMPLE:*
+
+The CoLA chatroom has to be able to, e.g. display images (on the right side of the chatroom). In order to display several images belonging to different categories in a structured way a table can be used. How can this be realized in the layout?
+
+**HTML:**
+
+1. Specify the area where the table should lie (5-7).
+2. Define the table (9,10).
+3. Define the first row of the table (12,13).
+4. Define the first cell of the first row (15,16).
+5. Define an image-tag inside the first cell of the first row (18,23).
+   Now there is a placeholder with the id **r0c0** for one image. Its *src*-attribute can be enriched with a value anytime.
+6. Define the second cell of the first row (28,29).
+7. Define an image-tag in the second cell of the first row (31,36)
+8. Etc.
+
+    .. code-block:: json
+       :linenos:
+    
+        {
+          "title": "CoLA - Chatroom",
+          "html": [
+            {
+              "layout-type": "div",
+              "id": "show-area",
+              "layout-content": [
+                {
+                  "layout-type": "table",
+                  "layout-content": [
+                    {
+                      "layout-type": "tr",
+                      "layout-content": [
+                        {
+                          "layout-type": "td",
+                          "layout-content": [
+                            {
+                              "layout-type": "image",
+                              "id": "r0c0",
+                              "src": "",
+                              "class": "hidden",
+                              "width": 128,
+                              "height": 128
+                            }
+                          ]
+                        },
+                        {
+                          "layout-type": "td",
+                          "layout-content": [
+                            {
+                              "layout-type": "image",
+                              "id": "r0c1",
+                              "src": "",
+                              "class": "hidden",
+                              "width": 128,
+                              "height": 128
+                            } 
+                          ]
+                        },
+                        ...
+
+
+
+**CSS:**
+
+1. Format the area where the table lies, referring to it by its ID (2-8).
+2. Format the table (10-19).
+3. Etc.
+
+    .. code-block:: json
+       :linenos:
+
+        "css": {
+            "#show-area": {
+              "display": "block",
+              "margin-left": "auto",
+              "margin-right": "auto",
+              "width": "900px",
+              "background-color": "rgb(182, 226, 226)"
+            },
+            "table": {
+              "display": "block",
+              "margin-left": "auto",
+              "margin-right": "auto",
+              "margin-bottom": "20px",
+              "padding-top": "20px",
+              "padding-bottom": "20px",
+              "width": "840px",
+              "border-collapse": "collapse",
+              "border-spacing": "0"
+            },
+            ...
+        }
+
+
+
 Plugin development in practice
 ------------------------------
 
