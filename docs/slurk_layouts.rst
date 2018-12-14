@@ -92,10 +92,10 @@ First of all, you should consider checking whether you want to modify the ``wait
 
 *EXAMPLE:*
 
-The CoLA waiting room is supposed to have a different title (2), a different image (12) and a blue theme (23):
+The CoLA waiting room is supposed to have a different title (2), a different image (12) and a blue theme (23).
+To realize this the lines 2, 12 and 23 were changed/added in the exisiting layout:
 
     .. code-block:: json
-       :linenos:
 
         {
           "title": "CoLA - Waiting Room",
@@ -114,17 +114,16 @@ The CoLA waiting room is supposed to have a different title (2), a different ima
                 }
               ]
             },
-            ...
+            [...]
           ],
           "css": {
-            ...,
             "header, footer": {
               "background": "#115E91"
             },
-            ...
+            [...]
           },
           "scripts": {
-            ...
+            [...]
           }
         }
 
@@ -195,7 +194,7 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
                             } 
                           ]
                         },
-                        ...
+                        [...]
 
 
 
@@ -226,7 +225,7 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
               "border-collapse": "collapse",
               "border-spacing": "0"
             },
-            ...
+            [...]
         }
 
 
