@@ -86,14 +86,13 @@ Creating and adding your own layout to Slurk allows you to customize the design 
 The following steps demonstrate how to build your own layout, using snippets from the layout for the *CoLA*-game as examples.
 
 1. Customizing the existing ``waiting_room`` layout
--------------------------------------------------
+---------------------------------------------------
 
 First of all, you should consider checking whether you want to modify the ``waiting_room`` layout which will be loaded by default when the Waiting Room is created (*see app/main/database.py, line 136*).
 
 *EXAMPLE:*
 
-The CoLA waiting room is supposed to have a different title (2), a different image (12) and a blue theme (23).
-To realize this the lines 2, 12 and 23 were changed/added in the exisiting layout:
+The CoLA waiting room is supposed to have a different title (l. 2), a different image (l. 12) and a blue theme (l. 23):
 
     .. code-block:: json
 
@@ -135,7 +134,7 @@ To realize this the lines 2, 12 and 23 were changed/added in the exisiting layou
 The main layout defines **your** chatroom and it will be loaded as soon as a *New Task Room* is opened.
 By default, the ``pairup-bot`` will load the ``meetup_task``-layout. 
 In order to use yours you need to replace "meetup_task" with the name of your layout (*see pairup_bot.py, line 159*).
-Here it would be "cola_task".
+Here it would be "cola_task" (assuming that a file *cola_task.json* was created in /app/static/layouts).
 
 *EXAMPLE:*
 
@@ -143,14 +142,14 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
 
 **HTML:**
 
-1. Specify the area where the table should lie (5-7).
-2. Define the table (9,10).
-3. Define the first row of the table (12,13).
-4. Define the first cell of the first row (15,16).
-5. Define an image-tag inside the first cell of the first row (18,23).
+1. Specify the area where the table should lie (ll. 5-7).
+2. Define the table (ll. 9,10).
+3. Define the first row of the table (ll. 12,13).
+4. Define the first cell of the first row (ll. 15,16).
+5. Define an image-tag inside the first cell of the first row (ll. 18-23).
    Now there is a placeholder with the id **r0c0** for one image. Its *src*-attribute can be enriched with a value anytime.
-6. Define the second cell of the first row (28,29).
-7. Define an image-tag in the second cell of the first row (31,36)
+6. Define the second cell of the first row (ll. 28,29).
+7. Define an image-tag in the second cell of the first row (ll. 31-36)
 8. Etc.
 
     .. code-block:: json
@@ -200,8 +199,8 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
 
 **CSS:**
 
-1. Format the area where the table lies, referring to it by its ID (2-8).
-2. Format the table (10-19).
+1. Format the area where the table lies, referring to it by its ID (ll. 2-8).
+2. Format the table (ll. 10-19).
 3. Etc.
 
     .. code-block:: json
