@@ -132,7 +132,7 @@ The CoLA waiting room is supposed to have a different title (l. 2), a different 
 ------------------
 
 The main layout defines **your** chatroom and it will be loaded as soon as a *New Task Room* is opened.
-By default, the ``pairup-bot`` will load the ``meetup_task``-layout. 
+By default, the ``pairup-bot`` will load the ``meetup_task``-layout.
 In order to use yours you need to replace "meetup_task" with the name of your layout (*see pairup_bot.py, line 159*).
 Here it would be "cola_task" (assuming that a file *cola_task.json* was created in /app/static/layouts).
 
