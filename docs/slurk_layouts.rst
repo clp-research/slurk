@@ -194,8 +194,10 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
                           ]
                         },
                         [...]
-
-
+                    ]}
+                ]}
+            ]}
+        ]}
 
 **CSS:**
 
