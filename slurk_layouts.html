@@ -87,7 +87,15 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Layouts and Plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Layouts and Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#layout-development-in-practice">5.1. Layout development in practice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#customizing-the-existing-waiting-room-layout">5.1.1. 1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-main-layout">5.1.2. 2. The Main Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plugin-development-in-practice">5.1.3. Plugin development in practice</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deploying the system</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
@@ -256,6 +264,136 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 <li><code class="docutils literal notranslate"><span class="pre">submit_image(url,</span> <span class="pre">width,</span> <span class="pre">height)</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">submit_command(parameter)</span></code></li>
 </ul>
+<div class="section" id="layout-development-in-practice">
+<h2>5.1. Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this headline">¶</a></h2>
+<p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with existing ones.</p>
+<p>The following steps demonstrate how to build your own layout, using snippets from the layout for the <em>CoLA</em>-game as examples.</p>
+<div class="section" id="customizing-the-existing-waiting-room-layout">
+<h3>5.1.1. 1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout<a class="headerlink" href="#customizing-the-existing-waiting-room-layout" title="Permalink to this headline">¶</a></h3>
+<p>First of all, you should consider checking whether you want to modify the <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout which will be loaded by default when the Waiting Room is created (<em>see app/main/database.py, line 136</em>).</p>
+<p><em>EXAMPLE:</em></p>
+<p>The CoLA waiting room is supposed to have a different title (l. 2), a different image (l. 12) and a blue theme (l. 23):</p>
+<blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+  &quot;title&quot;: &quot;CoLA - Waiting Room&quot;,
+  &quot;subtitle&quot;: &quot;Waiting for another player...&quot;,
+  &quot;html&quot;: [
+    {
+      &quot;layout-type&quot;: &quot;div&quot;,
+      &quot;id&quot;: &quot;image-area&quot;,
+      &quot;layout-content&quot;: [
+        {
+          &quot;layout-type&quot;: &quot;image&quot;,
+          &quot;id&quot;: &quot;current-image&quot;,
+          &quot;src&quot;: &quot;https://dsg.lili.uni-bielefeld.de:8000/cola_data/The-Waiting-Room.jpg&quot;,
+          &quot;width&quot;: 500,
+          &quot;height&quot;: 400
+        }
+      ]
+    },
+    [...]
+  ],
+  &quot;css&quot;: {
+    &quot;header, footer&quot;: {
+      &quot;background&quot;: &quot;#115E91&quot;
+    },
+    [...]
+  },
+  &quot;scripts&quot;: {
+    [...]
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="the-main-layout">
+<h3>5.1.2. 2. The Main Layout<a class="headerlink" href="#the-main-layout" title="Permalink to this headline">¶</a></h3>
+<p>The main layout defines <strong>your</strong> chatroom and it will be loaded as soon as a <em>New Task Room</em> is opened.
+By default, the <code class="docutils literal notranslate"><span class="pre">pairup-bot</span></code> will load the <code class="docutils literal notranslate"><span class="pre">meetup_task</span></code>-layout.
+In order to use yours you need to replace “meetup_task” with the name of your layout (<em>see pairup_bot.py, line 159</em>).
+Here it would be “cola_task” (assuming that a file <em>cola_task.json</em> was created in /app/static/layouts).</p>
+<p><em>EXAMPLE:</em></p>
+<p>The CoLA chatroom has to be able to, e.g. display images (on the right side of the chatroom). In order to display several images belonging to different categories in a structured way a table can be used. How can this be realized in the layout?</p>
+<p><strong>HTML:</strong></p>
+<ol class="arabic">
+<li><p class="first">Specify the area where the table should lie (ll. 5-7).</p>
+</li>
+<li><p class="first">Define the table (ll. 9,10).</p>
+</li>
+<li><p class="first">Define the first row of the table (ll. 12,13).</p>
+</li>
+<li><p class="first">Define the first cell of the first row (ll. 15,16).</p>
+</li>
+<li><p class="first">Define an image-tag inside the first cell of the first row (ll. 18-23).
+Now there is a placeholder with the id <strong>r0c0</strong> for one image. Its <em>src</em>-attribute can be enriched with a value anytime.</p>
+</li>
+<li><p class="first">Define the second cell of the first row (ll. 28,29).</p>
+</li>
+<li><p class="first">Define an image-tag in the second cell of the first row (ll. 31-36)</p>
+</li>
+<li><p class="first">Etc.</p>
+<blockquote>
+<div></div></blockquote>
+</li>
+</ol>
+<p><strong>CSS:</strong></p>
+<ol class="arabic">
+<li><p class="first">Format the area where the table lies, referring to it by its ID (ll. 2-8).</p>
+</li>
+<li><p class="first">Format the table (ll. 10-19).</p>
+</li>
+<li><p class="first">Etc.</p>
+<blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>&quot;css&quot;: {
+    &quot;#show-area&quot;: {
+      &quot;display&quot;: &quot;block&quot;,
+      &quot;margin-left&quot;: &quot;auto&quot;,
+      &quot;margin-right&quot;: &quot;auto&quot;,
+      &quot;width&quot;: &quot;900px&quot;,
+      &quot;background-color&quot;: &quot;rgb(182, 226, 226)&quot;
+    },
+    &quot;table&quot;: {
+      &quot;display&quot;: &quot;block&quot;,
+      &quot;margin-left&quot;: &quot;auto&quot;,
+      &quot;margin-right&quot;: &quot;auto&quot;,
+      &quot;margin-bottom&quot;: &quot;20px&quot;,
+      &quot;padding-top&quot;: &quot;20px&quot;,
+      &quot;padding-bottom&quot;: &quot;20px&quot;,
+      &quot;width&quot;: &quot;840px&quot;,
+      &quot;border-collapse&quot;: &quot;collapse&quot;,
+      &quot;border-spacing&quot;: &quot;0&quot;
+    },
+    [...]
+}
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="plugin-development-in-practice">
+<h3>5.1.3. Plugin development in practice<a class="headerlink" href="#plugin-development-in-practice" title="Permalink to this headline">¶</a></h3>
+<p>You can use plugins to implement additional client-side functionality to Slurk. The steps neccessary to do this are illustrated below, using the example of a simple mechanism for capturing mouse clicks. Creating and injecting a new plugin consists of the following steps:</p>
+<ol class="arabic">
+<li><p class="first">Choosing an appropriate trigger</p>
+<p>Depending on the functionality you want to add to Slurk, you can choose between different triggers. Mouse clicks neither depend on messages nor the chat history, therefore the trigger <code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code> is used.</p>
+</li>
+<li><p class="first">Creating the plugin file</p>
+<p>Create a new JavaScript file and save it in the directory <em>/app/static/plugins</em>, using an appropriate name (e.g. “mouse-clicks.js”).</p>
+<p>Add the necessary code to the file:</p>
+<blockquote>
+<div></div></blockquote>
+</li>
+<li><p class="first">Injecting the plugin</p>
+<p>Inject your plugin to Slurk by adding trigger and plugin (without the file extension) to the <code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code> dictionary in the layout file you’re using:</p>
+<blockquote>
+<div></div></blockquote>
+<p>The JavaScript code is now embedded as follows:</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 
 
