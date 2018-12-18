@@ -153,7 +153,6 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
 8. Etc.
 
     .. code-block:: json
-    
         {
           "title": "CoLA - Chatroom",
           "html": [
