@@ -36,18 +36,17 @@
                             "layout-content": [
                                 {
                                     "layout-type": "td",
-                                    "layout-content": [
-                                        {
-                                            "layout-type": "image",
-                                            "id": "r0c0",
-                                            "src": "",
-                                            "class": "not_zoomed",
-                                            "onclick": "zoom(this)",
-                                            "width": 128,
-                                            "height": 128
-                                        }
-                                    ]
-                                },
+                                    "id": "r0c0",
+                                    "class": "caption",
+                                    "colspan": "5",
+                                    "layout-content": "Caption 1"
+                                }
+                            ]
+                        },
+                        {
+                            "layout-type": "tr",
+                            "id": "r1",
+                            "layout-content": [
                                 {
                                     "layout-type": "td",
                                     "layout-content": [
@@ -103,19 +102,20 @@
                                             "height": 128
                                         }
                                     ]
-                                }
-                            ]
-                        },
-                        {
-                            "layout-type": "tr",
-                            "id": "r1",
-                            "layout-content": [
+                                },
                                 {
                                     "layout-type": "td",
-                                    "id": "r1c0",
-                                    "class": "caption",
-                                    "colspan": "5",
-                                    "layout-content": "Caption 1"
+                                    "layout-content": [
+                                        {
+                                            "layout-type": "image",
+                                            "id": "r0c5",
+                                            "src": "",
+                                            "class": "not_zoomed",
+                                            "onclick": "zoom(this)",
+                                            "width": 128,
+                                            "height": 128
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -125,10 +125,23 @@
                             "layout-content": [
                                 {
                                     "layout-type": "td",
+                                    "id": "r1c0",
+                                    "class": "caption",
+                                    "colspan": 5,
+                                    "layout-content": "Caption 2"
+                                }
+                            ]
+                        },
+                        {
+                            "layout-type": "tr",
+                            "id": "r3",
+                            "layout-content": [
+                                {
+                                    "layout-type": "td",
                                     "layout-content": [
                                         {
                                             "layout-type": "image",
-                                            "id": "r2c0",
+                                            "id": "r1c1",
                                             "src": "",
                                             "class": "not_zoomed",
                                             "onclick": "zoom(this)",
@@ -137,6 +150,81 @@
                                         }
                                     ]
                                 },
+                                {
+                                    "layout-type": "td",
+                                    "layout-content": [
+                                        {
+                                            "layout-type": "image",
+                                            "id": "r1c2",
+                                            "src": "",
+                                            "class": "not_zoomed",
+                                            "onclick": "zoom(this)",
+                                            "width": 128,
+                                            "height": 128
+                                        }
+                                    ]
+                                },
+                                {
+                                    "layout-type": "td",
+                                    "layout-content": [
+                                        {
+                                            "layout-type": "image",
+                                            "id": "r1c3",
+                                            "src": "",
+                                            "class": "not_zoomed",
+                                            "onclick": "zoom(this)",
+                                            "width": 128,
+                                            "height": 128
+                                        }
+                                    ]
+                                },
+                                {
+                                    "layout-type": "td",
+                                    "layout-content": [
+                                        {
+                                            "layout-type": "image",
+                                            "id": "r1c4",
+                                            "src": "",
+                                            "class": "not_zoomed",
+                                            "onclick": "zoom(this)",
+                                            "width": 128,
+                                            "height": 128
+                                        }
+                                    ]
+                                },
+                                {
+                                    "layout-type": "td",
+                                    "layout-content": [
+                                        {
+                                            "layout-type": "image",
+                                            "id": "r1c5",
+                                            "src": "",
+                                            "class": "not_zoomed",
+                                            "onclick": "zoom(this)",
+                                            "width": 128,
+                                            "height": 128
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "layout-type": "tr",
+                            "id": "r4",
+                            "layout-content": [
+                                {
+                                    "layout-type": "td",
+                                    "id": "r2c0",
+                                    "class": "caption",
+                                    "colspan": "5",
+                                    "layout-content": "Caption 3"
+                                }
+                            ]
+                        },
+                        {
+                            "layout-type": "tr",
+                            "id": "r5",
+                            "layout-content": [
                                 {
                                     "layout-type": "td",
                                     "layout-content": [
@@ -192,46 +280,13 @@
                                             "height": 128
                                         }
                                     ]
-                                }
-                            ]
-                        },
-                        {
-                            "layout-type": "tr",
-                            "id": "r3",
-                            "layout-content": [
-                                {
-                                    "layout-type": "td",
-                                    "id": "r3c0",
-                                    "class": "caption",
-                                    "colspan": 5,
-                                    "layout-content": "Caption 2"
-                                }
-                            ]
-                        },
-                        {
-                            "layout-type": "tr",
-                            "id": "r4",
-                            "layout-content": [
-                                {
-                                    "layout-type": "td",
-                                    "layout-content": [
-                                        {
-                                            "layout-type": "image",
-                                            "id": "r4c0",
-                                            "src": "",
-                                            "class": "not_zoomed",
-                                            "onclick": "zoom(this)",
-                                            "width": 128,
-                                            "height": 128
-                                        }
-                                    ]
                                 },
                                 {
                                     "layout-type": "td",
                                     "layout-content": [
                                         {
                                             "layout-type": "image",
-                                            "id": "r4c1",
+                                            "id": "r2c5",
                                             "src": "",
                                             "class": "not_zoomed",
                                             "onclick": "zoom(this)",
@@ -239,61 +294,6 @@
                                             "height": 128
                                         }
                                     ]
-                                },
-                                {
-                                    "layout-type": "td",
-                                    "layout-content": [
-                                        {
-                                            "layout-type": "image",
-                                            "id": "r4c2",
-                                            "src": "",
-                                            "class": "not_zoomed",
-                                            "onclick": "zoom(this)",
-                                            "width": 128,
-                                            "height": 128
-                                        }
-                                    ]
-                                },
-                                {
-                                    "layout-type": "td",
-                                    "layout-content": [
-                                        {
-                                            "layout-type": "image",
-                                            "id": "r4c3",
-                                            "src": "",
-                                            "class": "not_zoomed",
-                                            "onclick": "zoom(this)",
-                                            "width": 128,
-                                            "height": 128
-                                        }
-                                    ]
-                                },
-                                {
-                                    "layout-type": "td",
-                                    "layout-content": [
-                                        {
-                                            "layout-type": "image",
-                                            "id": "r4c4",
-                                            "src": "",
-                                            "class": "not_zoomed",
-                                            "onclick": "zoom(this)",
-                                            "width": 128,
-                                            "height": 128
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "layout-type": "tr",
-                            "id": "r5",
-                            "layout-content": [
-                                {
-                                    "layout-type": "td",
-                                    "id": "r5c0",
-                                    "class": "caption",
-                                    "colspan": "5",
-                                    "layout-content": "Caption 3"
                                 }
                             ]
                         }
