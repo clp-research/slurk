@@ -1,0 +1,81 @@
+{
+  "title": "CoLA - Waiting Room",
+  "subtitle": "Waiting for another player...",
+  "html": [
+    {
+      "layout-type": "div",
+      "id": "image-area",
+      "layout-content": [
+        {
+          "layout-type": "b",
+          "id": "status-text",
+          "layout-content": ""
+        },
+        {
+          "layout-type": "br"
+        },
+        {
+          "layout-type": "image",
+          "id": "current-image",
+          "src": "https://dsg.lili.uni-bielefeld.de:8000/cola_data/The-Waiting-Room.jpg",
+          "width": 500,
+          "height": 400
+        }
+      ]
+    },
+    {
+      "layout-type": "div",
+      "id": "status-box"
+    },
+    {
+      "layout-type": "div",
+      "id": "typing-area"
+    }
+  ],
+  "css": {
+    "#image-area": {
+      "align-content": "left",
+      "margin": "50px 20px 15px"
+    },
+    "header, footer": {
+      "background": "#115E91"
+    },
+    "header": {
+      "border-bottom": "#115E91 solid 1px",
+      "z-index": "10"
+    },
+    "h1": {
+      "padding-top": "20px"
+    },
+    "header .button": {
+     "top": "45px",
+     "right": "2px",
+     "position": "absolute"
+    },
+    ".button": {
+     "display": "inline-block"
+    },
+    ".button_content": {
+     "visibility": "hidden",
+     "background-color": "black",
+     "font-size": "15px",
+     "color": "#fff",
+     "width": "500px",
+     "text-align": "center",
+     "padding": "20px",
+     "border-radius": "6px",
+     "position": "absolute",
+     "top": "-5px",
+     "right": "105%"
+    },
+    ".button:hover .button_content": {
+     "visibility": "visible"
+    }
+  },
+  "scripts": {
+    "incoming-message": "display-message",
+    "submit-message": "send-message",
+    "print-history": "plain-history",
+    "plain": "cola-script"
+  }
+}
