@@ -37,7 +37,7 @@
                                 {
                                     "layout-type": "td",
                                     "id": "r0c0",
-                                    "class": "caption",
+                                    "class": "hidden caption",
                                     "colspan": "5",
                                     "layout-content": "Caption 1"
                                 }
@@ -54,7 +54,7 @@
                                             "layout-type": "image",
                                             "id": "r0c1",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -68,7 +68,7 @@
                                             "layout-type": "image",
                                             "id": "r0c2",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -82,7 +82,7 @@
                                             "layout-type": "image",
                                             "id": "r0c3",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -96,7 +96,7 @@
                                             "layout-type": "image",
                                             "id": "r0c4",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -110,7 +110,7 @@
                                             "layout-type": "image",
                                             "id": "r0c5",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -126,7 +126,7 @@
                                 {
                                     "layout-type": "td",
                                     "id": "r1c0",
-                                    "class": "caption",
+                                    "class": "hidden caption",
                                     "colspan": 5,
                                     "layout-content": "Caption 2"
                                 }
@@ -143,7 +143,7 @@
                                             "layout-type": "image",
                                             "id": "r1c1",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -157,7 +157,7 @@
                                             "layout-type": "image",
                                             "id": "r1c2",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -171,7 +171,7 @@
                                             "layout-type": "image",
                                             "id": "r1c3",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -185,7 +185,7 @@
                                             "layout-type": "image",
                                             "id": "r1c4",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -199,7 +199,7 @@
                                             "layout-type": "image",
                                             "id": "r1c5",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -215,7 +215,7 @@
                                 {
                                     "layout-type": "td",
                                     "id": "r2c0",
-                                    "class": "caption",
+                                    "class": "hidden caption",
                                     "colspan": "5",
                                     "layout-content": "Caption 3"
                                 }
@@ -232,7 +232,7 @@
                                             "layout-type": "image",
                                             "id": "r2c1",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -246,7 +246,7 @@
                                             "layout-type": "image",
                                             "id": "r2c2",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -260,7 +260,7 @@
                                             "layout-type": "image",
                                             "id": "r2c3",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -274,7 +274,7 @@
                                             "layout-type": "image",
                                             "id": "r2c4",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -288,7 +288,7 @@
                                             "layout-type": "image",
                                             "id": "r2c5",
                                             "src": "",
-                                            "class": "not_zoomed",
+                                            "class": "hidden not_zoomed",
                                             "onclick": "zoom(this)",
                                             "width": 128,
                                             "height": 128
@@ -453,7 +453,8 @@
         },
         "#sidebar": {
             "overflow-y": "scroll",
-            "overflow-x": "scroll"
+            "overflow-x": "scroll",
+            "background-color": "rgb(182, 226, 226)"
         },
         "#show-area": {
             "display": "table",
@@ -468,8 +469,8 @@
             "font-size": "20px"
         },
         ".caption": {
-            "padding-top": "10px",
-            "padding-bottom": "30px",
+            "padding-top": "30px",
+            "padding-bottom": "10px",
             "text-align": "center"
         },
         ".not_zoomed": {
