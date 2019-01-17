@@ -97,10 +97,17 @@ def connect():
 
 @socketio.on('my_ping', namespace='/chat')
 @login_required
-def ping():
+def ping(message):
     emit('my_pong', {
         'timestamp': timegm(datetime.now().utctimetuple())
     }, room=request.sid)
+    last_typing = message['typing']
+    if last_typing == 0:
+        emit('start_typing', {'user': current_user.serialize()},
+             room=current_user.latest_room().name())
+    elif last_typing == 3:
+        emit('stop_typing', {'user': current_user.serialize()},
+             room=current_user.latest_room().name())
 
 
 @socketio.on('join_room', namespace='/chat')
@@ -630,11 +637,11 @@ def command(message):
          'command': message['data'][0], 'data': message['data'][1:]})
 
 
-@socketio.on('keypress', namespace='/chat')
+@socketio.on('start_typing', namespace='/chat')
 @login_required
-def keypress():
-    emit('start_typing', {'user': current_user.serialize()},
-         room=current_user.room())
+def start_typing(message):
+    emit('started_typing', {'user': current_user.serialize()},
+         room=current_user.latest_room())
 
 
 @socketio.on('clear_chat', namespace='/chat')

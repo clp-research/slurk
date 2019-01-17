@@ -26,7 +26,7 @@
         },
         {
           "layout-type": "span",
-          "layout-content": "This is a span!"
+          "id": "typing"
         },
         {
           "layout-type": "br"
@@ -57,6 +57,7 @@
     "incoming-message": "display-message",
     "submit-message": "send-message",
     "print-history": "intercept-history",
-    "plain": "do-my-stuff"
+    "plain": "do-my-stuff",
+    "typing-users": "typing-users"
   }
 }
