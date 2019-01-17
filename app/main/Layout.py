@@ -174,6 +174,7 @@ class Layout:
             "        let current_room = self_room;\n" \
             "        let current_user = self_user;\n" \
             "        let current_timestamp = new Date().getTime();\n" \
+            "        is_typing = 3;\n" \
             + content + '\n' \
             "    }\n" \
             "});\n"

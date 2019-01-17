@@ -173,7 +173,9 @@
             window.setInterval(function () {
                 startTime = (new Date).getTime();
                 socket.emit("my_ping", { "typing": is_typing });
-                is_typing += 1;
+                if (is_typing !== -1) {
+                    is_typing += 1;
+                }
             }, 1000);
 
             socket.on('joined_room', function (data) {
