@@ -35,7 +35,7 @@ class Layout:
 
         try:
             with urllib.request.urlopen(name) as url:
-                print("loading layout from", url)
+                print("loading layout from", name)
                 return cls(json.loads(url.read().decode()))
         except:
             pass
@@ -231,8 +231,10 @@ class Layout:
         for trigger, script_file in self._data['scripts'].items():
             try:
                 with urllib.request.urlopen(script_file) as url:
+                    print("loaded script from url:", script_file)
                     script += self._create_script(trigger,
                                                   url.read().decode("utf-8")) + "\n\n\n"
+                    continue
             except:
                 pass
 
@@ -242,11 +244,12 @@ class Layout:
 
             try:
                 with open(plugin_path) as script_content:
+                    print("loaded script from file:", plugin_path)
                     script += self._create_script(trigger,
                                                   script_content.read()) + "\n\n\n"
+                    continue
             except FileNotFoundError:
                 print("Could not find script:", script_file)
-                continue
 
         return script
 

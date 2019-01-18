@@ -3,12 +3,13 @@ import os
 from flask import redirect, url_for, render_template, request, jsonify, abort
 
 from .Room import Room
+from .database import Database
 from .Permissions import Permissions
 from .Task import Task
 from .Token import Token
 from .Layout import Layout
 from . import main
-from .forms import LoginForm, TokenGenerationForm
+from .forms import LoginForm, TokenGenerationForm, AdminForm
 from .User import User
 from flask_login import login_required, current_user, logout_user
 
@@ -17,19 +18,22 @@ from .. import config
 
 @main.route('/token', methods=['GET', 'POST'])
 def token():
-    source = request.args.get("source", None) if request.method == 'GET' else None
+    source = request.args.get(
+        "source", None) if request.method == 'GET' else None
     room = request.args.get("room", None) if request.method == 'GET' else None
     if room:
         room = int(room)
     task = request.args.get("task", None) if request.method == 'GET' else None
     if task:
         task = int(task)
-    count = request.args.get("count", None) if request.method == 'GET' else None
+    count = request.args.get(
+        "count", None) if request.method == 'GET' else None
     if count:
         count = int(count)
     key = request.args.get("key", None) if request.method == 'GET' else None
 
-    form = TokenGenerationForm(task=task or 0, count=count or 1, source=source or "", key=key or "", room=room or 1)
+    form = TokenGenerationForm(
+        task=task or 0, count=count or 1, source=source or "", key=key or "", room=room or 1)
     if form.is_submitted():
         source = form.source.data or ""
         room = form.room.data
@@ -37,7 +41,7 @@ def token():
         count = form.count.data
         key = form.key.data
     elif not (room and task and key):
-        form.room.choices = [(room.id(), room.name()) for room in Room.list()]
+        form.room.choices = [(room.id(), room.label()) for room in Room.list()]
         form.task.choices = [(task.id(), task.name()) for task in Task.list()]
         return render_template('token.html',
                                form=form,
@@ -48,10 +52,35 @@ def token():
         return "Invalid password"
     output = ""
     for i in range(0, count or 1):
-        output += Token.create(source or "", Room.from_id(room), Task.from_id(task)).uuid()
+        output += Token.create(source or "",
+                               Room.from_id(room), Task.from_id(task)).uuid()
         output += "<br />"
     return output
 
+
+@main.route('/admin', methods=['GET', 'POST'])
+def admin():
+    form = AdminForm()
+
+    if form.is_submitted():
+        if form.key.data != config["server"]["secret-key"]:
+            return "Invalid password"
+        db = Database()
+        db.create_room(name=form.name.data,
+                       label=form.label.data,
+                       layout=form.layout.data,
+                       read_only=form.readonly.data,
+                       show_users=form.showusers.data,
+                       show_latency=form.showlatency.data,
+                       show_history=form.showhistory.data,
+                       show_input=form.showinput.data,
+                       show_interaction_area=form.showinteractionarea.data)
+        return "Created room"
+    else:
+        return render_template('admin.html',
+                               form=form,
+                               title=config['templates']['token-title'],
+                               )
 
 
 @main.route('/', methods=['GET', 'POST'])

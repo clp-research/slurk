@@ -176,13 +176,15 @@ class Database:
                   (name, required_users))
         self.db.commit()
 
-    def create_room(self, name, layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True):
+    def create_room(self, name, label="", layout="", read_only=False, show_users=True, show_latency=True, show_input=True, show_history=True, show_interaction_area=True):
         c = self.db.cursor()
+        if label == "":
+            label = name
         c.execute('SELECT COUNT(*) FROM Room WHERE Name = ?', (name,))
         if c.fetchone()[0] == 0:
             c.execute('INSERT OR IGNORE INTO '
                       'Room(`Name`, `Label`, `Layout`, `ReadOnly`, `ShowUsers`, `ShowLatency`, `ShowInput`, `ShowHistory`, `ShowInteractionArea`, `Static`) '
-                      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1);', (name, name, layout, read_only, show_users, show_latency, show_input, show_history, show_interaction_area))
+                      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1);', (name, label, layout, read_only, show_users, show_latency, show_input, show_history, show_interaction_area))
             self.db.commit()
 
     def rooms(self):
