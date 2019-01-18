@@ -230,6 +230,8 @@ def message_text(data):
             'user': current_user.serialize(),
             'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=user.sid())
+        emit('stop_typing', {'user': current_user.serialize()},
+             room=current_user.latest_room().name())
         log({'type': 'text', 'msg': data['msg'], 'room': user.latest_room(
         ).id(), 'receiver': data['receiver_id']})
     elif 'room' in data:
@@ -239,6 +241,8 @@ def message_text(data):
             'user': current_user.serialize(),
             'timestamp': timegm(datetime.now().utctimetuple()),
         }, room=Room.from_id(data['room']).name())
+        emit('stop_typing', {'user': current_user.serialize()},
+             room=current_user.latest_room().name())
         log({'type': 'text', 'msg': data['msg'], 'room': data['room']})
     else:
         print("`text` requires `room` or `receiver_id` as parameters")
@@ -635,13 +639,6 @@ def command(message):
 
     log({'type': 'command', 'room': room.id(),
          'command': message['data'][0], 'data': message['data'][1:]})
-
-
-@socketio.on('start_typing', namespace='/chat')
-@login_required
-def start_typing(message):
-    emit('started_typing', {'user': current_user.serialize()},
-         room=current_user.latest_room())
 
 
 @socketio.on('clear_chat', namespace='/chat')
