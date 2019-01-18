@@ -164,6 +164,7 @@ class Layout:
     @staticmethod
     def _submit(content: str):
         return "$('#text').keypress(function(e) {\n" \
+            "    if ($(self).is('[readonly]')) { return; }\n" \
             "    is_typing = 0;\n" \
             "    let code = e.keyCode || e.which;\n" \
             "    if (code === 13) {\n" \
