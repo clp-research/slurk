@@ -595,7 +595,7 @@ def update_permissions(data):
     if 'interaction_area' in data:
         permissions.set_see_interaction_area(data['interaction_area'])
 
-    emit('update_permissions', {
+    emit('new_permissions', {
         'permissions': permissions.serialize()
     }, room=user.sid())
 

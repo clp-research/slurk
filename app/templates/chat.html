@@ -277,7 +277,7 @@
                 $('#chat-area').empty()
             });
 
-            socket.on('update_permissions', function (data) {
+            socket.on('new_permissions', function (data) {
                 updatePermissions(data.permissions)
             });
 
