@@ -9,6 +9,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/socket.io-2.0.3.min.js') }}"></script>
     <script type="text/javascript" charset="utf-8">
         let socket;
+        let is_typing = -1;
         let typing = {};
         let self_user = undefined;
         let self_room = undefined;
@@ -17,6 +18,7 @@
         let history_received = false;
         let users = {};
         let print_history = undefined;
+        let update_typing = undefined;
 
         function getTime(timestamp) {
             if (typeof timestamp === "undefined")
@@ -170,13 +172,10 @@
             let ping_pong_times = [];
             window.setInterval(function () {
                 startTime = (new Date).getTime();
-                socket.emit("my_ping");
-                let date = new Date();
-                for (let sid in typing) {
-                    if (typing[sid]['date'].getSeconds() + 3 < date.getSeconds())
-                        delete typing[sid];
+                socket.emit("my_ping", { "typing": is_typing });
+                if (is_typing !== -1) {
+                    is_typing += 1;
                 }
-                // updateTyping();
             }, 1000);
 
             socket.on('joined_room', function (data) {
@@ -258,11 +257,27 @@
                 }
             });
 
+            socket.on('start_typing', function (data) {
+                typing[data.user.id] = data.user.name;
+                if (!update_typing !== undefined) {
+                    update_typing(typing);
+                }
+                console.log("start typing:", data)
+            })
+
+            socket.on('stop_typing', function (data) {
+                delete typing[data.user.id];
+                if (!update_typing !== undefined) {
+                    update_typing(typing);
+                }
+                console.log("stop typing:", data)
+            })
+
             socket.on('clear_chat_area', function () {
                 $('#chat-area').empty()
             });
 
-            socket.on('update_permissions', function (data) {
+            socket.on('new_permissions', function (data) {
                 updatePermissions(data.permissions)
             });
 

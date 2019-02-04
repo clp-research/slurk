@@ -164,26 +164,33 @@ class Layout:
     @staticmethod
     def _submit(content: str):
         return "$('#text').keypress(function(e) {\n" \
-               "    let code = e.keyCode || e.which;\n" \
-               "    if (code === 13) {\n" \
-               "        let text = $(e.target).val();\n" \
-               "        $(e.target).val('');\n" \
-               "        if (text === '') \n" \
-               "            return;\n" \
-               "        let current_room = self_room;\n" \
-               "        let current_user = self_user;\n" \
-               "        let current_timestamp = new Date().getTime();\n" \
+            "    if ($('#text').is('[readonly]')) { return; }\n" \
+            "    is_typing = 0;\n" \
+            "    let code = e.keyCode || e.which;\n" \
+            "    if (code === 13) {\n" \
+            "        let text = $(e.target).val();\n" \
+            "        $(e.target).val('');\n" \
+            "        if (text === '') \n" \
+            "            return;\n" \
+            "        let current_room = self_room;\n" \
+            "        let current_user = self_user;\n" \
+            "        let current_timestamp = new Date().getTime();\n" \
+            "        is_typing = -1;\n" \
             + content + '\n' \
-               "    }\n" \
-               "});\n"
+            "    }\n" \
+            "});\n"
 
     @staticmethod
     def _history(content: str):
-        return "print_history = function(history) {" \
-               "    history.forEach(function(element) {\n" \
+        return "print_history = function(history) {\n" \
+            "    history.forEach(function(element) {\n" \
             + content + '\n' \
-               "    })\n" \
-               "}\n"
+            "    })\n" \
+            "}\n"
+
+    @staticmethod
+    def _typing_users(content: str):
+        return "update_typing = function(users) {\n" + content + '\n}\n'
 
     @staticmethod
     def _document_ready(content: str):
@@ -205,6 +212,8 @@ class Layout:
             return self._history(content)
         if trigger == "document-ready":
             return self._document_ready(content)
+        if trigger == "typing-users":
+            return self._typing_users(content)
         if trigger == "plain":
             return content
         print("unknown trigger:", trigger)
