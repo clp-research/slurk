@@ -18,7 +18,7 @@ args = parser.parse_args()
 terminal = "gnome-terminal"
 bots = args.bot
 dir_path = os.path.dirname(os.path.realpath(__file__))
-dir_virtualenv = "/home/simeon/my_virtualenv/bin"
+#dir_virtualenv = "/home/simeon/my_virtualenv/bin"
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -59,10 +59,12 @@ if __name__ == "__main__":
 
     # start bots in new shell sessions
     for i in args.bot:
-        token = get_bot_token(i, secret_key)
+        bot_dir = os.path.abspath(os.path.dirname(i))
+        bot_file = os.path.basename(i)
+        token = get_bot_token(bot_file, secret_key)
         print ("\n\nstarting", i, "\ntoken:", token)
         if platform == 'linux':
-            os.system('{trmnl} -x bash -c "source {virtualenv}/activate; python3.6 {path}/{name} {bot_token} " --title={name}'.format(virtualenv=dir_virtualenv, trmnl=terminal, path=dir_path, name=i, bot_token=token))
+            os.system('{trmnl} -x bash -c "cd {bot_dir}; source {virtualenv}/activate; python3.6 {path}/{name} {bot_token} " --title={name}'.format(bot_dir= bot_dir ,virtualenv=dir_virtualenv, trmnl=terminal, path=dir_path, name=i, bot_token=token))
         elif platform == 'darwin':
             appscript.app('Terminal').do_script('source activate {virtualenv}; python3.6 {path}/{name} {bot_token}'.format(virtualenv=dir_virtualenv, path=dir_path, name=i, bot_token=token))
         else:
