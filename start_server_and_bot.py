@@ -18,7 +18,6 @@ args = parser.parse_args()
 terminal = "gnome-terminal"
 bots = args.bot
 dir_path = os.path.dirname(os.path.realpath(__file__))
-#dir_virtualenv = "/home/simeon/my_virtualenv/bin"
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -48,10 +47,10 @@ if __name__ == "__main__":
     # start slurk in new shell session
     print ("\nstarting chat server")
     if platform == 'linux':
-        os.system('{trmnl} -x bash -c "source {virtualenv}/activate; python3.6 {path}/chat.py"'.format(virtualenv=dir_virtualenv, trmnl=terminal, path=dir_path))
+        os.system('{trmnl} -x bash -c "python3.6 {path}/chat.py"'.format(trmnl=terminal, path=dir_path))
         print ("success")
     elif platform == 'darwin':
-        appscript.app('Terminal').do_script('source activate {virtualenv}; python3.6 {path}/chat.py'.format(virtualenv=dir_virtualenv, path=dir_path))
+        appscript.app('Terminal').do_script('python3.6 {path}/chat.py'.format(path=dir_path))
         print ("success")
     else:
         print ('Could not detect operating system')
@@ -64,9 +63,9 @@ if __name__ == "__main__":
         token = get_bot_token(bot_file, secret_key)
         print ("\n\nstarting", i, "\ntoken:", token)
         if platform == 'linux':
-            os.system('{trmnl} -x bash -c "cd {bot_dir}; source {virtualenv}/activate; python3.6 {path}/{name} {bot_token} " --title={name}'.format(bot_dir= bot_dir ,virtualenv=dir_virtualenv, trmnl=terminal, path=dir_path, name=i, bot_token=token))
+            os.system('{trmnl} -x bash -c "cd {bot_dir}; python3.6 {path}/{name} {bot_token} " --title={name}'.format(bot_dir= bot_dir, trmnl=terminal, path=dir_path, name=i, bot_token=token))
         elif platform == 'darwin':
-            appscript.app('Terminal').do_script('source activate {virtualenv}; python3.6 {path}/{name} {bot_token}'.format(virtualenv=dir_virtualenv, path=dir_path, name=i, bot_token=token))
+            appscript.app('Terminal').do_script('python3.6 {path}/{name} {bot_token}'.format(path=dir_path, name=i, bot_token=token))
         else:
             print ('Could not detect operating system')
             break
