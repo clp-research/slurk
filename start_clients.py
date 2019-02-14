@@ -8,10 +8,21 @@ from time import sleep
 
 platform = sys.platform
 
-if platform == 'darwin':
+if platform == 'linux':
+    # if script is run on linux
+    firefox = webbrowser.get('firefox')
+    chromium = webbrowser.get('chromium-browser')
+    chrome = webbrowser.get('google-chrome')
+
+elif platform == 'darwin':
+    # if script is run on osx
     import appscript
-    CHROME_PATH = 'open -a /Applications/Google\ Chrome.app %s'
-    FIREFOX_PATH = 'open -a /Applications/Firefox.app %s'
+    firefox = webbrowser.get('open -a /Applications/Firefox.app %s')
+    chrome = webbrowser.get('open -a /Applications/Google\ Chrome.app %s')
+    safari = webbrowser.get('open -a /Applications/Safari.app %s')
+    opera = webbrowser.get('open -a /Applications/Opera.app %s')
+else:
+    print ('could not detect operating system')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -38,16 +49,13 @@ def get_client_links(*names, key):
 
 if __name__ == "__main__":
 
-    # get the links
+    # get the links (number of names == number of clients)
     links =  get_client_links('Dr. John Zoidberg', 'Professor Farnsworth', key=secret_key)
 
-    # log in using firefox (linux) or chrome (mac)
-    for link in links:
-        if sys.platform == 'linux':
-            webbrowser.get('firefox').open(link)
-        elif platform == 'darwin':
-            webbrowser.get(CHROME_PATH).open(link)
+    # open generated links using firefox and chrome
+    for i,link in list(enumerate(links)):
+        if i%2 == 0:
+            firefox.open(link)
         else:
-            print ('Could not detect operating system')
-            break
+            chrome.open(link)
         sleep(2)
