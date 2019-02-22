@@ -4,31 +4,23 @@ import webbrowser
 import lxml.html
 import configparser
 import sys
+import os
+from os.path import dirname, realpath
 from time import sleep
 
-platform = sys.platform
-
-if platform == 'linux':
-    # if script is run on linux
-    firefox = webbrowser.get('firefox')
-    chromium = webbrowser.get('chromium-browser')
-    chrome = webbrowser.get('google-chrome')
-
-elif platform == 'darwin':
-    # if script is run on osx
-    import appscript
-    firefox = webbrowser.get('open -a /Applications/Firefox.app %s')
-    chrome = webbrowser.get('open -a /Applications/Google\ Chrome.app %s')
-    safari = webbrowser.get('open -a /Applications/Safari.app %s')
-    opera = webbrowser.get('open -a /Applications/Opera.app %s')
-else:
-    print ('could not detect operating system')
+# use dirname twice to get parent directory of current file
+dir_path = dirname(dirname(realpath(__file__)))
+os.chdir(dir_path)
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 secret_key = config['server']['secret-key']
 
-def get_client_links(*names, key):
+browser1 = webbrowser.get(config['tools']['browser1'])
+browser2 = webbrowser.get(config['tools']['browser2'])
+client_names = config['tools']['client_names'].split(',')
+
+def get_client_links(names, key):
     """ return links to log in as a client """
     links= []
     for i in names:
@@ -49,13 +41,13 @@ def get_client_links(*names, key):
 
 if __name__ == "__main__":
 
-    # get the links (number of names == number of clients)
-    links =  get_client_links('Dr. John Zoidberg', 'Professor Farnsworth', key=secret_key)
+    # get the links (length of client_names is number of clients)
+    links =  get_client_links(client_names, key=secret_key)
 
-    # open generated links using firefox and chrome
+    # open generated links using the web browsers specified in config file
     for i,link in list(enumerate(links)):
         if i%2 == 0:
-            firefox.open(link)
+            browser1.open(link)
         else:
-            chrome.open(link)
-        sleep(2)
+            browser2.open(link)
+        sleep(1)
