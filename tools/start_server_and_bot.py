@@ -12,19 +12,11 @@ from time import sleep
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bot', nargs='*', help='path to bot file')
-parser.add_argument('--v', action='store_true', help='verbose output')
 args = parser.parse_args()
 
 # get absolute paths for all bot files
 bots = [abspath(bot) for bot in args.bot]
-
-# set STDOUT to None or /dev/null, dependent on --v argument
-if args.v:
-    # verbose
-    STDOUT = None
-else:
-    # stdout and stderr for processes redirected to /dev/null
-    STDOUT = open(os.devnull, 'w')
+nullfile = open(os.devnull, "w")
 
 # use dirname twice to move to parent directory of current file (i.e. root folder of slurk)
 dir_path = dirname(dirname(realpath(__file__)))
@@ -56,8 +48,8 @@ if __name__ == "__main__":
     processes = []
 
     # start slurk
-    print ('starting server')
-    server = subprocess.Popen('python {path}/chat.py'.format(path=dir_path), shell=True, stdout=STDOUT, stderr=STDOUT)
+    server = subprocess.Popen('python {path}/chat.py'.format(path=dir_path), shell=True)
+
     # add process id to list of running processes
     processes.append(server.pid)
     # pause to allow server to start before adding bots
@@ -70,21 +62,25 @@ if __name__ == "__main__":
         os.chdir(bot_dir)
         token = get_bot_token(bot_filename, secret_key)
 
-        print ("\n\nstarting", i, "\ntoken:", token)
-        bot_process = subprocess.Popen('python {name} {bot_token}'.format(name=bot_filename, bot_token=token), shell=True, stdout=STDOUT, stderr=STDOUT)
+        print ("starting", i, "\ntoken:", token)
+
+        bot_process = subprocess.Popen('python {name} {bot_token}'.format(name=bot_filename, bot_token=token), shell=True, stdout=nullfile, stderr=nullfile)
+
         # add process id to list of running processes
         processes.append(bot_process.pid)
         sleep(1)
 
-# clean up at exit
-@atexit.register
-def exit_handler():
-    print ('closing...')
-    # close STDOUT file if script is executed without --v
-    if STDOUT:
-        STDOUT.close()
-    # terminate all processes in list of running processes
-    for process in processes[::-1]:
-        os.killpg(os.getpgid(process), signal.SIGTERM)
+    # clean up at exit
+    def terminate_processes():
+        """
+        terminate all processes in list of running processes
+        """
+        for process in processes[::-1]:
+            os.killpg(os.getpgid(process), signal.SIGTERM)
+        nullfile.close()
 
-signal.pause()
+    # register exit handler
+    atexit.register(terminate_processes)
+
+    # wait for keyboardinterrupt
+    signal.pause()
