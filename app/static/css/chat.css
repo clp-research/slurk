@@ -53,23 +53,26 @@ header .users {
     color: darkgrey;
 }
 
-#wrapper {
-    position: fixed;
-    top: 80px;
-    background-color: #B9BABB;
-    min-width: 600px;
-    width: 100%;
-    height: calc(100% - 80px);
-}
-
 #sidebar {
-    position: fixed;
+    position: absolute;
     top: 80px;
     right: 0;
     width: 55%;
     min-width: 300px;
+    max-width: calc(100% - 200px);
     height: calc(100% - 80px - 60px);
-    border-right: medium groove inherit;
+}
+
+#sidebar:after {
+    content: " ";
+    background-color: darkgray;
+    position: absolute;
+    left: 0;
+    width: 7px;
+    top: 0;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 1;
 }
 
 #content {
@@ -77,8 +80,10 @@ header .users {
     top: 80px;
     left: 0;
     width: 45%;
+    min-width: 200px;
+    max-width: calc(100% - 300px);
     height: calc(100% - 80px - 60px);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #chat-area {

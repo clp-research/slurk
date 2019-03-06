@@ -219,6 +219,27 @@ class Layout:
         print("unknown trigger:", trigger)
         return ""
 
+    def _parse_trigger(self, trigger, script_file):
+        script = ""
+        try:
+            with urllib.request.urlopen(script_file) as url:
+                script += self._create_script(trigger,
+                                                url.read().decode("utf-8")) + "\n\n\n"
+        except:
+            pass
+
+        plugin_path = \
+            os.path.dirname(os.path.realpath(__file__)) + \
+            "/../static/plugins/" + script_file + ".js"
+
+        try:
+            with open(plugin_path) as script_content:
+                script += self._create_script(trigger,
+                                                script_content.read()) + "\n\n\n"
+        except FileNotFoundError:
+            print("Could not find script:", script_file)
+        return script
+
     def script(self):
         """
         Creates a script from the Layout.
@@ -229,24 +250,11 @@ class Layout:
 
         script = ""
         for trigger, script_file in self._data['scripts'].items():
-            try:
-                with urllib.request.urlopen(script_file) as url:
-                    script += self._create_script(trigger,
-                                                  url.read().decode("utf-8")) + "\n\n\n"
-            except:
-                pass
-
-            plugin_path = \
-                os.path.dirname(os.path.realpath(__file__)) + \
-                "/../static/plugins/" + script_file + ".js"
-
-            try:
-                with open(plugin_path) as script_content:
-                    script += self._create_script(trigger,
-                                                  script_content.read()) + "\n\n\n"
-            except FileNotFoundError:
-                print("Could not find script:", script_file)
-                continue
+            if isinstance(script_file, str):
+                script += self._parse_trigger(trigger, script_file)
+            else:
+                for script_file in iter(script_file):
+                    script += self._parse_trigger(trigger, script_file)
 
         return script
 
