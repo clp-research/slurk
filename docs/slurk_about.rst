@@ -24,13 +24,17 @@ We were specifically interested in multimodal dialogues which involve more than 
 Some basic concepts
 ~~~~~~~~~~~~~~~~~~~~
 
-Room
-  A collection of users (humans and bots) that can talk to each other. Human users are always in exactly one room.
 Bots
-  Bots are little client programms (written in python, and connecting to the slurk server via `socket.io`) that can enter rooms as well. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue *tasks*. Defining an experimental or data collection setting typically means writing a bot.
-Slash-Commands
-  Bots can register commands with the server, which the users can then use to control the bot. These commands are prefixed with a slash. E.g., `/new_image` could be such a command that user can use to effect something (here, it could trigger a change of what is shown in the display area).
-Token
-  To provide control over who is allowed to log into the chat (since we're not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.
-Waiting Room
-  A special room, realised by the `pairup_bot`, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
+  Bots are little client programms (written in python, and connecting to the slurk server via `socket.io`) that can enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue *tasks*. Defining an experimental or data collection setting typically includes writing one or multiple bots.
+
+Rooms
+  Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one room.
+  The **Waiting Room** is a special room, realised by the `pairup_bot`, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
+
+Technical concepts
+  **Events**: Since Slurk is based on flask-SocketIO, it heavily relies on events emitted by the server. All events have a certain type and corresponding information, which can be processed by bots and client-side scripts. The events used in Slurk are defined in the file `events.py`.
+
+  **Commands**: Clients can communicate with the server using predefined commands, causing the server to emit corresponding events. Strictly speaking, server commands are available for bots only. They can be used, for instance, to send room messages, connect or disconnect clients or alter the attributes of HTML elements.
+  **Slash-Commands** are a special kind of commands: Registered in bot files, they can be used by human users to control the bot, which in turn communicates with the server. These commands are prefixed with a slash. E.g., `/new_image_public` could be such a command that user can use to effect something. In this example (taken from the `multi_bot` provided as a sample), the command triggers a change of what is shown in the display area, visible to all clients in the current room.
+
+  **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.
