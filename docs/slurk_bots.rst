@@ -4,13 +4,25 @@
 Writing your own bots
 =========================================
 
-Disecting the minimal bot
+Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.
+
+There are some sample bots provided as examples, two of which are dissected and explained in detail below.
+
+Dissecting the minimal bot
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images if new clients are joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can change and display user permissions.
 
-Disecting the multi bot
+The bot file has to be called providing the server URL and port as well as a valid login token.
+
+After importing the necessary python modules, the ChatNamespace class is defined. The methods defined within this class determin which actions the minimal bot is able to perform in chat rooms.
+
+Dissecting the multi bot
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+The multi bot and the minimal bot share a large part of their features. The main difference is that the multi bot is able to switch to other task rooms once they are created, therefore it is not bound to a single room as the minimal bot. If the event `new_task_room` is emmited by the server, the multi bot sends the command `join_task` with the corresponding room id.
+
+Apart from that, the multi bot is able to change the images shown in the image area, storing the ids of clients joining any room the multi bot is in, and terminating the current meetup session for all clients.
 
 Interacting with layouts
 ~~~~~~~~~~~~~~~~~~~~~~~
