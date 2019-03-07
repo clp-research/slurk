@@ -15,7 +15,7 @@ config = None
 def create_app(debug=False):
     global config
 
-    config = configparser.ConfigParser()
+    config = configparser.ConfigParser(interpolation=None)
     config.read("config.ini")
 
     """Create an application."""

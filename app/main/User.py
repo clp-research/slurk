@@ -8,6 +8,7 @@ from .Token import Token
 from .database import Database
 from .Room import Room, ROOMS
 from .Logger import Logger
+from .. import config
 from .Layout import Layout
 
 
@@ -105,8 +106,13 @@ class User(UserMixin):
         sio.join_room(room.name(), self.sid())
 
         if room.id() not in ROOMS:
+            logfile_format = '%Y-%m-%d %H-%M-%S'
+            if "logfile-date-format" in config["server"]:
+                logfile_format = config["server"]["logfile-date-format"]
+            logfile_date_format = '{:'+logfile_format+"}"
+            logfile_date = logfile_date_format.format(datetime.now())
             ROOMS[room.id()] = {
-                'log': Logger('log/{:%Y-%m-%d %H-%M-%S}-{}.log'.format(datetime.now(), room.name())),
+                'log': Logger('log/{}-{}.log'.format(logfile_date, room.name())),
                 'users': {},
                 'listeners': {}
             }
