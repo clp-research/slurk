@@ -2,12 +2,15 @@
 
 <head>
     <title>{{ title }}: {{ room }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='3rd_party/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}" />
     <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/jquery-3.2.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/socket.io-2.0.3.min.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='js/3rd_party/socket.io-2.0.3.min.js') }}"></script>
     <script type="text/javascript" charset="utf-8">
+        const BORDERSIZE = 7;
         let socket;
         let is_typing = -1;
         let typing = {};
@@ -165,6 +168,29 @@
         }
 
         $(document).ready(function () {
+            const sidebar = document.getElementById("sidebar");
+            const content = document.getElementById("content");
+
+            let splitter_pos;
+            function resize(e) {
+                const dx = splitter_pos - e.x;
+                splitter_pos = e.x;
+                sidebar.style.width = (parseInt(getComputedStyle(sidebar, '').width + BORDERSIZE) + dx) + "px";
+                content.style.width = (parseInt(getComputedStyle(content, '').width + BORDERSIZE) - dx) + "px";
+            }
+
+            sidebar.addEventListener("mousedown", function (e) {
+                console.log("mousedown", e.offsetX);
+                if (e.offsetX < BORDERSIZE) {
+                    splitter_pos = e.x;
+                    document.addEventListener("mousemove", resize, false);
+                }
+            }, false);
+
+            document.addEventListener("mouseup", function () {
+                document.removeEventListener("mousemove", resize, false);
+            }, false);
+
             $('#latency').hide();
             $('#user-list').hide();
             socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + '/chat');

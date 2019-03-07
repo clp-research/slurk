@@ -57,7 +57,10 @@
     "incoming-message": "display-message",
     "submit-message": "send-message",
     "print-history": "intercept-history",
-    "plain": "do-my-stuff",
+    "plain": [
+      "do-my-stuff"
+    ],
+    "document-ready": "log-resize-events",
     "typing-users": "typing-users"
   }
 }

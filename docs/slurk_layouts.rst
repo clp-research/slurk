@@ -32,7 +32,7 @@ A layout is a JSON file with a top level dictionary with the following keys:
            "margin": "50px 20px 15px"
          }
        }
-- ``"script"``: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which maps different triggers to scripts. Scripts can either lie in *app/static/plugins* or can be passed by link. Example:
+- ``"script"``: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which maps different triggers to scripts or a list of scripts. Scripts can either lie in *app/static/plugins* or can be passed by link. Example:
 
     .. code-block:: json
 
