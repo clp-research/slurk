@@ -14,6 +14,38 @@ from string import ascii_letters, digits, punctuation
 from random import choices
 
 
+def config_entries(dir=os.getcwd()):
+    """
+        retrieve information from config file
+        if there's no config.ini in provided directory: copy config.template.ini
+        generate secret key if none is found in config.ini
+    """
+    config = configparser.ConfigParser()
+    if 'config.ini' not in os.listdir(dir):
+        # copy template file if config.ini doesn't exist
+        print ('creating config file')
+        copyfile(dir+'/config.template.ini', dir+'/config.ini')
+    config.read(dir+'/config.ini')
+
+    try:
+        # run exception if secret-key is not found or is empty string
+        s_key = config['server']['secret-key']
+        if len(s_key) == 0:
+            raise Exception('invalid secret key')
+    except:
+        print ('generating secret key')
+        # generate secret key with length = 17
+        chars = ascii_letters + digits + punctuation.replace('%', '')
+        s_key = ''.join(choices(chars, k=17))
+        # write secret key to config file
+        config['server']['secret-key'] = s_key
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
+
+    return {
+        'secret-key': s_key
+    }
+
 def get_bot_token(name, key, testroom):
     """
     get a token for connecting a bot
@@ -38,37 +70,6 @@ def get_bot_token(name, key, testroom):
     if login_token.endswith('<br />'):
         login_token = login_token[:-6]
     return login_token
-
-def config_entries(dir=os.getcwd()):
-    """
-        retrieve information from config file
-        if there's no config.ini in provided directory: copy config.template.ini
-        generate secret key if none is found in config.ini
-    """
-    config = configparser.ConfigParser()
-    if 'config.ini' not in os.listdir(dir):
-        # copy template file if config.ini doesn't exist
-        print ('creating config file')
-        copyfile(dir+'/config.template.ini', dir+'/config.ini')
-    config.read(dir+'/config.ini')
-
-    try:
-        # run exception if secret-key is not found or is empty string
-        s_key = config['server']['secret-key']
-        if len(s_key) == 0:
-            raise Exception('invalid secret key')
-    except:
-        print ('generating secret key')
-        # generate secret key with length = 17
-        s_key = ''.join(choices(ascii_letters + digits + punctuation, k=17))
-        # write secret key to config file
-        config['server']['secret-key'] = s_key
-        with open('config.ini', 'w') as configfile:
-            config.write(configfile)
-
-    return {
-        'secret-key': s_key
-    }
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bot', nargs='*', help='path to bot file')
