@@ -6,3 +6,4 @@ COPY requirements.txt /usr/src/slurk
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/slurk
+COPY docker/config.ini /usr/src/slurk
