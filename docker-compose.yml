@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  slurk:
+    image: slurk/server
+    container_name: slurk
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/slurk/Dockerfile
+    ports:
+      - "5000:5000"
+    command: gunicorn -w 1 -b :5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker chat:app
