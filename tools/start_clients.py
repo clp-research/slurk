@@ -36,7 +36,7 @@ def config_entries(dir=os.getcwd()):
             # run exception if browser is not found or is empty string
             val = config['tools'][entry]
             if len(val) == 0:
-                raise Exception('invalid web browser')
+                raise Exception('no web browser')
             browsers[entry] = val
         except:
             print ("\nKey '{browser}' is not set in config.ini! Attempting to use default browser. \nPlease specify in the config file which web browser you want to use!".format(browser=entry))
@@ -47,6 +47,7 @@ def config_entries(dir=os.getcwd()):
 
     # client names
     try:
+        # run exception if no client names are found
         names = config['tools']['client-names']
         if len(names) == 0:
             raise Exception('no client names found')
@@ -63,7 +64,7 @@ def config_entries(dir=os.getcwd()):
         # run exception if secret-key is not found or is empty string
         s_key = config['server']['secret-key']
         if len(s_key) == 0:
-            raise Exception('invalid secret key')
+            raise Exception('no secret key')
     except:
         print ('generating secret key')
         # generate secret key with length = 17
@@ -109,25 +110,39 @@ dir_path = dirname(dirname(realpath(__file__)))
 os.chdir(dir_path)
 
 # get information from config file
-config_entries = config_entries()
+config_entries = config_entries(dir_path)
 browser1 = config_entries['browser1']
-if browser1:
-    browser1 = webbrowser.get(browser1)
 browser2 = config_entries['browser2']
-if browser2:
-    browser2 = webbrowser.get(browser2)
+try:
+    if browser1:
+        current_b = browser1
+        browser1 = webbrowser.get(browser1)
+    if browser2:
+        current_b = browser2
+        browser2 = webbrowser.get(browser2)
+except Exception as exc:
+    print (exc)
+    print ("\nError:\nInvalid browser '{b}'. Please refer to https://docs.python.org/3.7/library/webbrowser.html for supported type names.\n".format(b=current_b))
+    exit()
 client_names = config_entries['client-names'].split(',')
 secret_key = config_entries['secret-key']
 
 if __name__ == "__main__":
     # get the links (length of client_names is number of clients)
-    links =  get_client_links(client_names, key=secret_key, testroom=args.testroom)
-
+    try:
+        links =  get_client_links(client_names, key=secret_key, testroom=args.testroom)
+    except Exception as exc:
+        print ('\nError: \n', sys.exc_info())
+        print ('\nCould not connect to Slurk server! Is it running?')
+        exit()
     # open generated links using the web browsers specified in config file
     # if browser1 or browser2 is False: use default web browser
     for i,link in list(enumerate(links)):
-        if i%2 == 0:
-            browser1.open(link) if browser1 else webbrowser.open(link)
-        else:
-            browser2.open(link) if browser2 else webbrowser.open(link)
+        try:
+            if i%2 == 0:
+                browser1.open(link) if browser1 else webbrowser.open(link)
+            else:
+                browser2.open(link) if browser2 else webbrowser.open(link)
+        except:
+            print ('ERROR: could not open link in web browser!')
         sleep(1)

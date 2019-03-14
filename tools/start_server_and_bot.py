@@ -90,7 +90,7 @@ if not (args.nopairup or args.testroom):
     bots.insert(0, dir_path+'/sample_bots/pairup_bot.py')
 
 # get secret key from config.ini
-secret_key = config_entries()['secret-key']
+secret_key = config_entries(dir_path)['secret-key']
 
 if __name__ == "__main__":
     # print basic information
