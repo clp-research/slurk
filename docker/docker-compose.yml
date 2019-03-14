@@ -8,5 +8,5 @@ services:
       context: ..
       dockerfile: docker/slurk/Dockerfile
     ports:
-      - "5000:5000"
-    command: gunicorn -w 1 -b :5000 chat:app
+      - "8000:8000"
+    command: gunicorn -w 1 -b :8000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker chat:app
