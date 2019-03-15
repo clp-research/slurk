@@ -11,7 +11,7 @@ There are some sample bots provided as examples, two of which are dissected and 
 Dissecting the minimal bot
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images if new clients are joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can change and display user permissions.
+The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.
 
 The bot file has to be called providing the server URL and port as well as a valid login token as arguments. The bot is then connects to the server using the `connectWithToken` command within the LoginNamespace.
 
@@ -79,7 +79,7 @@ Dissecting the multi bot
 
 The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.
 
-The main difference between the minimal bot and the multi bot lies in the latter not being bounded to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event `new_task_room` is emmited by the server, the multi bot sends the command `join_task` with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.
+The main difference between the minimal bot and the multi bot lies in the latter not being bound to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event `new_task_room` is emmited by the server, the multi bot sends the command `join_task` with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.
 
 .. code-block:: python
 
