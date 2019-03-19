@@ -120,9 +120,9 @@ try:
     if browser2:
         current_b = browser2
         browser2 = webbrowser.get(browser2)
-except Exception as exc:
-    print (exc)
-    print ("\nError:\nInvalid browser '{b}'. Please refer to https://docs.python.org/3.7/library/webbrowser.html for supported type names.\n".format(b=current_b))
+except webbrowser.Error as exc:
+    print ("\nError:",exc)
+    print ("Invalid browser '{b}'. Please refer to https://docs.python.org/3.7/library/webbrowser.html for supported type names.\n".format(b=current_b))
     exit()
 client_names = config_entries['client-names'].split(',')
 secret_key = config_entries['secret-key']
@@ -131,9 +131,9 @@ if __name__ == "__main__":
     # get the links (length of client_names is number of clients)
     try:
         links =  get_client_links(client_names, key=secret_key, testroom=args.testroom)
-    except Exception as exc:
-        print ('\nError: \n', sys.exc_info())
-        print ('\nCould not connect to Slurk server! Is it running?')
+    except requests.exceptions.ConnectionError as exc:
+        print ('\nError: \n', sys.exc_info()[1])
+        print ('\nCould not connect to server! Is it running?')
         exit()
     # open generated links using the web browsers specified in config file
     # if browser1 or browser2 is False: use default web browser
@@ -143,6 +143,7 @@ if __name__ == "__main__":
                 browser1.open(link) if browser1 else webbrowser.open(link)
             else:
                 browser2.open(link) if browser2 else webbrowser.open(link)
-        except:
-            print ('ERROR: could not open link in web browser!')
+        except Exception as exc:
+            print ('\nError: \n', sys.exc_info())
+            print ('\nCould not open link in web browser! Try starting the browser first and then re-running the script.')
         sleep(1)
