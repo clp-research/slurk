@@ -66,6 +66,8 @@ These are the currently defined triggers:
 - ``"print-history"``: Triggered, when the server sends the history of the chat on joining a room
 - ``"document-ready"``: Inserted into the JQuery ``$(document).ready`` function
 - ``"plain"``: Inserted as plain script into the chat
+- ``"typing-users"``: Triggered when a user starts or stops typing
+    - ``users``: A map of currently typing users, where the it's id as the key
 
 Additional, some functions are guarantied to exist:
 
