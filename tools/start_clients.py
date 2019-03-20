@@ -26,6 +26,9 @@ def config_entries(dir=os.getcwd()):
         copyfile(dir+'/config.template.ini', dir+'/config.ini')
     config.read(dir+'/config.ini')
 
+    host = config['server']['host']
+    port = config['server']['port']
+
     if not 'tools' in config.sections():
         config.add_section('tools')
 
@@ -75,7 +78,7 @@ def config_entries(dir=os.getcwd()):
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
-    return {**browsers, 'client-names':names, 'secret-key':s_key}
+    return {**browsers, 'client-names':names, 'secret-key':s_key, 'host':host, 'port':port}
 
 def get_client_links(names, key, testroom):
     """ return links to log in as a client """
@@ -86,17 +89,17 @@ def get_client_links(names, key, testroom):
     links= []
     for i in names:
         name = i
-        url = 'http://127.0.0.1:5000/token'
+        url = 'http://{host}:{port}/token'.format(host=host,port=port)
         s = requests.session()
         r = s.get(url)
         source = lxml.html.document_fromstring(r.content)
         token = source.xpath('//input[@name="csrf_token"]/@value')[0]
-        headers = {'Referer': 'http://127.0.0.1:5000/token'}
+        headers = {'Referer': 'http://{host}:{port}/token'.format(host=host,port=port)}
         data = {'csrf_token': token, 'room': room, 'task': '1', 'source': name, 'key': key}
         login_token = s.post(url, data=data, headers=headers).text
         if login_token.endswith('<br />'):
             login_token = login_token[:-6]
-        uris = 'http://127.0.0.1:5000/?name={}&token={}'.format(name, login_token)
+        uris = 'http://{host}:{port}/?name={name}&token={token}'.format(host=host,port=port,name=name,token=login_token)
         links.append(uris)
     return links
 
@@ -126,6 +129,8 @@ except webbrowser.Error as exc:
     exit()
 client_names = config_entries['client-names'].split(',')
 secret_key = config_entries['secret-key']
+host = config_entries['host']
+port = config_entries['port']
 
 if __name__ == "__main__":
     # get the links (length of client_names is number of clients)

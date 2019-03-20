@@ -27,6 +27,9 @@ def config_entries(dir=os.getcwd()):
         copyfile(dir+'/config.template.ini', dir+'/config.ini')
     config.read(dir+'/config.ini')
 
+    host = config['server']['host']
+    port = config['server']['port']
+
     try:
         # run exception if secret-key is not found or is empty string
         s_key = config['server']['secret-key']
@@ -43,7 +46,7 @@ def config_entries(dir=os.getcwd()):
             config.write(configfile)
 
     return {
-        'secret-key': s_key
+        'secret-key':s_key,'host':host,'port':port
     }
 
 def get_bot_token(name, key, testroom):
@@ -53,12 +56,12 @@ def get_bot_token(name, key, testroom):
     # get token for test room or waiting room
     room = 2 if testroom else 1
 
-    url = 'http://127.0.0.1:5000/token'
+    url = 'http://{host}:{port}/token'.format(host=host,port=port)
     s = requests.session()
     r = s.get(url)
     source = document_fromstring(r.content)
     token = source.xpath('//input[@name="csrf_token"]/@value')[0]
-    headers = {'Referer': 'http://127.0.0.1:5000/token'}
+    headers = {'Referer': 'http://{host}:{port}/token'.format(host=host,port=port)}
     data = {'csrf_token': token,
             'room': room,
             'task': '2',
@@ -90,7 +93,11 @@ if not (args.nopairup or args.testroom):
     bots.insert(0, dir_path+'/sample_bots/pairup_bot.py')
 
 # get secret key from config.ini
-secret_key = config_entries(dir_path)['secret-key']
+config_entries = config_entries(dir_path)
+secret_key = config_entries['secret-key']
+host = config_entries['host']
+port = config_entries['port']
+
 
 if __name__ == "__main__":
     # print basic information
@@ -100,10 +107,11 @@ if __name__ == "__main__":
     nullfile = open(os.devnull, "w")
 
     # start slurk
-    server = subprocess.Popen('python {path}/chat.py'.format(path=dir_path), shell=True)
+    server = subprocess.Popen(['python','{path}/chat.py'.format(path=dir_path)])
 
     # add process id to list of running processes
     processes.append(server.pid)
+
     # pause to allow server to start before adding bots
     sleep(2)
 
@@ -116,19 +124,19 @@ if __name__ == "__main__":
 
         print ("starting", i, "\ntoken:", token)
 
-        bot_process = subprocess.Popen('python {name} {bot_token}'.format(name=bot_filename, bot_token=token), shell=True, stdout=nullfile, stderr=nullfile)
+        bot_process = subprocess.Popen(['python',bot_filename,token,'--chat_host',host,'--chat_port', port],stdout=nullfile, stderr=nullfile)
 
         # add process id to list of running processes
         processes.append(bot_process.pid)
         sleep(1)
-
     # clean up at exit
     def terminate_processes():
         """
         terminate all processes in list of running processes
         """
+        print ('terminating processes')
         for process in processes[::-1]:
-            os.killpg(os.getpgid(process), signal.SIGTERM)
+            os.kill(os.getpgid(process), signal.SIGTERM)
         nullfile.close()
 
     # register exit handler
