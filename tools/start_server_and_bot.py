@@ -31,15 +31,15 @@ def config_entries(dir=os.getcwd()):
     port = config['server']['port']
 
     try:
-        # run exception if secret-key is not found or is empty string
+        # run exception if secret-key is not found or empty
         s_key = config['server']['secret-key']
         if len(s_key) == 0:
             raise Exception('invalid secret key')
     except:
         print ('generating secret key')
-        # generate secret key with length = 17
+        # generate secret key (16 characters)
         chars = ascii_letters + digits + punctuation.replace('%', '')
-        s_key = ''.join(choices(chars, k=17))
+        s_key = ''.join(choices(chars, k=16))
         # write secret key to config file
         config['server']['secret-key'] = s_key
         with open('config.ini', 'w') as configfile:
@@ -53,9 +53,10 @@ def get_bot_token(name, key, testroom):
     """
     get a token for connecting a bot
     """
-    # get token for test room or waiting room
+    # room = 1 -> Waiting Room, room = 2 -> Test Room
     room = 2 if testroom else 1
 
+    # retrieve token
     url = 'http://{host}:{port}/token'.format(host=host,port=port)
     s = requests.session()
     r = s.get(url)
@@ -84,7 +85,7 @@ args = parser.parse_args()
 
 # get absolute paths for all bot files
 bots = [abspath(bot) for bot in args.bot]
-# move to slurk root folder
+# move to slurk root folder (parent directory of this file)
 dir_path = dirname(dirname(realpath(__file__)))
 os.chdir(dir_path)
 
@@ -100,6 +101,7 @@ port = config_entries['port']
 
 
 if __name__ == "__main__":
+
     # print basic information
     print ("Directory:",dir_path)
     print ("Bots: ",bots, "\n")
@@ -108,7 +110,6 @@ if __name__ == "__main__":
 
     # start slurk
     server = subprocess.Popen(['python','{path}/chat.py'.format(path=dir_path)])
-
     # add process id to list of running processes
     processes.append(server.pid)
 
@@ -129,6 +130,7 @@ if __name__ == "__main__":
         # add process id to list of running processes
         processes.append(bot_process.pid)
         sleep(1)
+
     # clean up at exit
     def terminate_processes():
         """
@@ -136,7 +138,7 @@ if __name__ == "__main__":
         """
         print ('terminating processes')
         for process in processes[::-1]:
-            os.kill(os.getpgid(process), signal.SIGTERM)
+            os.killpg(os.getpgid(process), signal.SIGTERM)
         nullfile.close()
 
     # register exit handler

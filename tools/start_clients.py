@@ -83,12 +83,13 @@ def config_entries(dir=os.getcwd()):
 def get_client_links(names, key, testroom):
     """ return links to log in as a client """
 
-    # get links for test room or waiting room
+    # room = 1 -> Waiting Room, room = 2 -> Test Room
     room = 2 if testroom else 1
 
     links= []
     for i in names:
         name = i
+        # retrieve token
         url = 'http://{host}:{port}/token'.format(host=host,port=port)
         s = requests.session()
         r = s.get(url)
@@ -99,6 +100,7 @@ def get_client_links(names, key, testroom):
         login_token = s.post(url, data=data, headers=headers).text
         if login_token.endswith('<br />'):
             login_token = login_token[:-6]
+        # create link with token
         uris = 'http://{host}:{port}/?name={name}&token={token}'.format(host=host,port=port,name=name,token=login_token)
         links.append(uris)
     return links
@@ -108,9 +110,8 @@ parser.add_argument('--testroom', help='connect clients to test room',
     action='store_true')
 args = parser.parse_args()
 
-# use dirname twice to get parent directory of current file
+# get slurk root directory (parent directory of this file)
 dir_path = dirname(dirname(realpath(__file__)))
-os.chdir(dir_path)
 
 # get information from config file
 config_entries = config_entries(dir_path)
@@ -133,13 +134,15 @@ host = config_entries['host']
 port = config_entries['port']
 
 if __name__ == "__main__":
-    # get the links (length of client_names is number of clients)
+
+    # get links for connecting (length of client_names is number of clients)
     try:
         links =  get_client_links(client_names, key=secret_key, testroom=args.testroom)
     except requests.exceptions.ConnectionError as exc:
         print ('\nError: \n', sys.exc_info()[1])
         print ('\nCould not connect to server! Is it running?')
         exit()
+
     # open generated links using the web browsers specified in config file
     # if browser1 or browser2 is False: use default web browser
     for i,link in list(enumerate(links)):
