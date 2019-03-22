@@ -53,3 +53,8 @@ If everything is set up correctly, simply call `start_clients.py` with Python fr
     $ python tools/start_clients.py
 
 By default, clients are connected to the Waiting Room. Using the `\\-\\-testroom` flag, you can connect clients to the Test Room instead.
+
+**Known issues for macOS:**
+
+- Opera can't be selected as a browser
+- some browsers may have to be started manually before running the script (error observed for Chrome)
