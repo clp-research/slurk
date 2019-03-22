@@ -182,7 +182,7 @@ Do not forget to check if UFW (Uncomplicated Firewall) is installed on your mach
 <p>You can serve our Flask application on a permanent basis.
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
 the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
-<a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">this tutorial</a>.</p>
+<a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04" target="_blank">this tutorial</a>.</p>
 <p>First, isolate your Flask application on your computer. For this you have to install <em>virtualenv</em> package.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">venv</span>
 </pre></div>
@@ -310,13 +310,13 @@ and include certificates which were created earlier <a class="footnote-reference
 <table class="docutils footnote" frame="void" id="id6" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>There is a nice tutorial on <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04">how to install Nginx on Ubuntu 18.04</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>There is a nice tutorial on <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04" target="_blank">how to install Nginx on Ubuntu 18.04</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id7" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04" target="_blank">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id8" rules="none">
@@ -324,7 +324,7 @@ and include certificates which were created earlier <a class="footnote-reference
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><p class="first">An important thing is that you specify type of the worker associated with the Gunicorn process. You should use websockets provided by <cite>gevent</cite> package:</p>
 <p><code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">geventwebsocket.gunicorn.workers.GeventWebSocketWorker</span></code></p>
-<p class="last">More information can be found in <a class="reference external" href="http://flask.pocoo.org/docs/1.0/deploying/wsgi-standalone/#gunicorn">official Flask documentation</a>.</p>
+<p class="last">More information can be found in <a class="reference external" href="http://flask.pocoo.org/docs/1.0/deploying/wsgi-standalone/#gunicorn" target="_blank">official Flask documentation</a>.</p>
 </td></tr>
 </tbody>
 </table>

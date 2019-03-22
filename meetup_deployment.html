@@ -159,7 +159,7 @@
   <div class="section" id="meetup-how-to-deploy">
 <span id="meetup-depl"></span><h1>MeetUp: how to deploy<a class="headerlink" href="#meetup-how-to-deploy" title="Permalink to this headline">¶</a></h1>
 <p>The MeetUp task is dependent on displayed images, this is why the first step would be to
-download the <a class="reference external" href="http://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20k image dataset</a>. You will need training set in particular.
+download the <a class="reference external" href="http://groups.csail.mit.edu/vision/datasets/ADE20K/" target="_blank">ADE20k image dataset</a>. You will need training set in particular.
 Navigate to your <cite>/media</cite> folder and arrange the image dataset there. This location will be used in Nginx server blocks.</p>
 <p>If you want to use SSL connection, please make a new directory <cite>certificates</cite> in the project directory,
 and populate it with your certificate and certificate key <a class="footnote-reference" href="#id3" id="id1">[1]</a>. Do not forget to restrict permissions to this directory
@@ -190,7 +190,7 @@ Please execute <code class="docutils literal notranslate"><span class="pre">sudo
 <span class="n">add_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="o">-</span><span class="n">Options</span> <span class="n">nosniff</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>For more information, address <a class="reference external" href="http://nginx.org/en/docs/http/configuring_https_servers.html">Nginx’s HTTPS configuration</a>.</p>
+<p>For more information, address <a class="reference external" href="http://nginx.org/en/docs/http/configuring_https_servers.html" target="_blank">Nginx’s HTTPS configuration</a>.</p>
 <p>The next step would be to create a new server block where our Nginx will serve image directory.
 Open a new server block in your default nginx configuration file, which can be found in <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>server {
@@ -218,7 +218,7 @@ to store your server configuration, while the latter enables your block. This ca
 </div>
 <p>Check if you UFW is active and allow incoming connections for the port that you use to serve images <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
 <p>If everything has been set up properly, you will be able to access images by visiting <code class="docutils literal notranslate"><span class="pre">host:8000</span></code>, depending on your host.
-At the moment, all images are accessible <a class="reference external" href="https://dsg.lili.uni-bielefeld.de:8000">here</a>.</p>
+At the moment, all images are accessible <a class="reference external" href="https://dsg.lili.uni-bielefeld.de:8000" target="_blank">here</a>.</p>
 <hr class="docutils" />
 <table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -229,7 +229,7 @@ At the moment, all images are accessible <a class="reference external" href="htt
 <table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04" target="_blank">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
 </tbody>
 </table>
 </div>
