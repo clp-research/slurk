@@ -11,3 +11,6 @@ WTForms == 2.2.1
 
 # Client
 SocketIO-Client == 0.7.2
+
+# Tools
+lxml == 4.3.2
