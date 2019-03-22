@@ -112,6 +112,7 @@ args = parser.parse_args()
 
 # get slurk root directory (parent directory of this file)
 dir_path = dirname(dirname(realpath(__file__)))
+os.chdir(dir_path)
 
 # get information from config file
 config_entries = config_entries(dir_path)
