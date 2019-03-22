@@ -1,32 +1,40 @@
 dist: xenial
-language: python
-python: 3.7
 
-install:
-    - pip install sphinx
-    - pip install sphinx_rtd_theme
+env:
+  global:
+    - secure: I0FienCI2vzEOVn9EnLfnTUpadvI3A/D9T+bY4iLl9iSSxg39k6HRnxta+OdCQRW/PvwINpTnQAcx3m5vp1V/JOIVcPjQTKTzORzJHxz9gdtaQu8N2fFn0vYpnRn5ByQhyHmQvbdAzZaZR5AAjiqUhWEApZ9MewCUZ5HkH+eijkDbY49lSpOIpFeaLolLSdDq97dahIZNfGkX1yDuJMZQIigYFSbdr5VGeLyZJwpY9NMQm3Mwb5A5Xv9bLGJ0SeY4ZMM1L289WdLMuGwBX88iZIlu/AF4N2Z8RWt6Z9nZSpxv+A8e3xu6Rby95ZANKHwHQkDuU1J44hWSHuC0ppwIW3Z1Fin+3fo1w1X3BA86pB1o9nwttmASRuUhi0AASz66cWFfbLNDujN2MYoTaBmozna7yfv8eiOBWOxEHLgPHL4wig/ajKiJVujDvQAWhcmIPQu2vivJAu7b16kxMfiPuEBJL2EIwgho0NbWPyIEPMt3pE6pnwlgR4LvQmzqPN/wJlC3k+okbQPrQ2Wip95xsKaayG2kfI81MCrrfhF68tH1dWOa1WIKUfkMz1LtUe9miojDhtWN/CUdKPK3mLhxznDtZ4elV+O82r5zcfMhCis+3vnxFPMEIbSjcm+wnR9u82XFDdldM5jbIph+nIAyiB88dktDnxKytliMu4cWlU=
+    - secure: OeDnF48Q4VgpmwY5kMJmcZcHCa6lmSlt/UvlGfVvGjMXGe/dLmoRvqjedcg7fk0qXBLbFgcVz2zCRoM49l73AoQmYciSRKDsXJ2fyrM13QG4DJdR6zjVh1jDONUJKwS5NHbyOUH+qqSxdU9cq9r6GqlCKyXhwz6Ie8Jc0F6Oi8toiNLtLknlynLCjs7GenL27xAnBKp+Ci5QgIGo2UbB3kONwccTZFwWcRPs1yGif/dEX4PoTjZ342jLqdQ6KppemmuoA/7i5VfIRrePOK2OCsyA95bJMGDH8PLXVPm1d/8qH9Kq8YGrMcD6B2qDD0lw2tqJQt0SwO5zEMCH+n4HFPt/z9kfxBgjhz/jiBwyWL8dsbEpymsN2G9F3Wr7J7Tn+a4dcUyAJhPrqSBOtfJokof+HdiBH2kJ4J4U4WPWm4MfTFTrSxFMt5fXLI2CJgOej5zsZr7jRHpWkm+Lfou9aD7tCVtDBWPq3eI1FKVXPuTE9WrFMbd8E9KFKyBrktN8T4oe/+qDAba+av2R0fEQpBIenaOc74IVyme85YJ0GErRob4Swrq8lcjIadzpd3KBk3lSHNRELcVW51xRYa6FyET00Jng50BDxbbXlGBdAOu4BVUN3cYeRu9pPYn7TlKhCWqht1G1eJJjjjstkgFS1WJpn6qtxaAr/NDlX4wzc+o=
 
-script: (cd docs && make html)
-after_success: touch docs/_build/html/.nojekyll
-
-deploy:
-  provider: pages
-  skip-cleanup: true
-  local_dir: docs/_build/html
-  github-token: $GH_TOKEN
-  keep-history: true
-  on:
-    branch: master
-
-matrix:
+jobs:
   include:
-    services:
-      - docker
-    install: false
-    # before_install:
-    #   - sudo rm /usr/local/bin/docker-compose
-    #   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    #   - chmod +x docker-compose
-    #   - sudo mv docker-compose /usr/local/bin
-    script:
-      - docker-compose build
+    - stage: deploy
+      name: Docker
+      language: ruby
+      services:
+        - docker
+      script:
+        - docker-compose build
+      before_deploy:
+        - echo "$REPOSITORY_PASS" | docker login -u "$REPOSITORY_USER" --password-stdin
+      deploy:
+        provider: script
+        script: docker-compose push
+        on:
+          branch: master
+    - stage: deploy
+      name: Documentation
+      language: python
+      python: 3.7
+      install:
+        - pip install sphinx
+        - pip install sphinx_rtd_theme
+      script: (cd docs && make html)
+      after_success: touch docs/_build/html/.nojekyll
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        local_dir: docs/_build/html
+        github-token: $GH_TOKEN
+        keep-history: true
+        on:
+          branch: master
