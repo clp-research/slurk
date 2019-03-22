@@ -37,10 +37,3 @@ Slurk is built in Python, on top of flask_ and flask-socketio_.
 
 
 Happy slurking!
-
-
-TODO: Revise everything below bots.
-
-TODO: Add section on structure of database.
-
-TODO: Group technical stuff (events, commands, database, etc.) under one section.
