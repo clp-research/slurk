@@ -95,7 +95,8 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deploying the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -172,16 +173,17 @@
 <div class="section" id="some-basic-concepts">
 <h2>1.1. Some basic concepts<a class="headerlink" href="#some-basic-concepts" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
-<dt>Room</dt>
-<dd>A collection of users (humans and bots) that can talk to each other. Human users are always in exactly one room.</dd>
 <dt>Bots</dt>
-<dd>Bots are little client programms (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can enter rooms as well. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically means writing a bot.</dd>
-<dt>Slash-Commands</dt>
-<dd>Bots can register commands with the server, which the users can then use to control the bot. These commands are prefixed with a slash. E.g., <cite>/new_image</cite> could be such a command that user can use to effect something (here, it could trigger a change of what is shown in the display area).</dd>
-<dt>Token</dt>
-<dd>To provide control over who is allowed to log into the chat (since we’re not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.</dd>
-<dt>Waiting Room</dt>
-<dd>A special room, realised by the <cite>pairup_bot</cite>, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.</dd>
+<dd>Bots are little client programms (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically includes writing one or multiple bots.</dd>
+<dt>Rooms</dt>
+<dd>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one room.
+The <strong>Waiting Room</strong> is a special room, realised by the <cite>pairup_bot</cite>, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.</dd>
+<dt>Technical concepts</dt>
+<dd><p class="first"><strong>Events</strong>: Slurk is driven by events emitted by the server. All events have a certain type and corresponding information, which can be processed by bots and client-side scripts. The events used in Slurk are defined in the file <cite>events.py</cite>.</p>
+<p><strong>Commands</strong>: Bots can communicate with the server using predefined commands, causing the server to emit corresponding events. For instance, they can be used to send room messages, connect or disconnect clients or alter the attributes of HTML elements.
+<strong>Slash-Commands</strong> are a special kind of commands: Registered in bot files, they can be used by human users to control the bot, which in turn communicates with the server. These commands are prefixed with a slash as, for instance, in <cite>/new_image_public</cite>. In this example (taken from the <cite>multi_bot</cite>), the command triggers a change of what is shown in the display area, visible to all clients in the current room.</p>
+<p class="last"><strong>Tokens</strong>: To provide control over who is allowed to log into the chat (since we’re not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.</p>
+</dd>
 </dl>
 </div>
 </div>

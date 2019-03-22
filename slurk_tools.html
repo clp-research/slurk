@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8. Tools &mdash; slurk 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="9. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
+    <link rel="prev" title="7. Deploying the system" href="slurk_deployment.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deploying the system</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#start-up-script-for-server-and-bots">8.1. Start-up script for server and bots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-up-script-for-clients">8.2. Start-up script for clients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>8. Tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_tools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tools">
+<span id="slurk-tools"></span><h1>8. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h1>
+<p>Currently there are two scripts in the <cite>tools</cite> directory:
+<cite>start_server_and_bot.py</cite> can be used to automatically start Slurk in combination with any number of bots provided as arguments.
+<cite>start_clients.py</cite> establishes client connections to the server, using web browsers and client names specified in the configuration file.</p>
+<p>The purpose of both scripts is to speed up the process of setting up new Slurk sessions, e.g. during the development of bots or plugins.
+Since they automatically handle the basic setup of the configuration file, they are a convenient starting point for using Slurk.
+The usage of both scripts is discribed below.</p>
+<div class="section" id="start-up-script-for-server-and-bots">
+<h2>8.1. Start-up script for server and bots<a class="headerlink" href="#start-up-script-for-server-and-bots" title="Permalink to this headline">¶</a></h2>
+<p>Using the script <cite>start_server_and_bot.py</cite>, you can easily set up a new Slurk session on the localhost.
+The script can be used by simply calling it with Python from the command line.
+If any virtual environment is needed to run Slurk, it has to be activated before executing the script.
+You can provide any number of file paths to bot scripts as arguments in order to automatically connect the respective bots to the server.</p>
+<p>By default, bots are connected to the Waiting Room. Using the flag <cite>--testroom</cite>, you can connect Bots to the Test Room instead. Without the <cite>--testroom</cite> argument, the PairupBot is connected by default. Adding <cite>--nopairup</cite> prevents the PairupBot from connecting.</p>
+<p>Example: To start the server and connect both the PairupBot and the MultiBot (located in the <cite>sample_bots</cite> folder), you’d have to activate your virtual environment, navigate to the main directory of your Slurk installation, and call the startup script as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python tools/start_server_and_bot.py sample_bots/multi_bot.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-up-script-for-clients">
+<h2>8.2. Start-up script for clients<a class="headerlink" href="#start-up-script-for-clients" title="Permalink to this headline">¶</a></h2>
+<p><cite>start_clients.py</cite> can be used to automatically connect clients to a Slurk session. Some information has to be provided to the config file for the script to work properly. In particular, you should specify which web browsers you want to use by adding their respective type names (as found <a class="reference external" href="https://docs.python.org/3.7/library/webbrowser.html">here</a>) to the <cite>[tools]</cite> section, using the keys <cite>browser1</cite> and <cite>browser2</cite>. If this information is missing, the script will try to use your default browser.</p>
+<p>The number and respective names of the clients to be connected can be specified in the configuration file by using the key <cite>client-names</cite> in the <cite>[tools]</cite> section. Multiple names can be provided, separated by commas. The number of names provided determines the number of clients to be connected to the server. If no client names are specified, the script will connect two clients (called <cite>client1</cite> and <cite>client2</cite>) to the server, adding the respective entry to the configuration file.</p>
+<p>If you’d like to connect two clients to Slurk using Firefox and Chromium, the <cite>[tools]</cite> section of your config file might look like this:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[tools]</span>
+<span class="na">browser1</span> <span class="o">=</span> <span class="s">firefox</span>
+<span class="na">browser2</span> <span class="o">=</span> <span class="s">chromium-browser</span>
+<span class="na">client-names</span> <span class="o">=</span> <span class="s">John Zoidberg,Hubert Farnsworth</span>
+</pre></div>
+</div>
+<p>If everything is set up correctly, simply call <cite>start_clients.py</cite> with Python from the command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python tools/start_clients.py
+</pre></div>
+</div>
+<p>By default, clients are connected to the Waiting Room. Using the <cite>--testroom</cite> flag, you can connect clients to the Test Room instead.</p>
+<p><strong>Known issues for macOS:</strong></p>
+<ul class="simple">
+<li>Opera can’t be selected as a browser</li>
+<li>some browsers may have to be started manually before running the script (error observed for Chrome)</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="9. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="slurk_deployment.html" class="btn btn-neutral float-left" title="7. Deploying the system" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, DSG Bielefeld
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

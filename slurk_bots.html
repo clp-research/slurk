@@ -91,13 +91,14 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">6. Writing your own bots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#disecting-the-minimal-bot">6.1. Disecting the minimal bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#disecting-the-multi-bot">6.2. Disecting the multi bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-minimal-bot">6.1. Dissecting the minimal bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-multi-bot">6.2. Dissecting the multi bot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">6.3. Interacting with layouts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deploying the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -164,11 +165,91 @@
             
   <div class="section" id="writing-your-own-bots">
 <span id="slurk-bots"></span><h1>6. Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="disecting-the-minimal-bot">
-<h2>6.1. Disecting the minimal bot<a class="headerlink" href="#disecting-the-minimal-bot" title="Permalink to this headline">¶</a></h2>
+<p>Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
+<p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
+<div class="section" id="dissecting-the-minimal-bot">
+<h2>6.1. Dissecting the minimal bot<a class="headerlink" href="#dissecting-the-minimal-bot" title="Permalink to this headline">¶</a></h2>
+<p>The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.</p>
+<p>The bot file has to be called providing the server URL and port as well as a valid login token as arguments. The bot is then connects to the server using the <cite>connectWithToken</cite> command within the LoginNamespace.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SocketIO</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">chat_host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">chat_port</span><span class="p">)</span> <span class="k">as</span> <span class="n">socketIO</span><span class="p">:</span>
+    <span class="n">login_namespace</span> <span class="o">=</span> <span class="n">socketIO</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="n">LoginNamespace</span><span class="p">,</span> <span class="s1">&#39;/login&#39;</span><span class="p">)</span>
+
+    <span class="n">login_namespace</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;connectWithToken&#39;</span><span class="p">,</span> <span class="p">{</span>
+                         <span class="s1">&#39;token&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;minimal bot&quot;</span><span class="p">})</span>
+</pre></div>
 </div>
-<div class="section" id="disecting-the-multi-bot">
-<h2>6.2. Disecting the multi bot<a class="headerlink" href="#disecting-the-multi-bot" title="Permalink to this headline">¶</a></h2>
+<p>If the connection was successfull, the bot connects to the ChatNamespace:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># verify login status</span>
+<span class="k">def</span> <span class="nf">on_login_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">chat_namespace</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+        <span class="n">chat_namespace</span> <span class="o">=</span> <span class="n">socketIO</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="n">ChatNamespace</span><span class="p">,</span> <span class="s1">&#39;/chat&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not login to server:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The methods defined within the ChatNamespace class determine which actions the minimal bot is able to perform in task rooms. All bot actions are triggered by either events emmitted by the server or slash commands typed in using the chat interface. A new event handler has to be defined within the ChatNamespace class for every event or command the bot should react to. The syntax is the same for both cases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On joining the room, all slash commands are registered using the <cite>listen_to</cite> command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_joined_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_private&#39;</span><span class="p">]})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_public&#39;</span><span class="p">]})</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>Subsequently, event handlers for server events and registered slash commands are added to the namespace class. For example, the minimal bot can change the image visible to all clients in the room using the registered slash command. The following method is called every time a client submits <cite>/new_image_public</cite> via the chat interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_image_public</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;set_attribute&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s2">&quot;current-image&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;attribute&#39;</span><span class="p">:</span> <span class="s2">&quot;src&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s2">&quot;https://picsum.photos/400/200?&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200000000</span><span class="p">))</span>
+    <span class="p">})</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s2">&quot;I have received a command, wohoo </span><span class="se">\\</span><span class="s2">o/&quot;</span><span class="p">})</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;new public image requested: {data}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The minimal bot first changes the <cite>src</cite> attribute of the image with the id <cite>current-image</cite> to a random image URL using the <cite>set_attribute</cite> command. Then it sends a message to the task log.</p>
+<p>Apart from changing image attributes, the minimal bot is able to send messages and image visible in the chat area using the <cite>text</cite> and <cite>image</cite> commands (private messages and images, if the user id of the intended receiver is provided). It can modify which parts of the interface are shown to users using the <cite>update_permissions</cite> command, and request the current permission information from the server (<cite>get_permissions</cite>). Finally, it can clear the chat history using the <cite>clear_chat</cite> command.</p>
+</div>
+<div class="section" id="dissecting-the-multi-bot">
+<h2>6.2. Dissecting the multi bot<a class="headerlink" href="#dissecting-the-multi-bot" title="Permalink to this headline">¶</a></h2>
+<p>The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.</p>
+<p>The main difference between the minimal bot and the multi bot lies in the latter not being bound to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event <cite>new_task_room</cite> is emmited by the server, the multi bot sends the command <cite>join_task</cite> with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_task_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;hello!!! I have been triggered!&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;meetup&#39;</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">room</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Joining room&quot;</span><span class="p">,</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;join_task&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_private&#39;</span><span class="p">]})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_public&#39;</span><span class="p">]})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;end_meetup&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
+<p>Just as the minimal bot, the multi bot is able to change the images shown in the image area. Apart from that, it stores the ids of clients joining any room the multi bot is in. If the slash command <cite>/end_meetup</cite> is submitted, every client in the current room is sent back to the waiting room:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_end_meetup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]]:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;leaving room&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;leave_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;join_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;leave_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="interacting-with-layouts">
 <h2>6.3. Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
