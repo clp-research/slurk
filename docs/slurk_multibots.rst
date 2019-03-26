@@ -11,9 +11,11 @@ First, we need to log in the bots and then the users.
 
 **Step 1:** 
 
-Open a terminal window and start slurk:
+Open a terminal window and start the server:
 
-  ``python chat.py``
+    .. code-block:: sh
+    
+        python chat.py
 
 **Step 2:**
 
@@ -24,7 +26,9 @@ Go to the server's token page, e.g. http://127.0.0.1:5000/token, and fill in the
   - Task:    None
   - Count:   2	
   - Key:     *the secret key you've defined in the config.ini*
-   
+
+(Please note that in production mode you should be cautious on how to name your *Source*, as this is meant to identify, e.g. different sessions.)
+
 Press "Generate tokens".
 
 Now you have two tokens. One token will be used for the pairup bot (*Step 3*) and the other one for the multi bot (*Step 4*). The multi bot serves as an example bot here which will join the users in the taskroom later.
@@ -87,7 +91,7 @@ Next we need a second user.
 
 Now open the page again, but this time in a **different browser**. Fill the first field with a username and the second field with the other token from *Step 5*. Press "Enter Chatroom".
 
-With two participants being present in the waiting room now the *pairup bot* will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the *multi bot*. Now the users and the multi bot can interact with each other, e.g. you can use the commands **/new_image_private** and **/new_image_public** in the chatroom to see this in action.
+With two participants being present in the waiting room now the *pairup bot* will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the *multi bot*. Now the users and the multi bot can interact with each other, e.g. you can use the commands **/new_image_private** and **/new_image_public** in the chatroom to see this in action. Both commands are provided by our sample bot, the *multi bot*.
 
 .. _screenshot_privimage:
 .. figure:: slurk_taskroom.png
