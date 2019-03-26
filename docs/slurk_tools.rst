@@ -12,6 +12,8 @@ The purpose of both scripts is to speed up the process of setting up new Slurk s
 Since they automatically handle the basic setup of the configuration file, they are a convenient starting point for using Slurk.
 The usage of both scripts is discribed below.
 
+Please note: Both startup scripts are designed to be used for testing purposes. For actual deployment it is recommended to manually set up Slurk.
+
 Start-up script for server and bots
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
