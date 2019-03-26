@@ -158,27 +158,12 @@ class Layout:
         return css
 
     @staticmethod
-    def _socket(event: str, content: str):
-        return "$(document).ready(function(){socket.on('"+event+"', function(data) {"+content+"});});"
+    def _incoming_message(content: str):
+        return "incoming_message = function(data) {\n" + content + '\n}\n', ""
 
     @staticmethod
     def _submit(content: str):
-        return "$('#text').keypress(function(e) {\n" \
-            "    if ($('#text').is('[readonly]')) { return; }\n" \
-            "    is_typing = 0;\n" \
-            "    let code = e.keyCode || e.which;\n" \
-            "    if (code === 13) {\n" \
-            "        let text = $(e.target).val();\n" \
-            "        $(e.target).val('');\n" \
-            "        if (text === '') \n" \
-            "            return;\n" \
-            "        let current_room = self_room;\n" \
-            "        let current_user = self_user;\n" \
-            "        let current_timestamp = new Date().getTime();\n" \
-            "        is_typing = -1;\n" \
-            + content + '\n' \
-            "    }\n" \
-            "});\n"
+        return "keypress = function(current_room, current_user, current_timestamp, text) {" + content + "}", ""
 
     @staticmethod
     def _history(content: str):
@@ -186,15 +171,15 @@ class Layout:
             "    history.forEach(function(element) {\n" \
             + content + '\n' \
             "    })\n" \
-            "}\n"
+            "}\n", ""
 
     @staticmethod
     def _typing_users(content: str):
-        return "update_typing = function(users) {\n" + content + '\n}\n'
+        return "update_typing = function(users) {\n" + content + '\n}\n', ""
 
     @staticmethod
     def _document_ready(content: str):
-        return "$(document).ready(function(){" + content + "});"
+        return "$(document).ready(function(){" + content + "});", ""
 
     @staticmethod
     def _verify(content: str):
@@ -205,7 +190,7 @@ class Layout:
             print("invalid script for", trigger)
             return ""
         if trigger == "incoming-message":
-            return self._socket("message", "if (self_user.id == data.user.id) return;"+content)
+            return self._incoming_message(content)
         if trigger == "submit-message":
             return self._submit(content)
         if trigger == "print-history":
@@ -215,16 +200,18 @@ class Layout:
         if trigger == "typing-users":
             return self._typing_users(content)
         if trigger == "plain":
-            return content
+            return content, ""
         print("unknown trigger:", trigger)
         return ""
 
     def _parse_trigger(self, trigger, script_file):
+        eval = ""
         script = ""
         try:
             with urllib.request.urlopen(script_file) as url:
-                script += self._create_script(trigger,
-                                                url.read().decode("utf-8")) + "\n\n\n"
+                (eval_append, script_append) = self._create_script(trigger, url.read().decode("utf-8"))
+                eval += eval_append + "\n\n\n"
+                script += script_append + "\n\n\n"
         except:
             pass
 
@@ -234,11 +221,12 @@ class Layout:
 
         try:
             with open(plugin_path) as script_content:
-                script += self._create_script(trigger,
-                                                script_content.read()) + "\n\n\n"
+                (eval_append, script_append) = self._create_script(trigger, script_content.read())
+                eval += eval_append + "\n\n\n"
+                script += script_append + "\n\n\n"
         except FileNotFoundError:
             print("Could not find script:", script_file)
-        return script
+        return (eval, script)
 
     def script(self):
         """
@@ -249,22 +237,30 @@ class Layout:
             return ""
 
         script = ""
+        eval = ""
         for trigger, script_file in self._data['scripts'].items():
             if isinstance(script_file, str):
-                script += self._parse_trigger(trigger, script_file)
+                (eval_append, script_append) = self._parse_trigger(trigger, script_file)
+                eval += eval_append
+                script += script_append
             else:
                 for script_file in iter(script_file):
-                    script += self._parse_trigger(trigger, script_file)
+                    (eval_append, script_append) = self._parse_trigger(trigger, script_file)
+                    eval += eval_append
+                    script += script_append
 
-        return script
+
+        return (eval, script)
 
     def serialize(self):
+        (eval, script) = self.script()
         return {
             "title": self.title(),
             "subtitle": self.subtitle(),
             "html": self.html(),
             "css": self.css(),
-            "script": self.script()
+            "eval": eval,
+            "script": script,
         }
 
     def __repr__(self):

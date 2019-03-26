@@ -22,6 +22,8 @@
         let users = {};
         let print_history = undefined;
         let update_typing = undefined;
+        let keypress = undefined;
+        let incoming_message = undefined;
 
         function getTime(timestamp) {
             if (typeof timestamp === "undefined")
@@ -37,6 +39,7 @@
         }
 
         function display_message(sender, time, message, privateMessage) {
+            console.log("display message", sender, time, message, privateMessage, self_user);
             if (self_user === undefined) {
                 return;
             }
@@ -139,7 +142,7 @@
         }
 
         function updatePermissions(permissions) {
-            console.log("new permissions:", permissions);
+            // console.log("new permissions:", permissions);
             if (permissions.write) {
                 $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
             } else {
@@ -180,7 +183,7 @@
             }
 
             sidebar.addEventListener("mousedown", function (e) {
-                console.log("mousedown", e.offsetX);
+                // console.log("mousedown", e.offsetX);
                 if (e.offsetX < BORDERSIZE) {
                     splitter_pos = e.x;
                     document.addEventListener("mousemove", resize, false);
@@ -205,21 +208,25 @@
             }, 1000);
 
             socket.on('joined_room', function (data) {
-                console.log("permissions: ", data.permissions);
+                // console.log("permissions: ", data.permissions);
                 self_user = data.self;
                 self_user.name = "You";
                 self_room = data.room.id;
 
-                console.log("joined room:", data);
+                // console.log("joined room:", data);
                 if (data.layout.html !== "") {
                     $("#sidebar").html(data.layout.html);
                 }
                 if (data.layout.css !== "") {
                     $("#custom-styles").html(data.layout.css);
                 }
+                if (data.layout.eval !== "") {
+                    window.eval(data.layout.eval);
+                }
                 if (data.layout.script !== "") {
                     $("#custom-scripts").html(data.layout.script);
                 }
+
                 if (data.layout.title !== "") {
                     document.title = data.layout.title;
                 } else {
@@ -258,8 +265,15 @@
                 ping.text(Math.round(10 * sum / ping_pong_times.length) / 10);
             });
 
+            socket.on("message", function (data) {
+                // console.log("incoming message", data, self_user);
+                if (incoming_message !== undefined && data.user.id !== self_user.id) {
+                    incoming_message(data)
+                }
+            });
+
             socket.on('status', function (data) {
-                console.log("status:", data);
+                // console.log("status:", data);
                 if (typeof self_user === "undefined")
                     return;
                 switch (data.type) {
@@ -285,19 +299,19 @@
 
             socket.on('start_typing', function (data) {
                 typing[data.user.id] = data.user.name;
-                if (!update_typing !== undefined) {
+                if (update_typing !== undefined) {
                     update_typing(typing);
                 }
-                console.log("start typing:", data)
-            })
+                // console.log("start typing:", data)
+            });
 
             socket.on('stop_typing', function (data) {
                 delete typing[data.user.id];
-                if (!update_typing !== undefined) {
+                if (update_typing !== undefined) {
                     update_typing(typing);
                 }
-                console.log("stop typing:", data)
-            })
+                // console.log("stop typing:", data)
+            });
 
             socket.on('clear_chat_area', function () {
                 $('#chat-area').empty()
@@ -308,12 +322,12 @@
             });
 
             socket.on('new_image', function (data) {
-                console.log("New image:", data);
+                // console.log("New image:", data);
                 $('#' + data.id).attr('src', data.url).show();
             });
 
             socket.on('attribute_update', function (data) {
-                console.log("Attribute updated:", data);
+                // console.log("Attribute updated:", data);
                 if (data.id)
                     $('#' + data.id).attr(data.attribute, data.value).show();
                 if (data.class)
@@ -323,18 +337,38 @@
             });
 
             socket.on('class_add', function (data) {
-                console.log("Class added:", data);
+                // console.log("Class added:", data);
                 $('#' + data.id).addClass(data.class);
             });
 
             socket.on('class_remove', function (data) {
-                console.log("Class removed:", data);
+                // console.log("Class removed:", data);
                 $('#' + data.id).removeClass(data.class);
             });
 
             socket.on('text_update', function (data) {
-                console.log("Text updated:", data);
+                // console.log("Text updated:", data);
                 $('#' + data.id).text(data.text).show();
+            });
+
+            $('#text').keypress(function(e) {
+                if (keypress === undefined || $('#text').is('[readonly]')) {
+                    return;
+                }
+                is_typing = 0;
+                let code = e.keyCode || e.which;
+                // 13: RETURN key
+                if (code === 13) {
+                    let text = $(e.target).val();
+                    $(e.target).val('');
+                    if (text === '') {
+                        return
+                    }
+                    is_typing = -1;
+                    let date = new Date();
+                    let time = date.getTime() - date.getTimezoneOffset() * 60000;
+                    keypress(self_room, self_user, time / 1000, text);
+                }
             });
         });
     </script>
