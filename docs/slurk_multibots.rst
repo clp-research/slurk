@@ -11,63 +11,63 @@ First, we need to log in the bots and then the users.
 
 **Step 1:** 
 
-  Open a terminal window and start slurk:
+Open a terminal window and start slurk:
 
-    ``python chat.py``
+  ``python chat.py``
 
 **Step 2:**
 
-  Go to http://127.0.0.1:5000/token and fill in the following:
+Go to http://127.0.0.1:5000/token and fill in the following:
 
-    - Source:  *can be anything*
-    - Room:    Waiting Room
-    - Task:    None
-    - Count:   2	
-    - Key:     *the secret key you've defined in the config.ini*
+  - Source:  *can be anything*
+  - Room:    Waiting Room
+  - Task:    None
+  - Count:   2	
+  - Key:     *the secret key you've defined in the config.ini*
    
-  Press "Generate tokens".
+Press "Generate tokens".
 
-  Now you have two tokens. One token will be used for the pairup bot (*Step 3*) and the other one for the multi bot (*Step 4*). The multi bot serves as an example bot here which will join the users in the taskroom later.
+Now you have two tokens. One token will be used for the pairup bot (*Step 3*) and the other one for the multi bot (*Step 4*). The multi bot serves as an example bot here which will join the users in the taskroom later.
    
 **Step 3:**
 
- Open a new terminal window and run the **pairup bot**:
+Open a new terminal window and run the **pairup bot**:
 
-   ``python sample_bots/pairup_bot.py *token*``
+  ``python sample_bots/pairup_bot.py *token*``
 
- Replace \*token\* with the first token created in *Step 2*. The pairup bot will enter the waiting room now. You will see a confirmation of this in the terminal window where you started the chat server:
+Replace \*token\* with the first token created in *Step 2*. The pairup bot will enter the waiting room now. You will see a confirmation of this in the terminal window where you started the chat server:
  
-    ``ConciergeBot joined room: Waiting Room``
+  ``ConciergeBot joined room: Waiting Room``
     
- *ConciergeBot* is the name of the pairup bot.
+*ConciergeBot* is the name of the pairup bot.
 
 **Step 4:**
  
- Open a third terminal window and run the **multi bot**:
+Open a third terminal window and run the **multi bot**:
 
   ``python sample_bots/multi_bot.py *token*``
 
- where \*token\* is to be replaced by the second token created in *Step 2*. The multi bot is also in the waiting room now. Check for confirmation in the terminal window:
+where \*token\* is to be replaced by the second token created in *Step 2*. The multi bot is also in the waiting room now. Check for confirmation in the terminal window:
 
-    ``MultiBot joined room: Waiting Room``
+  ``MultiBot joined room: Waiting Room``
  
- All required bots are registered. In the next steps we need to log in the users.
+All required bots are registered. In the next steps we need to log in the users.
 
 **Step 5:**
 
-  Open http://127.0.0.1:5000/token again and fill in the following:
+Open http://127.0.0.1:5000/token again and fill in the following:
 
-    - Source:  *can be anything*
-    - Room:    Waiting Room
-    - Task:    meetup
-    - Count:   2	
-    - Key:     *the secret key you've defined in the config.ini*
+  - Source:  *can be anything*
+  - Room:    Waiting Room
+  - Task:    meetup
+  - Count:   2	
+  - Key:     *the secret key you've defined in the config.ini*
 
-  Press "Generate tokens". You will see two tokens.
+Press "Generate tokens". You will see two tokens.
 
 **Step 6:**
 
-  Open http://127.0.0.1:5000 in a new tab. Fill the first field with a username and the second field with one of the tokens created in *Step 5*. Press "Enter Chatroom". The user will join the waiting room. Next we need a second user.
+Open http://127.0.0.1:5000 in a new tab. Fill the first field with a username and the second field with one of the tokens created in *Step 5*. Press "Enter Chatroom". The user will join the waiting room. Next we need a second user.
   
 .. _screenshot_void:
 .. figure:: slurk_waitingroom.png
@@ -78,7 +78,7 @@ First, we need to log in the bots and then the users.
 
 **Step 7:**
 
-  Open http://127.0.0.1:5000 again, but this time in a **different browser**. Fill the first field with a username and the second field with the other token from *Step 5*. Press "Enter Chatroom".
+Open http://127.0.0.1:5000 again, but this time in a **different browser**. Fill the first field with a username and the second field with the other token from *Step 5*. Press "Enter Chatroom".
 
 With two participants being present in the waiting room now the *pairup bot* will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the *multi bot*. Now the users and the multi bot can interact with each other, e.g. you can use the commands **/new_image_private** and **/new_image_public** in the chatroom to see this in action.
 
