@@ -86,7 +86,10 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-documentation">2.1. Building the documentation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
@@ -160,11 +163,11 @@
             
   <div class="section" id="installation">
 <span id="slurk-installation"></span><h1>2. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>You will need Python 3.6+ and <cite>pip</cite>. To test the dialogue setup, you will also need to have two different web browsers on your system.</p>
+<p>You will need Python 3.7+ and <cite>pip</cite>. To test the dialogue setup, you will also need to have two different web browsers on your system.</p>
 <p>To install the requirements and prepare for testing, do the following. (We assume that you have cloned the repository.)</p>
 <ul class="simple">
 <li>Set up a virtual environment, if you like. (Optional.) E.g. with <cite>virtualenv</cite>:<ul>
-<li><code class="docutils literal notranslate"><span class="pre">virtualenv</span> <span class="pre">-p</span> <span class="pre">/usr/bin/python3.6</span> <span class="pre">slurk_test</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">virtualenv</span> <span class="pre">-p</span> <span class="pre">/usr/bin/python3.7</span> <span class="pre">slurk_test</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">my_virtualenv/bin/activate</span></code></li>
 </ul>
 </li>
@@ -179,6 +182,16 @@
 </ul>
 </li>
 </ul>
+<div class="section" id="building-the-documentation">
+<h2>2.1. Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>In order to build the documentation yourself, you additionally need the packages <em>sphinx</em> and <em>sphinx_rtd_theme</em>. Then you can create the documentation in the <em>docs</em> folder:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme
+<span class="nb">cd</span> docs
+make html
+</pre></div>
+</div>
+<p>The generated documentation can then be found at <em>docs/_build/</em></p>
+</div>
 </div>
 
 
