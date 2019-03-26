@@ -43,7 +43,6 @@ This has confirmed that the server is working correctly, but so far this hasn't 
 
 (But one additional thing before we move on: If you repeat the steps above while keeping the chat server alive, you will notice that you will end up in the same room which shows the chat history of the previously created user which now however is orphaned, as you have your new identity. The reason for that is the websocket connection that is created by the server is tied to the browser, and was kept alive. If you want to start fresh, you need to kill the chat server and restart again.)
 
-TODO: Double check. Is that true? Or is there another way to start with a fresh empty test room w/o killing the chat server?
 
 
 .. _twobrowsers: 
