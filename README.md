@@ -5,6 +5,16 @@ Slurk (think “slack for mechanical turk”…) is a lightweight and easily ext
 
 Slurk is built in Python, on top of [flask] and [flask-socketio].
 
+If you want to build the documentation yourself, you need the packages _sphinx_ and _sphinx_rtd_theme_. Then you can create the documentation in the _docs_ folder:
+
+```
+pip install sphinx sphinx_rtd_theme
+cd docs
+make html
+```
+The generated documentation can then be found at _docs/_build/_
+
+
 Happy slurking!
 
 [what's this]: https://dsg-bielefeld.github.io/slurk/slurk_about.html#slurk-about
