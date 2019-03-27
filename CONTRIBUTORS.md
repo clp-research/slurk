@@ -4,7 +4,7 @@ Organization and planning
 -------------------------
 - [Prof. Dr. David Schlangen](https://github.com/davidschlangen)
 - [Tim Diekmann](https://github.com/TimDiekmann)
-- [Sina Zarrieß](https://github.com/sinazarriess)
+- [Dr. Sina Zarrieß](https://github.com/sinazarriess)
 
 Coders and testers
 ------------------
