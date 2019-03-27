@@ -3,8 +3,8 @@ This file contains a list of people who has made [contributions](https://github.
 Organization and planning
 -------------------------
 - [Prof. Dr. David Schlangen](https://github.com/davidschlangen)
-- [Tim Diekmann](https://github.com/TimDiekmann)
 - [Dr. Sina Zarrieß](https://github.com/sinazarriess)
+- [Tim Diekmann](https://github.com/TimDiekmann)
 
 Coders and testers
 ------------------
