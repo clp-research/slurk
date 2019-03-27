@@ -12,7 +12,7 @@ pip install sphinx sphinx_rtd_theme
 cd docs
 make html
 ```
-The generated documentation can then be found at _docs/_build/_
+The generated documentation can then be found at *docs/_build/*
 
 
 Happy slurking!
