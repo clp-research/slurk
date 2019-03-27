@@ -81,14 +81,14 @@ Copy the first one, and use it to do the following, in a new terminal window (`m
 
 - `python minimal.py` *<TOKEN>*
 
-In the terminal window where you started the chat server, you should see a message stating that `minimal bot has connected`. In the window of the chat bot, you will see some JSON structures. These structures contain several pieces of information, for example about the room and the user. They are needed to keep track of all events and to emit data to the right room or user. You can access all the information with the help of the predefined commands in the bots, e.g.:
+In the terminal window where you started the chat server, you should see a message stating that `minimal bot has connected`. In the window of the minimal bot, you will see some JSON structures. These structures contain information about events emitted by the server. Several kinds of information are included in this event data, for example about the room and the user. The event data can be accessed using event handlers, several of which are predefined in the bot files. For instance, the following piece of code causes the bot to print the event data:
 
     .. code-block:: python
     
       def on_message(self, data):
           print("on_message", data)
         
-where *data*, in this case, holds information about the user that sends a text, about the rooms that are involved and of course the text message itself (see *minimal.py*). Depending on which command you are using the contents of the JSON structures may vary.
+where *data*, in this case, holds information about the user that sends a text, about the rooms that are involved and of course the text message itself (see *minimal.py*). Depending on which handler you are using, information about different events can be accessed.
 
 Now start two browsers and log in as two different users (let's call them `A` and `B`), as described above in :ref:`twobrowsers`. The list of users in the top right corner of the window should now indicate that besides `A` and `B` there is also a user called `minimal bot`.
 
