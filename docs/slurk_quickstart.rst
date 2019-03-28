@@ -126,8 +126,6 @@ Examining the log files
 
 The point of all this, however, is not just to make interaction *possible*, it is to *record* these interactions to be able to later study them or train models on them. In the directory `log/` where you started the chat server, you should now find logfiles, named with the time stamp and the name of the room. These files contain, as a JSON list, most of the events that the server handled, including all the messages that were sent. This should contain the information that you need for your particular purposes.
 
-TODO: Provide example script that extracts the utterances in a parlAI style representation?
-
 
 
 
