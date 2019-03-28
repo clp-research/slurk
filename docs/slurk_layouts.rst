@@ -87,8 +87,8 @@ Creating and adding your own layout to Slurk allows you to customize the design 
 
 The following steps demonstrate how to build your own layout, using snippets from the layout for the *CoLA*-game as examples.
 
-1. Customizing the existing ``waiting_room`` layout
----------------------------------------------------
+Customizing the existing ``waiting_room`` layout
+------------------------------------------------
 
 First of all, you should consider checking whether you want to modify the ``waiting_room`` layout which will be loaded by default when the Waiting Room is created (*see app/main/database.py, line 136*).
 
@@ -130,8 +130,8 @@ The CoLA waiting room is supposed to have a different title (l. 2), a different 
 
 
 
-2. The Main Layout
-------------------
+The Main Layout
+---------------
 
 The main layout defines **your** chatroom and it will be loaded as soon as a *New Task Room* is opened.
 By default, the ``pairup-bot`` will load the ``meetup_task``-layout.
@@ -155,6 +155,7 @@ The CoLA chatroom has to be able to, e.g. display images (on the right side of t
 8. Etc.
 
     .. code-block:: json
+    
         {
           "title": "CoLA - Chatroom",
           "html": [
@@ -247,7 +248,7 @@ You can use plugins to implement additional client-side functionality to Slurk. 
 
     Add the necessary code to the file:
 
-      .. codeblock:: javascript
+      .. code-block:: javascript
 
           var mousePos = {x:undefined, y:undefined};
           var offset;
@@ -272,7 +273,7 @@ You can use plugins to implement additional client-side functionality to Slurk. 
 
     Inject your plugin to Slurk by adding trigger and plugin (without the file extension) to the ``"script"`` dictionary in the layout file you're using:
 
-      .. codeblock:: json
+      .. code-block:: json
 
         "script": {
           "document-ready": "mouse-clicks"
@@ -280,7 +281,7 @@ You can use plugins to implement additional client-side functionality to Slurk. 
 
     The JavaScript code is now embedded as follows:
 
-    .. codeblock:: javascript
+    .. code-block:: javascript
 
         $(document).ready(function(){
 
