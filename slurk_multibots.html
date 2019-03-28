@@ -160,7 +160,79 @@
             
   <div class="section" id="pairing-up-participants-and-running-multiple-rooms-and-bots">
 <span id="slurk-multibots"></span><h1>4. Pairing up participants and running multiple rooms (and bots)<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms-and-bots" title="Permalink to this headline">¶</a></h1>
-<p><em>Explain how to run the waiting room / pairup bot, and the multibot.</em></p>
+<p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be paired up and put into a new task-specific chatroom along with bots. We provided an example bot handling this mechanism: The <strong>pairup bot</strong> moves human users and other bots from the waiting room to a taskroom. You can find it in the <em>sample_bots</em> directory.</p>
+<p>Again, we will start the chat server in development mode and assume that you will use the default values in the config.ini, serving slurk on <a class="reference external" href="http://127.0.0.1:5000" target="_blank">http://127.0.0.1:5000</a>.</p>
+<p>First, we need to log in the bots and then the users.</p>
+<p><strong>Step 1:</strong></p>
+<p>Open a terminal window and start the server:</p>
+<blockquote>
+<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python chat.py
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Step 2:</strong></p>
+<p>Go to the server’s token page, e.g. <a class="reference external" href="http://127.0.0.1:5000/token" target="_blank">http://127.0.0.1:5000/token</a>, and fill in the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Source:  <em>can be anything</em></li>
+<li>Room:    Waiting Room</li>
+<li>Task:    None</li>
+<li>Count:   2</li>
+<li>Key:     <em>the secret key you’ve defined in the config.ini</em></li>
+</ul>
+</div></blockquote>
+<p>(Please note that in production mode you should be cautious on how to name your <em>Source</em>, as this is meant to identify, e.g. different sessions.)</p>
+<p>Press “Generate tokens”.</p>
+<p>Now you have two tokens. One token will be used for the pairup bot (<em>Step 3</em>) and the other one for the multi bot (<em>Step 4</em>). The multi bot serves as an example bot here which will join the users in the taskroom later.</p>
+<p><strong>Step 3:</strong></p>
+<p>Open a new terminal window and start the <strong>pairup bot</strong>:</p>
+<blockquote>
+<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python sample_bots/pairup_bot.py *token*
+</pre></div>
+</div>
+</div></blockquote>
+<p>Replace *token* with the first token created in <em>Step 2</em>. The pairup bot will enter the waiting room now. You will see a confirmation of this in the terminal window where you started the chat server:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">ConciergeBot</span> <span class="pre">joined</span> <span class="pre">room:</span> <span class="pre">Waiting</span> <span class="pre">Room</span></code></div></blockquote>
+<p>where <em>ConciergeBot</em> is the name of our pairup bot.</p>
+<p><strong>Step 4:</strong></p>
+<p>Open a third terminal window and run the <strong>multi bot</strong>:</p>
+<blockquote>
+<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python sample_bots/multi_bot.py *token*
+</pre></div>
+</div>
+</div></blockquote>
+<p>where *token* is to be replaced by the second token created in <em>Step 2</em>. The multi bot is also in the waiting room now. Check for confirmation in the terminal window:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">MultiBot</span> <span class="pre">joined</span> <span class="pre">room:</span> <span class="pre">Waiting</span> <span class="pre">Room</span></code></div></blockquote>
+<p>All required bots are registered. In the next steps we need to log in the users.</p>
+<p><strong>Step 5:</strong></p>
+<p>Open the server’s token page, e.g. <a class="reference external" href="http://127.0.0.1:5000/token" target="_blank">http://127.0.0.1:5000/token</a>, again and fill in the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Source:  <em>can be anything</em></li>
+<li>Room:    Waiting Room</li>
+<li>Task:    meetup</li>
+<li>Count:   2</li>
+<li>Key:     <em>the secret key you’ve defined in the config.ini</em></li>
+</ul>
+</div></blockquote>
+<p>Press “Generate tokens”. You will see two tokens.</p>
+<p><strong>Step 6:</strong></p>
+<p>Open the server (<a class="reference external" href="http://127.0.0.1:5000" target="_blank">http://127.0.0.1:5000</a> for this example) in a new tab. Fill the first field with a username and the second field with one of the tokens created in <em>Step 5</em>. Press “Enter Chatroom”. The user will join the waiting room.</p>
+<p>Next we need a second user.</p>
+<div class="figure align-center" id="id1">
+<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/slurk_waitingroom.png"><img alt="_images/slurk_waitingroom.png" src="_images/slurk_waitingroom.png" style="width: 657.0px; height: 446.4px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.1 </span><span class="caption-text">A single user in the waiting room, waiting for another player to join</span></p>
+</div>
+<p><strong>Step 7:</strong></p>
+<p>Now open the page again, but this time in a <strong>different browser</strong>. Fill the first field with a username and the second field with the other token from <em>Step 5</em>. Press “Enter Chatroom”.</p>
+<p>With two participants being present in the waiting room now the <em>pairup bot</em> will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the <em>multi bot</em>. Now the users and the multi bot can interact with each other, e.g. you can use the commands <strong>/new_image_private</strong> and <strong>/new_image_public</strong> in the chatroom to see this in action. Both commands are provided by our sample bot, the <em>multi bot</em>.</p>
+<div class="figure align-center" id="id2">
+<span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/slurk_taskroom.png"><img alt="_images/slurk_taskroom.png" src="_images/slurk_taskroom.png" style="width: 553.1999999999999px; height: 460.79999999999995px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.2 </span><span class="caption-text">Two users interacting in the taskroom</span></p>
+</div>
+<p><em>Notice:</em> While the two users need to leave the waiting room in order to enter the taskroom, the multi bot remains in the waiting room and can join as many chatrooms as needed from there. This means: the multi bot (or bots in general) can exist in multiple rooms simultaneously whereas human users can only be present in one room.</p>
 </div>
 
 

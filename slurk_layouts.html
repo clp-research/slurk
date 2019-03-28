@@ -91,8 +91,8 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5. Layouts and Plugins</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#layout-development-in-practice">5.1. Layout development in practice</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#customizing-the-existing-waiting-room-layout">5.1.1. 1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-main-layout">5.1.2. 2. The Main Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customizing-the-existing-waiting-room-layout">5.1.1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-main-layout">5.1.2. The Main Layout</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plugin-development-in-practice">5.1.3. Plugin development in practice</a></li>
 </ul>
 </li>
@@ -280,7 +280,7 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 <p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with existing ones.</p>
 <p>The following steps demonstrate how to build your own layout, using snippets from the layout for the <em>CoLA</em>-game as examples.</p>
 <div class="section" id="customizing-the-existing-waiting-room-layout">
-<h3>5.1.1. 1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout<a class="headerlink" href="#customizing-the-existing-waiting-room-layout" title="Permalink to this headline">¶</a></h3>
+<h3>5.1.1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout<a class="headerlink" href="#customizing-the-existing-waiting-room-layout" title="Permalink to this headline">¶</a></h3>
 <p>First of all, you should consider checking whether you want to modify the <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout which will be loaded by default when the Waiting Room is created (<em>see app/main/database.py, line 136</em>).</p>
 <p><em>EXAMPLE:</em></p>
 <p>The CoLA waiting room is supposed to have a different title (l. 2), a different image (l. 12) and a blue theme (l. 23):</p>
@@ -319,7 +319,7 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </div></blockquote>
 </div>
 <div class="section" id="the-main-layout">
-<h3>5.1.2. 2. The Main Layout<a class="headerlink" href="#the-main-layout" title="Permalink to this headline">¶</a></h3>
+<h3>5.1.2. The Main Layout<a class="headerlink" href="#the-main-layout" title="Permalink to this headline">¶</a></h3>
 <p>The main layout defines <strong>your</strong> chatroom and it will be loaded as soon as a <em>New Task Room</em> is opened.
 By default, the <code class="docutils literal notranslate"><span class="pre">pairup-bot</span></code> will load the <code class="docutils literal notranslate"><span class="pre">meetup_task</span></code>-layout.
 In order to use yours you need to replace “meetup_task” with the name of your layout (<em>see pairup_bot.py, line 159</em>).
@@ -345,7 +345,53 @@ Now there is a placeholder with the id <strong>r0c0</strong> for one image. Its 
 </li>
 <li><p class="first">Etc.</p>
 <blockquote>
-<div></div></blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+  &quot;title&quot;: &quot;CoLA - Chatroom&quot;,
+  &quot;html&quot;: [
+    {
+      &quot;layout-type&quot;: &quot;div&quot;,
+      &quot;id&quot;: &quot;show-area&quot;,
+      &quot;layout-content&quot;: [
+        {
+          &quot;layout-type&quot;: &quot;table&quot;,
+          &quot;layout-content&quot;: [
+            {
+              &quot;layout-type&quot;: &quot;tr&quot;,
+              &quot;layout-content&quot;: [
+                {
+                  &quot;layout-type&quot;: &quot;td&quot;,
+                  &quot;layout-content&quot;: [
+                    {
+                      &quot;layout-type&quot;: &quot;image&quot;,
+                      &quot;id&quot;: &quot;r0c0&quot;,
+                      &quot;src&quot;: &quot;&quot;,
+                      &quot;class&quot;: &quot;hidden&quot;,
+                      &quot;width&quot;: 128,
+                      &quot;height&quot;: 128
+                    }
+                  ]
+                },
+                {
+                  &quot;layout-type&quot;: &quot;td&quot;,
+                  &quot;layout-content&quot;: [
+                    {
+                      &quot;layout-type&quot;: &quot;image&quot;,
+                      &quot;id&quot;: &quot;r0c1&quot;,
+                      &quot;src&quot;: &quot;&quot;,
+                      &quot;class&quot;: &quot;hidden&quot;,
+                      &quot;width&quot;: 128,
+                      &quot;height&quot;: 128
+                    }
+                  ]
+                },
+                [...]
+            ]}
+        ]}
+    ]}
+]}
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 </ol>
 <p><strong>CSS:</strong></p>
@@ -394,13 +440,54 @@ Now there is a placeholder with the id <strong>r0c0</strong> for one image. Its 
 <p>Create a new JavaScript file and save it in the directory <em>/app/static/plugins</em>, using an appropriate name (e.g. “mouse-clicks.js”).</p>
 <p>Add the necessary code to the file:</p>
 <blockquote>
-<div></div></blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">mousePos</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">offset</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">getPosition</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">area</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">offset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">area</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+    <span class="nx">mousePos</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">-</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+    <span class="nx">mousePos</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">-</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#current-image&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
+    <span class="nx">getPosition</span><span class="p">(</span><span class="nx">evt</span><span class="p">,</span> <span class="s2">&quot;#current-image&quot;</span><span class="p">);</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;mousePosition&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;click&#39;</span><span class="p">,</span>
+        <span class="nx">element</span><span class="o">:</span><span class="s2">&quot;#current-image&quot;</span><span class="p">,</span>
+        <span class="nx">coordinates</span><span class="o">:</span><span class="nx">mousePos</span><span class="p">,</span>
+        <span class="nx">room</span><span class="o">:</span><span class="nx">self_room</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 <li><p class="first">Injecting the plugin</p>
 <p>Inject your plugin to Slurk by adding trigger and plugin (without the file extension) to the <code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code> dictionary in the layout file you’re using:</p>
 <blockquote>
-<div></div></blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>&quot;script&quot;: {
+  &quot;document-ready&quot;: &quot;mouse-clicks&quot;
+}
+</pre></div>
+</div>
+</div></blockquote>
 <p>The JavaScript code is now embedded as follows:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+
+  <span class="kd">var</span> <span class="nx">mousePosition</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">offset</span><span class="p">;</span>
+
+  <span class="kd">function</span> <span class="nx">getPosition</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">area</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">[...]</span>
+  <span class="p">}</span>
+
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#current-image&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
+    <span class="p">[...]</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+</div>
 </li>
 </ol>
 </div>

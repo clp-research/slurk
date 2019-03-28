@@ -19,13 +19,13 @@ If you now go to http://127.0.0.1:5000, you should see the login window, asking 
 
 To get a token, you will need to generate one by going to http://127.0.0.1:5000/token. On that page, fill in the fields as follows:
 
-- Source: Web
+- Source: *can be anything*
 - Room: Test Room
 - Task: None
-- Reusable: <check>
 - Count: 1
+- Key: *the secret key you've defined in the config.ini*
 
-(Note: What is happening behind the curtain is that entries are created in the user database, with attributes as specified here. `Room` fixes where the user that is logging in with the created token start, `Task` specifies the tasks that this user is allowed to do, `Reusable` specifies whether a token can be used for more than one login, and `Count` creates as many tokens. `Source` doesn't really have a function at the moment; any string will do here.)
+(Note: What is happening behind the curtain is that entries are created in the user database, with attributes as specified here. `Room` fixes where the user that is logging in with the created token starts, `Task` specifies the tasks that this user is allowed to do, and `Count` creates as many tokens. `Source` doesn't really have a function at the moment; any string will do here.)
   
 After you submit this form, you should see a long alphanumeric string as a response. Copy this string (the token) over to the login page. Enter whatever Name you like and this copied token, and click "enter chatroom".
 
@@ -43,7 +43,6 @@ This has confirmed that the server is working correctly, but so far this hasn't 
 
 (But one additional thing before we move on: If you repeat the steps above while keeping the chat server alive, you will notice that you will end up in the same room which shows the chat history of the previously created user which now however is orphaned, as you have your new identity. The reason for that is the websocket connection that is created by the server is tied to the browser, and was kept alive. If you want to start fresh, you need to kill the chat server and restart again.)
 
-TODO: Double check. Is that true? Or is there another way to start with a fresh empty test room w/o killing the chat server?
 
 
 .. _twobrowsers: 
@@ -70,11 +69,11 @@ Now before we log onto the server in the way described above, let us create a bo
 
 Bots also need tokens. Let us directly create all tokens we need. Go to http://127.0.0.1:5000/token, and fill in:
 
-- Source: Web
+- Source: *can be anything*
 - Room: Test Room
 - Task: None
-- Reusable: <check>
-- Count: 3
+- Count: 1
+- Key: *the secret key you've defined in the config.ini*
 
 That is, we create three tokens in one go.
 
@@ -82,13 +81,20 @@ Copy the first one, and use it to do the following, in a new terminal window (`m
 
 - `python minimal.py` *<TOKEN>*
 
-In the terminal window where you started the chat server, you should see a message stating that `minimal bot has connected`. (In the window of the chat bot, you will see some JSON structures that will be explained TODO:ELSEWHERE.)
+In the terminal window where you started the chat server, you should see a message stating that `minimal bot has connected`. In the window of the minimal bot, you will see some JSON structures. These structures contain information about events emitted by the server. Several kinds of information are included in this event data, for example about the room and the user. The event data can be accessed using event handlers, several of which are predefined in the bot files. For instance, the following piece of code causes the bot to print the event data:
+
+    .. code-block:: python
+    
+      def on_message(self, data):
+          print("on_message", data)
+        
+where *data*, in this case, holds information about the user that sends a text, about the rooms that are involved and of course the text message itself (see *minimal.py*). Depending on which handler you are using, information about different events can be accessed.
 
 Now start two browsers and log in as two different users (let's call them `A` and `B`), as described above in :ref:`twobrowsers`. The list of users in the top right corner of the window should now indicate that besides `A` and `B` there is also a user called `minimal bot`.
 
 So far, nothing else has changed really. (Except that you now get a glimpse of what's happening behind the scenes, as the `minimal bot` prints all messages that pass through the room to its `STDOUT` [i.e., into the terminal window where it was started].)
 
-But now that the bot is in the room, we can issue *commands* to it. Try the  following in `A`'s chat (the leading `/` is important):
+But now that the bot is in the room, we can issue *slash commands* to it. Try the  following in `A`'s chat (the leading `/` is important):
 
 - `/new_image_public`
 
@@ -119,8 +125,6 @@ Examining the log files
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The point of all this, however, is not just to make interaction *possible*, it is to *record* these interactions to be able to later study them or train models on them. In the directory `log/` where you started the chat server, you should now find logfiles, named with the time stamp and the name of the room. These files contain, as a JSON list, most of the events that the server handled, including all the messages that were sent. This should contain the information that you need for your particular purposes.
-
-TODO: Provide example script that extracts the utterances in a parlAI style representation?
 
 
 
