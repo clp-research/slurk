@@ -1,4 +1,4 @@
-Version [1.1](https://github.com/dsg-bielefeld/slurk/tree/v1.1) (2019-26-03)
+Version [1.1](https://github.com/dsg-bielefeld/slurk/tree/v1.1) (2019-03-28)
 ============================================================================
 
 - **New**: [Online Documentation](https://dsg-bielefeld.github.io/slurk/)
@@ -15,7 +15,7 @@ Config
 - Added option for database name
 - Added option for log-file format
 
-Version [1.0](https://github.com/dsg-bielefeld/slurk/tree/v1.0) (2018-30-09)
+Version [1.0](https://github.com/dsg-bielefeld/slurk/tree/v1.0) (2018-09-30)
 ============================================================================
 
 - Initial Release
