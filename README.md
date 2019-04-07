@@ -17,8 +17,8 @@ The generated documentation can then be found at *docs/_build/*
 
 Happy slurking!
 
-[what's this]: https://dsg-bielefeld.github.io/slurk/slurk_about.html#slurk-about
-[Quickstart]: https://dsg-bielefeld.github.io/slurk/slurk_quickstart.html#slurk-quickstart
-[Installation]: https://dsg-bielefeld.github.io/slurk/slurk_installation.html#slurk-installation
+[what's this]: https://clp-research.github.io/slurk/slurk_about.html#slurk-about
+[Quickstart]: https://clp-research.github.io/slurk/slurk_quickstart.html#slurk-quickstart
+[Installation]: https://clp-research.github.io/slurk/slurk_installation.html#slurk-installation
 [flask]: http://flask.pocoo.org/
 [flask-socketio]: https://flask-socketio.readthedocs.io/en/latest
