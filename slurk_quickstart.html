@@ -188,7 +188,7 @@
 <p>This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).</p>
 <div class="figure align-center" id="id1">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span></p>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.</p>
 <p>(But one additional thing before we move on: If you repeat the steps above while keeping the chat server alive, you will notice that you will end up in the same room which shows the chat history of the previously created user which now however is orphaned, as you have your new identity. The reason for that is the websocket connection that is created by the server is tied to the browser, and was kept alive. If you want to start fresh, you need to kill the chat server and restart again.)</p>
@@ -247,7 +247,7 @@
 <p>Now only the image shown for <cite>B</cite> should have changed and you should be seeing something similar to <a class="reference internal" href="#screenshot-privimage"><span class="std std-numref">Fig. 3.2</span></a>. This demonstrates another important feature: the display area can be controlled per user; that is, different users can be shown different material in that area. This makes it possible to set up tasks where the users may not in fact be seeing the same image.</p>
 <div class="figure align-center" id="id2">
 <span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/minimal_private_images.png"><img alt="_images/minimal_private_images.png" src="_images/minimal_private_images.png" style="width: 708.6px; height: 510.0px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Example interaction with the minimal bot</span></p>
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Example interaction with the minimal bot</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="examining-the-log-files">

@@ -164,24 +164,20 @@ Optional parameters must be checked beforehand.
 These are specified in the description.</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><cite>status &lt;type&gt;</cite></dt>
-<dd><ul class="first last">
+<dt><cite>status &lt;type&gt;</cite></dt><dd><ul>
 <li>a status update has been made</li>
 <li><cite>timestamp</cite>: The actual server time</li>
 <li><dl class="first docutils">
-<dt><cite>&lt;type&gt;</cite>: Type of update</dt>
-<dd><ul class="first last">
+<dt><cite>&lt;type&gt;</cite>: Type of update</dt><dd><ul>
 <li><dl class="first docutils">
-<dt><cite>new_image</cite>: Ein new picture was sent</dt>
-<dd><ul class="first last">
+<dt><cite>new_image</cite>: Ein new picture was sent</dt><dd><ul>
 <li><cite>sid</cite>: Sender of the image</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>join</cite>: A client has connected to the room</dt>
-<dd><ul class="first last">
+<dt><cite>join</cite>: A client has connected to the room</dt><dd><ul>
 <li><cite>sid</cite>: Session ID of the new client</li>
 <li><cite>name</cite>: Name of the new client</li>
 </ul>
@@ -189,8 +185,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>leave</cite>: A client has left the room</dt>
-<dd><ul class="first last">
+<dt><cite>leave</cite>: A client has left the room</dt><dd><ul>
 <li><cite>sid</cite>: Session ID of the client</li>
 <li><cite>name</cite>: Name of the client</li>
 </ul>
@@ -198,8 +193,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>undefined_command</cite>: The command sent could not be interpreted</dt>
-<dd><ul class="first last">
+<dt><cite>undefined_command</cite>: The command sent could not be interpreted</dt><dd><ul>
 <li><cite>command</cite>: The transmitted command</li>
 </ul>
 </dd>
@@ -214,8 +208,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>message</cite></dt>
-<dd><ul class="first last">
+<dt><cite>message</cite></dt><dd><ul>
 <li><cite>timestamp</cite>: The actual server time</li>
 <li><cite>sid</cite>: Session ID of the sender</li>
 <li><cite>name</cite>: Name of the sender</li>
@@ -226,8 +219,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>new_image &lt;url&gt;</cite></dt>
-<dd><ul class="first last">
+<dt><cite>new_image &lt;url&gt;</cite></dt><dd><ul>
 <li>A new picture has been sent</li>
 <li>url`: URL of the new image</li>
 </ul>
@@ -235,24 +227,21 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>acquire_sid &lt;sid&gt;</cite></dt>
-<dd><ul class="first last">
+<dt><cite>acquire_sid &lt;sid&gt;</cite></dt><dd><ul>
 <li><cite>sid</cite>: the session ID of the current client</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>my_pong</cite></dt>
-<dd><ul class="first last">
+<dt><cite>my_pong</cite></dt><dd><ul>
 <li>This event can be used for latency calculation, for example</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>start_typing</cite></dt>
-<dd><ul class="first last">
+<dt><cite>start_typing</cite></dt><dd><ul>
 <li>The specified client has started typing</li>
 <li><cite>sid</cite>: Session ID of the client</li>
 <li><cite>name</cite>: Name of the client</li>
@@ -262,8 +251,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>stop_typing</cite></dt>
-<dd><ul class="first last">
+<dt><cite>stop_typing</cite></dt><dd><ul>
 <li>The specified client has stopped typing</li>
 <li><cite>sid</cite>: Session ID of the client</li>
 <li><cite>name</cite>: Name of the client</li>
@@ -273,8 +261,7 @@ These are specified in the description.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>active_users &lt;dict&gt;</cite></dt>
-<dd><ul class="first last">
+<dt><cite>active_users &lt;dict&gt;</cite></dt><dd><ul>
 <li><cite>dict</cite>: a user dictionary <cite>Session id =&gt; Client name</cite></li>
 </ul>
 </dd>

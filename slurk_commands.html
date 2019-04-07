@@ -169,8 +169,7 @@ needed for communication between bots and Slurk.</p>
 <p>In addition to the commands registered by bots <a class="footnote-reference" href="#id4" id="id2">[1]</a> , the following commands are also available for chatting:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><cite>/new_image &lt;image-url&gt; [room]</cite></dt>
-<dd><ul class="first last">
+<dt><cite>/new_image &lt;image-url&gt; [room]</cite></dt><dd><ul>
 <li>A new image is sent to a room</li>
 <li><cite>&lt;image-url&gt;</cite> specifies the URL for the new image</li>
 <li>The image is then displayed for the clients in the room on the righthand side</li>
@@ -179,8 +178,7 @@ needed for communication between bots and Slurk.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>/listen_to &lt;name&gt;</cite></dt>
-<dd><ul class="first last">
+<dt><cite>/listen_to &lt;name&gt;</cite></dt><dd><ul>
 <li>A command of listening to commands in the targeted room</li>
 <li>If a client sends the command <cite>name</cite>, this client receives the command together with the entered parameters.</li>
 </ul>
@@ -198,8 +196,7 @@ The commands are divided into two namespaces: <cite>login</cite> and <cite>chat<
 <h3>Login Namespace<a class="headerlink" href="#login-namespace" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><cite>connect_with_token &lt;name&gt; &lt;room&gt; [token]</cite></dt>
-<dd><ul class="first last">
+<dt><cite>connect_with_token &lt;name&gt; &lt;room&gt; [token]</cite></dt><dd><ul>
 <li>The client connects to a room</li>
 <li><cite>name</cite>: name of the client to be connected (e.g. “Bot-XY”)</li>
 <li><cite>room</cite>: room to which the client should connect</li>
@@ -214,8 +211,7 @@ The commands are divided into two namespaces: <cite>login</cite> and <cite>chat<
 <h3>Chat Namespace<a class="headerlink" href="#chat-namespace" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><cite>my_ping</cite></dt>
-<dd><ul class="first last">
+<dt><cite>my_ping</cite></dt><dd><ul>
 <li>A new event <a class="footnote-reference" href="#id5" id="id3">[2]</a> (<cite>my_pong</cite>) is generated with the current bot</li>
 <li>As an example, this command can be used to check latency level</li>
 </ul>
@@ -223,32 +219,28 @@ The commands are divided into two namespaces: <cite>login</cite> and <cite>chat<
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>disconnect</cite></dt>
-<dd><ul class="first last">
+<dt><cite>disconnect</cite></dt><dd><ul>
 <li>Closes connection with the client</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>receive_sid</cite></dt>
-<dd><ul class="first last">
+<dt><cite>receive_sid</cite></dt><dd><ul>
 <li>The new event <cite>acquire_sid</cite> is created</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>log [params…]</cite></dt>
-<dd><ul class="first last">
+<dt><cite>log [params…]</cite></dt><dd><ul>
 <li>All parameters are written to the current log file</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>text &lt;msg&gt; [receiver]</cite></dt>
-<dd><ul class="first last">
+<dt><cite>text &lt;msg&gt; [receiver]</cite></dt><dd><ul>
 <li>A text message is sent</li>
 <li><cite>msg</cite>: the message to be sent</li>
 <li><cite>receiver</cite>: message recipient. This can be a room or a session ID of the player.</li>
@@ -257,8 +249,7 @@ The commands are divided into two namespaces: <cite>login</cite> and <cite>chat<
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>command &lt;name&gt; [params…]</cite></dt>
-<dd><ul class="first last">
+<dt><cite>command &lt;name&gt; [params…]</cite></dt><dd><ul>
 <li>The command is either executed or forwarded to the respective listeners.</li>
 <li><cite>name</cite>: name of the command</li>
 <li><cite>params</cite>: parameter to the command</li>
@@ -267,8 +258,7 @@ The commands are divided into two namespaces: <cite>login</cite> and <cite>chat<
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><cite>clients</cite></dt>
-<dd><ul class="first last">
+<dt><cite>clients</cite></dt><dd><ul>
 <li>The event <cite>active_users</cite> is created</li>
 </ul>
 </dd>
