@@ -4,8 +4,32 @@
 Deploying the system
 =========================================
 
+Using docker
+~~~~~~~~~~~~
+
+The easiest way to deploy the system is using Docker. For this, ``docker-compose`` is recommended: ::
+
+  sudo apt install docker-compose
+  
+Now go to the root directory and just call::
+
+  docker-compose up --build -d
+  
+This will build the slurk container and serve it via ``gunicorn`` at port ``5000``. Additinally, it is served
+via ``nginx`` at port ``80``. This can be configured in ``docker-compose.yml``. The containers can be stoppd
+with::
+
+  docker-compose down
+
+If you don't want to run it detached, you may omit ``-d``.
+
+Manual setup
+~~~~~~~~~~~~
+
+If you don't want to use docker for whatever reason, you can also manually setup the server.
+
 General description and requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
 with SSL connection.
@@ -19,7 +43,7 @@ Also please make sure that your Ubuntu server is running on Nginx [1]_ and ``sys
 Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine [2]_.
 
 Serving Slurk with Gunicorn
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 You can serve our Flask application on a permanent basis.
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
@@ -102,7 +126,7 @@ The output should be similar to the following::
         └─18103 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
 
 Configuring Nginx
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
 
 At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
 First, we will create a new server block configuration file in Nginx's `sites-available` directory::

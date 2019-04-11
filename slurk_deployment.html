@@ -92,9 +92,13 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">7. Deploying the system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general-description-and-requirements">7.1. General description and requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#serving-slurk-with-gunicorn">7.2. Serving Slurk with Gunicorn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuring-nginx">7.3. Configuring Nginx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-docker">7.1. Using docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-setup">7.2. Manual setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-description-and-requirements">7.2.1. General description and requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serving-slurk-with-gunicorn">7.2.2. Serving Slurk with Gunicorn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-nginx">7.2.3. Configuring Nginx</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
@@ -165,8 +169,29 @@
             
   <div class="section" id="deploying-the-system">
 <span id="slurk-deployment"></span><h1>7. Deploying the system<a class="headerlink" href="#deploying-the-system" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-docker">
+<h2>7.1. Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to deploy the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> is recommended:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span>
+</pre></div>
+</div>
+<p>Now go to the root directory and just call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">--</span><span class="n">build</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>This will build the slurk container and serve it via <code class="docutils literal notranslate"><span class="pre">gunicorn</span></code> at port <code class="docutils literal notranslate"><span class="pre">5000</span></code>. Additinally, it is served
+via <code class="docutils literal notranslate"><span class="pre">nginx</span></code> at port <code class="docutils literal notranslate"><span class="pre">80</span></code>. This can be configured in <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>. The containers can be stoppd
+with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>If you don’t want to run it detached, you may omit <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
+</div>
+<div class="section" id="manual-setup">
+<h2>7.2. Manual setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h2>
+<p>If you don’t want to use docker for whatever reason, you can also manually setup the server.</p>
 <div class="section" id="general-description-and-requirements">
-<h2>7.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h2>
+<h3>7.2.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h3>
 <p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
 with SSL connection.</p>
 <p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
@@ -178,7 +203,7 @@ with SSL connection.</p>
 Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine <a class="footnote-reference" href="#id7" id="id2">[2]</a>.</p>
 </div>
 <div class="section" id="serving-slurk-with-gunicorn">
-<h2>7.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h2>
+<h3>7.2.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h3>
 <p>You can serve our Flask application on a permanent basis.
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
 the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
@@ -259,7 +284,7 @@ CGroup: /system.slice/chat.service
 </div>
 </div>
 <div class="section" id="configuring-nginx">
-<h2>7.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h2>
+<h3>7.2.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
 <p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
 First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">chat</span>
@@ -349,6 +374,7 @@ location block where you specify location of the static files:</p>
 If you choose incorrect one, the application will not be accessible from outside of your network, even if you adjust firewall settings.</td></tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 
