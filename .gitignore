@@ -4,3 +4,4 @@ botsi.db
 config.ini
 .DS_Store
 _build
+!docker/slurk/config.ini

@@ -1,10 +1,10 @@
 #!/bin/env python
+from app import create_app, socketio
+import configparser
 from gevent import monkey
 
 monkey.patch_all(subprocess=True)
 
-import configparser
-from app import create_app, socketio
 
 app = create_app()
 
@@ -26,6 +26,8 @@ if __name__ == '__main__':
             keyfile=config['ssl']['key']
         )
         http_server.serve_forever()
-        socketio.run(app, config['server']['host'], int(config['server']['port']), ssl_context=ctx)
+        socketio.run(app, config['server']['host'], int(
+            config['server']['port']), ssl_context=ctx)
     else:
-        socketio.run(app, config['server']['host'], int(config['server']['port']))
+        socketio.run(app, config['server']['host'],
+                     int(config['server']['port']))
