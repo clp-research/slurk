@@ -171,7 +171,14 @@ class ChatNamespace(BaseNamespace):
 
 
 class LoginNamespace(BaseNamespace):
-    pass
+    @staticmethod
+    def on_login_status(data):
+        global chat_namespace
+        if data["success"]:
+            chat_namespace = socketIO.define(ChatNamespace, '/chat')
+        else:
+            print("Could not login to server")
+            sys.exit(1)
 
 
 if __name__ == '__main__':
@@ -191,5 +198,4 @@ if __name__ == '__main__':
         login_namespace = socketIO.define(LoginNamespace, '/login')
         login_namespace.emit('connectWithToken', {
                              'token': args.token, 'name': "ConciergeBot"})
-        chat_namespace = socketIO.define(ChatNamespace, '/chat')
         socketIO.wait()
