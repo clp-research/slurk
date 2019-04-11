@@ -1,4 +1,4 @@
-This file contains a list of people who has made [contributions](https://github.com/dsg-bielefeld/slurk/graphs/contributors) to this project.
+This file contains a list of people who has made [contributions](https://github.com/clp-research/slurk/graphs/contributors) to this project.
 
 Organization and planning
 -------------------------
