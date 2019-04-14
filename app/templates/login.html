@@ -8,13 +8,13 @@
 	<body>
     <div class="login-page">
       <div class="login-form">
-        <h1>Botsi Chat</h1>
+        <h1>Slurk</h1>
         <form method="POST">
           {{ form.hidden_tag() }}
 	        <span class="error">{% for error in form.name.errors %}{{ error }}{% endfor %}</span>
           {{ form.name(required="required", placeholder="Name", autocomplete="off") }}
-	        <span class="error">{% for error in form.token.errors %}{{ error }}{% endfor %}{% if token_invalid %}The token is either expired, was already used or isn't correct at all.{% endif %}</span>
-          {{ form.token(required="required", placeholder="Token", value=token, autocomplete="off") }}
+	        <span class="error">{% for error in form.token.errors %}{{ error }}{% endfor %}</span>
+          {{ form.token(required="required", placeholder="Token", autocomplete="off") }}
           {{ form.submit() }}
         </form>
       </div>

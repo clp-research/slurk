@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>{{ title }}</title>
@@ -34,6 +34,47 @@
                         <td><label for="key">Key</label></td>
                         <td>{{ form.key(placeholder="secret-key from config.ini") }}</td>
                     </tr>
+                    <tr><td>
+                        <h3>Permissions</h3>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4>Query</h4>
+                                    <table>
+                                        <tr>
+                                            <td><label for="query_user">User</label></td>
+                                            <td>{{ form.query_user() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="query_room">Room</label></td>
+                                            <td>{{ form.query_room() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="query_permissions">Permissions</label></td>
+                                            <td>{{ form.query_permissions() }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <h4>Message</h4>
+                                    <table>
+                                        <tr>
+                                            <td><label for="message_send">Send</label></td>
+                                            <td>{{ form.message_send() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="message_history">History</label></td>
+                                            <td>{{ form.message_history() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="message_broadcast">Broadcast</label></td>
+                                            <td>{{ form.message_broadcast() }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td></tr>
                 </table>
                 {{ form.submit() }}
             </form>
