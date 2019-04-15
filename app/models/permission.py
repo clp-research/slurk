@@ -1,3 +1,4 @@
+from flask_login import current_user
 from flask import request
 
 from .. import db, socketio
@@ -12,18 +13,24 @@ class Permissions(Base):
     query_user = db.Column(db.Boolean, nullable=False, default=False)
     query_room = db.Column(db.Boolean, nullable=False, default=False)
     query_permissions = db.Column(db.Boolean, nullable=False, default=False)
+    query_layout = db.Column(db.Boolean, nullable=False, default=False)
     message_send = db.Column(db.Boolean, nullable=False, default=False)
     message_history = db.Column(db.Boolean, nullable=False, default=False)
     message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
+    token_generate = db.Column(db.Boolean, nullable=False, default=False)
+    token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
     token = db.relationship("Token", backref="permissions", uselist=False)
 
     def __repr__(self):
-        return "<Permission(query='%s', message='%s')>" % ({'user': self.query_user,
-                                                            'room': self.query_room,
-                                                            'permissions': self.query_permissions},
-                                                           {'send': self.message_send,
-                                                            'history': self.message_history,
-                                                            'broadcast': self.message_broadcast})
+        return "<Permission(query='%s', message='%s', token='%s')>" % ({'user': self.query_user,
+                                                                        'room': self.query_room,
+                                                                        'permissions': self.query_permissions,
+                                                                        'layout': self.query_layout},
+                                                                       {'send': self.message_send,
+                                                                        'history': self.message_history,
+                                                                        'broadcast': self.message_broadcast},
+                                                                       {'generate': self.token_generate,
+                                                                        'invalidate': self.token_invalidate})
 
     def as_dict(self):
         return dict({
@@ -31,24 +38,32 @@ class Permissions(Base):
                 'user': self.query_user,
                 'room': self.query_room,
                 'permissions': self.query_permissions,
+                'layout': self.query_layout,
             },
             'message': {
                 'send': self.message_send,
                 'history': self.message_history,
                 'broadcast': self.message_broadcast,
-            }
+            },
+            'token': {
+                'generate': self.token_generate,
+                'invalidate': self.token_invalidate,
+            },
         }, **super(Permissions, self).as_dict())
 
 
 @socketio.on('get_permissions_by_user')
 def _get_permissions_by_user(id):
-    user = User.query.filter_by(session_id=request.sid).first()
-    if not user:
+    if not current_user.get_id():
         return False, "invalid session id"
+    if id and not (current_user.token.permissions.query_permissions and current_user.token.permissions.query_user):
+        return False, "insufficient rights"
+
     if id:
-        if not user.token.permissions.query_permissions:
-            return False, "insufficient rights"
         user = User.query.get(id)
+    else:
+        user = current_user
+
     if user:
         return True, user.token.permissions.as_dict()
     else:
@@ -57,10 +72,9 @@ def _get_permissions_by_user(id):
 
 @socketio.on('get_permissions')
 def _get_permissions(id):
-    user = User.query.filter_by(session_id=request.sid).first()
-    if not user:
+    if not current_user.get_id():
         return False, "invalid session id"
-    if not user.token.permissions.query_permissions:
+    if not current_user.token.permissions.query_permissions:
         return False, "insufficient rights"
     permissions = Permissions.query.get(id)
     if permissions:

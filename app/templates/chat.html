@@ -171,26 +171,28 @@
         }
 
         function apply_layout(layout_id) {
-            socket.emit("get_layout", layout_id, (layout) => {
-                if (layout.html !== "") {
-                    $("#sidebar").html(layout.html);
-                }
-                if (layout.css !== "") {
-                    $("#custom-styles").html(layout.css);
-                }
-                if (layout.script !== "") {
-                    window.eval(layout.script);
-                }
-                if (layout.title !== "") {
-                    document.title = layout.title;
-                } else {
-                    document.title = 'Slurk';
-                }
-                $("#title").text(document.title);
-                if (layout.subtitle !== "") {
-                    $("#subtitle").text(layout.subtitle);
-                } else {
-                    $("#subtitle").text(room.label);
+            socket.emit("get_layout", layout_id, (success, layout) => {
+                if (verify_query(success, layout)) {
+                    if (layout.html !== "") {
+                        $("#sidebar").html(layout.html);
+                    }
+                    if (layout.css !== "") {
+                        $("#custom-styles").html(layout.css);
+                    }
+                    if (layout.script !== "") {
+                        window.eval(layout.script);
+                    }
+                    if (layout.title !== "") {
+                        document.title = layout.title;
+                    } else {
+                        document.title = 'Slurk';
+                    }
+                    $("#title").text(document.title);
+                    if (layout.subtitle !== "") {
+                        $("#subtitle").text(layout.subtitle);
+                    } else {
+                        $("#subtitle").text(room.label);
+                    }
                 }
             });
         }
@@ -258,7 +260,6 @@
                         let room = rooms[0];
                         if (room) {
                             self_room = room.name;
-                            console.log(room);
                             apply_layout(room.layout);
                         }
                     }

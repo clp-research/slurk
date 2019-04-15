@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, request, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
@@ -36,15 +36,33 @@ def load_user(id):
 
 @app.before_request
 def before_request():
-    g.user = current_user
+    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static"\
+            or request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate:
+        return login_manager.unauthorized()
 
 
 from .models.room import Room
+from .models.token import Token
 from .models.layout import Layout
+from .models.permission import Permissions
 
 if not Room.query.get("test_room"):
+    admin_token = Token(room_name='test_room',
+                        id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
+                        permissions=Permissions(query_user=True,
+                                                query_room=True,
+                                                query_permissions=True,
+                                                query_layout=True,
+                                                message_send=True,
+                                                message_history=True,
+                                                message_broadcast=True,
+                                                token_generate=True,
+                                                token_invalidate=True))
+    db.session.add(admin_token)
     db.session.add(Room(name="test_room",
                         label="Test Room",
                         static=True,
                         layout=Layout.from_json_file("test_room")))
-db.session.commit()
+    db.session.commit()
+    print("generating test room and admin token...")
+print("admin token:", Token.query.order_by(Token.date_created).first().id)

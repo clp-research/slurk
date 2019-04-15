@@ -1,3 +1,4 @@
+from flask_login import current_user
 from flask import request
 
 from .. import db, socketio
@@ -45,13 +46,16 @@ class Room(db.Model):
 
 @socketio.on('get_rooms_by_user')
 def _get_rooms_by_user(id):
-    user = User.query.filter_by(session_id=request.sid).first()
-    if not user:
+    if not current_user.get_id():
         return False, "invalid session id"
+    if id and not (current_user.token.permissions.query_room and current_user.token.permissions.query_user):
+        return False, "insufficient rights"
+
     if id:
-        if not user.token.permissions.query_user:
-            return False, "insufficient rights"
         user = User.query.get(id)
+    else:
+        user = current_user
+
     if user:
         return True, [room.as_dict() for room in user.rooms]
     else:
@@ -60,10 +64,9 @@ def _get_rooms_by_user(id):
 
 @socketio.on('get_room')
 def _get_room(name):
-    user = User.query.filter_by(session_id=request.sid).first()
-    if not user:
+    if not current_user.get_id():
         return False, "invalid session id"
-    if not user.token.permissions.query_room:
+    if not current_user.token.permissions.query_room:
         return False, "insufficient rights"
     room = Room.query.get(name)
     if room:

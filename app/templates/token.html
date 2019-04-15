@@ -30,10 +30,6 @@
                         <td><label for="count">Count</label></td>
                         <td>{{ form.count() }}</td>
                     </tr>
-                    <tr>
-                        <td><label for="key">Key</label></td>
-                        <td>{{ form.key(placeholder="secret-key from config.ini") }}</td>
-                    </tr>
                     <tr><td>
                         <h3>Permissions</h3>
                         <table>
@@ -53,6 +49,10 @@
                                             <td><label for="query_permissions">Permissions</label></td>
                                             <td>{{ form.query_permissions() }}</td>
                                         </tr>
+                                        <tr>
+                                            <td><label for="query_layout">Layout</label></td>
+                                            <td>{{ form.query_layout() }}</td>
+                                        </tr>
                                     </table>
                                 </td>
                                 <td>
@@ -69,6 +69,19 @@
                                         <tr>
                                             <td><label for="message_broadcast">Broadcast</label></td>
                                             <td>{{ form.message_broadcast() }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <h4>Token</h4>
+                                    <table>
+                                        <tr>
+                                            <td><label for="token_generate">Generate</label></td>
+                                            <td>{{ form.token_generate() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="token_invalidate">Invalidate</label></td>
+                                            <td>{{ form.token_invalidate() }}</td>
                                         </tr>
                                     </table>
                                 </td>

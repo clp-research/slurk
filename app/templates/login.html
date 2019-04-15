@@ -10,6 +10,15 @@
       <div class="login-form">
         <h1>Slurk</h1>
         <form method="POST">
+            <span class="error">
+                {% with messages = get_flashed_messages() %}
+                   {% if messages %}
+                      {% for message in messages %}
+                         {{ message }}
+                      {% endfor %}
+                   {% endif %}
+                {% endwith %}
+            </span>
           {{ form.hidden_tag() }}
 	        <span class="error">{% for error in form.name.errors %}{{ error }}{% endfor %}</span>
           {{ form.name(required="required", placeholder="Name", autocomplete="off") }}

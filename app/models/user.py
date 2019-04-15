@@ -1,4 +1,5 @@
 from flask import request
+from flask_login import current_user
 
 from .. import db, socketio
 
@@ -42,13 +43,13 @@ class User(Base):
 
 @socketio.on('get_user')
 def _get_user(id):
-    user = User.query.filter_by(session_id=request.sid).first()
-    if not user:
+    current_id = current_user.get_id()
+    if not current_id:
         return False, "invalid session id"
-    if id:
-        if not user.token.permissions.query_user:
-            return False, "insufficient rights"
-        user = User.query.get(id)
+
+    if id and not current_user.token.permissions.query_user:
+        return False, "insufficient rights"
+    user = User.query.get(id or current_id)
     if user:
         return True, user.as_dict()
     else:
