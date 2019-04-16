@@ -18,7 +18,10 @@ def connect():
         join_room(room.name)
         socketio.emit('status', {
             'type': 'join',
-            'user': current_user.id,
+            'user': {
+                'id': current_user.id,
+                'name': current_user.name,
+            },
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
@@ -31,7 +34,10 @@ def disconnect():
     for room in current_user.rooms:
         socketio.emit('status', {
             'type': 'leave',
-            'user': current_user.id,
+            'user': {
+                'id': current_user.id,
+                'name': current_user.name,
+            },
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)

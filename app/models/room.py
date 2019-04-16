@@ -40,7 +40,7 @@ class Room(db.Model):
             'show_history': self.show_history,
             'show_interaction_Area': self.show_interaction_Area,
             'static': self.static,
-            'users': {user.id: user.as_dict() for user in self.users},
+            'users': {user.id: user.name for user in self.users},
         }
 
 
