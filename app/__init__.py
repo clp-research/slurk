@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask, request, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
@@ -66,3 +68,4 @@ if not Room.query.get("test_room"):
     db.session.commit()
     print("generating test room and admin token...")
 print("admin token:", Token.query.order_by(Token.date_created).first().id)
+sys.stdout.flush()

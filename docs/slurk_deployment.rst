@@ -11,12 +11,18 @@ The easiest way to deploy the system is using Docker. For this, ``docker-compose
 
   sudo apt install docker-compose
   
+Slurk needs some environment variables in order to run::
+
+  cat slurk.env
+  SECRET_KEY = top-secret-key
+  DEBUG = on
+
 Now go to the root directory and just call::
 
   docker-compose up --build -d
   
 This will build the slurk container and serve it via ``gunicorn`` at port ``5000``. Additinally, it is served
-via ``nginx`` at port ``80``. This can be configured in ``docker-compose.yml``. The containers can be stoppd
+via ``nginx`` at port ``80``. This can be configured in ``docker-compose.yml``. The containers can be stopped
 with::
 
   docker-compose down

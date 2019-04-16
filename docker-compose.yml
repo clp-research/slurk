@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  slurk:
+    image: slurk/server
+    container_name: slurk
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/slurk/Dockerfile
+    env_file:
+      - slurk.env
+    ports:
+      - "5000:5000"
+    command: gunicorn -w 1 -b :5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker run:app
+
+  nginx:
+    image: slurk/nginx
+    container_name: nginx
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - slurk
