@@ -1,12 +1,10 @@
 from flask_login import current_user
-from flask import request
 
 from .. import db, socketio
 
 from . import user_room
 from .token import Token
 from .layout import Layout
-from .user import User
 
 
 class Room(db.Model):
@@ -33,24 +31,6 @@ class Room(db.Model):
             'static': self.static,
             'users': {user.id: user.name for user in self.users},
         }
-
-
-@socketio.on('get_rooms_by_user')
-def _get_rooms_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not (current_user.token.permissions.query_room and current_user.token.permissions.query_user):
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, [room.as_dict() for room in user.rooms]
-    else:
-        return False, "user does not exist"
 
 
 @socketio.on('get_room')

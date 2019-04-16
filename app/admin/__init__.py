@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
+from flask_login import login_required
 
-from .. import db, settings
+from .. import db
 
 from ..models.room import Room
 from ..models.task import Task
@@ -41,6 +42,7 @@ def _string_parameter(name, default=None):
 
 
 @admin.route('/token', methods=['GET', 'POST'])
+@login_required
 def token():
     form = TokenGenerationForm(source=_string_parameter("source"),
                                room=_string_parameter("room"),
@@ -86,4 +88,4 @@ def token():
               for _ in range(0, form.count.data or 1)]
     db.session.add_all(tokens)
     db.session.commit()
-    return "<br >".join([str(tk.id) for tk in tokens])
+    return "<br>".join([str(tk.id) for tk in tokens])

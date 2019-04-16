@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from sqlalchemy_utils.types.uuid import UUIDType
 
-from .. import db, socketio
+from .. import db
 
 from . import Base
 from .permission import Permissions

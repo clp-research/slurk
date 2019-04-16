@@ -30,12 +30,6 @@ login_manager.login_view = 'login.index'
 socketio.init_app(app)
 
 
-@login_manager.user_loader
-def load_user(id):
-    from .models.user import User
-    return User.query.get(int(id))
-
-
 @app.before_request
 def before_request():
     if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static"\

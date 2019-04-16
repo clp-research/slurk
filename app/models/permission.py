@@ -1,10 +1,8 @@
 from flask_login import current_user
-from flask import request
 
 from .. import db, socketio
 
 from . import Base
-from .user import User
 
 
 class Permissions(Base):
@@ -43,24 +41,6 @@ class Permissions(Base):
                 'invalidate': self.token_invalidate,
             },
         }, **super(Permissions, self).as_dict())
-
-
-@socketio.on('get_permissions_by_user')
-def _get_permissions_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not (current_user.token.permissions.query_permissions and current_user.token.permissions.query_user):
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, user.token.permissions.as_dict()
-    else:
-        return False, "user does not exist"
 
 
 @socketio.on('get_permissions')
