@@ -11,13 +11,13 @@ function _getTime(timestamp) {
     return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : "" + currentDate.getMinutes());
 }
 
-function display_message(sender, time, message, privateMessage) {
+function display_message(user, time, message, privateMessage) {
     if (self_user === undefined) {
         return;
     }
 
     let classes = "";
-    if (self_user.id === sender.id) {
+    if (self_user.id === user.id) {
         classes += "self";
     } else {
         classes += "other";
@@ -36,19 +36,19 @@ function display_message(sender, time, message, privateMessage) {
         "    <span class='msg'></span>" +
         "  </div>" +
         "</li>");
-    text.find(".user").text(self_user.id === sender.id ? "You" : sender.name);
+    text.find(".user").text(self_user.id === user.id ? "You" : user.name);
     text.find(".msg").text(message);
     text.find("time").text(_getTime(time));
     _append(text);
 }
 
-function display_image(sender, time, url, width, height, privateMessage) {
+function display_image(user, time, url, width, height, privateMessage) {
     if (self_user === undefined) {
         return;
     }
 
     let classes = "";
-    if (self_user.id === sender.id) {
+    if (self_user.id === user.id) {
         classes += "self";
     } else {
         classes += "other";
@@ -77,7 +77,7 @@ function display_image(sender, time, url, width, height, privateMessage) {
         "    <img/>" +
         "  </div>" +
         "</li>");
-    text.find(".user").text(self_user.id === sender.id ? "You" : sender.name);
+    text.find(".user").text(self_user.id === user.id ? "You" : user.name);
     text.find("time").text(_getTime(time));
     text.find("img").attr("src", url).attr("width", width).attr("height", height);
     _append(text);

@@ -5,21 +5,26 @@ let incoming_message = undefined;
 
 $(document).ready(() => {
     socket.on("message", function (data) {
-        console.log("message", data);
-        if (incoming_message !== undefined && data.sender.id !== self_user.id) {
+        if (incoming_message !== undefined && data.user.id !== self_user.id) {
             incoming_message(data)
         }
     });
 
     socket.on('start_typing', function (data) {
-        typing[data.sender.id] = data.sender.name;
+        if (data.user.id === self_user.id) {
+            return
+        }
+        typing[data.user.id] = data.user.name;
         if (update_typing !== undefined) {
             update_typing(typing);
         }
     });
 
     socket.on('stop_typing', function (data) {
-        delete typing[data.sender.id];
+        if (data.user.id === self_user.id) {
+            return
+        }
+        delete typing[data.user.id];
         if (update_typing !== undefined) {
             update_typing(typing);
         }

@@ -28,7 +28,6 @@ function apply_room_properties(room) {
 }
 
 function apply_layout(layout) {
-    console.log(layout);
     if (layout.html !== "") {
         $("#sidebar").html(layout.html);
     }
@@ -96,14 +95,12 @@ $(document).ready(() => {
     socket.on('connect', (data) => {
         socket.emit("get_user", null, (success, user) => {
             if (verify_query(success, user)) {
-                console.log("user", user);
                 self_user = user;
                 updateUsers();
             }
         });
         socket.emit('get_rooms_by_user', null, (success, rooms) => {
             if (verify_query(success, rooms)) {
-                console.log("rooms", rooms);
                 let room = rooms[0];
                 if (room) {
                     self_room = room.name;
@@ -118,7 +115,6 @@ $(document).ready(() => {
         });
         socket.emit("get_layouts_by_user", null, (success, layouts) => {
             if (verify_query(success, layouts)) {
-                console.log("layouts", layouts);
                 let room = Object.keys(layouts)[0];
                 if (room && layouts[room]) {
                     apply_layout(layouts[room]);
@@ -127,7 +123,6 @@ $(document).ready(() => {
         });
         socket.emit("get_permissions_by_user", null, (success, permissions) => {
             if (verify_query(success, permissions)) {
-                console.log("permissions", permissions);
                 apply_user_permissions(permissions);
             }
         });
@@ -136,7 +131,6 @@ $(document).ready(() => {
     socket.on('status', function (data) {
         if (typeof self_user === "undefined")
             return;
-        console.log('status', data);
         switch (data.type) {
             case "join":
                 let user = data.user;
@@ -148,12 +142,6 @@ $(document).ready(() => {
             case "leave":
                 delete users[data.user.id];
                 updateUsers();
-                break;
-            case "new_image":
-                display_info(data.timestamp, 'You have received a new image!');
-                break;
-            case "undefined_command":
-                display_info(data.timestamp, 'Command could not be recognized!');
                 break;
         }
     });

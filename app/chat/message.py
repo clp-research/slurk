@@ -39,17 +39,18 @@ def message_text(payload):
     else:
         return False, "`text` requires `room` or `receiver_id` as parameters"
 
+    user = {
+        'id': current_user_id,
+        'name': current_user.name,
+    }
     emit('message', {
         'msg': payload['msg'],
-        'sender': {
-            'id': current_user_id,
-            'name': current_user.name,
-        },
+        'user': user,
         'private_message': private,
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=receiver, broadcast=broadcast)
     for room in current_user.rooms:
-        emit('stop_typing', {'sender': current_user_id}, room=room.name)
+        emit('stop_typing', {'user': user}, room=room.name)
     return True
 
 
@@ -83,17 +84,18 @@ def message_image(payload):
     else:
         return False, "`image` requires `room` or `receiver_id` as parameters"
 
+    user = {
+        'id': current_user_id,
+        'name': current_user.name,
+    }
     emit('message', {
         'url': payload['url'],
-        'sender': {
-            'id': current_user_id,
-            'name': current_user.name,
-        },
+        'user': user,
         'width': payload['width'] if 'width' in payload else None,
         'height': payload['width'] if 'width' in payload else None,
         'private_message': private,
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=receiver, broadcast=broadcast)
     for room in current_user.rooms:
-        emit('stop_typing', {'sender': current_user_id}, room=room.name)
+        emit('stop_typing', {'user': user}, room=room.name)
     return True

@@ -63,6 +63,19 @@ if not Room.query.get("test_room"):
                                                 token_generate=True,
                                                 token_invalidate=True))
     db.session.add(admin_token)
+    db.session.add(Token(room_name='test_room',
+                         id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
+                         permissions=Permissions(query_user=True,
+                                                 query_room=True,
+                                                 query_permissions=True,
+                                                 query_layout=True,
+                                                 message_text=True,
+                                                 message_image=True,
+                                                 message_command=True,
+                                                 message_history=True,
+                                                 message_broadcast=True,
+                                                 token_generate=True,
+                                                 token_invalidate=True)))
     db.session.add(Room(name="test_room",
                         label="Test Room",
                         static=True,

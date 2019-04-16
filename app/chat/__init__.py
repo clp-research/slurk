@@ -5,6 +5,7 @@ chat = Blueprint('chat', __name__)
 
 from .. import db
 from .message import *
+from .connection import *
 
 
 @chat.route('/', methods=['GET', 'POST'])

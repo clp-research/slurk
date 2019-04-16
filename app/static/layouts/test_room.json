@@ -18,8 +18,8 @@
           "layout-type": "image",
           "id": "current-image",
           "src": "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
-          "width": 500,
-          "height": 400
+          "width": 300,
+          "height": 200
         },
         {
           "layout-type": "br"
@@ -60,7 +60,6 @@
     "plain": [
       "do-my-stuff"
     ],
-    "document-ready": "log-resize-events",
     "typing-users": "typing-users"
   }
 }
