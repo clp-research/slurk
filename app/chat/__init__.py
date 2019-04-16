@@ -14,4 +14,4 @@ def index():
         current_user.rooms.append(current_user.token.room)
         db.session.commit()
 
-    return render_template('chat.html')
+    return render_template('chat.html', title="slurk")

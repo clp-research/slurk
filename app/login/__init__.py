@@ -36,7 +36,7 @@ def index():
             db.session.commit()
             login_user(user)
             return redirect(request.args.get('next') or url_for("chat.index"))
-        flash("The token is either expired, was already used or isn't correct at all.", "error")
+        flash("The token is either expired, was already used, or isn't correct at all.", "error")
 
     form.token.data = token
     form.name.data = name
