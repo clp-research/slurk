@@ -11,7 +11,7 @@ from .permission import Permissions
 class Token(Base):
     __tablename__ = "Token"
 
-    id = db.Column(UUIDType, default=uuid4, primary_key=True)
+    id = db.Column(UUIDType(binary=False), default=uuid4, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     task_id = db.Column(db.Integer, db.ForeignKey('Task.id'))
     room_name = db.Column(db.String, db.ForeignKey('Room.name'), nullable=False)
@@ -20,8 +20,7 @@ class Token(Base):
     valid = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
-        return "<Token(id='%s', user='%s', task='%s', room='%s', source='%s', valid=%s)>" % \
-               (self.id, self.user, self.task, self.room, self.source, self.valid)
+        return str(self.id)
 
     def invalidate(self):
         self.valid = False

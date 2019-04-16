@@ -59,8 +59,16 @@
                                     <h4>Message</h4>
                                     <table>
                                         <tr>
-                                            <td><label for="message_send">Send</label></td>
-                                            <td>{{ form.message_send() }}</td>
+                                            <td><label for="message_text">Text</label></td>
+                                            <td>{{ form.message_text() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="message_image">Image</label></td>
+                                            <td>{{ form.message_image() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="message_send">Command</label></td>
+                                            <td>{{ form.message_command() }}</td>
                                         </tr>
                                         <tr>
                                             <td><label for="message_history">History</label></td>

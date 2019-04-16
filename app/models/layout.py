@@ -6,6 +6,7 @@ import urllib.request
 import urllib.error
 
 from . import Base
+from .user import User
 from .. import db, socketio
 
 
@@ -266,6 +267,26 @@ class Layout(Base):
         css = _css(data)
         script = _script(data)
         return cls(name=name, title=title, subtitle=subtitle, html=html, css=css, script=script)
+
+
+@socketio.on('get_layouts_by_user')
+def _get_permissions_by_user(id):
+    if not current_user.get_id():
+        return False, "invalid session id"
+
+    if id:
+        if not (current_user.token.permissions.query_layout and
+                current_user.token.permissions.query_room and
+                current_user.token.permissions.query_user):
+            return False, "insufficient rights"
+        user = User.query.get(id)
+    else:
+        user = current_user
+
+    if user:
+        return True, {room.name: room.layout.as_dict() for room in user.rooms}
+    else:
+        return False, "user does not exist"
 
 
 @socketio.on('get_layout')

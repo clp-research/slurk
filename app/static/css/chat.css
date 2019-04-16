@@ -60,7 +60,8 @@ header .users {
     width: 55%;
     min-width: 300px;
     max-width: calc(100% - 200px);
-    height: calc(100% - 80px - 60px);
+    height: 100%;
+    z-index: 0;
 }
 
 #sidebar:after {

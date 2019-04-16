@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 chat = Blueprint('chat', __name__)
 
 from .. import db
+from .events import *
 
 
 @chat.route('/', methods=['GET', 'POST'])

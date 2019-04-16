@@ -27,7 +27,7 @@ def index():
         except StatementError:
             token = None
 
-        if token and token.valid:
+        if token and token.valid and token.user is None:
             user = User(name=name, token=token)
             db.session.add(user)
             db.session.commit()

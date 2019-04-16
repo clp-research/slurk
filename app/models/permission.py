@@ -14,7 +14,9 @@ class Permissions(Base):
     query_room = db.Column(db.Boolean, nullable=False, default=False)
     query_permissions = db.Column(db.Boolean, nullable=False, default=False)
     query_layout = db.Column(db.Boolean, nullable=False, default=False)
-    message_send = db.Column(db.Boolean, nullable=False, default=False)
+    message_text = db.Column(db.Boolean, nullable=False, default=False)
+    message_image = db.Column(db.Boolean, nullable=False, default=False)
+    message_command = db.Column(db.Boolean, nullable=False, default=False)
     message_history = db.Column(db.Boolean, nullable=False, default=False)
     message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
     token_generate = db.Column(db.Boolean, nullable=False, default=False)
@@ -26,7 +28,9 @@ class Permissions(Base):
                                                                         'room': self.query_room,
                                                                         'permissions': self.query_permissions,
                                                                         'layout': self.query_layout},
-                                                                       {'send': self.message_send,
+                                                                       {'text': self.message_text,
+                                                                        'image': self.message_image,
+                                                                        'command': self.message_command,
                                                                         'history': self.message_history,
                                                                         'broadcast': self.message_broadcast},
                                                                        {'generate': self.token_generate,
@@ -41,7 +45,9 @@ class Permissions(Base):
                 'layout': self.query_layout,
             },
             'message': {
-                'send': self.message_send,
+                'text': self.message_text,
+                'image': self.message_image,
+                'command': self.message_command,
                 'history': self.message_history,
                 'broadcast': self.message_broadcast,
             },

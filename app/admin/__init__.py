@@ -16,6 +16,14 @@ def _to_bool(var):
     return var.lower() not in ("f", "false", "0", "no", "off")
 
 
+def _boolean_parameter(name):
+    parameter = request.args.get("name", None) if request.method == 'GET' else None
+    if parameter:
+        return _to_bool(parameter)
+    else:
+        return None
+
+
 @admin.route('/token', methods=['GET', 'POST'])
 def token():
     source = request.args.get("source", None) if request.method == 'GET' else None
@@ -26,33 +34,17 @@ def token():
     count = request.args.get("count", None) if request.method == 'GET' else None
     if count:
         count = int(count)
-    query_user = request.args.get("query_user", None) if request.method == 'GET' else None
-    if query_user:
-        query_user = _to_bool(query_user)
-    query_permissions = request.args.get("query_permissions", None) if request.method == 'GET' else None
-    if query_permissions:
-        query_permissions = _to_bool(query_permissions)
-    query_room = request.args.get("query_room", None) if request.method == 'GET' else None
-    if query_room:
-        query_room = _to_bool(query_room)
-    query_layout = request.args.get("query_layout", None) if request.method == 'GET' else None
-    if query_layout:
-        query_layout = _to_bool(query_layout)
-    message_send = request.args.get("message_send", None) if request.method == 'GET' else None
-    if message_send:
-        message_send = _to_bool(message_send)
-    message_history = request.args.get("message_history", None) if request.method == 'GET' else None
-    if message_history:
-        message_history = _to_bool(message_history)
-    message_broadcast = request.args.get("message_broadcast", None) if request.method == 'GET' else None
-    if message_broadcast:
-        message_broadcast = _to_bool(message_broadcast)
-    token_generate = request.args.get("token_generate", None) if request.method == 'GET' else None
-    if token_generate:
-        token_generate = _to_bool(token_generate)
-    token_invalidate = request.args.get("token_invalidate", None) if request.method == 'GET' else None
-    if token_invalidate:
-        token_invalidate = _to_bool(token_invalidate)
+    query_user = _boolean_parameter("query_user")
+    query_permissions = _boolean_parameter("query_permissions")
+    query_room = _boolean_parameter("query_room")
+    query_layout = _boolean_parameter("query_layout")
+    message_text = _boolean_parameter("message_text")
+    message_image = _boolean_parameter("message_image")
+    message_command = _boolean_parameter("message_command")
+    message_history = _boolean_parameter("message_history")
+    message_broadcast = _boolean_parameter("message_broadcast")
+    token_generate = _boolean_parameter("token_generate")
+    token_invalidate = _boolean_parameter("token_invalidate")
 
     form = TokenGenerationForm(task=task or 0, count=count or 1, source=source or "", room=room or 1)
 
@@ -65,7 +57,9 @@ def token():
         query_room = form.query_room.data
         query_permissions = form.query_permissions.data
         query_layout = form.query_layout.data
-        message_send = form.message_send.data
+        message_text = form.message_text.data
+        message_image = form.message_image.data
+        message_command = form.message_command.data
         message_history = form.message_history.data
         message_broadcast = form.message_broadcast.data
         token_generate = form.token_generate.data
@@ -89,7 +83,9 @@ def token():
                                             query_room=query_room,
                                             query_permissions=query_permissions,
                                             query_layout=query_layout,
-                                            message_send=message_send,
+                                            message_text=message_text,
+                                            message_image=message_image,
+                                            message_command=message_command,
                                             message_history=message_history,
                                             message_broadcast=message_broadcast,
                                             token_generate=token_generate,

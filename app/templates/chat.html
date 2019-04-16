@@ -37,7 +37,6 @@
         }
 
         function display_message(sender, time, message, privateMessage) {
-            console.log("display message", sender, time, message, privateMessage, self_user);
             if (self_user === undefined) {
                 return;
             }
@@ -103,6 +102,7 @@
                 "    <img/>" +
                 "  </div>" +
                 "</li>");
+            text.find(".user").text(self_user.id === sender.id ? "You" : sender.name);
             text.find("time").text(getTime(time));
             text.find("img").attr("src", url).attr("width", width).attr("height", height);
             append(text);
@@ -111,7 +111,7 @@
         function display_info(time, message) {
             let text = $(
                 "<li class='notification'>" +
-                "  <p class='message'></p>" +
+                "  <p class='msg'></p>" +
                 "  <time></time>" +
                 "</li>");
             text.find(".msg").text(message);
@@ -119,16 +119,54 @@
             append(text);
         }
 
-        function submit_text(text) {
-            socket.emit('text', { room: self_room, msg: text });
+        function unknown_error(time) {
+            let text = $(
+                "<li class='notification'>" +
+                "  <p class='msg'></p>" +
+                "  <time></time>" +
+                "</li>");
+            text.find(".msg").html('An unknown error occurred.<br \>Please feel free to <a href="https://github.com/clp-research/slurk/issues/new">file the bug<\a>');
+            text.find("time").text(getTime(time));
+            append(text);
         }
 
-        function submit_image(url, width, height) {
-            socket.emit('image', { room: self_room, image: url, width: width, height: height });
+        function submit_text(text, resolve, reject) {
+            socket.emit('text', { room: self_room, msg: text }, (success, error) => {
+                if (verify_query(success, error)) {
+                    if (resolve !== undefined)
+                        resolve();
+                } else {
+                    if (reject !== undefined) {
+                        reject(error);
+                    }
+                }
+            });
         }
 
-        function submit_command(parameter) {
-            socket.emit('command', { room: self_room, data: parameter });
+        function submit_image(url, width, height, resolve, reject) {
+            socket.emit('image', { room: self_room, url: url, width: width, height: height }, (success, error) => {
+                if (verify_query(success, error)) {
+                    if (resolve !== undefined)
+                        resolve();
+                } else {
+                    if (reject !== undefined) {
+                        reject(error);
+                    }
+                }
+            });
+        }
+
+        function submit_command(parameter, resolve, reject) {
+            socket.emit('command', { room: self_room, data: parameter }, (success, error) => {
+                if (verify_query(success, error)) {
+                    if (resolve !== undefined)
+                        resolve();
+                } else {
+                    if (reject !== undefined) {
+                        reject(error);
+                    }
+                }
+            });
         }
 
         function updateUsers() {
@@ -140,61 +178,39 @@
         }
 
         function apply_user_permissions(permissions) {
-            if (permissions.message.send) {
-                $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
-            } else {
-                $('#text').prop('readonly', true).prop('placeholder', 'You don\'t have the permissions to write in this room.');
+            if (permissions.message.text || permissions.message.image || permissions.message.command) {
+                $('#type-area').show();
             }
         }
 
-        function apply_room_properties(properties) {
-            if (properties.latency)
-                $('#latency').show();
-            else
-                $('#latency').hide();
-            if (properties.users)
-                $('#user-list').show();
-            else
-                $('#user-list').hide();
-            if (properties.input)
-                $('#type-area').show();
-            else
-                $('#type-area').hide();
-            if (properties.history)
-                $('#chat-area').show();
-            else
-                $('#chat-area').hide();
-            if (properties.interaction_area)
-                $('#sidebar').show();
-            else
-                $('#sidebar').hide();
+        function apply_room_properties(room) {
+            if (room.read_only) {
+                $('#text').prop('readonly', true).prop('placeholder', 'This room is read-only');
+            } else {
+                $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
+            }
         }
 
-        function apply_layout(layout_id) {
-            socket.emit("get_layout", layout_id, (success, layout) => {
-                if (verify_query(success, layout)) {
-                    if (layout.html !== "") {
-                        $("#sidebar").html(layout.html);
-                    }
-                    if (layout.css !== "") {
-                        $("#custom-styles").html(layout.css);
-                    }
-                    if (layout.script !== "") {
-                        window.eval(layout.script);
-                    }
-                    if (layout.title !== "") {
-                        document.title = layout.title;
-                    } else {
-                        document.title = 'Slurk';
-                    }
-                    $("#title").text(document.title);
-                    if (layout.subtitle !== "") {
-                        $("#subtitle").text(layout.subtitle);
-                    } else {
-                        $("#subtitle").text(room.label);
-                    }
-                }
-            });
+        function apply_layout(layout) {
+            console.log(layout);
+            if (layout.html !== "") {
+                $("#sidebar").html(layout.html);
+            }
+            if (layout.css !== "") {
+                $("#custom-styles").html(layout.css);
+            }
+            if (layout.script !== "") {
+                window.eval(layout.script);
+            }
+            if (layout.title !== "") {
+                document.title = layout.title;
+            } else {
+                document.title = 'Slurk';
+            }
+            $("#title").text(document.title);
+            if (layout.subtitle !== "") {
+                $("#subtitle").text(layout.subtitle);
+            }
         }
 
         function verify_query(success, message) {
@@ -211,6 +227,8 @@
         }
 
         $(document).ready(function () {
+            $('#type-area').hide();
+
             const sidebar = document.getElementById("sidebar");
             const content = document.getElementById("content");
 
@@ -260,7 +278,16 @@
                         let room = rooms[0];
                         if (room) {
                             self_room = room.name;
-                            apply_layout(room.layout);
+                            apply_room_properties(room);
+                        }
+                    }
+                });
+                socket.emit("get_layouts_by_user", null, (success, layouts) => {
+                    if (verify_query(success, layouts)) {
+                        console.log("layouts", layouts);
+                        let room = Object.keys(layouts)[0];
+                        if (room && layouts[room]) {
+                            apply_layout(layouts[room]);
                         }
                     }
                 });
@@ -325,7 +352,8 @@
             });
 
             socket.on("message", function (data) {
-                if (incoming_message !== undefined && data.user.id !== self_user.id) {
+                console.log("message", data);
+                if (incoming_message !== undefined && data.sender.id !== self_user.id) {
                     incoming_message(data)
                 }
             });
@@ -355,14 +383,14 @@
             });
 
             socket.on('start_typing', function (data) {
-                typing[data.user.id] = data.user.name;
+                typing[data.sender.id] = data.sender.name;
                 if (update_typing !== undefined) {
                     update_typing(typing);
                 }
             });
 
             socket.on('stop_typing', function (data) {
-                delete typing[data.user.id];
+                delete typing[data.sender.id];
                 if (update_typing !== undefined) {
                     update_typing(typing);
                 }
