@@ -48,7 +48,7 @@ if __name__ == '__main__':
                         default='http://localhost')
     parser.add_argument('-p', '--chat_port',
                         type=int,
-                        help='port of chat server', default=5000)
+                        help='port of chat server', default=None)
     args = parser.parse_args()
 
     # We pass token and name in request header
