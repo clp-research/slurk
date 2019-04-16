@@ -58,7 +58,12 @@ def load_user_from_request(request):
 
     if token:
         if not token.user:
-            token.user = User(name=request.args.get('name'))
+            name = request.headers.get('Name')
+            if not name:
+                name = request.args.get('header')
+            if not name:
+                return None
+            token.user = User(name=name)
             db.session.commit()
         return token.user
     return None

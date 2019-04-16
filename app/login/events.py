@@ -3,9 +3,11 @@ from datetime import datetime
 
 from flask import request
 from flask_socketio import join_room, leave_room
-from flask_login import login_required, current_user, logout_user
+from flask_login import login_required, current_user, logout_user, login_user
 
 from .. import db, socketio
+from ..models.user import User
+from ..models.token import Token
 
 
 @socketio.on('connect')
@@ -14,6 +16,9 @@ def connect():
     print(current_user.name, "connected")
     current_user.session_id = request.sid
     db.session.commit()
+    if current_user.rooms.count() == 0:
+        current_user.rooms.append(current_user.token.room)
+        db.session.commit()
     for room in current_user.rooms:
         join_room(room.name)
         socketio.emit('status', {
