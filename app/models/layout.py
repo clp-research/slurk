@@ -196,9 +196,6 @@ class Layout(Base):
     css = db.Column(db.String)
     script = db.Column(db.String)
 
-    def __repr__(self):
-        return "<Layout(name='%s', title='%s', subtitle='%s')>" % (self.name, self.title, self.subtitle)
-
     def as_dict(self):
         return dict({
             'name': self.name,
@@ -270,7 +267,7 @@ class Layout(Base):
 
 
 @socketio.on('get_layouts_by_user')
-def _get_permissions_by_user(id):
+def _get_layouts_by_user(id):
     if not current_user.get_id():
         return False, "invalid session id"
 

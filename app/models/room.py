@@ -18,15 +18,9 @@ class Room(db.Model):
     read_only = db.Column(db.Boolean, default=False, nullable=False)
     show_users = db.Column(db.Boolean, default=True, nullable=False)
     show_latency = db.Column(db.Boolean, default=True, nullable=False)
-    show_input = db.Column(db.Boolean, default=True, nullable=False)
-    show_history = db.Column(db.Boolean, default=True, nullable=False)
-    show_interaction_Area = db.Column(db.Boolean, default=True, nullable=False)
     static = db.Column(db.Boolean, default=False, nullable=False)
     tokens = db.relationship(Token, backref="room")
     users = db.relationship("User", secondary=user_room, back_populates="rooms")
-
-    def __repr__(self):
-        return "<Room(name='%s', label='%s', layout='%s')>" % (self.name, self.label, self.layout.name)
 
     def as_dict(self):
         return {
@@ -36,9 +30,6 @@ class Room(db.Model):
             'read_only': self.read_only,
             'show_users': self.show_users,
             'show_latency': self.show_latency,
-            'show_input': self.show_input,
-            'show_history': self.show_history,
-            'show_interaction_Area': self.show_interaction_Area,
             'static': self.static,
             'users': {user.id: user.name for user in self.users},
         }

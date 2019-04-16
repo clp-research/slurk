@@ -10,19 +10,17 @@
       <div class="login-form">
         <h1>Slurk</h1>
         <form method="POST">
-            <span class="error">
-                {% with messages = get_flashed_messages() %}
+            <ul class="flash">
+                {% with messages = get_flashed_messages(with_categories=true) %}
                    {% if messages %}
-                      {% for message in messages %}
-                         {{ message }}
+                      {% for category, message in messages %}
+                         <li class="{{ category }}">{{ message }}</li>
                       {% endfor %}
                    {% endif %}
                 {% endwith %}
-            </span>
+            </ul>
           {{ form.hidden_tag() }}
-	        <span class="error">{% for error in form.name.errors %}{{ error }}{% endfor %}</span>
           {{ form.name(required="required", placeholder="Name", autocomplete="off") }}
-	        <span class="error">{% for error in form.token.errors %}{{ error }}{% endfor %}</span>
           {{ form.token(required="required", placeholder="Token", autocomplete="off") }}
           {{ form.submit() }}
         </form>

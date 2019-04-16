@@ -10,6 +10,3 @@ class Task(Base):
     name = db.Column(db.String, nullable=False)
     num_users = db.Column(db.Integer)
     tokens = db.relationship(Token.__tablename__, backref="task")
-
-    def __repr__(self):
-        return "<Task(name='%s', num_users='%s')>" % (self.name, self.num_users)

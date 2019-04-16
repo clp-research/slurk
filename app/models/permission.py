@@ -23,19 +23,6 @@ class Permissions(Base):
     token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
     token = db.relationship("Token", backref="permissions", uselist=False)
 
-    def __repr__(self):
-        return "<Permission(query='%s', message='%s', token='%s')>" % ({'user': self.query_user,
-                                                                        'room': self.query_room,
-                                                                        'permissions': self.query_permissions,
-                                                                        'layout': self.query_layout},
-                                                                       {'text': self.message_text,
-                                                                        'image': self.message_image,
-                                                                        'command': self.message_command,
-                                                                        'history': self.message_history,
-                                                                        'broadcast': self.message_broadcast},
-                                                                       {'generate': self.token_generate,
-                                                                        'invalidate': self.token_invalidate})
-
     def as_dict(self):
         return dict({
             'query': {

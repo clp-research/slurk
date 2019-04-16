@@ -18,9 +18,3 @@ class Token(Base):
     permissions_id = db.Column(db.Integer, db.ForeignKey(Permissions.id), nullable=False)
     source = db.Column(db.String)
     valid = db.Column(db.Boolean, default=True, nullable=False)
-
-    def __repr__(self):
-        return str(self.id)
-
-    def invalidate(self):
-        self.valid = False

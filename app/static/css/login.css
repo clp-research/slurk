@@ -54,6 +54,18 @@ body, html {
     margin: 0 auto;
 }
 
+.flash > .error {
+    color: red;
+}
+
+.flash > .warning {
+    color: yellow;
+}
+
+.flash > .info {
+    color: blue;
+}
+
 input {
   border: none;
   border-radius: 5px;

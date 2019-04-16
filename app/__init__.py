@@ -69,5 +69,6 @@ if not Room.query.get("test_room"):
                         layout=Layout.from_json_file("test_room")))
     db.session.commit()
     print("generating test room and admin token...")
-print("admin token:", Token.query.order_by(Token.date_created).first().id)
+print("admin token:")
+print(Token.query.order_by(Token.date_created).first().id)
 sys.stdout.flush()

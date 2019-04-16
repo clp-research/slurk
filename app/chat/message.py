@@ -25,7 +25,10 @@ def message_text(payload):
         return False, "insufficient rights"
 
     if 'receiver_id' in payload:
-        receiver = User.query.get(payload['receiver_id']).session_id
+        user = User.query.get(payload['receiver_id'])
+        if not user:
+            return False, 'User "%s" does not exist' % user.name
+        receiver = user.session_id
         private = True
     elif 'room' in payload:
         room = Room.query.get(payload['room'])
@@ -66,7 +69,10 @@ def message_image(payload):
         return False, "insufficient rights"
 
     if 'receiver_id' in payload:
-        receiver = User.query.get(payload['receiver_id']).session_id
+        user = User.query.get(payload['receiver_id'])
+        if not user:
+            return False, 'User "%s" does not exist' % user.name
+        receiver = user.session_id
         private = True
     elif 'room' in payload:
         room = Room.query.get(payload['room'])

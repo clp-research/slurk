@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_user
 
 from sqlalchemy.exc import StatementError
@@ -27,13 +27,16 @@ def index():
         except StatementError:
             token = None
 
-        if token and token.valid and token.user is None:
-            user = User(name=name, token=token)
-            db.session.add(user)
+        if token and token.valid:
+            if token.user is None:
+                user = User(name=name, token=token)
+                db.session.add(user)
+            else:
+                user = token.user
             db.session.commit()
             login_user(user)
             return redirect(request.args.get('next') or url_for("chat.index"))
-        form.token.errors.append("The token is either expired, was already used or isn't correct at all.")
+        flash("The token is either expired, was already used or isn't correct at all.", "error")
 
     form.token.data = token
     form.name.data = name

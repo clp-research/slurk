@@ -37,9 +37,6 @@ class User(Base):
     def get_id(self):
         return self.id
 
-    def __repr__(self):
-        return str(self.as_dict())
-
 
 @socketio.on('get_user')
 def _get_user(id):
