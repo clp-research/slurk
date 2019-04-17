@@ -105,7 +105,7 @@ $(document).ready(() => {
                 if (room) {
                     self_room = room.name;
                     apply_room_properties(room);
-                    for (let user_id in room.users) {
+                    for (let user_id in room.current_users) {
                         if (Number(user_id) !== self_user.id)
                             users[user_id] = room.users[user_id];
                     }

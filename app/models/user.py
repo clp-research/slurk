@@ -1,9 +1,8 @@
-from flask import request
 from flask_login import current_user
 
 from .. import db, socketio, login_manager
 
-from . import Base, user_room
+from . import Base, user_room, current_user_room
 
 from .token import Token
 
@@ -14,6 +13,7 @@ class User(Base):
     name = db.Column(db.String)
     token = db.relationship("Token", backref="user", uselist=False)
     rooms = db.relationship("Room", secondary=user_room, back_populates="users", lazy='dynamic')
+    current_rooms = db.relationship("Room", secondary=current_user_room, back_populates="current_users", lazy='dynamic')
     session_id = db.Column(db.String, unique=True)
 
     @property

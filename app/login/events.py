@@ -6,8 +6,6 @@ from flask_socketio import join_room, leave_room
 from flask_login import login_required, current_user, logout_user, login_user
 
 from .. import db, socketio
-from ..models.user import User
-from ..models.token import Token
 
 
 @socketio.on('connect')
@@ -18,9 +16,9 @@ def connect():
     db.session.commit()
     if current_user.rooms.count() == 0:
         current_user.rooms.append(current_user.token.room)
-        db.session.commit()
     for room in current_user.rooms:
         join_room(room.name)
+        current_user.current_rooms.append(current_user.token.room)
         socketio.emit('status', {
             'type': 'join',
             'user': {
@@ -31,6 +29,7 @@ def connect():
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
         print(current_user.name, "joined", room.label)
+    db.session.commit()
 
 
 @socketio.on('disconnect')
@@ -47,6 +46,8 @@ def disconnect():
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
         leave_room(room.name)
+        current_user.current_rooms.remove(current_user.token.room)
         print(current_user.name, "left", room.label)
+    db.session.commit()
     print(current_user.name, "disconnected")
     logout_user()

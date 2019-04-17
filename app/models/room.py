@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 
 from .. import db, socketio
 
-from . import user_room
+from . import user_room, current_user_room
 from .token import Token
 from .layout import Layout
 
@@ -20,6 +20,7 @@ class Room(db.Model):
     static = db.Column(db.Boolean, default=False, nullable=False)
     tokens = db.relationship(Token, backref="room")
     users = db.relationship("User", secondary=user_room, back_populates="rooms")
+    current_users = db.relationship("User", secondary=current_user_room, back_populates="current_rooms")
 
     def as_dict(self):
         return {
@@ -31,6 +32,7 @@ class Room(db.Model):
             'show_latency': self.show_latency,
             'static': self.static,
             'users': {user.id: user.name for user in self.users},
+            'current_users': {user.id: user.name for user in self.current_users},
         }
 
 
