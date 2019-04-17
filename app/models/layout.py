@@ -269,7 +269,7 @@ class Layout(Base):
 def _get_layout(id):
     if not current_user.get_id():
         return False, "invalid session id"
-    if not current_user.token.permissions.query_layout:
+    if not current_user.token.permissions.layout_query:
         return False, "insufficient rights"
     layout = Layout.query.get(id)
     if layout:

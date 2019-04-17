@@ -73,7 +73,7 @@ def load_user_from_request(request):
 def _get_rooms_by_user(id):
     if not current_user.get_id():
         return False, "invalid session id"
-    if id and not (current_user.token.permissions.query_room and current_user.token.permissions.query_user):
+    if id and not current_user.token.permissions.room_query:
         return False, "insufficient rights"
 
     if id:
@@ -91,7 +91,7 @@ def _get_rooms_by_user(id):
 def _get_permissions_by_user(id):
     if not current_user.get_id():
         return False, "invalid session id"
-    if id and not (current_user.token.permissions.query_permissions and current_user.token.permissions.query_user):
+    if id and not current_user.token.permissions.permissions_query:
         return False, "insufficient rights"
 
     if id:
@@ -111,9 +111,7 @@ def _get_layouts_by_user(id):
         return False, "invalid session id"
 
     if id:
-        if not (current_user.token.permissions.query_layout and
-                current_user.token.permissions.query_room and
-                current_user.token.permissions.query_user):
+        if not current_user.token.permissions.layout_query:
             return False, "insufficient rights"
         user = User.query.get(id)
     else:
@@ -131,7 +129,7 @@ def _get_user(id):
     if not current_id:
         return False, "invalid session id"
 
-    if id and not current_user.token.permissions.query_user:
+    if id and not current_user.token.permissions.user_query:
         return False, "insufficient rights"
     user = User.query.get(id or current_id)
     if user:

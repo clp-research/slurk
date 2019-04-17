@@ -19,6 +19,7 @@ login_manager = LoginManager()
 from .login import login as login_blueprint
 from .admin import admin as admin_blueprint
 from .chat import chat as chat_blueprint
+
 app.register_blueprint(login_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(chat_blueprint)
@@ -32,7 +33,7 @@ socketio.init_app(app)
 
 @app.before_request
 def before_request():
-    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static"\
+    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static" \
             or request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate:
         return login_manager.unauthorized()
 
@@ -45,31 +46,47 @@ from .models.permission import Permissions
 if not Room.query.get("test_room"):
     admin_token = Token(room_name='test_room',
                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
-                        permissions=Permissions(query_user=True,
-                                                query_room=True,
-                                                query_permissions=True,
-                                                query_layout=True,
-                                                message_text=True,
-                                                message_image=True,
-                                                message_command=True,
-                                                message_history=True,
-                                                message_broadcast=True,
-                                                token_generate=True,
-                                                token_invalidate=True))
+                        permissions=Permissions(
+                            user_query=True,
+                            user_kick=True,
+                            user_permissions_query=True,
+                            user_permissions_update=True,
+                            user_room_join=True,
+                            user_room_leave=True,
+                            message_text=True,
+                            message_image=True,
+                            message_command=True,
+                            message_history=True,
+                            message_broadcast=True,
+                            room_query=True,
+                            room_create=True,
+                            room_delete=True,
+                            layout_query=True,
+                            token_generate=True,
+                            token_invalidate=True,
+                        ))
     db.session.add(admin_token)
     db.session.add(Token(room_name='test_room',
                          id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
-                         permissions=Permissions(query_user=True,
-                                                 query_room=True,
-                                                 query_permissions=True,
-                                                 query_layout=True,
-                                                 message_text=True,
-                                                 message_image=True,
-                                                 message_command=True,
-                                                 message_history=True,
-                                                 message_broadcast=True,
-                                                 token_generate=True,
-                                                 token_invalidate=True)))
+                         permissions=Permissions(
+                             user_query=True,
+                             user_kick=True,
+                             user_permissions_query=True,
+                             user_permissions_update=True,
+                             user_room_join=True,
+                             user_room_leave=True,
+                             message_text=True,
+                             message_image=True,
+                             message_command=True,
+                             message_history=True,
+                             message_broadcast=True,
+                             room_query=True,
+                             room_create=True,
+                             room_delete=True,
+                             layout_query=True,
+                             token_generate=True,
+                             token_invalidate=True,
+                         )))
     db.session.add(Room(name="test_room",
                         label="Test Room",
                         static=True,

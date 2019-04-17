@@ -8,26 +8,38 @@ from . import Base
 class Permissions(Base):
     __tablename__ = 'Permissions'
 
-    query_user = db.Column(db.Boolean, nullable=False, default=False)
-    query_room = db.Column(db.Boolean, nullable=False, default=False)
-    query_permissions = db.Column(db.Boolean, nullable=False, default=False)
-    query_layout = db.Column(db.Boolean, nullable=False, default=False)
+    user_query = db.Column(db.Boolean, nullable=False, default=False)
+    user_kick = db.Column(db.Boolean, nullable=False, default=False)
+    user_permissions_query = db.Column(db.Boolean, nullable=False, default=False)
+    user_permissions_update = db.Column(db.Boolean, nullable=False, default=False)
+    user_room_join = db.Column(db.Boolean, nullable=False, default=False)
+    user_room_leave = db.Column(db.Boolean, nullable=False, default=False)
     message_text = db.Column(db.Boolean, nullable=False, default=False)
     message_image = db.Column(db.Boolean, nullable=False, default=False)
     message_command = db.Column(db.Boolean, nullable=False, default=False)
     message_history = db.Column(db.Boolean, nullable=False, default=False)
     message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
+    room_query = db.Column(db.Boolean, nullable=False, default=False)
+    room_create = db.Column(db.Boolean, nullable=False, default=False)
+    room_delete = db.Column(db.Boolean, nullable=False, default=False)
+    layout_query = db.Column(db.Boolean, nullable=False, default=False)
     token_generate = db.Column(db.Boolean, nullable=False, default=False)
     token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
     token = db.relationship("Token", backref="permissions", uselist=False)
 
     def as_dict(self):
         return dict({
-            'query': {
-                'user': self.query_user,
-                'room': self.query_room,
-                'permissions': self.query_permissions,
-                'layout': self.query_layout,
+            'user': {
+                'query': self.user_query,
+                'kick': self.user_kick,
+                'permissions': {
+                    'query': self.user_permissions_query,
+                    'update': self.user_permissions_update,
+                },
+                'room': {
+                    'join': self.user_room_join,
+                    'leave': self.user_room_leave,
+                },
             },
             'message': {
                 'text': self.message_text,
@@ -36,21 +48,16 @@ class Permissions(Base):
                 'history': self.message_history,
                 'broadcast': self.message_broadcast,
             },
+            'room': {
+                'query': self.room_query,
+                'create': self.room_create,
+                'delete': self.room_delete,
+            },
+            'layout': {
+                'query': self.layout_query,
+            },
             'token': {
                 'generate': self.token_generate,
                 'invalidate': self.token_invalidate,
             },
         }, **super(Permissions, self).as_dict())
-
-
-@socketio.on('get_permissions')
-def _get_permissions(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if not current_user.token.permissions.query_permissions:
-        return False, "insufficient rights"
-    permissions = Permissions.query.get(id)
-    if permissions:
-        return True, permissions.as_dict()
-    else:
-        return False, "permissions does not exist"
