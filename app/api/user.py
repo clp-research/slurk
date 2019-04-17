@@ -22,6 +22,42 @@ def _get_user(id):
         return False, "user does not exist"
 
 
+@socketio.on('get_user_permissions')
+def _get_user_permissions(id):
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if id and not current_user.token.permissions.permissions_query:
+        return False, "insufficient rights"
+
+    if id:
+        user = User.query.get(id)
+    else:
+        user = current_user
+
+    if user:
+        return True, user.token.permissions.as_dict()
+    else:
+        return False, "user does not exist"
+
+
+@socketio.on('get_user_rooms')
+def _get_user_rooms(id):
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if id and not current_user.token.permissions.user_room_query:
+        return False, "insufficient rights"
+
+    if id:
+        user = User.query.get(id)
+    else:
+        user = current_user
+
+    if user:
+        return True, [room.as_dict() for room in user.rooms]
+    else:
+        return False, "user does not exist"
+
+
 @socketio.on('join_room')
 def _join_room(id, room):
     if not current_user.get_id():
@@ -44,7 +80,10 @@ def _join_room(id, room):
         user.rooms.append(room)
     if room not in user.current_rooms:
         user.current_rooms.append(room)
-        socketio.emit('joined_room', room.as_dict(), room=user.session_id)
+        socketio.emit('joined_room', {
+            'room': room.as_dict(),
+            'layout': room.layout.as_dict() if room.layout else None,
+        }, room=user.session_id)
         print(user.name, "joined", room.name)
     db.session.commit()
 

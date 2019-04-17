@@ -22,24 +22,6 @@ def _get_room(name):
         return False, "room does not exist"
 
 
-@socketio.on('get_rooms_by_user')
-def _get_rooms_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.room_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, [room.as_dict() for room in user.rooms]
-    else:
-        return False, "user does not exist"
-
-
 @socketio.on('create_room')
 def _create_room(name, label, data):
     if not current_user.get_id():

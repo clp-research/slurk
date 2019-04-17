@@ -7,9 +7,9 @@ class Permissions(Base):
     __tablename__ = 'Permissions'
 
     user_query = db.Column(db.Boolean, nullable=False, default=False)
-    user_kick = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_query = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_update = db.Column(db.Boolean, nullable=False, default=False)
+    user_room_query = db.Column(db.Boolean, nullable=False, default=False)
     user_room_join = db.Column(db.Boolean, nullable=False, default=False)
     user_room_leave = db.Column(db.Boolean, nullable=False, default=False)
     message_text = db.Column(db.Boolean, nullable=False, default=False)
@@ -30,7 +30,6 @@ class Permissions(Base):
         return dict({
             'user': {
                 'query': self.user_query,
-                'kick': self.user_kick,
                 'permissions': {
                     'query': self.user_permissions_query,
                     'update': self.user_permissions_update,

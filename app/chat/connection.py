@@ -4,10 +4,8 @@ from datetime import datetime
 from flask import request
 from flask_socketio import emit
 from flask_login import current_user
-from sqlalchemy import event
-from sqlalchemy.engine import Engine
 
-from .. import socketio, settings
+from .. import socketio
 
 
 @socketio.on('my_ping')
@@ -27,11 +25,3 @@ def ping(message):
             emit('start_typing', {'user': user}, room=room.name)
         elif last_typing == 3:
             emit('stop_typing', {'user': user}, room=room.name)
-
-
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, _connection_record):
-    if settings.database_url.startswith('sqlite://'):
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.close()

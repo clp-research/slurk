@@ -14,8 +14,8 @@ class ChatNamespace(BaseNamespace):
 
         # Ask some general information about this bot (None determines `self`)
         self.emit('get_user', None, self.get_user_response)
-        self.emit('get_rooms_by_user', None, self.get_rooms_response)
-        self.emit('get_permissions_by_user', None, self.get_permissions_response)
+        self.emit('get_user_rooms', None, self.get_rooms_response)
+        self.emit('get_user_permissions', None, self.get_permissions_response)
 
     def on_joined_room(self, room):
         print("joined", room)
@@ -46,7 +46,7 @@ class ChatNamespace(BaseNamespace):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Run Waiting Room-Bot')
+    parser = argparse.ArgumentParser(description='Run Minimal bot')
     parser.add_argument('token',
                         help='token for logging in as bot (see SERVURL/token)')
     parser.add_argument('-c', '--chat_host',

@@ -18,8 +18,12 @@ def connect():
         current_user.rooms.append(current_user.token.room)
     for room in current_user.rooms:
         join_room(room.name)
-        current_user.current_rooms.append(current_user.token.room)
-        socketio.emit('joined_room', room.as_dict(), room=current_user.session_id)
+        if current_user not in room.current_users:
+            current_user.current_rooms.append(current_user.token.room)
+        socketio.emit('joined_room', {
+            'room': room.as_dict(),
+            'layout': room.layout.as_dict() if room.layout else None,
+        }, room=current_user.session_id)
         socketio.emit('status', {
             'type': 'join',
             'user': {

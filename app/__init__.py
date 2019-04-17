@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
 
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+
 from .settings import Settings
 
 socketio = SocketIO(ping_interval=5, ping_timeout=120, async_mode="gevent")
@@ -31,6 +34,14 @@ login_manager.login_view = 'login.index'
 socketio.init_app(app)
 
 
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, _connection_record):
+    if settings.database_url.startswith('sqlite://'):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
+
 @app.before_request
 def before_request():
     if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static" \
@@ -48,9 +59,9 @@ if not Room.query.get("test_room"):
                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
                         permissions=Permissions(
                             user_query=True,
-                            user_kick=True,
                             user_permissions_query=True,
                             user_permissions_update=True,
+                            user_room_query=True,
                             user_room_join=True,
                             user_room_leave=True,
                             message_text=True,
@@ -71,9 +82,9 @@ if not Room.query.get("test_room"):
                          id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
                          permissions=Permissions(
                              user_query=True,
-                             user_kick=True,
                              user_permissions_query=True,
                              user_permissions_update=True,
+                             user_room_query=True,
                              user_room_join=True,
                              user_room_leave=True,
                              message_text=True,

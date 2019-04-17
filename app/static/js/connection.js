@@ -28,6 +28,8 @@ function apply_room_properties(room) {
 }
 
 function apply_layout(layout) {
+    if (!layout)
+        return;
     if (layout.html !== "") {
         $("#sidebar").html(layout.html);
     }
@@ -92,36 +94,24 @@ $(document).ready(() => {
         ping.text(Math.round(10 * sum / ping_pong_times.length) / 10);
     });
 
-    socket.on('connect', (data) => {
-        socket.emit("get_user", null, (success, user) => {
+    socket.on('joined_room', (data) => {
+        self_room = data.room.name;
+        apply_room_properties(data.room);
+        apply_layout(data.layout);
+        socket.emit('get_user', null, (success, user) => {
             if (verify_query(success, user)) {
                 self_user = user;
+                for (let user_id in data.room.current_users) {
+                    if (Number(user_id) !== user.id)
+                        users[user_id] = data.room.users[user_id];
+                }
                 updateUsers();
             }
         });
-        socket.emit('get_rooms_by_user', null, (success, rooms) => {
-            if (verify_query(success, rooms)) {
-                let room = rooms[0];
-                if (room) {
-                    self_room = room.name;
-                    apply_room_properties(room);
-                    for (let user_id in room.current_users) {
-                        if (Number(user_id) !== self_user.id)
-                            users[user_id] = room.users[user_id];
-                    }
-                    updateUsers();
-                }
-            }
-        });
-        socket.emit("get_layouts_by_user", null, (success, layouts) => {
-            if (verify_query(success, layouts)) {
-                let room = Object.keys(layouts)[0];
-                if (room && layouts[room]) {
-                    apply_layout(layouts[room]);
-                }
-            }
-        });
-        socket.emit("get_permissions_by_user", null, (success, permissions) => {
+    });
+
+    socket.on('connect', (data) => {
+        socket.emit("get_user_permissions", null, (success, permissions) => {
             if (verify_query(success, permissions)) {
                 apply_user_permissions(permissions);
             }
