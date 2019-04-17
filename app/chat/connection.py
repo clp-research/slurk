@@ -7,7 +7,7 @@ from flask_login import current_user
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
-from .. import socketio
+from .. import socketio, settings
 
 
 @socketio.on('my_ping')
@@ -31,6 +31,7 @@ def ping(message):
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, _connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+    if settings.database_url.startswith('sqlite://'):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
