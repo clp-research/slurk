@@ -17,6 +17,12 @@ class ChatNamespace(BaseNamespace):
         self.emit('get_rooms_by_user', None, self.get_rooms_response)
         self.emit('get_permissions_by_user', None, self.get_permissions_response)
 
+    def on_joined_room(self, room):
+        print("joined", room)
+
+    def on_left_room(self, room):
+        print("left", room)
+
     def get_user_response(self, success, user):
         if not success:
             print("Could not retrieve user:", user)

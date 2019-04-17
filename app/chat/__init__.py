@@ -3,9 +3,9 @@ from flask_login import login_required, current_user
 
 chat = Blueprint('chat', __name__)
 
-from .. import db
 from .message import *
 from .connection import *
+from ..api import *
 
 
 @chat.route('/', methods=['GET', 'POST'])

@@ -102,8 +102,8 @@
                                             <td>{{ form.room_create() }}</td>
                                         </tr>
                                         <tr>
-                                            <td><label for="room_delete">Delete</label></td>
-                                            <td>{{ form.room_delete() }}</td>
+                                            <td><label for="room_close">Close</label></td>
+                                            <td>{{ form.room_close() }}</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -126,6 +126,10 @@
                                         <tr>
                                             <td><label for="token_invalidate">Invalidate</label></td>
                                             <td>{{ form.token_invalidate() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label for="token_remove">Remove</label></td>
+                                            <td>{{ form.token_remove() }}</td>
                                         </tr>
                                     </table>
                                 </td>

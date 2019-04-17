@@ -1,6 +1,4 @@
-from flask_login import current_user
-
-from .. import db, socketio
+from .. import db
 
 from . import Base
 
@@ -21,10 +19,11 @@ class Permissions(Base):
     message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
     room_query = db.Column(db.Boolean, nullable=False, default=False)
     room_create = db.Column(db.Boolean, nullable=False, default=False)
-    room_delete = db.Column(db.Boolean, nullable=False, default=False)
+    room_close = db.Column(db.Boolean, nullable=False, default=False)
     layout_query = db.Column(db.Boolean, nullable=False, default=False)
     token_generate = db.Column(db.Boolean, nullable=False, default=False)
     token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
+    token_remove = db.Column(db.Boolean, nullable=False, default=False)
     token = db.relationship("Token", backref="permissions", uselist=False)
 
     def as_dict(self):
@@ -51,7 +50,7 @@ class Permissions(Base):
             'room': {
                 'query': self.room_query,
                 'create': self.room_create,
-                'delete': self.room_delete,
+                'close': self.room_close,
             },
             'layout': {
                 'query': self.layout_query,
@@ -59,5 +58,6 @@ class Permissions(Base):
             'token': {
                 'generate': self.token_generate,
                 'invalidate': self.token_invalidate,
+                'remove': self.token_remove,
             },
         }, **super(Permissions, self).as_dict())

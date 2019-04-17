@@ -60,10 +60,11 @@ if not Room.query.get("test_room"):
                             message_broadcast=True,
                             room_query=True,
                             room_create=True,
-                            room_delete=True,
+                            room_close=True,
                             layout_query=True,
                             token_generate=True,
                             token_invalidate=True,
+                            token_remove=True,
                         ))
     db.session.add(admin_token)
     db.session.add(Token(room_name='test_room',
@@ -82,10 +83,11 @@ if not Room.query.get("test_room"):
                              message_broadcast=True,
                              room_query=True,
                              room_create=True,
-                             room_delete=True,
+                             room_close=True,
                              layout_query=True,
                              token_generate=True,
                              token_invalidate=True,
+                             token_remove=True,
                          )))
     db.session.add(Room(name="test_room",
                         label="Test Room",

@@ -19,6 +19,7 @@ def connect():
     for room in current_user.rooms:
         join_room(room.name)
         current_user.current_rooms.append(current_user.token.room)
+        socketio.emit('joined_room', room.as_dict(), room=current_user.session_id)
         socketio.emit('status', {
             'type': 'join',
             'user': {
@@ -45,6 +46,7 @@ def disconnect():
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
+        socketio.emit('left_room', room.name, room=current_user.session_id)
         leave_room(room.name)
         current_user.current_rooms.remove(current_user.token.room)
         print(current_user.name, "left", room.label)

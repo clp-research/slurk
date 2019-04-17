@@ -62,10 +62,11 @@ def token():
         message_broadcast=_boolean_parameter("message_broadcast"),
         room_query=_boolean_parameter("room_query"),
         room_create=_boolean_parameter("room_create"),
-        room_delete=_boolean_parameter("room_delete"),
+        room_close=_boolean_parameter("room_close"),
         layout_query=_boolean_parameter("layout_query"),
         token_generate=_boolean_parameter("token_generate"),
         token_invalidate=_boolean_parameter("token_invalidate"),
+        token_remove=_boolean_parameter("token_remove"),
     )
 
     room = Room.query.get(form.room.data)
@@ -94,10 +95,11 @@ def token():
                         message_broadcast=form.message_broadcast.data,
                         room_query=form.room_query.data,
                         room_create=form.room_create.data,
-                        room_delete=form.room_delete.data,
+                        room_close=form.room_close.data,
                         layout_query=form.layout_query.data,
                         token_generate=form.token_generate.data,
                         token_invalidate=form.token_invalidate.data,
+                        token_remove=form.token_remove.data,
                     ))
               for _ in range(0, form.count.data or 1)]
     db.session.add_all(tokens)

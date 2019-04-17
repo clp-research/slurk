@@ -1,6 +1,4 @@
-from flask_login import current_user
-
-from .. import db, socketio, login_manager
+from .. import db, login_manager
 
 from . import Base, user_room, current_user_room
 
@@ -50,13 +48,16 @@ def load_user_from_request(request):
     token = None
     token_id = request.headers.get('Authorization')
     if token_id:
-        token = Token.query.get(token_id)
+        try:
+            token = Token.query.get(token_id)
+        except:
+            return None
     if not token:
         token_id = request.args.get('token')
         if token_id:
             token = Token.query.get(token_id)
 
-    if token:
+    if token and token.valid:
         if not token.user:
             name = request.headers.get('Name')
             if not name:
@@ -67,72 +68,3 @@ def load_user_from_request(request):
             db.session.commit()
         return token.user
     return None
-
-
-@socketio.on('get_rooms_by_user')
-def _get_rooms_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.room_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, [room.as_dict() for room in user.rooms]
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_permissions_by_user')
-def _get_permissions_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.permissions_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, user.token.permissions.as_dict()
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_layouts_by_user')
-def _get_layouts_by_user(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-
-    if id:
-        if not current_user.token.permissions.layout_query:
-            return False, "insufficient rights"
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, {room.name: room.layout.as_dict() for room in user.rooms}
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user')
-def _get_user(id):
-    current_id = current_user.get_id()
-    if not current_id:
-        return False, "invalid session id"
-
-    if id and not current_user.token.permissions.user_query:
-        return False, "insufficient rights"
-    user = User.query.get(id or current_id)
-    if user:
-        return True, user.as_dict()
-    else:
-        return False, "user does not exist"

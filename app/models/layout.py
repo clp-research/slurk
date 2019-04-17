@@ -1,12 +1,10 @@
-from flask_login import current_user
-
 import json
 import os
 import urllib.request
 import urllib.error
 
 from . import Base
-from .. import db, socketio
+from .. import db
 
 
 def _title(data):
@@ -263,16 +261,3 @@ class Layout(Base):
         css = _css(data)
         script = _script(data)
         return cls(name=name, title=title, subtitle=subtitle, html=html, css=css, script=script)
-
-
-@socketio.on('get_layout')
-def _get_layout(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if not current_user.token.permissions.layout_query:
-        return False, "insufficient rights"
-    layout = Layout.query.get(id)
-    if layout:
-        return True, layout.as_dict()
-    else:
-        return False, "layout does not exist"
