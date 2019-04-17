@@ -8,7 +8,9 @@
     }
   ],
   "env": {
-    "DEBUG": "on",
+    "DEBUG": {
+      "value": "on"
+    },
     "SECRET_KEY": {
       "generator": "secret"
     }
