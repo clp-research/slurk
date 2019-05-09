@@ -26,7 +26,7 @@ def message_text(payload):
 
     if 'receiver_id' in payload:
         user = User.query.get(payload['receiver_id'])
-        if not user:
+        if not user or not user.session_id:
             return False, 'User "%s" does not exist' % user.name
         receiver = user.session_id
         private = True
@@ -71,7 +71,7 @@ def message_image(payload):
 
     if 'receiver_id' in payload:
         user = User.query.get(payload['receiver_id'])
-        if not user:
+        if not user or not user.session_id:
             return False, 'User "%s" does not exist' % user.name
         receiver = user.session_id
         private = True

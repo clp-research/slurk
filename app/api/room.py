@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from flask_login import current_user
 from flask_socketio import close_room
 from sqlalchemy.exc import IntegrityError
@@ -6,7 +8,6 @@ from .. import socketio, db
 
 from ..models.layout import Layout
 from ..models.room import Room
-from ..models.user import User
 
 
 @socketio.on('get_room')
@@ -66,8 +67,9 @@ def _close_room(room):
 
     try:
         for user in room.current_users:
-            socketio.emit('left_room', room.name, room=user.session_id)
-            print(user.name, "left", room.name)
+            if user.session_id:
+                socketio.emit('left_room', room.name, room=user.session_id)
+                getLogger("slurk").info('%s left %s', user.name, room.name)
         close_room(room.name)
         deleted = Room.query.filter_by(name=room.name).delete()
         db.session.commit()

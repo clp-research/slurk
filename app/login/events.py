@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from calendar import timegm
 from datetime import datetime
 
@@ -11,7 +13,7 @@ from .. import db, socketio
 @socketio.on('connect')
 @login_required
 def connect():
-    print(current_user.name, "connected")
+    getLogger("slurk").info('%s connected', current_user.name)
     current_user.session_id = request.sid
     db.session.commit()
     if current_user.rooms.count() == 0:
@@ -23,7 +25,7 @@ def connect():
         socketio.emit('joined_room', {
             'room': room.as_dict(),
             'layout': room.layout.as_dict() if room.layout else None,
-        }, room=current_user.session_id)
+        }, room=request.sid)
         socketio.emit('status', {
             'type': 'join',
             'user': {
@@ -33,7 +35,7 @@ def connect():
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
-        print(current_user.name, "joined", room.label)
+        getLogger("slurk").info('%s joined %s', current_user.name, room.label)
     db.session.commit()
 
 
@@ -50,10 +52,11 @@ def disconnect():
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
-        socketio.emit('left_room', room.name, room=current_user.session_id)
+        if current_user.session_id:
+            socketio.emit('left_room', room.name, room=current_user.session_id)
         leave_room(room.name)
         current_user.current_rooms.remove(current_user.token.room)
-        print(current_user.name, "left", room.label)
+        getLogger("slurk").info('%s left %s', current_user.name, room.label)
     db.session.commit()
-    print(current_user.name, "disconnected")
+    getLogger("slurk").info('%s disconnected', current_user.name)
     logout_user()

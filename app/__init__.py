@@ -1,5 +1,6 @@
 import sys
 import logging
+from logging import getLogger
 
 from flask import Flask, request, g
 from flask_sqlalchemy import SQLAlchemy
@@ -109,7 +110,7 @@ if not Room.query.get("test_room"):
                         static=True,
                         layout=Layout.from_json_file("test_room")))
     db.session.commit()
-    print("generating test room and admin token...")
+    getLogger("slurk").info("generating test room and admin token...")
 print("admin token:")
 print(Token.query.order_by(Token.date_created).first().id)
 sys.stdout.flush()

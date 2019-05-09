@@ -1,3 +1,4 @@
+from logging import getLogger
 import json
 import os
 import urllib.request
@@ -129,7 +130,7 @@ def _verify(content: str):
 
 def _create_script(trigger: str, content: str):
     if not _verify(content):
-        print("invalid script for", trigger)
+        getLogger("slurk").error("invalid script for %s", trigger)
         return ""
     if trigger == "incoming-message":
         return _incoming_message(content)
@@ -143,7 +144,7 @@ def _create_script(trigger: str, content: str):
         return _typing_users(content)
     if trigger == "plain":
         return content
-    print("unknown trigger:", trigger)
+    getLogger("slurk").error("unknown trigger: %s", trigger)
     return ""
 
 
@@ -163,7 +164,7 @@ def _parse_trigger(trigger, script_file):
         with open(plugin_path) as script_content:
             script += _create_script(trigger, script_content.read()) + "\n\n\n"
     except FileNotFoundError:
-        print("Could not find script:", script_file)
+        getLogger("slurk").error("Could not find script: %s", script_file)
     return script
 
 
@@ -232,7 +233,7 @@ class Layout(Base):
 
         try:
             with urllib.request.urlopen(name) as url:
-                print("loading layout from", url)
+                getLogger("slurk").info("loading layout from %s", url)
                 return cls._from_json_data(name, json.loads(url.read().decode()))
         except:
             pass
@@ -242,13 +243,13 @@ class Layout(Base):
 
         try:
             with open(layout_path + name + ".json") as json_data:
-                print("loading layout from", layout_path + name + ".json")
+                getLogger("slurk").info("loading layout from %s%s.json", layout_path, name)
                 return cls._from_json_data(name, json.load(json_data))
         except FileNotFoundError:
             try:
                 with open(layout_path + "default.json") as json_data:
-                    print(
-                        f"could not find layout \"{name}\". loaded default layout instead")
+                    getLogger("slurk").warn(
+                        'could not find layout "%s". loaded default layout instead', name)
                     return cls._from_json_data(name, json.load(json_data))
             except FileNotFoundError:
                 return None

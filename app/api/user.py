@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from flask_login import current_user
 from flask_socketio import join_room, leave_room
 
@@ -69,7 +71,7 @@ def _join_room(id, room):
         user = User.query.get(id)
     else:
         user = current_user
-    if not user:
+    if not user or not user.session_id:
         return False, "user does not exist"
 
     room = Room.query.get(room)
@@ -84,7 +86,7 @@ def _join_room(id, room):
             'room': room.as_dict(),
             'layout': room.layout.as_dict() if room.layout else None,
         }, room=user.session_id)
-        print(user.name, "joined", room.name)
+        getLogger("slurk").info('%s joined %s', user.name, room.name)
     db.session.commit()
 
     join_room(room, user.session_id)
@@ -103,7 +105,7 @@ def _leave_room(id, room):
         user = User.query.get(id)
     else:
         user = current_user
-    if not user:
+    if not user or not user.session_id:
         return False, "user does not exist"
 
     room = Room.query.get(room)
@@ -113,9 +115,8 @@ def _leave_room(id, room):
     user.rooms.remove(room)
     if user.current_rooms.remove(room) > 0:
         socketio.emit('left_room', room.name, room=user.session_id)
-        print(user.name, "left", room.name)
+        getLogger("slurk").info('%s left %s', user.name, room.name)
     db.session.commit()
-
     leave_room(room, user.session_id)
 
     return True
