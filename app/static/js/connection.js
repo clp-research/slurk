@@ -8,9 +8,7 @@ let self_user = undefined;
 let self_room = undefined;
 
 function apply_user_permissions(permissions) {
-    if (permissions.message.text || permissions.message.image || permissions.message.command) {
-        $('#type-area').show();
-    }
+    $('#type-area').fadeTo(null, permissions.message.text || permissions.message.image || permissions.message.command);
 }
 
 function apply_room_properties(room) {
@@ -19,35 +17,34 @@ function apply_room_properties(room) {
     } else {
         $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
     }
-    if (room.show_users) {
-        $('#user-list').show();
-    }
-    if (room.show_latency) {
-        $('#latency').show();
-    }
+
+    $('#user-list').fadeTo(null, room.show_users);
+    $('#latency').fadeTo(null, room.show_latency);
 }
 
 function apply_layout(layout) {
-    if (!layout)
-        return;
-    if (layout.html !== "") {
-        $("#sidebar").html(layout.html);
-    }
-    if (layout.css !== "") {
-        $("#custom-styles").html(layout.css);
-    }
-    if (layout.script !== "") {
-        window.eval(layout.script);
-    }
-    if (layout.title !== "") {
-        document.title = layout.title;
-    } else {
-        document.title = 'Slurk';
-    }
-    $("#title").text(document.title);
-    if (layout.subtitle !== "") {
-        $("#subtitle").text(layout.subtitle);
-    }
+    $(".fade").fadeOut(null, () => {
+        if (!layout)
+            return;
+        if (layout.html !== "") {
+            $("#sidebar").html(layout.html);
+        }
+        if (layout.css !== "") {
+            $("#custom-styles").html(layout.css);
+        }
+        if (layout.script !== "") {
+            window.eval(layout.script);
+        }
+        if (layout.title !== "") {
+            document.title = layout.title;
+        } else {
+            document.title = 'Slurk';
+        }
+        $("#title").text(document.title);
+        if (layout.subtitle !== "") {
+            $("#subtitle").text(layout.subtitle);
+        }
+    }).fadeIn();
 }
 
 function verify_query(success, message) {
@@ -64,12 +61,12 @@ function verify_query(success, message) {
 }
 
 function updateUsers() {
-    let current_users = "You";
+    let current_users = "";
     for (let user_id in users) {
         if (user_id !== self_user.id)
-            current_users += ", " + users[user_id];
+            current_users += users[user_id] + ', ';
     }
-    $('#current-users').text(current_users);
+    $('#current-users').text(current_users + "You");
 }
 
 $(document).ready(() => {
@@ -78,20 +75,14 @@ $(document).ready(() => {
     window.setInterval(function () {
         startTime = (new Date).getTime();
         socket.emit("my_ping", { "typing": is_typing });
+        updateUsers();
         if (is_typing !== -1) {
             is_typing += 1;
         }
     }, 1000);
 
-    socket.on("my_pong", function () {
-        let latency = (new Date).getTime() - startTime;
-        ping_pong_times.push(latency);
-        ping_pong_times = ping_pong_times.slice(-5);
-        let sum = 0;
-        for (let i = 0; i < ping_pong_times.length; ++i)
-            sum += ping_pong_times[i];
-        let ping = $("#ping");
-        ping.text(Math.round(10 * sum / ping_pong_times.length) / 10);
+    socket.on("pong", (data) => {
+        $("#ping").text(data);
     });
 
     socket.on('joined_room', (data) => {

@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from flask import Flask, request, g
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +10,8 @@ from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
 from .settings import Settings
+
+logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
 
 socketio = SocketIO(ping_interval=5, ping_timeout=120, async_mode="gevent")
 
@@ -27,7 +30,8 @@ app.register_blueprint(login_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(chat_blueprint)
 
-db.drop_all()
+if settings.drop_database_on_startup:
+    db.drop_all()
 db.create_all()
 login_manager.init_app(app)
 login_manager.login_view = 'login.index'
