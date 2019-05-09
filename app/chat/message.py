@@ -9,6 +9,27 @@ from ..models.user import User
 from ..models.room import Room
 
 
+@socketio.on('keypress')
+def keypress(message):
+    last_typing = message.get('last_keypress', None)
+    if not last_typing:
+        return
+
+    current_user_id = current_user.get_id()
+    if not current_user_id:
+        return
+
+    for room in current_user.rooms:
+        user = {
+            'id': current_user_id,
+            'name': current_user.name
+        }
+        if last_typing == 0:
+            emit('start_typing', {'user': user}, room=room.name)
+        elif last_typing == 3:
+            emit('stop_typing', {'user': user}, room=room.name)
+
+
 @socketio.on('text')
 @login_required
 def message_text(payload):

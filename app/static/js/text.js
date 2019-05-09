@@ -2,6 +2,7 @@ let typing = {};
 let update_typing = undefined;
 let keypress = undefined;
 let incoming_message = undefined;
+let is_typing = -1;
 
 $(document).ready(() => {
     socket.on("message", function (data) {
@@ -30,9 +31,19 @@ $(document).ready(() => {
         }
     });
 
+    window.setInterval(function () {
+        if (is_typing !== -1)
+            is_typing += 1;
+        if (is_typing === 3)
+            socket.emit("keypress", { "typing": false });
+    }, 1000);
+
     $('#text').keypress(function(e) {
         if (keypress === undefined || $('#text').is('[readonly]')) {
             return;
+        }
+        if (is_typing === -1) {
+            socket.emit("keypress", { "typing": true });
         }
         is_typing = 0;
         let code = e.keyCode || e.which;

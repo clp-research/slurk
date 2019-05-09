@@ -1,8 +1,5 @@
 let socket;
-let startTime;
-let ping_pong_times = [];
 let users = {};
-let is_typing = -1;
 
 let self_user = undefined;
 let self_room = undefined;
@@ -71,15 +68,6 @@ function updateUsers() {
 
 $(document).ready(() => {
     socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
-    window.setInterval(function () {
-        startTime = (new Date).getTime();
-        socket.emit("my_ping", { "typing": is_typing });
-        updateUsers();
-        if (is_typing !== -1) {
-            is_typing += 1;
-        }
-    }, 1000);
 
     socket.on("pong", (data) => {
         $("#ping").text(data);
