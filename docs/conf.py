@@ -73,8 +73,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'slurk'
-copyright = u'2018, DSG Bielefeld'
-author = u'DSG Bielefeld'
+copyright = u'2018-2019, CLP Research'
+author = u'CLP Research'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
