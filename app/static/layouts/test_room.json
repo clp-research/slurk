@@ -54,7 +54,8 @@
     }
   },
   "scripts": {
-    "incoming-message": "display-message",
+    "incoming-text": "display-text",
+    "incoming-image": "display-image",
     "submit-message": "send-message",
     "print-history": "intercept-history",
     "plain": [

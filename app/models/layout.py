@@ -100,8 +100,12 @@ def _css(data, indent=0):
     return css
 
 
-def _incoming_message(content: str):
-    return "incoming_message = function(data) {\n" + content + '\n}\n'
+def _incoming_text(content: str):
+    return "incoming_text = function(data) {\n" + content + '\n}\n'
+
+
+def _incoming_image(content: str):
+    return "incoming_image = function(data) {\n" + content + '\n}\n'
 
 
 def _submit(content: str):
@@ -132,8 +136,10 @@ def _create_script(trigger: str, content: str):
     if not _verify(content):
         getLogger("slurk").error("invalid script for %s", trigger)
         return ""
-    if trigger == "incoming-message":
-        return _incoming_message(content)
+    if trigger == "incoming-text":
+        return _incoming_text(content)
+    if trigger == "incoming-image":
+        return _incoming_image(content)
     if trigger == "submit-message":
         return _submit(content)
     if trigger == "print-history":

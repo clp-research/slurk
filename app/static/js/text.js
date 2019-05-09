@@ -1,13 +1,20 @@
 let typing = {};
 let update_typing = undefined;
 let keypress = undefined;
-let incoming_message = undefined;
+let incoming_text = undefined;
+let incoming_image = undefined;
 let is_typing = -1;
 
 $(document).ready(() => {
-    socket.on("message", function (data) {
-        if (incoming_message !== undefined && data.user.id !== self_user.id) {
-            incoming_message(data)
+    socket.on("text_message", function (data) {
+        if (incoming_text !== undefined && data.user.id !== self_user.id) {
+            incoming_text(data)
+        }
+    });
+
+    socket.on("image_message", function (data) {
+        if (incoming_image !== undefined && data.user.id !== self_user.id) {
+            incoming_image(data)
         }
     });
 

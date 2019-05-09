@@ -46,17 +46,19 @@ def message_text(payload):
         return False, "insufficient rights"
 
     if 'receiver_id' in payload:
-        user = User.query.get(payload['receiver_id'])
+        if not current_user.token.permissions.message_text:
+            return False, 'You are not allowed to send private text messages'
+        receiver_id = payload['receiver_id']
+        user = User.query.get(receiver_id)
         if not user or not user.session_id:
-            return False, 'User "%s" does not exist' % user.name
+            return False, 'User "%s" does not exist' % receiver_id
         receiver = user.session_id
-        private = True
+        room = None
     elif 'room' in payload:
         room = Room.query.get(payload['room'])
         if room.read_only:
             return False, 'Room "%s" is read-only' % room.label
         receiver = room.name
-        private = False
     else:
         return False, "`text` requires `room` or `receiver_id` as parameters"
 
@@ -64,10 +66,10 @@ def message_text(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    emit('message', {
+    emit('text_message', {
         'msg': payload['msg'],
         'user': user,
-        'private_message': private,
+        'room': room.name if room else None,
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=receiver, broadcast=broadcast)
     for room in current_user.rooms:
@@ -91,17 +93,19 @@ def message_image(payload):
         return False, "insufficient rights"
 
     if 'receiver_id' in payload:
-        user = User.query.get(payload['receiver_id'])
+        if not current_user.token.permissions.message_text:
+            return False, 'You are not allowed to send private text messages'
+        receiver_id = payload['receiver_id']
+        user = User.query.get(receiver_id)
         if not user or not user.session_id:
-            return False, 'User "%s" does not exist' % user.name
+            return False, 'User "%s" does not exist' % receiver_id
         receiver = user.session_id
-        private = True
+        room = None
     elif 'room' in payload:
         room = Room.query.get(payload['room'])
         if room.read_only:
             return False, 'Room "%s" is read-only' % room.label
         receiver = room.name
-        private = False
     else:
         return False, "`image` requires `room` or `receiver_id` as parameters"
 
@@ -109,12 +113,12 @@ def message_image(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    emit('message', {
+    emit('image_message', {
         'url': payload['url'],
         'user': user,
         'width': payload['width'] if 'width' in payload else None,
         'height': payload['width'] if 'width' in payload else None,
-        'private_message': private,
+        'room': room.name if room else None,
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=receiver, broadcast=broadcast)
     for room in current_user.rooms:
