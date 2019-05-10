@@ -109,7 +109,7 @@ The CoLA waiting room is supposed to have a different title (l. 2), a different 
                 {
                   "layout-type": "image",
                   "id": "current-image",
-                  "src": "https://dsg.lili.uni-bielefeld.de:8000/cola_data/The-Waiting-Room.jpg",
+                  "src": "https://example.de:8000/cola_data/The-Waiting-Room.jpg",
                   "width": 500,
                   "height": 400
                 }
