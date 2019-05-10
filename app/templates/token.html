@@ -10,128 +10,140 @@
 </head>
 
 <body>
-    <div class="login-page">
-        <div class="login-form">
-            <h1>Generate Tokens</h1>
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <table>
-                    <tr>
-                        <td><label for="source">Source</label></td>
-                        <td>{{ form.source(placeholder="Source") }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="room">Room</label></td>
-                        <td>{{ form.room(required="required") }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="task">Task</label></td>
-                        <td>{{ form.task(required="required", placeholder="Source") }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="count">Count</label></td>
-                        <td>{{ form.count() }}</td>
-                    </tr>
-                </table>
+    <h1>Generate Tokens</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <table>
+            <tr title="{{ form.source.description }}">
+                <td>{{ form.source.label }}</td>
+                <td>{{ form.source(placeholder=form.source.label.text) }}</td>
+            </tr>
+            <tr title="{{ form.room.description }}">
+                <td>{{ form.room.label }}</td>
+                <td>{{ form.room(placeholder=form.room.label.text) }}</td>
+            </tr>
+            <tr title="{{ form.task.description }}">
+                <td>{{ form.task.label }}</td>
+                <td>{{ form.task(placeholder=form.task.label.text) }}</td>
+            </tr>
+            <tr title="{{ form.count.description }}">
+                <td>{{ form.count.label }}</td>
+                <td>{{ form.count(placeholder=form.count.label.text) }}</td>
+            </tr>
+        </table>
 
-                <h3>Permissions</h3>
+        <h3>Permissions</h3>
 
-                <h4>User</h4>
-                <table>
-                    <tr>
-                        <td><label for="user_query">Query</label></td>
-                        <td>{{ form.user_query() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="user_permissions_query">Query permissions</label></td>
-                        <td>{{ form.user_permissions_query() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="user_permissions_update">Update permissions</label></td>
-                        <td>{{ form.user_permissions_update() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="user_room_query">Query rooms</label></td>
-                        <td>{{ form.user_room_query() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="user_room_join">Join room</label></td>
-                        <td>{{ form.user_room_join() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="user_room_leave">Leave room</label></td>
-                        <td>{{ form.user_room_leave() }}</td>
-                    </tr>
-                </table>
+        <h4>User</h4>
+        <table>
+            <tr title="{{ form.user_query.description }}">
+                <td>{{ form.user_query.label }}</td>
+                <td>{{ form.user_query() }}</td>
+            </tr>
+            <tr title="{{ form.user_permissions_query.description }}">
+                <td>{{ form.user_permissions_query.label }}</td>
+                <td>{{ form.user_permissions_query() }}</td>
+            </tr>
+            <tr title="{{ form.user_permissions_update.description }}">
+                <td>{{ form.user_permissions_update.label }}</td>
+                <td>{{ form.user_permissions_update() }}</td>
+            </tr>
+            <tr title="{{ form.user_room_query.description }}">
+                <td>{{ form.user_room_query.label }}</td>
+                <td>{{ form.user_room_query() }}</td>
+            </tr>
+            <tr title="{{ form.user_room_join.description }}">
+                <td>{{ form.user_room_join.label }}</td>
+                <td>{{ form.user_room_join() }}</td>
+            </tr>
+            <tr title="{{ form.user_room_leave.description }}">
+                <td>{{ form.user_room_leave.label }}</td>
+                <td>{{ form.user_room_leave() }}</td>
+            </tr>
+        </table>
 
-                <h4>Message</h4>
-                <table>
-                    <tr>
-                        <td><label for="message_text">Text</label></td>
-                        <td>{{ form.message_text() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="message_image">Image</label></td>
-                        <td>{{ form.message_image() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="message_command">Command</label></td>
-                        <td>{{ form.message_command() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="message_history">History</label></td>
-                        <td>{{ form.message_history() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="message_broadcast">Broadcast</label></td>
-                        <td>{{ form.message_broadcast() }}</td>
-                    </tr>
-                </table>
+        <h4>Message</h4>
+        <table>
+            <tr title="{{ form.message_text.description }}">
+                <td>{{ form.message_text.label }}</td>
+                <td>{{ form.message_text() }}</td>
+            </tr>
+            <tr title="{{ form.message_image.description }}">
+                <td>{{ form.message_image.label }}</td>
+                <td>{{ form.message_image() }}</td>
+            </tr>
+            <tr title="{{ form.message_command.description }}">
+                <td>{{ form.message_command.label }}</td>
+                <td>{{ form.message_command() }}</td>
+            </tr>
+            <tr title="{{ form.message_history.description }}">
+                <td>{{ form.message_history.label }}</td>
+                <td>{{ form.message_history() }}</td>
+            </tr>
+            <tr title="{{ form.message_broadcast.description }}">
+                <td>{{ form.message_broadcast.label }}</td>
+                <td>{{ form.message_broadcast() }}</td>
+            </tr>
+        </table>
 
-                <h4>Room</h4>
-                <table>
-                    <tr>
-                        <td><label for="room_query">Query</label></td>
-                        <td>{{ form.room_query() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="room_create">Create</label></td>
-                        <td>{{ form.room_create() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="room_close">Close</label></td>
-                        <td>{{ form.room_close() }}</td>
-                    </tr>
-                </table>
+        <h4>Room</h4>
+        <table>
+            <tr title="{{ form.room_query.description }}">
+                <td>{{ form.room_query.label }}</td>
+                <td>{{ form.room_query() }}</td>
+            </tr>
+            <tr title="{{ form.room_create.description }}">
+                <td>{{ form.room_create.label }}</td>
+                <td>{{ form.room_create() }}</td>
+            </tr>
+            <tr title="{{ form.room_close.description }}">
+                <td>{{ form.room_close.label }}</td>
+                <td>{{ form.room_close() }}</td>
+            </tr>
+        </table>
 
-                <h4>Layout</h4>
-                <table>
-                    <tr>
-                        <td><label for="layout_query">Query</label></td>
-                        <td>{{ form.layout_query() }}</td>
-                    </tr>
-                </table>
+        <h4>Layout</h4>
+        <table>
+            <tr title="{{ form.layout_query.description }}">
+                <td>{{ form.layout_query.label }}</td>
+                <td>{{ form.layout_query() }}</td>
+            </tr>
+        </table>
 
-                <h4>Token</h4>
-                <table>
-                    <tr>
-                        <td><label for="token_generate">Generate</label></td>
-                        <td>{{ form.token_generate() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="token_invalidate">Invalidate</label></td>
-                        <td>{{ form.token_invalidate() }}</td>
-                    </tr>
-                    <tr>
-                        <td><label for="token_remove">Remove</label></td>
-                        <td>{{ form.token_remove() }}</td>
-                    </tr>
-                </table>
+        <h4>Task</h4>
+        <table>
+            <tr title="{{ form.task_create.description }}">
+                <td>{{ form.task_create.label }}</td>
+                <td>{{ form.task_create() }}</td>
+            </tr>
+            <tr title="{{ form.task_query.description }}">
+                <td>{{ form.task_query.label }}</td>
+                <td>{{ form.task_query() }}</td>
+            </tr>
+        </table>
 
-                {{ form.submit() }}
-            </form>
-        </div>
-    </div>
+        <h4>Token</h4>
+        <table>
+            <tr title="{{ form.token_generate.description }}">
+                <td>{{ form.token_generate.label }}</td>
+                <td>{{ form.token_generate() }}</td>
+            </tr>
+            <tr title="{{ form.token_query.description }}">
+                <td>{{ form.token_query.label }}</td>
+                <td>{{ form.token_query() }}</td>
+            </tr>
+            <tr title="{{ form.token_invalidate.description }}">
+                <td>{{ form.token_invalidate.label }}</td>
+                <td>{{ form.token_invalidate() }}</td>
+            </tr>
+            <tr title="{{ form.token_remove.description }}">
+                <td>{{ form.token_remove.label }}</td>
+                <td>{{ form.token_remove() }}</td>
+            </tr>
+        </table>
+
+        {{ form.submit() }}
+    </form>
 </body>
 
 </html>

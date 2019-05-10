@@ -20,3 +20,13 @@ class Token(Base):
 
     def __repr__(self):
         return str(self.id)
+
+    def as_dict(self):
+        return dict({
+            'user': self.user_id,
+            'task': self.task_id,
+            'room': self.room_name,
+            'permissions': self.permissions_id,
+            'source': self.source,
+            'valid': self.valid,
+        }, **super(Token, self).as_dict())

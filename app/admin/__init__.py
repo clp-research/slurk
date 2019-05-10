@@ -8,7 +8,7 @@ from ..models.task import Task
 from ..models.token import Token
 from ..models.permission import Permissions
 
-from .forms import TokenGenerationForm
+from .forms import TokenGenerationForm, TaskGenerationForm
 
 admin = Blueprint('admin', __name__, url_prefix="/admin")
 
@@ -64,7 +64,10 @@ def token():
         room_create=_boolean_parameter("room_create"),
         room_close=_boolean_parameter("room_close"),
         layout_query=_boolean_parameter("layout_query"),
+        task_create=_boolean_parameter("task_create"),
+        task_query=_boolean_parameter("task_query"),
         token_generate=_boolean_parameter("token_generate"),
+        token_query=_boolean_parameter("token_query"),
         token_invalidate=_boolean_parameter("token_invalidate"),
         token_remove=_boolean_parameter("token_remove"),
     )
@@ -97,7 +100,10 @@ def token():
                         room_create=form.room_create.data,
                         room_close=form.room_close.data,
                         layout_query=form.layout_query.data,
+                        task_create=form.task_create.data,
+                        task_query=form.task_create.data,
                         token_generate=form.token_generate.data,
+                        token_query=form.token_query.data,
                         token_invalidate=form.token_invalidate.data,
                         token_remove=form.token_remove.data,
                     ))
@@ -105,3 +111,22 @@ def token():
     db.session.add_all(tokens)
     db.session.commit()
     return "<br>".join([str(tk.id) for tk in tokens])
+
+
+@admin.route('/task', methods=['GET', 'POST'])
+@login_required
+def task():
+    form = TaskGenerationForm(
+        name=_string_parameter("name"),
+        num_users=_int_parameter("num"),
+    )
+
+    name = form.name.data
+    num_users = form.num_users.data
+
+    if not name or not num_users:
+        return render_template('task.html', form=form, title="Task generation")
+
+    db.session.add(Task(name=name, num_users=num_users))
+    db.session.commit()
+    return f"Task \"{name}\" created"

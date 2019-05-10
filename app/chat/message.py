@@ -22,7 +22,7 @@ def keypress(message):
     for room in current_user.rooms:
         user = {
             'id': current_user_id,
-            'name': current_user.name
+            'name': current_user.name,
         }
         if last_typing == 0:
             emit('start_typing', {'user': user}, room=room.name)

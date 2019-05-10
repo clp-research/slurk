@@ -24,6 +24,42 @@ def _get_user(id):
         return False, "user does not exist"
 
 
+@socketio.on('get_user_task')
+def _get_user_task(id):
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if id and not current_user.token.permissions.task_query:
+        return False, "insufficient rights"
+
+    if id:
+        user = User.query.get(id)
+    else:
+        user = current_user
+
+    if user:
+        return True, user.token.task.as_dict() if user.token and user.token.task else None
+    else:
+        return False, "user does not exist"
+
+
+@socketio.on('get_user_token')
+def _get_user_task(id):
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if id and not current_user.token.permissions.token_query:
+        return False, "insufficient rights"
+
+    if id:
+        user = User.query.get(id)
+    else:
+        user = current_user
+
+    if user:
+        return True, user.token.as_dict() if user.token else None
+    else:
+        return False, "user does not exist"
+
+
 @socketio.on('get_user_permissions')
 def _get_user_permissions(id):
     if not current_user.get_id():

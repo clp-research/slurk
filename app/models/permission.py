@@ -21,7 +21,10 @@ class Permissions(Base):
     room_create = db.Column(db.Boolean, nullable=False, default=False)
     room_close = db.Column(db.Boolean, nullable=False, default=False)
     layout_query = db.Column(db.Boolean, nullable=False, default=False)
+    task_create = db.Column(db.Boolean, nullable=False, default=False)
+    task_query = db.Column(db.Boolean, nullable=False, default=False)
     token_generate = db.Column(db.Boolean, nullable=False, default=False)
+    token_query = db.Column(db.Boolean, nullable=False, default=False)
     token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
     token_remove = db.Column(db.Boolean, nullable=False, default=False)
     token = db.relationship("Token", backref="permissions", uselist=False)
@@ -54,8 +57,13 @@ class Permissions(Base):
             'layout': {
                 'query': self.layout_query,
             },
+            'task': {
+                'create': self.task_create,
+                'query': self.task_query,
+            },
             'token': {
                 'generate': self.token_generate,
+                'query': self.token_query,
                 'invalidate': self.token_invalidate,
                 'remove': self.token_remove,
             },

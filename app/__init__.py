@@ -2,7 +2,7 @@ import sys
 import logging
 from logging import getLogger
 
-from flask import Flask, request, g
+from flask import Flask, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
@@ -49,8 +49,12 @@ def set_sqlite_pragma(dbapi_connection, _connection_record):
 
 @app.before_request
 def before_request():
-    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static" \
-            or request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate:
+    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static":
+        return login_manager.unauthorized()
+
+    if request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate \
+            or request.endpoint == 'admin.task' and not current_user.token.permissions.task_create:
+        flash("Permission denied", "error")
         return login_manager.unauthorized()
 
 
@@ -58,10 +62,13 @@ from .models.room import Room
 from .models.token import Token
 from .models.layout import Layout
 from .models.permission import Permissions
+from .models.task import Task
 
 if not Room.query.get("test_room"):
+    meetup = Task(name="Meetup", num_users=2)
     admin_token = Token(room_name='test_room',
                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
+                        task=meetup,
                         permissions=Permissions(
                             user_query=True,
                             user_permissions_query=True,
@@ -78,7 +85,10 @@ if not Room.query.get("test_room"):
                             room_create=True,
                             room_close=True,
                             layout_query=True,
+                            task_create=True,
+                            task_query=True,
                             token_generate=True,
+                            token_query=True,
                             token_invalidate=True,
                             token_remove=True,
                         ))
@@ -100,8 +110,11 @@ if not Room.query.get("test_room"):
                              room_query=True,
                              room_create=True,
                              room_close=True,
+                             task_create=True,
+                             task_query=True,
                              layout_query=True,
                              token_generate=True,
+                             token_query=True,
                              token_invalidate=True,
                              token_remove=True,
                          )))
