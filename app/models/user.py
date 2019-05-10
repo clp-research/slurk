@@ -3,6 +3,7 @@ from .. import db, login_manager
 from . import Base, user_room, current_user_room
 
 from .token import Token
+from .log import Log
 
 
 class User(Base):
@@ -13,6 +14,7 @@ class User(Base):
     rooms = db.relationship("Room", secondary=user_room, back_populates="users", lazy='dynamic')
     current_rooms = db.relationship("Room", secondary=current_user_room, back_populates="current_users", lazy='dynamic')
     session_id = db.Column(db.String, unique=True)
+    logs = db.relationship("Log", backref="user", order_by=db.asc("date_modified"))
 
     @property
     def is_active(self):

@@ -16,6 +16,7 @@ class Room(db.Model):
     tokens = db.relationship("Token", backref="room")
     users = db.relationship("User", secondary=user_room, back_populates="rooms")
     current_users = db.relationship("User", secondary=current_user_room, back_populates="current_rooms")
+    logs = db.relationship("Log", backref="room", order_by=db.asc("date_modified"))
 
     def as_dict(self):
         return {

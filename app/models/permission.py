@@ -7,6 +7,7 @@ class Permissions(Base):
     __tablename__ = 'Permissions'
 
     user_query = db.Column(db.Boolean, nullable=False, default=False)
+    user_log_query = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_query = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_update = db.Column(db.Boolean, nullable=False, default=False)
     user_room_query = db.Column(db.Boolean, nullable=False, default=False)
@@ -15,9 +16,9 @@ class Permissions(Base):
     message_text = db.Column(db.Boolean, nullable=False, default=False)
     message_image = db.Column(db.Boolean, nullable=False, default=False)
     message_command = db.Column(db.Boolean, nullable=False, default=False)
-    message_history = db.Column(db.Boolean, nullable=False, default=False)
     message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
     room_query = db.Column(db.Boolean, nullable=False, default=False)
+    room_log_query = db.Column(db.Boolean, nullable=False, default=False)
     room_create = db.Column(db.Boolean, nullable=False, default=False)
     room_close = db.Column(db.Boolean, nullable=False, default=False)
     layout_query = db.Column(db.Boolean, nullable=False, default=False)
@@ -33,6 +34,9 @@ class Permissions(Base):
         return dict({
             'user': {
                 'query': self.user_query,
+                'log': {
+                    'query': self.user_log_query,
+                },
                 'permissions': {
                     'query': self.user_permissions_query,
                     'update': self.user_permissions_update,
@@ -46,13 +50,15 @@ class Permissions(Base):
                 'text': self.message_text,
                 'image': self.message_image,
                 'command': self.message_command,
-                'history': self.message_history,
                 'broadcast': self.message_broadcast,
             },
             'room': {
                 'query': self.room_query,
                 'create': self.room_create,
                 'close': self.room_close,
+                'log': {
+                    'query': self.room_log_query,
+                },
             },
             'layout': {
                 'query': self.layout_query,

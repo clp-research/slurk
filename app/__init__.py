@@ -31,6 +31,14 @@ app.register_blueprint(login_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(chat_blueprint)
 
+from .models.room import Room
+from .models.token import Token
+from .models.layout import Layout
+from .models.permission import Permissions
+from .models.task import Task
+from .models.log import Log
+from .models.event import Event
+
 if settings.drop_database_on_startup:
     db.drop_all()
 db.create_all()
@@ -58,19 +66,28 @@ def before_request():
         return login_manager.unauthorized()
 
 
-from .models.room import Room
-from .models.token import Token
-from .models.layout import Layout
-from .models.permission import Permissions
-from .models.task import Task
+def register_event(name):
+    if not Event.query.get(name):
+        db.session.add(Event(name=name))
+
 
 if not Room.query.get("test_room"):
+    register_event("join")
+    register_event("leave")
+    register_event("connect")
+    register_event("disconnect")
+    register_event("text_message")
+    register_event("image_message")
+    register_event("command")
+    register_event("custom")
+
     meetup = Task(name="Meetup", num_users=2)
     admin_token = Token(room_name='test_room',
                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
                         task=meetup,
                         permissions=Permissions(
                             user_query=True,
+                            user_log_query=True,
                             user_permissions_query=True,
                             user_permissions_update=True,
                             user_room_query=True,
@@ -79,9 +96,9 @@ if not Room.query.get("test_room"):
                             message_text=True,
                             message_image=True,
                             message_command=True,
-                            message_history=True,
                             message_broadcast=True,
                             room_query=True,
+                            room_log_query=True,
                             room_create=True,
                             room_close=True,
                             layout_query=True,
@@ -97,6 +114,7 @@ if not Room.query.get("test_room"):
                          id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
                          permissions=Permissions(
                              user_query=True,
+                             user_log_query=True,
                              user_permissions_query=True,
                              user_permissions_update=True,
                              user_room_query=True,
@@ -105,9 +123,9 @@ if not Room.query.get("test_room"):
                              message_text=True,
                              message_image=True,
                              message_command=True,
-                             message_history=True,
                              message_broadcast=True,
                              room_query=True,
+                             room_log_query=True,
                              room_create=True,
                              room_close=True,
                              task_create=True,

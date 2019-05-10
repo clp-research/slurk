@@ -40,6 +40,10 @@
                 <td>{{ form.user_query.label }}</td>
                 <td>{{ form.user_query() }}</td>
             </tr>
+            <tr title="{{ form.user_log_query.description }}">
+                <td>{{ form.user_log_query.label }}</td>
+                <td>{{ form.user_log_query() }}</td>
+            </tr>
             <tr title="{{ form.user_permissions_query.description }}">
                 <td>{{ form.user_permissions_query.label }}</td>
                 <td>{{ form.user_permissions_query() }}</td>
@@ -76,10 +80,6 @@
                 <td>{{ form.message_command.label }}</td>
                 <td>{{ form.message_command() }}</td>
             </tr>
-            <tr title="{{ form.message_history.description }}">
-                <td>{{ form.message_history.label }}</td>
-                <td>{{ form.message_history() }}</td>
-            </tr>
             <tr title="{{ form.message_broadcast.description }}">
                 <td>{{ form.message_broadcast.label }}</td>
                 <td>{{ form.message_broadcast() }}</td>
@@ -91,6 +91,10 @@
             <tr title="{{ form.room_query.description }}">
                 <td>{{ form.room_query.label }}</td>
                 <td>{{ form.room_query() }}</td>
+            </tr>
+            <tr title="{{ form.room_log_query.description }}">
+                <td>{{ form.room_log_query.label }}</td>
+                <td>{{ form.room_log_query() }}</td>
             </tr>
             <tr title="{{ form.room_create.description }}">
                 <td>{{ form.room_create.label }}</td>

@@ -119,7 +119,7 @@ function submit_text(text, resolve, reject) {
 }
 
 function submit_private_text(receiver, text, resolve, reject) {
-    socket.emit('text', { receiver_id: receiver, msg: text }, (success, error) => {
+    socket.emit('text', { room: self_room, receiver_id: receiver, msg: text }, (success, error) => {
         if (verify_query(success, error)) {
             if (resolve !== undefined)
                 resolve();
@@ -145,7 +145,7 @@ function submit_image(url, width, height, resolve, reject) {
 }
 
 function submit_private_image(receiver, url, width, height, resolve, reject) {
-    socket.emit('image', { receiver_id: receiver, url: url, width: width, height: height }, (success, error) => {
+    socket.emit('image', { room: self_room, receiver_id: receiver, url: url, width: width, height: height }, (success, error) => {
         if (verify_query(success, error)) {
             if (resolve !== undefined)
                 resolve();

@@ -1,3 +1,5 @@
+import json
+
 from functools import partial
 import time
 
@@ -29,7 +31,18 @@ class ChatNamespace(BaseNamespace):
         elif status['type'] == 'leave':
             user = status['user']
             self.emit('get_user_task', user['id'], partial(self.user_task_leave, user))
+            self.emit('get_logs_by_user', user['id'], self.logs_response)
         print(status)
+
+    @staticmethod
+    def logs_response(success, log):
+        if not success:
+            print("Could not get logs:", log)
+            sys.exit(1)
+        if not log:
+            return
+
+        print(json.dumps(log, indent=4, sort_keys=True))
 
     def user_task_join(self, user, success, task):
         if not success:

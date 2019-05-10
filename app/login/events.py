@@ -1,20 +1,19 @@
-from logging import getLogger
-
 from calendar import timegm
 from datetime import datetime
 
 from flask import request
 from flask_socketio import join_room, leave_room
-from flask_login import login_required, current_user, logout_user, login_user
+from flask_login import login_required, current_user, logout_user
 
 from .. import db, socketio
+from ..api.log import log_event
 
 
 @socketio.on('connect')
 @login_required
 def connect():
-    getLogger("slurk").info('%s connected', current_user.name)
     current_user.session_id = request.sid
+    log_event("connect", current_user)
     db.session.commit()
     if current_user.rooms.count() == 0:
         current_user.rooms.append(current_user.token.room)
@@ -35,7 +34,7 @@ def connect():
             'room': room.name,
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
-        getLogger("slurk").info('%s joined %s', current_user.name, room.label)
+        log_event("join", current_user, room)
     db.session.commit()
 
 
@@ -56,7 +55,7 @@ def disconnect():
             socketio.emit('left_room', room.name, room=current_user.session_id)
         leave_room(room.name)
         current_user.current_rooms.remove(current_user.token.room)
-        getLogger("slurk").info('%s left %s', current_user.name, room.label)
+        log_event("leave", current_user, room)
     db.session.commit()
-    getLogger("slurk").info('%s disconnected', current_user.name)
+    log_event("disconnect", current_user)
     logout_user()

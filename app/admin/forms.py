@@ -19,16 +19,20 @@ class TokenGenerationForm(FlaskForm):
     user_query = BooleanField('Query',
                               default=False,
                               description="Can query other users")
+    user_log_query = BooleanField('Query logs',
+                                  default=False,
+                                  description="Can query the logs for an arbitrary user, the logs the user is in can "
+                                              "always be queried")
     user_permissions_query = BooleanField('Query Permissions',
                                           default=False,
-                                          description="Can query permissions of other user, The permissions for the "
+                                          description="Can query permissions of other user, the permissions for the "
                                                       "current can always be queried")
     user_permissions_update = BooleanField('Update Permissions',
                                            default=False,
                                            description="Can update permissions of a user")
     user_room_query = BooleanField('Query Room',
                                    default=False,
-                                   description="Can query the rooms for an arbitrary user, The rooms the user is in "
+                                   description="Can query the rooms for an arbitrary user, the rooms the user is in "
                                                "can always be queried")
     user_room_join = BooleanField('Join Room',
                                   default=False,
@@ -45,16 +49,15 @@ class TokenGenerationForm(FlaskForm):
     message_command = BooleanField('Command',
                                    default=False,
                                    description="Can submit commands")
-    message_history = BooleanField('History',
-                                   default=False,
-                                   description="Can query the history of arbitrary rooms, The history for the rooms "
-                                               "the user is in can always be queried")
     message_broadcast = BooleanField('Broadcast',
                                      default=False,
                                      description="Can broadcast messages")
     room_query = BooleanField('Query',
                               default=False,
                               description="Can query arbitrary rooms")
+    room_log_query = BooleanField('Query Logs',
+                                  default=False,
+                                  description="Can query logs for an arbitrary rooms. Without this permission")
     room_create = BooleanField('Create',
                                default=False,
                                description="Can create a room")

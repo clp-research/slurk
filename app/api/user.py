@@ -1,5 +1,3 @@
-from logging import getLogger
-
 from flask_login import current_user
 from flask_socketio import join_room, leave_room
 
@@ -7,6 +5,7 @@ from .. import socketio, db
 
 from ..models.room import Room
 from ..models.user import User
+from ..api.log import log_event
 
 
 @socketio.on('get_user')
@@ -79,19 +78,51 @@ def _get_user_permissions(id):
 
 
 @socketio.on('get_user_rooms')
-def _get_user_rooms(id):
+def _get_user_rooms(user_id):
     if not current_user.get_id():
         return False, "invalid session id"
-    if id and not current_user.token.permissions.user_room_query:
+    if user_id and not current_user.token.permissions.user_room_query:
         return False, "insufficient rights"
 
-    if id:
-        user = User.query.get(id)
+    if user_id:
+        user = User.query.get(user_id)
     else:
         user = current_user
 
     if user:
         return True, [room.as_dict() for room in user.rooms]
+    else:
+        return False, "user does not exist"
+
+
+@socketio.on('get_user_rooms_logs')
+def _get_user_rooms_logs(user_id):
+    from ..models.user import User
+
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if user_id and not current_user.token.permissions.user_log_query:
+        return False, "insufficient rights"
+
+    if user_id:
+        user = User.query.get(user_id)
+    else:
+        user = current_user
+
+    def filter_private_messages(logs, id):
+        for log in logs:
+            if log['event'] == "text_message" or log['event'] == "image_message":
+                # Filter only messages
+                if log['data']['receiver']:
+                    # Private message
+                    if int(log['data']['receiver']) != id and log['user']['id'] != id:
+                        # User not affected, continue the loop
+                        continue
+            yield log
+
+    if user:
+        return True, {room.name: list(filter_private_messages([log.as_dict() for log in room.logs], user.id))
+                      for room in user.rooms}
     else:
         return False, "user does not exist"
 
@@ -122,7 +153,7 @@ def _join_room(id, room):
             'room': room.as_dict(),
             'layout': room.layout.as_dict() if room.layout else None,
         }, room=user.session_id)
-        getLogger("slurk").info('%s joined %s', user.name, room.name)
+        log_event("join", user, room)
     db.session.commit()
 
     join_room(room, user.session_id)
@@ -151,7 +182,7 @@ def _leave_room(id, room):
     user.rooms.remove(room)
     if user.current_rooms.remove(room) > 0:
         socketio.emit('left_room', room.name, room=user.session_id)
-        getLogger("slurk").info('%s left %s', user.name, room.name)
+        log_event("leave", user, room)
     db.session.commit()
     leave_room(room, user.session_id)
 

@@ -1,5 +1,3 @@
-from logging import getLogger
-
 from flask_login import current_user
 from flask_socketio import close_room
 from sqlalchemy.exc import IntegrityError
@@ -8,6 +6,7 @@ from .. import socketio, db
 
 from ..models.layout import Layout
 from ..models.room import Room
+from ..api.log import log_event
 
 
 @socketio.on('get_room')
@@ -19,6 +18,20 @@ def _get_room(name):
     room = Room.query.get(name)
     if room:
         return True, room.as_dict()
+    else:
+        return False, "room does not exist"
+
+
+@socketio.on('get_room_logs')
+def _get_room_logs(name):
+    if not current_user.get_id():
+        return False, "invalid session id"
+    if not current_user.token.permissions.room_log_query:
+        return False, "insufficient rights"
+
+    room = Room.query.get(name)
+    if room:
+        return True, [log.as_dict() for log in room.logs]
     else:
         return False, "room does not exist"
 
@@ -69,7 +82,7 @@ def _close_room(room):
         for user in room.current_users:
             if user.session_id:
                 socketio.emit('left_room', room.name, room=user.session_id)
-                getLogger("slurk").info('%s left %s', user.name, room.name)
+                log_event("leave", user, room)
         close_room(room.name)
         deleted = Room.query.filter_by(name=room.name).delete()
         db.session.commit()

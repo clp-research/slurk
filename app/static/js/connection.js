@@ -66,6 +66,36 @@ function updateUsers() {
     $('#current-users').text(current_users + "You");
 }
 
+function print_history(room) {
+    socket.emit('get_user_rooms_logs', null, (success, rooms) => {
+        if (verify_query(success, rooms)) {
+            let logs = rooms[room];
+            console.log(logs);
+            for (let log_id in logs) {
+                let log = logs[log_id];
+                switch (log.event) {
+                    case 'text_message':
+                        display_message(
+                            log.user,
+                            log.date_modified,
+                            log.data.message,
+                            log.data.receiver !== null);
+                        break;
+                    case 'image_message':
+                        display_image(
+                            log.user,
+                            log.date_modified,
+                            log.data.url,
+                            log.data.width,
+                            log.data.height,
+                            log.data.receiver !== null);
+                        break
+                }
+            }
+        }
+    });
+}
+
 $(document).ready(() => {
     socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
@@ -85,6 +115,7 @@ $(document).ready(() => {
                         users[user_id] = data.room.users[user_id];
                 }
                 updateUsers();
+                print_history(data.room.name);
             }
         });
     });
