@@ -73,7 +73,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'slurk'
-copyright = u'2017-2018 DSG Bielefeld, 2019 CLP Research'
+copyright = u'2017-2018 DSG Bielefeld, 2019 CL Potsdam'
 author = u'Tim Diekmann, Simeon Schüz, Ayten Tüfekci'
 
 # The version info for the project you're documenting, acts as replacement for
