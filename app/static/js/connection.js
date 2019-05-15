@@ -78,17 +78,17 @@ function print_history(room) {
                         display_message(
                             log.user,
                             log.date_modified,
-                            log.data.message,
-                            log.data.receiver !== null);
+                            log.message,
+                            log.receiver !== null);
                         break;
                     case 'image_message':
                         display_image(
                             log.user,
                             log.date_modified,
-                            log.data.url,
-                            log.data.width,
-                            log.data.height,
-                            log.data.receiver !== null);
+                            log.url,
+                            log.width,
+                            log.height,
+                            log.receiver !== null);
                         break
                 }
             }

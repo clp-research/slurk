@@ -1,8 +1,9 @@
-from flask_login import current_user
+from flask import make_response, jsonify
+from flask_login import current_user, login_required
 from flask_socketio import close_room
 from sqlalchemy.exc import IntegrityError
 
-from .. import socketio, db
+from .. import socketio, db, api
 
 from ..models.layout import Layout
 from ..models.room import Room

@@ -113,9 +113,9 @@ def _get_user_rooms_logs(user_id):
         for log in logs:
             if log['event'] == "text_message" or log['event'] == "image_message":
                 # Filter only messages
-                if log['data']['receiver']:
+                if log['receiver']:
                     # Private message
-                    if int(log['data']['receiver']) != id and log['user']['id'] != id:
+                    if int(log['receiver']) != id and log['user']['id'] != id:
                         # User not affected, continue the loop
                         continue
             yield log

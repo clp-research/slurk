@@ -49,6 +49,7 @@ def load_user(id):
 def load_user_from_request(request):
     token = None
     token_id = request.headers.get('Authorization')
+
     if token_id:
         try:
             token = Token.query.get(token_id)
@@ -61,11 +62,11 @@ def load_user_from_request(request):
 
     if token and token.valid:
         if not token.user:
-            name = request.headers.get('Name')
+            name = request.headers.get('name')
             if not name:
-                name = request.args.get('header')
+                name = request.args.get('name')
             if not name:
-                return None
+                name = "<unnamed>"
             token.user = User(name=name)
             db.session.commit()
         return token.user

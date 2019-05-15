@@ -2,7 +2,7 @@ import sys
 import logging
 from logging import getLogger
 
-from flask import Flask, request, flash
+from flask import Flask, request, flash, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
@@ -23,10 +23,12 @@ db = SQLAlchemy(app)
 settings = Settings.from_object('config')
 login_manager = LoginManager()
 
+from .api import api as api_blueprint
 from .login import login as login_blueprint
 from .admin import admin as admin_blueprint
 from .chat import chat as chat_blueprint
 
+app.register_blueprint(api_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(chat_blueprint)
@@ -57,8 +59,12 @@ def set_sqlite_pragma(dbapi_connection, _connection_record):
 
 @app.before_request
 def before_request():
-    if not current_user.is_authenticated and request.endpoint != 'login.index' and request.endpoint != "static":
-        return login_manager.unauthorized()
+    if not current_user.is_authenticated:
+        if request.endpoint.startswith("api."):
+            return make_response(jsonify({'error': 'insufficient rights'}), 403)
+
+        if request.endpoint != 'login.index' and request.endpoint != "static":
+            return login_manager.unauthorized()
 
     if request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate \
             or request.endpoint == 'admin.task' and not current_user.token.permissions.task_create:
@@ -100,7 +106,9 @@ if not Room.query.get("test_room"):
                             room_query=True,
                             room_log_query=True,
                             room_create=True,
+                            room_update=True,
                             room_close=True,
+                            room_delete=True,
                             layout_query=True,
                             task_create=True,
                             task_query=True,

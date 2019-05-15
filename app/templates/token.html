@@ -100,9 +100,17 @@
                 <td>{{ form.room_create.label }}</td>
                 <td>{{ form.room_create() }}</td>
             </tr>
+            <tr title="{{ form.room_update.description }}">
+                <td>{{ form.room_update.label }}</td>
+                <td>{{ form.room_update() }}</td>
+            </tr>
             <tr title="{{ form.room_close.description }}">
                 <td>{{ form.room_close.label }}</td>
                 <td>{{ form.room_close() }}</td>
+            </tr>
+            <tr title="{{ form.room_delete.description }}">
+                <td>{{ form.room_delete.label }}</td>
+                <td>{{ form.room_delete() }}</td>
             </tr>
         </table>
 

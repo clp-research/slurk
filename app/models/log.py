@@ -14,7 +14,7 @@ class Log(Base):
     data = db.Column(db.Binary, nullable=False)
 
     def as_dict(self):
-        return dict({
+        base = dict({
             'event': str(self.event),
             'user': {
                 'id': self.user_id,
@@ -23,3 +23,4 @@ class Log(Base):
             'room': self.room_id,
             'data': bson.loads(self.data),
         }, **super(Log, self).as_dict())
+        return dict(base, **bson.loads(self.data))

@@ -20,7 +20,9 @@ class Permissions(Base):
     room_query = db.Column(db.Boolean, nullable=False, default=False)
     room_log_query = db.Column(db.Boolean, nullable=False, default=False)
     room_create = db.Column(db.Boolean, nullable=False, default=False)
+    room_update = db.Column(db.Boolean, nullable=False, default=False)
     room_close = db.Column(db.Boolean, nullable=False, default=False)
+    room_delete = db.Column(db.Boolean, nullable=False, default=False)
     layout_query = db.Column(db.Boolean, nullable=False, default=False)
     task_create = db.Column(db.Boolean, nullable=False, default=False)
     task_query = db.Column(db.Boolean, nullable=False, default=False)
@@ -55,7 +57,9 @@ class Permissions(Base):
             'room': {
                 'query': self.room_query,
                 'create': self.room_create,
+                'update': self.room_update,
                 'close': self.room_close,
+                'delete': self.room_delete,
                 'log': {
                     'query': self.room_log_query,
                 },

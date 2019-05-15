@@ -61,9 +61,15 @@ class TokenGenerationForm(FlaskForm):
     room_create = BooleanField('Create',
                                default=False,
                                description="Can create a room")
+    room_update = BooleanField('Update',
+                               default=False,
+                               description="Can update a rooms properties")
     room_close = BooleanField('Close',
                               default=False,
                               description="Can close a room")
+    room_delete = BooleanField('Close',
+                               default=False,
+                               description="Can delete a room if there are no backrefs it it (tokens, users etc.)")
     layout_query = BooleanField('Query',
                                 default=False,
                                 description="Can query layouts of arbitrary rooms. The layout from the rooms the user "
