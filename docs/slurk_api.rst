@@ -5,13 +5,20 @@ REST API for slurk
 =================================================
 
 Slurk provides a REST API. As authorization the token has to be provided. Data has to be passed as JSON. The responds
-will also return as JSON.
+will also return as JSON. Example::
 
+  curl -X POST
+       -H "Authorization: 00000000-0000-0000-0000-000000000000"
+       -H "Content-Type: application/json"
+       -H "Accept: application/json"
+       -d '{"name": "test_room2", "label": "Test Raum", "static": false}'
+       localhost:5000/api/v2/rooms
 
 Room
 ----
 
 * ``GET /api/v2/rooms``
+
   Returns a list of rooms:
 
   =========================  =================================================================================
@@ -45,6 +52,20 @@ Room
   ``users``                  List of users who were associated with this room at least once
   =========================  =================================================================================
 
+* ``POST /api/v2/rooms/``
+
+  Creates a new room:
+
+  =========================  =================================================================================
+  ``name`` *                 Unique name of the new room
+  ``label`` *                Label of the room
+  ``layout``                 ID of the layout
+  ``read_only``              ``True`` if the room is read only
+  ``show_latency``           ``True`` if the latency is shown in the room
+  ``show_users``             ``True`` if the current users are shown in the room
+  ``static``                 ``True`` if this room can be selected as login room
+  =========================  =================================================================================
+
 * ``PUT /api/v2/rooms/<string:name>``
 
   Updates the room by name:
@@ -52,7 +73,6 @@ Room
   =========================  =================================================================================
   ``label``                  Label of the room
   ``layout``                 ID of the layout
-  ``name``                   Unique name of the room
   ``read_only``              ``True`` if the room is read only
   ``show_latency``           ``True`` if the latency is shown in the room
   ``show_users``             ``True`` if the current users are shown in the room
@@ -61,4 +81,4 @@ Room
 
 * ``DELETE /api/v2/rooms/<string:name>``
 
-  Deletes the room by name if no associations to the room exist. Otherwise an error is returend.
+  Deletes the room by name if no associations to the room exist. Otherwise an error is returned.

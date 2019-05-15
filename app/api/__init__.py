@@ -10,7 +10,7 @@ from .task import *
 from flask import Blueprint, request
 
 
-api = Blueprint('api', __name__, url_prefix="/api/v1/")
+api = Blueprint('api', __name__, url_prefix="/api/v2/")
 
 
 @api.route('/rooms', methods=['GET'])
