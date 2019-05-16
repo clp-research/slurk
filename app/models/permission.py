@@ -8,6 +8,7 @@ class Permissions(Base):
 
     user_query = db.Column(db.Boolean, nullable=False, default=False)
     user_log_query = db.Column(db.Boolean, nullable=False, default=False)
+    user_log_event = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_query = db.Column(db.Boolean, nullable=False, default=False)
     user_permissions_update = db.Column(db.Boolean, nullable=False, default=False)
     user_room_query = db.Column(db.Boolean, nullable=False, default=False)
@@ -38,6 +39,7 @@ class Permissions(Base):
                 'query': self.user_query,
                 'log': {
                     'query': self.user_log_query,
+                    'event': self.user_log_event,
                 },
                 'permissions': {
                     'query': self.user_permissions_query,

@@ -104,4 +104,7 @@ class TaskGenerationForm(FlaskForm):
                              validators=[validators.InputRequired()],
                              default=2,
                              description="Number of turkers required for this task")
+    layout = SelectField('Layout',
+                         validators=[validators.InputRequired()],
+                         description="Layout the token is assigned to")
     submit = SubmitField('Generate Task')

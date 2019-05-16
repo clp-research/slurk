@@ -128,7 +128,10 @@ def _get_user_rooms_logs(user_id):
 
 
 @socketio.on('join_room')
-def _join_room(id, room):
+def _join_room(data):
+    id = data.get('user')
+    room = data.get('room')
+
     if not current_user.get_id():
         return False, "invalid session id"
     if id and not current_user.token.permissions.user_room_join:
@@ -150,19 +153,23 @@ def _join_room(id, room):
     if room not in user.current_rooms:
         user.current_rooms.append(room)
         socketio.emit('joined_room', {
-            'room': room.as_dict(),
-            'layout': room.layout.as_dict() if room.layout else None,
+            'room': room.name,
+            'user':  user.id,
         }, room=user.session_id)
         log_event("join", user, room)
     db.session.commit()
 
-    join_room(room, user.session_id)
+    print("join room:", room, user.session_id)
+    join_room(room.name, user.session_id)
 
     return True
 
 
 @socketio.on('leave_room')
-def _leave_room(id, room):
+def _leave_room(data):
+    id = data.get('user')
+    room = data.get('room')
+
     if not current_user.get_id():
         return False, "invalid session id"
     if id and not current_user.token.permissions.user_room_join:
@@ -179,11 +186,14 @@ def _leave_room(id, room):
     if not room:
         return False, "room does not exist"
 
+    print(user.as_dict())
+    print(room)
     user.rooms.remove(room)
-    if user.current_rooms.remove(room) > 0:
-        socketio.emit('left_room', room.name, room=user.session_id)
-        log_event("leave", user, room)
+    user.current_rooms.remove(room)
+    socketio.emit('left_room', room.name, room=user.session_id)
+    log_event("leave", user, room)
     db.session.commit()
-    leave_room(room, user.session_id)
+    print("leave room:", room, user.session_id)
+    leave_room(room.name, user.session_id)
 
     return True

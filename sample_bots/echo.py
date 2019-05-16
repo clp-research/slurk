@@ -3,27 +3,22 @@ from socketIO_client import SocketIO, BaseNamespace
 import sys
 import argparse
 
-chat_namespace = None
-
 
 # Define the namespace
 class ChatNamespace(BaseNamespace):
-    id = None
-
     # Called when connected
     def __init__(self, io, path):
         super().__init__(io, path)
 
-        # Ask some general information about this bot (None determines `self`)
-        self.emit('get_user', None, self.get_user_response)
+        self.id = None
+        self.emit('ready', self.ready_callback)
 
-    def get_user_response(self, success, user):
+    def ready_callback(self, success, user_id, _):
         if not success:
-            print("Could not retrieve user:", user)
-            sys.exit(2)
+            print("Could not join chat room")
+            sys.exit(1)
 
-        print("user: ", user)
-        self.id = user["id"]
+        self.id = user_id
 
     @staticmethod
     def get_message_response(success, error=None):

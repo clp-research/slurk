@@ -1,9 +1,11 @@
-from socketIO_client import SocketIO, BaseNamespace
-
+import requests
 import sys
 import argparse
 
-chat_namespace = None
+from socketIO_client import SocketIO, BaseNamespace
+
+uri = None
+token = None
 
 
 # Define the namespace
@@ -12,37 +14,37 @@ class ChatNamespace(BaseNamespace):
     def __init__(self, io, path):
         super().__init__(io, path)
 
-        # Ask some general information about this bot (None determines `self`)
-        self.emit('get_user', None, self.get_user_response)
-        self.emit('get_user_rooms', None, self.get_rooms_response)
-        self.emit('get_user_permissions', None, self.get_permissions_response)
+        self.emit('ready', self.ready_callback)
 
-    def on_joined_room(self, room):
-        print("joined", room)
-
-    def on_left_room(self, room):
-        print("left", room)
-
-    def get_user_response(self, success, user):
+    @staticmethod
+    def ready_callback(success, user_id, rooms):
         if not success:
-            print("Could not retrieve user:", user)
+            print("Could not join chat room")
+            sys.exit(1)
+
+        user = requests.get(f"{uri}/users/{user_id}", headers={'Authorization': f"Token {token}"})
+        if not user.ok:
+            print("Could not get user")
             sys.exit(2)
 
-        print("user: ", user)
+        print('Hi! I am "%s"' % user.json()['name'])
 
-    def get_rooms_response(self, success, rooms):
-        if not success:
-            print("Could not retrieve rooms:", rooms)
-            sys.exit(2)
+        for room_name in rooms:
+            room = requests.get(f"{uri}/rooms/{room_name}", headers={'Authorization': f"Token {token}"})
+            if not room.ok:
+                print("Could not get room")
+                sys.exit(3)
 
-        print("rooms: ", rooms)
+            print('I joined "%s"' % room.json()['name'])
 
-    def get_permissions_response(self, success, permissions):
-        if not success:
-            print("Could not retrieve permissions:", permissions)
-            sys.exit(2)
-
-        print("permissions: ", permissions)
+            logs = requests.get(f"{uri}/rooms/{room_name}/logs", headers={'Authorization': f"Token {token}"})
+            if not logs.ok:
+                print("Could not get logs")
+                sys.exit(4)
+            print('I found this logs in "%s":' % room_name)
+            for log_entry in logs.json():
+                # print(log_entry)
+                print("- %s by %s, data:" % (log_entry['event'], log_entry['user']['name']), log_entry['data'])
 
 
 if __name__ == '__main__':
@@ -56,6 +58,12 @@ if __name__ == '__main__':
                         type=int,
                         help='port of chat server', default=None)
     args = parser.parse_args()
+
+    uri = args.chat_host
+    if args.chat_port:
+        uri += f":{args.chat_port}"
+    uri += "/api/v2"
+    token = args.token
 
     # We pass token and name in request header
     socketIO = SocketIO(args.chat_host, args.chat_port,

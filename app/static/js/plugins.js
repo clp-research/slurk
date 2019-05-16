@@ -17,7 +17,7 @@ function display_message(user, time, message, privateMessage) {
     }
 
     let classes = "";
-    if (self_user.id === user.id) {
+    if (Number(self_user.id) === Number(user.id)) {
         classes += "self";
     } else {
         classes += "other";
@@ -48,7 +48,7 @@ function display_image(user, time, url, width, height, privateMessage) {
     }
 
     let classes = "";
-    if (self_user.id === user.id) {
+    if (self_user === user.id) {
         classes += "self";
     } else {
         classes += "other";

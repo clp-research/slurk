@@ -7,18 +7,27 @@ let is_typing = -1;
 
 $(document).ready(() => {
     socket.on("text_message", function (data) {
+        if (self_user === undefined) {
+            return;
+        }
         if (incoming_text !== undefined && data.user.id !== self_user.id) {
             incoming_text(data)
         }
     });
 
     socket.on("image_message", function (data) {
+        if (self_user === undefined) {
+            return;
+        }
         if (incoming_image !== undefined && data.user.id !== self_user.id) {
             incoming_image(data)
         }
     });
 
     socket.on('start_typing', function (data) {
+        if (self_user === undefined) {
+            return;
+        }
         if (data.user.id === self_user.id) {
             return
         }
@@ -29,6 +38,9 @@ $(document).ready(() => {
     });
 
     socket.on('stop_typing', function (data) {
+        if (self_user === undefined) {
+            return;
+        }
         if (data.user.id === self_user.id) {
             return
         }

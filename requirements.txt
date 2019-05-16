@@ -4,6 +4,7 @@ Flask-Login == 0.4.1
 Flask-SocketIO == 3.3.2
 Flask-SQLAlchemy == 2.3.2
 Flask-WTF == 0.14.2
+Flask-HTTPAuth == 3.2.4
 WTForms == 2.2.1
 bson == 0.5.8
 

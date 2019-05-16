@@ -20,28 +20,24 @@ function apply_room_properties(room) {
 }
 
 function apply_layout(layout) {
-    $(".fade").fadeOut(null, () => {
-        if (!layout)
-            return;
-        if (layout.html !== "") {
-            $("#sidebar").html(layout.html);
-        }
-        if (layout.css !== "") {
-            $("#custom-styles").html(layout.css);
-        }
-        if (layout.script !== "") {
-            window.eval(layout.script);
-        }
-        if (layout.title !== "") {
-            document.title = layout.title;
-        } else {
-            document.title = 'Slurk';
-        }
-        $("#title").text(document.title);
-        if (layout.subtitle !== "") {
-            $("#subtitle").text(layout.subtitle);
-        }
-    }).fadeIn();
+    if (!layout)
+        return;
+    if (layout.html !== "") {
+        $("#sidebar").html(layout.html);
+    }
+    if (layout.css !== "") {
+        $("#custom-styles").html(layout.css);
+    }
+    if (layout.script !== "") {
+        window.eval(layout.script);
+    }
+    if (layout.title !== "") {
+        document.title = layout.title;
+    } else {
+        document.title = 'Slurk';
+    }
+    $("#title").text(document.title);
+    $("#subtitle").text(layout.subtitle);
 }
 
 function verify_query(success, message) {
@@ -60,65 +56,77 @@ function verify_query(success, message) {
 function updateUsers() {
     let current_users = "";
     for (let user_id in users) {
-        if (user_id !== self_user.id)
-            current_users += users[user_id] + ', ';
+        current_users += users[user_id] + ', ';
     }
     $('#current-users').text(current_users + "You");
 }
 
-function print_history(room) {
-    socket.emit('get_user_rooms_logs', null, (success, rooms) => {
-        if (verify_query(success, rooms)) {
-            let logs = rooms[room];
-            console.log(logs);
-            for (let log_id in logs) {
-                let log = logs[log_id];
-                switch (log.event) {
-                    case 'text_message':
-                        display_message(
-                            log.user,
-                            log.date_modified,
-                            log.message,
-                            log.receiver !== null);
-                        break;
-                    case 'image_message':
-                        display_image(
-                            log.user,
-                            log.date_modified,
-                            log.url,
-                            log.width,
-                            log.height,
-                            log.receiver !== null);
-                        break
-                }
-            }
+function print_history(history) {
+    for (let log_id in history) {
+        let log = history[log_id];
+        switch (log.event) {
+            case 'text_message':
+                display_message(
+                    log.user,
+                    log.date_modified,
+                    log.message,
+                    log.receiver !== null);
+                break;
+            case 'image_message':
+                display_image(
+                    log.user,
+                    log.date_modified,
+                    log.url,
+                    log.width,
+                    log.height,
+                    log.receiver !== null);
+                break;
         }
-    });
+    }
+}
+
+function headers(xhr) {
+    xhr.setRequestHeader ("Authorization", "Token " + TOKEN);
 }
 
 $(document).ready(() => {
+    let uri = location.protocol + '//' + document.domain + ':' + location.port + "/api/v2";
     socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     socket.on("pong", (data) => {
         $("#ping").text(data);
     });
 
-    socket.on('joined_room', (data) => {
-        self_room = data.room.name;
-        apply_room_properties(data.room);
-        apply_layout(data.layout);
-        socket.emit('get_user', null, (success, user) => {
-            if (verify_query(success, user)) {
-                self_user = user;
-                for (let user_id in data.room.current_users) {
-                    if (Number(user_id) !== user.id)
-                        users[user_id] = data.room.users[user_id];
-                }
-                updateUsers();
-                print_history(data.room.name);
-            }
-        });
-    });
+    async function joined_room(data) {
+        self_room = data['room'];
+
+        let room_request = $.get({ url: uri + "/rooms/" + data['room'], beforeSend: headers });
+        let user_request = $.get({ url: uri + "/users/" + data['user'], beforeSend: headers });
+        let history = $.get({ url: uri + "/users/" + data['user'] + "/logs", beforeSend: headers });
+
+        let room = await room_request;
+        let layout = $.get({ url: uri + "/layouts/" + room.layout, beforeSend: headers });
+        apply_room_properties(room);
+
+        let user = await user_request;
+        self_user = { id: user.id, name: user.name };
+
+        users = {};
+        for (let user_id in room.current_users) {
+            if (Number(user_id) !== self_user.id)
+                users[user_id] = room.current_users[user_id];
+        }
+
+        updateUsers();
+        apply_layout(await layout);
+        print_history((await history)[room.name]);
+
+    }
+
+    async function left_room(data) {}
+
+    socket.on('joined_room', joined_room);
+    socket.on('left_room', left_room);
 
     socket.on('connect', (data) => {
         socket.emit("get_user_permissions", null, (success, permissions) => {
@@ -134,10 +142,7 @@ $(document).ready(() => {
         switch (data.type) {
             case "join":
                 let user = data.user;
-                if (user.id !== self_user) {
-                    users[user.id] = user.name;
-                    updateUsers();
-                }
+                updateUsers();
                 break;
             case "leave":
                 delete users[data.user.id];
@@ -145,4 +150,6 @@ $(document).ready(() => {
                 break;
         }
     });
+
+    socket.emit("ready")
 });

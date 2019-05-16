@@ -21,10 +21,6 @@ def connect():
         join_room(room.name)
         if current_user not in room.current_users:
             current_user.current_rooms.append(current_user.token.room)
-        socketio.emit('joined_room', {
-            'room': room.as_dict(),
-            'layout': room.layout.as_dict() if room.layout else None,
-        }, room=request.sid)
         socketio.emit('status', {
             'type': 'join',
             'user': {
@@ -38,10 +34,17 @@ def connect():
     db.session.commit()
 
 
+@socketio.on('ready')
+@login_required
+def ready():
+    for room in current_user.current_rooms:
+        socketio.emit("joined_room", dict(user=current_user.id, room=room.name), room=request.sid)
+
+
 @socketio.on('disconnect')
 @login_required
 def disconnect():
-    for room in current_user.rooms:
+    for room in current_user.current_rooms:
         socketio.emit('status', {
             'type': 'leave',
             'user': {
@@ -54,8 +57,8 @@ def disconnect():
         if current_user.session_id:
             socketio.emit('left_room', room.name, room=current_user.session_id)
         leave_room(room.name)
-        current_user.current_rooms.remove(current_user.token.room)
         log_event("leave", current_user, room)
+        current_user.current_rooms.remove(current_user.token.room)
     db.session.commit()
     log_event("disconnect", current_user)
     logout_user()

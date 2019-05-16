@@ -8,14 +8,14 @@ import bson
 class Log(Base):
     __tablename__ = 'Log'
 
-    event_name = db.Column(db.Integer, db.ForeignKey("Event.name"), nullable=False)
+    event = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("User.id"), nullable=False)
     room_id = db.Column(db.String, db.ForeignKey("Room.name"))
     data = db.Column(db.Binary, nullable=False)
 
     def as_dict(self):
         base = dict({
-            'event': str(self.event),
+            'event': self.event,
             'user': {
                 'id': self.user_id,
                 'name': self.user.name,

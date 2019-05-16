@@ -39,7 +39,6 @@ from .models.layout import Layout
 from .models.permission import Permissions
 from .models.task import Task
 from .models.log import Log
-from .models.event import Event
 
 if settings.drop_database_on_startup:
     db.drop_all()
@@ -59,10 +58,10 @@ def set_sqlite_pragma(dbapi_connection, _connection_record):
 
 @app.before_request
 def before_request():
-    if not current_user.is_authenticated:
-        if request.endpoint.startswith("api."):
-            return make_response(jsonify({'error': 'insufficient rights'}), 403)
+    if request.endpoint and request.endpoint.startswith("api."):
+        return
 
+    if not current_user.is_authenticated:
         if request.endpoint != 'login.index' and request.endpoint != "static":
             return login_manager.unauthorized()
 
@@ -72,28 +71,15 @@ def before_request():
         return login_manager.unauthorized()
 
 
-def register_event(name):
-    if not Event.query.get(name):
-        db.session.add(Event(name=name))
-
-
 if not Room.query.get("test_room"):
-    register_event("join")
-    register_event("leave")
-    register_event("connect")
-    register_event("disconnect")
-    register_event("text_message")
-    register_event("image_message")
-    register_event("command")
-    register_event("custom")
-
-    meetup = Task(name="Meetup", num_users=2)
+    meetup = Task(name="Meetup", num_users=2, layout=Layout.from_json_file("meetup_task"))
     admin_token = Token(room_name='test_room',
                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
                         task=meetup,
                         permissions=Permissions(
                             user_query=True,
                             user_log_query=True,
+                            user_log_event=True,
                             user_permissions_query=True,
                             user_permissions_update=True,
                             user_room_query=True,
@@ -120,9 +106,38 @@ if not Room.query.get("test_room"):
     db.session.add(admin_token)
     db.session.add(Token(room_name='test_room',
                          id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
+                        task=meetup,
                          permissions=Permissions(
                              user_query=True,
                              user_log_query=True,
+                             user_log_event=True,
+                             user_permissions_query=True,
+                             user_permissions_update=True,
+                             user_room_query=True,
+                             user_room_join=True,
+                             user_room_leave=True,
+                             message_text=True,
+                             message_image=True,
+                             message_command=True,
+                             message_broadcast=True,
+                             room_query=True,
+                             room_log_query=True,
+                             room_create=True,
+                             room_close=True,
+                             task_create=True,
+                             task_query=True,
+                             layout_query=True,
+                             token_generate=True,
+                             token_query=True,
+                             token_invalidate=True,
+                             token_remove=True,
+                         )))
+    db.session.add(Token(room_name='test_room',
+                         id='00000000-0000-0000-0000-000000000002' if settings.debug else None,
+                         permissions=Permissions(
+                             user_query=True,
+                             user_log_query=True,
+                             user_log_event=True,
                              user_permissions_query=True,
                              user_permissions_update=True,
                              user_room_query=True,

@@ -82,3 +82,44 @@ Room
 * ``DELETE /api/v2/rooms/<string:name>``
 
   Deletes the room by name if no associations to the room exist. Otherwise an error is returned.
+
+
+Logging
+-------
+
+
+* ``GET /api/v2/rooms/<string:name>/logs``
+
+  Returns the log of the room by name:
+
+  =========================  =================================================================================
+  ``id``                     ID of the log entry
+  ``date_created``           The date when the log entry was created
+  ``date_modified``          The date when the log entry was modified
+  ``event``                  The event type of the log entry
+  ``user``                   User who has created the log entry
+  ``data``                   Arbitrary data which is stored alongside the entry
+  =========================  =================================================================================
+
+* ``GET /api/v2/users/<int:id>/logs``
+
+  Returns a mapping for log entries for rooms of the specified user:
+
+  =========================  =================================================================================
+  ``id``                     ID of the log entry
+  ``date_created``           The date when the log entry was created
+  ``date_modified``          The date when the log entry was modified
+  ``event``                  The event type of the log entry
+  ``room``                   Associated room
+  ``data``                   Arbitrary data which is stored alongside the entry
+  =========================  =================================================================================
+
+* ``POST /api/v2/users/<int:id>/logs``
+
+  Creates a new log entry for the specified user
+
+  =========================  =================================================================================
+  ``event`` *                The event type of the log entry
+  ``room``                   The room to associate with the event
+  ``data``                   Arbitrary data which is stored alongside the entry
+  =========================  =================================================================================

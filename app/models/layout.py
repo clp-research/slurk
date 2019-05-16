@@ -194,6 +194,7 @@ class Layout(Base):
 
     name = db.Column(db.String, nullable=False, unique=True)
     rooms = db.relationship("Room", backref="layout")
+    tasks = db.relationship("Task", backref="layout")
     title = db.Column(db.String)
     subtitle = db.Column(db.String)
     html = db.Column(db.String)
