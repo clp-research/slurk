@@ -18,8 +18,8 @@ Slurk needs at least ``SECRET_KEY`` as environment variable in order to run::
 
 You can specify additional environment variables too:
 
-- ``DEBUG``: admin token is 00000000-0000-0000-0000-000000000000
-- ``SQLALCHEMY_DATABASE_URI``: URI to the database, defaults to "``sqlite:///:memory:``" (without quotes)
+- ``DEBUG``: admin token is ``00000000-0000-0000-0000-000000000000``
+- ``SQLALCHEMY_DATABASE_URI``: URI to the database, defaults to ``sqlite:///:memory:``
 - ``SQLALCHEMY_TRACK_MODIFICATIONS``: Tracks modifications in the database
 - ``SQLALCHEMY_ECHO``: Prints all executed commands to the database
 - ``DROP_DATABASE_ON_STARTUP``: Database will be recreated on restart
