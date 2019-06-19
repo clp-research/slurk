@@ -46,6 +46,8 @@ Step by step minimal example
           localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
    7dc2124e-f89f-4d06-9917-811df2a5bb89
 
+  for a list of possible parameters see :ref:`slurk_api`
+
 - Visit http://localhost and use the token to log in.
 
 Running the example bots

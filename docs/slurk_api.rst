@@ -14,6 +14,43 @@ will also return as JSON. Example::
        -d '{"name": "test_room2", "label": "Test Raum", "static": false}'
        localhost:5000/api/v2/rooms
 
+Token
+-----
+
+* ``POST /api/v2/token``
+
+  Generates a new token:
+
+  =============================  ===========================================================================================================
+  ``room`` *                     Room to land when using this token as login
+  ``user_query``                 Can query other users
+  ``user_log_query``             Can query the logs for an arbitrary user, the logs the user is in can always be queried
+  ``user_log_event``             Can create custom log events
+  ``user_permissions_query``     Can query permissions of other user, the permissions for the current can always be queried
+  ``user_permissions_update``    Can update permissions of a user
+  ``user_room_query``            Can query the rooms for an arbitrary user, the rooms the user is in can always be queried
+  ``user_room_join``             Can make users join a room
+  ``user_room_leave``            Can make users leave a room
+  ``message_text``               Can send text messages
+  ``message_image``              Can send images
+  ``message_command``            Can submit commands
+  ``message_broadcast``          Can broadcast messages
+  ``room_query``                 Can query arbitrary rooms
+  ``room_log_query``             Can query logs for an arbitrary rooms. Without this permission only the current room can be queried
+  ``room_create``                Can create a room
+  ``room_update``                Can update a rooms properties
+  ``room_close``                 Can close a room
+  ``room_delete``                Can delete a room if there are no backrefs to it (tokens, users etc.)
+  ``layout_query``               Can query layouts of arbitrary rooms. The layout from the rooms the user is in can always be queried
+  ``task_create``                Can generate tasks. Needed to open the task form
+  ``task_query``                 Can query tasks
+  ``token_generate``             Can generate tokens
+  ``token_query``                Can query tokens. The token from the current user can always be queried
+  ``token_invalidate``           Can invalidate tokens
+  ``token_remove``               Can remove tokens
+  =============================  ===========================================================================================================
+
+
 Room
 ----
 
