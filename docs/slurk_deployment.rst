@@ -39,11 +39,11 @@ Step by step minimal example
 - Generate a new token (``sed`` removes quotation from JSON-string): ::
 
    $ curl -X POST
-     -H "Authorization: Token $ADMIN_TOKEN"
-     -H "Content-Type: application/json"
-     -H "Accept: application/json"
-     -d '{"room": "test_room"}'
-     localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
+          -H "Authorization: Token $ADMIN_TOKEN"
+          -H "Content-Type: application/json"
+          -H "Accept: application/json"
+          -d '{"room": "test_room"}'
+          localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
    7dc2124e-f89f-4d06-9917-811df2a5bb89
 
 - Visit http://localhost and use the token (without quotes) to login.
