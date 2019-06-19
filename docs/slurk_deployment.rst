@@ -46,7 +46,7 @@ Step by step minimal example
           localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
    7dc2124e-f89f-4d06-9917-811df2a5bb89
 
-- Visit http://localhost and use the token (without quotes) to login.
+- Visit http://localhost and use the token to log in.
 
 Running the example bots
 ~~~~~~~~~~~~~~~~~~~~~~~~
