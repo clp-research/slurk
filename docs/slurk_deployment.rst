@@ -28,15 +28,15 @@ If you don't want to run it detached, you may omit ``-d``.
 Step by step minimal example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Start the server and store the container id:::
+- Start the server and store the container id: ::
 
     $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
 
-- Read the admin token from the logs:::
+- Read the admin token from the logs: ::
 
     $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
 
-- Generate a new token (``sed`` removes quotation from JSON-string):::
+- Generate a new token (``sed`` removes quotation from JSON-string): ::
 
    $ curl -X POST
      -H "Authorization: Token $ADMIN_TOKEN"
