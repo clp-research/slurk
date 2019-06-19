@@ -12,17 +12,16 @@ jobs:
       language: ruby
       services:
         - docker
-      before_script:
-        - touch slurk.env
       script:
-        - docker-compose build
+        - docker build -t slurk/server -f docker/slurk/Dockerfile .
+        - docker build -t slurk/concierge-bot -f sample_bots/concierge/Dockerfile  .
       before_deploy:
         - echo "$REPOSITORY_PASS" | docker login -u "$REPOSITORY_USER" --password-stdin
       deploy:
         provider: script
-        script: docker-compose push
-        on:
-          branch: master
+        script: docker push
+#        on:
+#          branch: master
     - stage: deploy
       name: Documentation
       language: python

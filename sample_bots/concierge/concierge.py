@@ -1,5 +1,6 @@
 import requests
 import sys
+import os
 import argparse
 
 from uuid import uuid1
@@ -49,6 +50,7 @@ class ChatNamespace(BaseNamespace):
 
     def on_status(self, status):
         print(status)
+        sys.stdout.flush()
         if status['type'] == 'join':
             user = status['user']
             task = self.get_user_task(user)
@@ -80,6 +82,7 @@ class ChatNamespace(BaseNamespace):
                 self.emit("leave_room", {'user': user, 'room': old_room}, self.leave_room_feedback)
             del self.tasks[task_id]
             print("created room:", new_room)
+            sys.stdout.flush()
         else:
             self.emit('text', {'msg': f'Hello, {user_name}! I am looking for a partner for you, it might take some '
                                'time, so be patient, please...',
@@ -101,6 +104,7 @@ class ChatNamespace(BaseNamespace):
             print("Could not join room:", error)
             sys.exit(4)
         print("user joined room")
+        sys.stdout.flush()
 
     @staticmethod
     def leave_room_feedback(success, error=None):
@@ -108,23 +112,45 @@ class ChatNamespace(BaseNamespace):
             print("Could not leave room:", error)
             sys.exit(5)
         print("user left room")
+        sys.stdout.flush()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run Concierge bot')
-    parser.add_argument('token',
-                        help='token for logging in as bot (see SERVURL/token)')
+
+    if 'TOKEN' in os.environ:
+        token = {'default': os.environ['TOKEN']}
+    else:
+        token = {'required': True}
+
+    if 'CHAT_HOST' in os.environ:
+        chat_host = {'default': os.environ['CHAT_HOST']}
+    else:
+        chat_host = {'default': 'http://localhost'}
+
+    if 'CHAT_PORT' in os.environ:
+        chat_port = {'default': os.environ['CHAT_PORT']}
+    else:
+        chat_port = {'default': None}
+
+    parser.add_argument('-t', '--token',
+                        help='token for logging in as bot (see SERVURL/token)',
+                        **token)
     parser.add_argument('-c', '--chat_host',
                         help='full URL (protocol, hostname; ending with /) of chat server',
-                        default='http://localhost')
+                        **chat_host)
     parser.add_argument('-p', '--chat_port',
                         type=int,
-                        help='port of chat server', default=None)
+                        help='port of chat server',
+                        **chat_port)
     args = parser.parse_args()
 
     uri = args.chat_host
     if args.chat_port:
         uri += f":{args.chat_port}"
+
+    print("running concierge bot on", uri, "with token", args.token)
+    sys.stdout.flush()
     uri += "/api/v2"
     token = args.token
 

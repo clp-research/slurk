@@ -7,16 +7,15 @@ Deploying the system
 Using docker
 ~~~~~~~~~~~~
 
-The easiest way to deploy the system is using Docker. For this, ``docker-compose`` is recommended: ::
+The easiest way to deploy the system is using Docker. For this, ``docker`` is recommended: ::
 
-  sudo apt-get install docker-compose
+  sudo apt-get install docker
   
-Slurk needs at least ``SECRET_KEY`` as environment variable in order to run::
+In order to run the server on port 80, just run
 
-  cat slurk.env
-  SECRET_KEY = top-secret-key
+  $ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
 
-You can specify additional environment variables too:
+These additional environment variables can be specified:
 
 - ``DEBUG``: admin token is ``00000000-0000-0000-0000-000000000000``
 - ``SQLALCHEMY_DATABASE_URI``: URI to the database, defaults to ``sqlite:///:memory:``
@@ -24,18 +23,20 @@ You can specify additional environment variables too:
 - ``SQLALCHEMY_ECHO``: Prints all executed commands to the database
 - ``DROP_DATABASE_ON_STARTUP``: Database will be recreated on restart
 
-
-Now go to the root directory and just call::
-
-  docker-compose up --build -d
-  
-This will build the slurk container and serve it via ``gunicorn`` at port ``5000``. Additinally, it is served
-via ``nginx`` at port ``80``. This can be configured in ``docker-compose.yml``. The containers can be stopped
-with::
-
-  docker-compose down
-
 If you don't want to run it detached, you may omit ``-d``.
+
+Running the example bots
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are Docker containers for all example bots. To run these bots using docker, type
+
+  $ docker run -e TOKEN=your-token slurk/concierge-bot
+
+- ``CHAT_HOST``: The host address (must include the protocol like "https://")
+- ``CHAT_PORT``: The port of the host
+
+Note, that you have to pass ``--net="host"`` to docker in order to make ``http://localhost`` working.
+
 
 Manual setup
 ~~~~~~~~~~~~

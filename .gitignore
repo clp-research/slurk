@@ -2,6 +2,5 @@ log/
 *__pycache__*
 .DS_Store
 _build
-slurk.env
 
 *.db
