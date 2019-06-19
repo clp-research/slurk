@@ -1,10 +1,18 @@
-switch (element["type"]) {
-    case "text":
-        display_message(element["user"], element["timestamp"], element["msg"], element["receiver_id"] !== null);
+switch (element.event) {
+    case 'text_message':
+        display_message(
+            element.user,
+            element.date_modified,
+            element.message,
+            element.receiver !== null);
         break;
-    case "command":
-        display_message(self_user, element["timestamp"], element["command"], true);
-        break;
-    case "status":
+    case 'image_message':
+        display_image(
+            element.user,
+            element.date_modified,
+            element.url,
+            element.width,
+            element.height,
+            element.receiver !== null);
         break;
 }

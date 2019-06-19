@@ -21,6 +21,8 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
+    env_file:
+      - slurk.env
     ports:
       - "80:80"
     depends_on:

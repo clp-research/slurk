@@ -1,7 +1,6 @@
 import requests
 import sys
 import argparse
-import time
 
 from uuid import uuid1
 from socketIO_client import SocketIO, BaseNamespace

@@ -57,7 +57,7 @@
     "incoming-text": "display-text",
     "incoming-image": "display-image",
     "submit-message": "send-message",
-    "print-history": "intercept-history",
+    "print-history": "plain-history",
     "plain": [
       "do-my-stuff"
     ],

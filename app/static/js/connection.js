@@ -61,30 +61,6 @@ function updateUsers() {
     $('#current-users').text(current_users + "You");
 }
 
-function print_history(history) {
-    for (let log_id in history) {
-        let log = history[log_id];
-        switch (log.event) {
-            case 'text_message':
-                display_message(
-                    log.user,
-                    log.date_modified,
-                    log.message,
-                    log.receiver !== null);
-                break;
-            case 'image_message':
-                display_image(
-                    log.user,
-                    log.date_modified,
-                    log.url,
-                    log.width,
-                    log.height,
-                    log.receiver !== null);
-                break;
-        }
-    }
-}
-
 function headers(xhr) {
     xhr.setRequestHeader ("Authorization", "Token " + TOKEN);
 }
@@ -119,7 +95,9 @@ $(document).ready(() => {
 
         updateUsers();
         apply_layout(await layout);
-        print_history((await history)[room.name]);
+        history = await history;
+        console.log(history[room.name]);
+        print_history(history[room.name]);
 
     }
 
