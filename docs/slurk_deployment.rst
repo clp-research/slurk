@@ -11,7 +11,7 @@ The easiest way to deploy the system is using Docker. For this, ``docker`` is re
 
   sudo apt-get install docker
   
-In order to run the server on port 80, just run
+In order to run the server on port 80, just run ::
 
   $ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
 
@@ -25,12 +25,35 @@ These additional environment variables can be specified:
 
 If you don't want to run it detached, you may omit ``-d``.
 
+Step by step minimal example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Start the server and store the container id:::
+
+    $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
+
+- Read the admin token from the logs:::
+
+    $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
+
+- Generate a new token (``sed`` removes quotation from JSON-string):::
+
+   $ curl -X POST
+     -H "Authorization: Token $ADMIN_TOKEN"
+     -H "Content-Type: application/json"
+     -H "Accept: application/json"
+     -d '{"room": "test_room"}'
+     localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
+   7dc2124e-f89f-4d06-9917-811df2a5bb89
+
+- Visit http://localhost and use the token (without quotes) to login.
+
 Running the example bots
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are Docker containers for all example bots. To run these bots using docker, type
+There are Docker containers for all example bots. To run these bots using docker, type ::
 
-  $ docker run -e TOKEN=your-token slurk/concierge-bot
+  $ docker run -e TOKEN=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx slurk/concierge-bot
 
 - ``CHAT_HOST``: The host address (must include the protocol like "https://")
 - ``CHAT_PORT``: The port of the host

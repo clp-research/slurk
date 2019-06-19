@@ -10,6 +10,7 @@ from .token import *
 from .user import *
 from .task import *
 
+from ..models.permission import Permissions
 
 from flask import Blueprint, request
 
@@ -33,6 +34,54 @@ def verify_token(token):
         g.current_user = token.user
         return True
     return False
+
+
+@api.route('/token', methods=['POST'])
+@auth.login_required
+def post_token():
+    if not g.current_permissions.token_generate:
+        return make_response(jsonify({'error': 'insufficient rights'}), 403)
+
+    data = request.get_json(force=True) if request.is_json else None
+    if not data:
+        return make_response(jsonify({'error': 'bad request'}, 400))
+
+    try:
+        token = Token(
+            room_name=data.get("room", None),
+            permissions=Permissions(
+                user_query=data.get("user_query", False),
+                user_log_query=data.get("user_log_query", False),
+                user_log_event=data.get("user_log_event", False),
+                user_permissions_query=data.get("user_permissions_query", False),
+                user_permissions_update=data.get("user_permissions_update", False),
+                user_room_query=data.get("user_room_query", False),
+                user_room_join=data.get("user_room_join", False),
+                user_room_leave=data.get("user_room_leave", False),
+                message_text=data.get("message_text", False),
+                message_image=data.get("message_image", False),
+                message_command=data.get("message_command", False),
+                message_broadcast=data.get("message_broadcast", False),
+                room_query=data.get("room_query", False),
+                room_log_query=data.get("room_log_query", False),
+                room_create=data.get("room_create", False),
+                room_update=data.get("room_update", False),
+                room_close=data.get("room_close", False),
+                room_delete=data.get("room_delete", False),
+                layout_query=data.get("layout_query", False),
+                task_create=data.get("task_create", False),
+                task_query=data.get("task_query", False),
+                token_generate=data.get("token_generate", False),
+                token_query=data.get("token_query", False),
+                token_invalidate=data.get("token_invalidate", False),
+                token_remove=data.get("token_remove", False),
+            )
+        )
+        db.session.add(token)
+        db.session.commit()
+        return jsonify(token.id)
+    except (IntegrityError, StatementError) as e:
+        return make_response(jsonify({'error': str(e)}), 400)
 
 
 @api.route('/users', methods=['GET'])
