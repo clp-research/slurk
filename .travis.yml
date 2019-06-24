@@ -25,7 +25,7 @@ jobs:
         on:
           branch: master
       - provider: script
-        script: docker push concierge-bot
+        script: docker push slurk/concierge-bot
         on:
           branch: master
       - provider: script
