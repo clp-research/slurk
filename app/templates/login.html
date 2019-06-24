@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+</head>
+
+<body>
+    <div class="login-page">
+      <div class="login-form">
+        <h1>Slurk</h1>
+        <form method="POST">
+            <ul class="flash">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                   {% if messages %}
+                      {% for category, message in messages %}
+                         <li class="{{ category }}">{{ message }}</li>
+                      {% endfor %}
+                   {% endif %}
+                {% endwith %}
+            </ul>
+          {{ form.hidden_tag() }}
+          {{ form.name(required="required", placeholder="Name", autocomplete="off") }}
+          {{ form.token(required="required", placeholder="Token", autocomplete="off") }}
+          {{ form.submit() }}
+        </form>
+      </div>
+    </div>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-let trackingArea = "#current-image"
+let trackingArea = "#current-image";
 let mouse = {
     move: false,
     pos: {x:false, y:false}

@@ -18,7 +18,7 @@ body, html {
 	height: 1px;
 	position: absolute;
 	top: 10px;
-	width: 30%;
+	width: 37%;
 }
 .login-page h1:after {
 	background: #666666;
@@ -52,6 +52,18 @@ body, html {
     position: relative;
     max-width: 320px;
     margin: 0 auto;
+}
+
+.flash > .error {
+    color: red;
+}
+
+.flash > .warning {
+    color: yellow;
+}
+
+.flash > .info {
+    color: blue;
 }
 
 input {

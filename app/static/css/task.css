@@ -1,0 +1,7 @@
+label {
+    width: 200px;
+}
+
+select, input[type="text"] {
+    width: 300px;
+}

@@ -1,37 +1,177 @@
-from flask import Flask
-from flask_login import LoginManager
+import sys
+import logging
+from logging import getLogger
+
+from flask import Flask, request, flash, make_response, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
 
-import configparser
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+
+from .settings import Settings
+
+logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
 
 socketio = SocketIO(ping_interval=5, ping_timeout=120, async_mode="gevent")
 
+app = Flask(__name__)
+app.config.from_object('config')
 
+db = SQLAlchemy(app)
+settings = Settings.from_object('config')
 login_manager = LoginManager()
 
-config = None
+from .api import api as api_blueprint
+from .login import login as login_blueprint
+from .chat import chat as chat_blueprint
+
+app.register_blueprint(api_blueprint)
+app.register_blueprint(login_blueprint)
+app.register_blueprint(chat_blueprint)
+
+from .models.room import Room
+from .models.token import Token
+from .models.layout import Layout
+from .models.permission import Permissions
+from .models.task import Task
+from .models.log import Log
+
+if settings.drop_database_on_startup:
+    db.drop_all()
+db.create_all()
+login_manager.init_app(app)
+login_manager.login_view = 'login.index'
+socketio.init_app(app)
 
 
-def create_app(debug=False):
-    global config
-
-    config = configparser.ConfigParser(interpolation=None)
-    config.read("config.ini")
-
-    """Create an application."""
-    app = Flask(__name__)
-    app.debug = debug
-    app.config['SECRET_KEY'] = config['server']['secret-key']
-
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    socketio.init_app(app)
-    login_manager.init_app(app)
-    return app
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, _connection_record):
+    if settings.database_url.startswith('sqlite://'):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    from .main.User import User
-    return User.from_id(user_id)
+@app.before_request
+def before_request():
+    if request.endpoint and request.endpoint.startswith("api."):
+        return
+
+    if not current_user.is_authenticated:
+        if request.endpoint != 'login.index' and request.endpoint != "static":
+            return login_manager.unauthorized()
+
+    if request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate \
+            or request.endpoint == 'admin.task' and not current_user.token.permissions.task_create:
+        flash("Permission denied", "error")
+        return login_manager.unauthorized()
+
+
+if not Room.query.get("test_room"):
+    meetup = Task(name="Meetup", num_users=2, layout=Layout.from_json_file("meetup_task"))
+    admin_token = Token(room_name='test_room',
+                        id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
+                        task=meetup,
+                        permissions=Permissions(
+                            user_query=True,
+                            user_log_query=True,
+                            user_log_event=True,
+                            user_permissions_query=True,
+                            user_permissions_update=True,
+                            user_room_query=True,
+                            user_room_join=True,
+                            user_room_leave=True,
+                            message_text=True,
+                            message_image=True,
+                            message_command=True,
+                            message_broadcast=True,
+                            room_query=True,
+                            room_log_query=True,
+                            room_create=True,
+                            room_update=True,
+                            room_close=True,
+                            room_delete=True,
+                            layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
+                            task_create=True,
+                            task_query=True,
+                            task_update=True,
+                            token_generate=True,
+                            token_query=True,
+                            token_invalidate=True,
+                            token_update=True,
+                        ))
+    db.session.add(admin_token)
+    db.session.add(Token(room_name='test_room',
+                         id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
+                         task=meetup,
+                         permissions=Permissions(
+                             user_query=True,
+                             user_log_query=True,
+                             user_log_event=True,
+                             user_permissions_query=True,
+                             user_permissions_update=True,
+                             user_room_query=True,
+                             user_room_join=True,
+                             user_room_leave=True,
+                             message_text=True,
+                             message_image=True,
+                             message_command=True,
+                             message_broadcast=True,
+                             room_query=True,
+                             room_log_query=True,
+                             room_create=True,
+                             room_close=True,
+                             task_create=True,
+                             task_query=True,
+                             task_update=True,
+                             layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
+                             token_generate=True,
+                             token_query=True,
+                             token_invalidate=True,
+                             token_update=True,
+                         )))
+    db.session.add(Token(room_name='test_room',
+                         id='00000000-0000-0000-0000-000000000002' if settings.debug else None,
+                         permissions=Permissions(
+                             user_query=True,
+                             user_log_query=True,
+                             user_log_event=True,
+                             user_permissions_query=True,
+                             user_permissions_update=True,
+                             user_room_query=True,
+                             user_room_join=True,
+                             user_room_leave=True,
+                             message_text=True,
+                             message_image=True,
+                             message_command=True,
+                             message_broadcast=True,
+                             room_query=True,
+                             room_log_query=True,
+                             room_create=True,
+                             room_close=True,
+                             task_create=True,
+                             task_query=True,
+                             task_update=True,
+                             layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
+                             token_generate=True,
+                             token_query=True,
+                             token_invalidate=True,
+                             token_update=True,
+                         )))
+    db.session.add(Room(name="test_room",
+                        label="Test Room",
+                        static=True,
+                        layout=Layout.from_json_file("test_room")))
+    db.session.commit()
+    getLogger("slurk").info("generating test room and admin token...")
+print("admin token:")
+print(Token.query.order_by(Token.date_created).first().id)
+sys.stdout.flush()
