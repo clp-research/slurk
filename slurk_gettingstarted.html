@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. Deploying the system &mdash; slurk 1.1.1 documentation</title>
+  <title>3. Getting started &mdash; slurk 1.1.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. Tools" href="slurk_tools.html" />
-    <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
+    <link rel="next" title="4. Pairing up participants and running multiple rooms (and bots)" href="slurk_multibots.html" />
+    <link rel="prev" title="2. Installation" href="slurk_installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,20 +87,23 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-docker">3.1. Using docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-by-step-minimal-example">3.2. Step by step minimal example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">3.3. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-example-bots">3.4. Running the example bots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-setup">3.5. Manual setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-description-and-requirements">3.5.1. General description and requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serving-slurk-with-gunicorn">3.5.2. Serving Slurk with Gunicorn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-nginx">3.5.3. Configuring Nginx</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Deploying the system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-docker">7.1. Using docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-setup">7.2. Manual setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#general-description-and-requirements">7.2.1. General description and requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#serving-slurk-with-gunicorn">7.2.2. Serving Slurk with Gunicorn</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-nginx">7.2.3. Configuring Nginx</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
@@ -148,13 +151,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>7. Deploying the system</li>
+      <li>3. Getting started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/slurk_deployment.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/slurk_gettingstarted.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -167,31 +170,85 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="deploying-the-system">
-<span id="slurk-deployment"></span><h1>7. Deploying the system<a class="headerlink" href="#deploying-the-system" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getting-started">
+<span id="slurk-deployment"></span><h1>3. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="using-docker">
-<h2>7.1. Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to deploy the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> is recommended:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span>
+<h2>3.1. Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to deploy the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">docker</span>
 </pre></div>
 </div>
-<p>Now go to the root directory and just call:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">--</span><span class="n">build</span> <span class="o">-</span><span class="n">d</span>
+<p>In order to run the server on port 80, just run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
 </pre></div>
 </div>
-<p>This will build the slurk container and serve it via <code class="docutils literal notranslate"><span class="pre">gunicorn</span></code> at port <code class="docutils literal notranslate"><span class="pre">5000</span></code>. Additinally, it is served
-via <code class="docutils literal notranslate"><span class="pre">nginx</span></code> at port <code class="docutils literal notranslate"><span class="pre">80</span></code>. This can be configured in <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>. The containers can be stoppd
-with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">down</span>
-</pre></div>
-</div>
+<p>These additional environment variables can be specified:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>: admin token is <code class="docutils literal notranslate"><span class="pre">00000000-0000-0000-0000-000000000000</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_DATABASE_URI</span></code>: URI to the database, defaults to <code class="docutils literal notranslate"><span class="pre">sqlite:///:memory:</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_TRACK_MODIFICATIONS</span></code>: Tracks modifications in the database</li>
+<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_ECHO</span></code>: Prints all executed commands to the database</li>
+<li><code class="docutils literal notranslate"><span class="pre">DROP_DATABASE_ON_STARTUP</span></code>: Database will be recreated on restart</li>
+</ul>
 <p>If you don’t want to run it detached, you may omit <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
 </div>
+<div class="section" id="step-by-step-minimal-example">
+<h2>3.2. Step by step minimal example<a class="headerlink" href="#step-by-step-minimal-example" title="Permalink to this headline">¶</a></h2>
+<p>Start the server and store the container id:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
+</pre></div>
+</div>
+<p>Read the admin token from the logs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2&gt; /dev/null | sed -n &#39;/admin token:/{n;p;}&#39;)
+</pre></div>
+</div>
+<p>Verify you have a proper UUID token:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $ADMIN_TOKEN
+b8b88080-b8d1-4eb2-af90-dccf7ece3d82
+</pre></div>
+</div>
+<p>Generate a new token for the clients (<code class="docutils literal notranslate"><span class="pre">sed</span></code> removes quotation from JSON-string):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot;
+       -H &quot;Content-Type: application/json&quot;
+       -H &quot;Accept: application/json&quot;
+       -d &#39;{&quot;room&quot;: &quot;test_room&quot;}&#39;
+       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
+7dc2124e-f89f-4d06-9917-811df2a5bb89
+</pre></div>
+</div>
+<p>for a list of possible parameters see <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a></p>
+<p>Visit <a class="reference external" href="http://localhost" target="_blank">http://localhost</a> and enter whatever Name you like and this token, and click “enter chatroom”.</p>
+<p>This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).</p>
+<div class="figure align-center" id="id11">
+<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.</p>
+</div>
+<div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
+<span id="twobrowsers"></span><h2>3.3. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an addtional token and, <strong>from a different web browser</strong>, log in with that token. You should now see both identities in the respective chat windows, and you should be able to talk with your two selves across these browsers. Hurray!</p>
+<p>(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network], this might work across machines, and so you can have a chat with an actual different person.)</p>
+<p>This has demonstrated the very basic capabilities – providing a chat environment –, but so far there hasn’t been any use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
+</div>
+<div class="section" id="running-the-example-bots">
+<h2>3.4. Running the example bots<a class="headerlink" href="#running-the-example-bots" title="Permalink to this headline">¶</a></h2>
+<p>There are Docker containers for all example bots. To run these bots using docker, type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx slurk/concierge-bot
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">CHAT_HOST</span></code>: The host address (must include the protocol like “<a class="reference external" href="https://" target="_blank">https://</a>”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">CHAT_PORT</span></code>: The port of the host</li>
+</ul>
+<p>Note, that you have to pass <code class="docutils literal notranslate"><span class="pre">--net=&quot;host&quot;</span></code> to docker in order to make <code class="docutils literal notranslate"><span class="pre">http://localhost</span></code> working.</p>
+</div>
 <div class="section" id="manual-setup">
-<h2>7.2. Manual setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h2>
+<h2>3.5. Manual setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h2>
 <p>If you don’t want to use docker for whatever reason, you can also manually setup the server.</p>
 <div class="section" id="general-description-and-requirements">
-<h3>7.2.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h3>
+<h3>3.5.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h3>
 <p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
 with SSL connection.</p>
 <p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
@@ -203,7 +260,7 @@ with SSL connection.</p>
 Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine <a class="footnote-reference" href="#id7" id="id2">[2]</a>.</p>
 </div>
 <div class="section" id="serving-slurk-with-gunicorn">
-<h3>7.2.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h3>
+<h3>3.5.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h3>
 <p>You can serve our Flask application on a permanent basis.
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
 the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
@@ -284,7 +341,7 @@ CGroup: /system.slice/chat.service
 </div>
 </div>
 <div class="section" id="configuring-nginx">
-<h3>7.2.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
+<h3>3.5.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
 <p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
 First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">chat</span>
@@ -386,10 +443,10 @@ If you choose incorrect one, the application will not be accessible from outside
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_tools.html" class="btn btn-neutral float-right" title="8. Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="4. Pairing up participants and running multiple rooms (and bots)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_installation.html" class="btn btn-neutral float-left" title="2. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Quickstart &mdash; slurk 1.1.1 documentation</title>
+  <title>Quickstart &mdash; slurk 1.1.1 documentation</title>
   
 
   
@@ -34,9 +34,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Pairing up participants and running multiple rooms (and bots)" href="slurk_multibots.html" />
-    <link rel="prev" title="2. Installation" href="slurk_installation.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,20 +82,14 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-a-basic-test-of-the-server">3.1. “Hello World”: A basic test of the server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">3.2. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#chatting-with-a-bot-and-giving-commands">3.3. Chatting with a bot, and giving commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examining-the-log-files">3.4. Examining the log files</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deploying the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
@@ -145,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>3. Quickstart</li>
+      <li>Quickstart</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,9 +157,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quickstart">
-<span id="slurk-quickstart"></span><h1>3. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-quickstart"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="hello-world-a-basic-test-of-the-server">
-<h2>3.1. “Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
+<h2>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
 <p>Start <em>slurk</em> with:</p>
 <ul class="simple">
 <li><cite>python chat.py</cite></li>
@@ -188,19 +180,19 @@
 <p>This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).</p>
 <div class="figure align-center" id="id1">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.</p>
 <p>(But one additional thing before we move on: If you repeat the steps above while keeping the chat server alive, you will notice that you will end up in the same room which shows the chat history of the previously created user which now however is orphaned, as you have your new identity. The reason for that is the websocket connection that is created by the server is tied to the browser, and was kept alive. If you want to start fresh, you need to kill the chat server and restart again.)</p>
 </div>
 <div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<span id="twobrowsers"></span><h2>3.2. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<span id="twobrowsers"></span><h2>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
 <p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an addtional token and, <strong>from a different web browser</strong>, log in with that token. You should now see both identities in the respective chat windows, and you should be able to talk with your two selves across these browsers. Hurray!</p>
 <p>(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network], this might work across machines, and so you can have a chat with an actual different person.)</p>
 <p>This has demonstrated the very basic capabilities – providing a chat environment –, but so far there hasn’t been any use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
 <div class="section" id="chatting-with-a-bot-and-giving-commands">
-<h2>3.3. Chatting with a bot, and giving commands<a class="headerlink" href="#chatting-with-a-bot-and-giving-commands" title="Permalink to this headline">¶</a></h2>
+<h2>Chatting with a bot, and giving commands<a class="headerlink" href="#chatting-with-a-bot-and-giving-commands" title="Permalink to this headline">¶</a></h2>
 <p>Kill the server (if it’s still running) and start it again:</p>
 <ul class="simple">
 <li><cite>python chat.py</cite></li>
@@ -244,14 +236,14 @@
 <ul class="simple">
 <li><cite>/new_image_private</cite></li>
 </ul>
-<p>Now only the image shown for <cite>B</cite> should have changed and you should be seeing something similar to <a class="reference internal" href="#screenshot-privimage"><span class="std std-numref">Fig. 3.2</span></a>. This demonstrates another important feature: the display area can be controlled per user; that is, different users can be shown different material in that area. This makes it possible to set up tasks where the users may not in fact be seeing the same image.</p>
+<p>Now only the image shown for <cite>B</cite> should have changed and you should be seeing something similar to <code class="xref std std-numref docutils literal notranslate"><span class="pre">screenshot_privimage</span></code>. This demonstrates another important feature: the display area can be controlled per user; that is, different users can be shown different material in that area. This makes it possible to set up tasks where the users may not in fact be seeing the same image.</p>
 <div class="figure align-center" id="id2">
 <span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/minimal_private_images.png"><img alt="_images/minimal_private_images.png" src="_images/minimal_private_images.png" style="width: 708.6px; height: 510.0px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Example interaction with the minimal bot</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Example interaction with the minimal bot</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="examining-the-log-files">
-<h2>3.4. Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
+<h2>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
 <p>The point of all this, however, is not just to make interaction <em>possible</em>, it is to <em>record</em> these interactions to be able to later study them or train models on them. In the directory <cite>log/</cite> where you started the chat server, you should now find logfiles, named with the time stamp and the name of the room. These files contain, as a JSON list, most of the events that the server handled, including all the messages that were sent. This should contain the information that you need for your particular purposes.</p>
 <p>This concludes the quick start. We now can be reasonably confident that the setup is working on your machine; and you also got a first introduction to the basic concepts. But what we have seen so far would only allow us to run a single room at a time. That may already be all you want if you conduct experiments locally with participants that you bring into the lab. If you want to make use of crowdsourcing, though, you will want to be able to automatically pair up participants and create task rooms for each pair. This will be explained in the next section.</p>
 </div>
@@ -262,15 +254,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="4. Pairing up participants and running multiple rooms (and bots)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="slurk_installation.html" class="btn btn-neutral float-left" title="2. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

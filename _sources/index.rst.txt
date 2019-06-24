@@ -10,11 +10,11 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 
    slurk_about
    slurk_installation
-   slurk_quickstart
+   slurk_gettingstarted
    slurk_multibots
    slurk_layouts
    slurk_bots
-   slurk_deployment
+   slurk_api
    slurk_tools
    slurk_amt
 
