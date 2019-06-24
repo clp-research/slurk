@@ -83,11 +83,6 @@ def _html(data, indent=0):
 
 
 def _css(data, indent=0):
-    """
-    Creates css from the Layout.
-    :param indent: indent the css by this value
-    :return: the css
-    """
     if "css" not in data:
         return ""
 
@@ -219,7 +214,7 @@ class Layout(Base):
         :param json_data: the json_data to create the layout from
         :return: the Layout
         """
-        return cls._from_json_data(name, json.loads(json_data))
+        return cls.from_json_data(name, json.loads(json_data))
 
     @classmethod
     def from_json_file(cls, name: str):
@@ -241,7 +236,7 @@ class Layout(Base):
         try:
             with urllib.request.urlopen(name) as url:
                 getLogger("slurk").info("loading layout from %s", url)
-                return cls._from_json_data(name, json.loads(url.read().decode()))
+                return cls.from_json_data(name, json.loads(url.read().decode()))
         except:
             pass
 
@@ -251,18 +246,18 @@ class Layout(Base):
         try:
             with open(layout_path + name + ".json") as json_data:
                 getLogger("slurk").info("loading layout from %s%s.json", layout_path, name)
-                return cls._from_json_data(name, json.load(json_data))
+                return cls.from_json_data(name, json.load(json_data))
         except FileNotFoundError:
             try:
                 with open(layout_path + "default.json") as json_data:
                     getLogger("slurk").warn(
                         'could not find layout "%s". loaded default layout instead', name)
-                    return cls._from_json_data(name, json.load(json_data))
+                    return cls.from_json_data(name, json.load(json_data))
             except FileNotFoundError:
                 return None
 
     @classmethod
-    def _from_json_data(cls, name, data):
+    def from_json_data(cls, name, data):
         title = _title(data)
         subtitle = _subtitle(data)
         html = _html(data)

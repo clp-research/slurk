@@ -15,13 +15,15 @@ jobs:
       script:
         - docker build -t slurk/server -f docker/slurk/Dockerfile .
         - docker build -t slurk/concierge-bot -f sample_bots/concierge/Dockerfile  .
+        - docker build -t slurk/minimal-bot -f sample_bots/minimal/Dockerfile  .
+        - docker build -t slurk/echo-bot -f sample_bots/echo/Dockerfile  .
       before_deploy:
         - echo "$REPOSITORY_PASS" | docker login -u "$REPOSITORY_USER" --password-stdin
       deploy:
         provider: script
         script: docker push
-#        on:
-#          branch: master
+        on:
+          branch: master
     - stage: deploy
       name: Documentation
       language: python

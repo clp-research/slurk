@@ -1,7 +1,7 @@
 .. _slurk_deployment:
 
 =========================================
-Deploying the system
+Getting started
 =========================================
 
 Using docker
@@ -28,15 +28,20 @@ If you don't want to run it detached, you may omit ``-d``.
 Step by step minimal example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Start the server and store the container id: ::
+Start the server and store the container id: ::
 
     $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
 
-- Read the admin token from the logs: ::
+Read the admin token from the logs: ::
 
     $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
 
-- Generate a new token (``sed`` removes quotation from JSON-string): ::
+Verify you have a proper UUID token: ::
+
+    $ echo $ADMIN_TOKEN
+    b8b88080-b8d1-4eb2-af90-dccf7ece3d82
+
+Generate a new token for the clients (``sed`` removes quotation from JSON-string): ::
 
    $ curl -X POST
           -H "Authorization: Token $ADMIN_TOKEN"
@@ -46,9 +51,32 @@ Step by step minimal example
           localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
    7dc2124e-f89f-4d06-9917-811df2a5bb89
 
-  for a list of possible parameters see :ref:`slurk_api`
+for a list of possible parameters see :ref:`slurk_api`
 
-- Visit http://localhost and use the token to log in.
+Visit http://localhost and enter whatever Name you like and this token, and click "enter chatroom".
+
+This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).
+
+
+.. _screenshot_void:
+.. figure:: single_user.png
+   :align: center
+   :scale: 60 %
+
+   A single user talking to no one in particular
+
+This has confirmed that the server is working correctly, but so far this hasn't really been very exciting. So we move on.
+
+.. _twobrowsers:
+
+"Hello World" -- "Hello Other Browser": Testing with two browsers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run the steps from the previous section (starting the server, creating a token and logging in), and then create an addtional token and, **from a different web browser**, log in with that token. You should now see both identities in the respective chat windows, and you should be able to talk with your two selves across these browsers. Hurray!
+
+(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network], this might work across machines, and so you can have a chat with an actual different person.)
+
+This has demonstrated the very basic capabilities -- providing a chat environment --, but so far there hasn't been any use made of the display window. Let's change that by inviting a bot into our chat room.
 
 Running the example bots
 ~~~~~~~~~~~~~~~~~~~~~~~~

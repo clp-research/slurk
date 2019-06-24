@@ -25,12 +25,10 @@ login_manager = LoginManager()
 
 from .api import api as api_blueprint
 from .login import login as login_blueprint
-from .admin import admin as admin_blueprint
 from .chat import chat as chat_blueprint
 
 app.register_blueprint(api_blueprint)
 app.register_blueprint(login_blueprint)
-app.register_blueprint(admin_blueprint)
 app.register_blueprint(chat_blueprint)
 
 from .models.room import Room
@@ -96,17 +94,20 @@ if not Room.query.get("test_room"):
                             room_close=True,
                             room_delete=True,
                             layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
                             task_create=True,
                             task_query=True,
+                            task_update=True,
                             token_generate=True,
                             token_query=True,
                             token_invalidate=True,
-                            token_remove=True,
+                            token_update=True,
                         ))
     db.session.add(admin_token)
     db.session.add(Token(room_name='test_room',
                          id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
-                        task=meetup,
+                         task=meetup,
                          permissions=Permissions(
                              user_query=True,
                              user_log_query=True,
@@ -126,11 +127,14 @@ if not Room.query.get("test_room"):
                              room_close=True,
                              task_create=True,
                              task_query=True,
+                             task_update=True,
                              layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
                              token_generate=True,
                              token_query=True,
                              token_invalidate=True,
-                             token_remove=True,
+                             token_update=True,
                          )))
     db.session.add(Token(room_name='test_room',
                          id='00000000-0000-0000-0000-000000000002' if settings.debug else None,
@@ -153,11 +157,14 @@ if not Room.query.get("test_room"):
                              room_close=True,
                              task_create=True,
                              task_query=True,
+                             task_update=True,
                              layout_query=True,
+                            layout_create=True,
+                            layout_update=True,
                              token_generate=True,
                              token_query=True,
                              token_invalidate=True,
-                             token_remove=True,
+                             token_update=True,
                          )))
     db.session.add(Room(name="test_room",
                         label="Test Room",

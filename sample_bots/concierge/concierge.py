@@ -24,7 +24,7 @@ class ChatNamespace(BaseNamespace):
 
     @staticmethod
     def get_user_task(user):
-        task = requests.get(f"{uri}/users/{user['id']}/task", headers={'Authorization': f"Token {token}"})
+        task = requests.get(f"{uri}/user/{user['id']}/task", headers={'Authorization': f"Token {token}"})
         if not task.ok:
             print("Could not get user task")
             sys.exit(2)
@@ -32,7 +32,7 @@ class ChatNamespace(BaseNamespace):
 
     @staticmethod
     def create_room(label, layout=None, read_only=False, show_users=True, show_latency=True):
-        room = requests.post(f"{uri}/rooms",
+        room = requests.post(f"{uri}/room",
                              headers={'Authorization': f"Token {token}"},
                              json=dict(
                                  name='%s-%s' % (label, uuid1()),

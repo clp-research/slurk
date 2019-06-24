@@ -76,12 +76,12 @@ $(document).ready(() => {
     async function joined_room(data) {
         self_room = data['room'];
 
-        let room_request = $.get({ url: uri + "/rooms/" + data['room'], beforeSend: headers });
-        let user_request = $.get({ url: uri + "/users/" + data['user'], beforeSend: headers });
-        let history = $.get({ url: uri + "/users/" + data['user'] + "/logs", beforeSend: headers });
+        let room_request = $.get({ url: uri + "/room/" + data['room'], beforeSend: headers });
+        let user_request = $.get({ url: uri + "/user/" + data['user'], beforeSend: headers });
+        let history = $.get({ url: uri + "/user/" + data['user'] + "/logs", beforeSend: headers });
 
         let room = await room_request;
-        let layout = $.get({ url: uri + "/layouts/" + room.layout, beforeSend: headers });
+        let layout = $.get({ url: uri + "/layout/" + room.layout, beforeSend: headers });
         apply_room_properties(room);
 
         let user = await user_request;

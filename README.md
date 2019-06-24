@@ -14,6 +14,27 @@ make html
 ```
 The generated documentation can then be found at *docs/_build/*
 
+### Minimal example
+
+- Start the server and store the container id:
+
+      $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
+
+- Read the admin token from the logs:
+
+      $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
+
+- Generate a new token (``sed`` removes quotation from JSON-string):
+
+      $ curl -X POST
+             -H "Authorization: Token $ADMIN_TOKEN"
+             -H "Content-Type: application/json"
+             -H "Accept: application/json"
+             -d '{"room": "test_room"}'
+             localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
+      7dc2124e-f89f-4d06-9917-811df2a5bb89
+
+- Visit http://localhost and use the token to log in.
 
 Happy slurking!
 
