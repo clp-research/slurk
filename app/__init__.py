@@ -69,45 +69,13 @@ def before_request():
         return login_manager.unauthorized()
 
 
-if not Room.query.get("test_room"):
-    meetup = Task(name="Meetup", num_users=2, layout=Layout.from_json_file("meetup_task"))
-    admin_token = Token(room_name='test_room',
-                        id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
-                        task=meetup,
-                        permissions=Permissions(
-                            user_query=True,
-                            user_log_query=True,
-                            user_log_event=True,
-                            user_permissions_query=True,
-                            user_permissions_update=True,
-                            user_room_query=True,
-                            user_room_join=True,
-                            user_room_leave=True,
-                            message_text=True,
-                            message_image=True,
-                            message_command=True,
-                            message_broadcast=True,
-                            room_query=True,
-                            room_log_query=True,
-                            room_create=True,
-                            room_update=True,
-                            room_close=True,
-                            room_delete=True,
-                            layout_query=True,
-                            layout_create=True,
-                            layout_update=True,
-                            task_create=True,
-                            task_query=True,
-                            task_update=True,
-                            token_generate=True,
-                            token_query=True,
-                            token_invalidate=True,
-                            token_update=True,
-                        ))
-    db.session.add(admin_token)
-    db.session.add(Token(room_name='test_room',
-                         id='00000000-0000-0000-0000-000000000001' if settings.debug else None,
-                         task=meetup,
+if not Room.query.get("admin_room"):
+    db.session.add(Room(name="admin_room",
+                        label="Admin Room",
+                        layout=Layout.from_json_file("default"),
+                        static=True))
+    db.session.add(Token(room_name='admin_room',
+                         id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
                          permissions=Permissions(
                              user_query=True,
                              user_log_query=True,
@@ -124,54 +92,22 @@ if not Room.query.get("test_room"):
                              room_query=True,
                              room_log_query=True,
                              room_create=True,
+                             room_update=True,
                              room_close=True,
+                             room_delete=True,
+                             layout_query=True,
+                             layout_create=True,
+                             layout_update=True,
                              task_create=True,
                              task_query=True,
                              task_update=True,
-                             layout_query=True,
-                            layout_create=True,
-                            layout_update=True,
                              token_generate=True,
                              token_query=True,
                              token_invalidate=True,
                              token_update=True,
                          )))
-    db.session.add(Token(room_name='test_room',
-                         id='00000000-0000-0000-0000-000000000002' if settings.debug else None,
-                         permissions=Permissions(
-                             user_query=True,
-                             user_log_query=True,
-                             user_log_event=True,
-                             user_permissions_query=True,
-                             user_permissions_update=True,
-                             user_room_query=True,
-                             user_room_join=True,
-                             user_room_leave=True,
-                             message_text=True,
-                             message_image=True,
-                             message_command=True,
-                             message_broadcast=True,
-                             room_query=True,
-                             room_log_query=True,
-                             room_create=True,
-                             room_close=True,
-                             task_create=True,
-                             task_query=True,
-                             task_update=True,
-                             layout_query=True,
-                            layout_create=True,
-                            layout_update=True,
-                             token_generate=True,
-                             token_query=True,
-                             token_invalidate=True,
-                             token_update=True,
-                         )))
-    db.session.add(Room(name="test_room",
-                        label="Test Room",
-                        static=True,
-                        layout=Layout.from_json_file("test_room")))
     db.session.commit()
-    getLogger("slurk").info("generating test room and admin token...")
+    getLogger("slurk").info("generating admin room and token...")
 print("admin token:")
 print(Token.query.order_by(Token.date_created).first().id)
 sys.stdout.flush()

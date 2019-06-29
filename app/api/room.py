@@ -49,7 +49,7 @@ def _create_room(name, label, data):
         if not layout:
             return False, "layout does not exist"
     else:
-        layout = None
+        layout = Layout.from_json_file("default")
 
     room = Room(
         name=name,

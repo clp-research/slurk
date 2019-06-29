@@ -25,16 +25,30 @@ Some basic concepts
 ~~~~~~~~~~~~~~~~~~~~
 
 Bots
-  Bots are little client programms (written in python, and connecting to the slurk server via `socket.io`) that can enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue *tasks*. Defining an experimental or data collection setting typically includes writing one or multiple bots.
+  Bots are little client programms (written in python, and connecting to the slurk server via `socket.io`) that can
+  enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate
+  with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms,
+  being responsible for handling certain dialogue *tasks*. Defining an experimental or data collection setting typically
+  includes writing one or multiple bots.
 
 Rooms
-  Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one room.
-  The **Waiting Room** is a special room, realised by the `pairup_bot`, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
+  Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
+  room. The pairup example bot provides the **Waiting Room**, where users wait until a pre-determined number of members
+  is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
 
 Technical concepts
-  **Events**: Slurk is driven by events emitted by the server. All events have a certain type and corresponding information, which can be processed by bots and client-side scripts. The events used in Slurk are defined in the file `events.py`.
+  **Events**: Slurk is driven by events emitted by the server. All events have a certain type and corresponding
+  information, which can be processed by bots and client-side scripts.
 
-  **Commands**: Bots can communicate with the server using predefined commands, causing the server to emit corresponding events. For instance, they can be used to send room messages, connect or disconnect clients or alter the attributes of HTML elements.
-  **Slash-Commands** are a special kind of commands: Registered in bot files, they can be used by human users to control the bot, which in turn communicates with the server. These commands are prefixed with a slash as, for instance, in `/new_image_public`. In this example (taken from the `multi_bot`), the command triggers a change of what is shown in the display area, visible to all clients in the current room.
+  **API**: Bots can communicate with the server using a :ref:`slurk_api`, causing the server to emit corresponding
+  events. For instance, they can be used to create rooms, connect or disconnect clients or generate tokens for logging
+  in.
 
-  **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.
+  **Commands** are a special kind of interaction with the server: Registered via the API, they can be used by human
+  users to control the bot, which in turn communicates with the server. Depending on the layout, commands are usually
+  prefixed with a slash as, for instance, in `/new_image_public`. In this example, the command triggers a change of what
+  is shown in the display area, visible to all clients in the current room.
+
+  **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a
+  public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is
+  logging in with the token) to a specific task / room type.

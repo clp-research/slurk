@@ -8,7 +8,7 @@ class Room(db.Model):
 
     name = db.Column(db.String, primary_key=True)
     label = db.Column(db.String, nullable=False)
-    layout_id = db.Column(db.Integer, db.ForeignKey("Layout.id"))
+    layout_id = db.Column(db.Integer, db.ForeignKey("Layout.id"), nullable=False)
     read_only = db.Column(db.Boolean, default=False, nullable=False)
     show_users = db.Column(db.Boolean, default=True, nullable=False)
     show_latency = db.Column(db.Boolean, default=True, nullable=False)
