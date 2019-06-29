@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Pairing up participants and running multiple rooms (and bots) &mdash; slurk 2.0.0-pre documentation</title>
+  <title>3. Pairing up participants and running multiple rooms &mdash; slurk 2.0.0-pre documentation</title>
   
 
   
@@ -87,7 +87,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
@@ -138,7 +138,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>3. Pairing up participants and running multiple rooms (and bots)</li>
+      <li>3. Pairing up participants and running multiple rooms</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,81 +157,84 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pairing-up-participants-and-running-multiple-rooms-and-bots">
-<span id="slurk-multibots"></span><h1>3. Pairing up participants and running multiple rooms (and bots)<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms-and-bots" title="Permalink to this headline">¶</a></h1>
-<p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be paired up and put into a new task-specific chatroom along with bots. We provided an example bot handling this mechanism: The <strong>pairup bot</strong> moves human users and other bots from the waiting room to a taskroom. You can find it in the <em>sample_bots</em> directory.</p>
-<p>Again, we will start the chat server in development mode and assume that you will use the default values in the config.ini, serving slurk on <a class="reference external" href="http://127.0.0.1:5000" target="_blank">http://127.0.0.1:5000</a>.</p>
-<p>First, we need to log in the bots and then the users.</p>
-<p><strong>Step 1:</strong></p>
-<p>Open a terminal window and start the server:</p>
+  <div class="section" id="pairing-up-participants-and-running-multiple-rooms">
+<span id="slurk-multibots"></span><h1>3. Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this headline">¶</a></h1>
+<p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be
+paired up and put into a new task-specific chatroom along with bots. We provided an example bot handling this mechanism:
+The <strong>concierge bot</strong> moves human users and other bots from the waiting room to a taskroom.</p>
+<p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the layout
+provided in the <em>sample_bots</em> directory:</p>
 <blockquote>
-<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python chat.py
+<div>$ curl <a class="reference external" href="https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json" target="_blank">https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json</a> &gt; waiting_room_layout.json</div></blockquote>
+<p>This layout now has to be pushed to the server. For this command you may have to install <code class="docutils literal notranslate"><span class="pre">jq</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install jq
+$ WAITING_ROOM_LAYOUT=$(curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d @waiting_room_layout.json \
+       localhost/api/v2/layout | jq .id)
 </pre></div>
 </div>
-</div></blockquote>
-<p><strong>Step 2:</strong></p>
-<p>Go to the server’s token page, e.g. <a class="reference external" href="http://127.0.0.1:5000/token" target="_blank">http://127.0.0.1:5000/token</a>, and fill in the following:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Source:  <em>can be anything</em></li>
-<li>Room:    Waiting Room</li>
-<li>Task:    None</li>
-<li>Count:   2</li>
-<li>Key:     <em>the secret key you’ve defined in the config.ini</em></li>
-</ul>
-</div></blockquote>
-<p>(Please note that in production mode you should be cautious on how to name your <em>Source</em>, as this is meant to identify, e.g. different sessions.)</p>
-<p>Press “Generate tokens”.</p>
-<p>Now you have two tokens. One token will be used for the pairup bot (<em>Step 3</em>) and the other one for the multi bot (<em>Step 4</em>). The multi bot serves as an example bot here which will join the users in the taskroom later.</p>
-<p><strong>Step 3:</strong></p>
-<p>Open a new terminal window and start the <strong>pairup bot</strong>:</p>
-<blockquote>
-<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python sample_bots/pairup_bot.py *token*
+<p>Ensure we have a valid id:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $WAITING_ROOM_LAYOUT
+2
 </pre></div>
 </div>
-</div></blockquote>
-<p>Replace *token* with the first token created in <em>Step 2</em>. The pairup bot will enter the waiting room now. You will see a confirmation of this in the terminal window where you started the chat server:</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">ConciergeBot</span> <span class="pre">joined</span> <span class="pre">room:</span> <span class="pre">Waiting</span> <span class="pre">Room</span></code></div></blockquote>
-<p>where <em>ConciergeBot</em> is the name of our pairup bot.</p>
-<p><strong>Step 4:</strong></p>
-<p>Open a third terminal window and run the <strong>multi bot</strong>:</p>
-<blockquote>
-<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python sample_bots/multi_bot.py *token*
+<p>We can now create the waiting room with the associated layout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &quot;{\&quot;name\&quot;: \&quot;waiting_room\&quot;, \&quot;label\&quot;: \&quot;Waiting Room\&quot;, \&quot;layout\&quot;: $WAITING_ROOM_LAYOUT}&quot; \
+       localhost/api/v2/room
+{
+  &quot;current_users&quot;: {},
+  &quot;label&quot;: &quot;Waiting Room&quot;,
+  &quot;layout&quot;: null,
+  &quot;name&quot;: &quot;waiting_room&quot;,
+  &quot;read_only&quot;: false,
+  &quot;show_latency&quot;: true,
+  &quot;show_users&quot;: true,
+  &quot;static&quot;: false,
+  &quot;users&quot;: {}
+}
 </pre></div>
 </div>
-</div></blockquote>
-<p>where *token* is to be replaced by the second token created in <em>Step 2</em>. The multi bot is also in the waiting room now. Check for confirmation in the terminal window:</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">MultiBot</span> <span class="pre">joined</span> <span class="pre">room:</span> <span class="pre">Waiting</span> <span class="pre">Room</span></code></div></blockquote>
-<p>All required bots are registered. In the next steps we need to log in the users.</p>
-<p><strong>Step 5:</strong></p>
-<p>Open the server’s token page, e.g. <a class="reference external" href="http://127.0.0.1:5000/token" target="_blank">http://127.0.0.1:5000/token</a>, again and fill in the following:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Source:  <em>can be anything</em></li>
-<li>Room:    Waiting Room</li>
-<li>Task:    meetup</li>
-<li>Count:   2</li>
-<li>Key:     <em>the secret key you’ve defined in the config.ini</em></li>
-</ul>
-</div></blockquote>
-<p>Press “Generate tokens”. You will see two tokens.</p>
-<p><strong>Step 6:</strong></p>
-<p>Open the server (<a class="reference external" href="http://127.0.0.1:5000" target="_blank">http://127.0.0.1:5000</a> for this example) in a new tab. Fill the first field with a username and the second field with one of the tokens created in <em>Step 5</em>. Press “Enter Chatroom”. The user will join the waiting room.</p>
-<p>Next we need a second user.</p>
-<div class="figure align-center" id="id1">
-<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/slurk_waitingroom.png"><img alt="_images/slurk_waitingroom.png" src="_images/slurk_waitingroom.png" style="width: 657.0px; height: 446.4px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user in the waiting room, waiting for another player to join</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p>The next step is to create a task. Each task contains information about the number of user required in order to start
+the task:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TASK_ID=$(curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &#39;{&quot;name&quot;: &quot;Echo Task&quot;, &quot;num_users&quot;: 2}&#39; \
+       localhost/api/v2/task | jq .id)
+</pre></div>
 </div>
-<p><strong>Step 7:</strong></p>
-<p>Now open the page again, but this time in a <strong>different browser</strong>. Fill the first field with a username and the second field with the other token from <em>Step 5</em>. Press “Enter Chatroom”.</p>
-<p>With two participants being present in the waiting room now the <em>pairup bot</em> will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the <em>multi bot</em>. Now the users and the multi bot can interact with each other, e.g. you can use the commands <strong>/new_image_private</strong> and <strong>/new_image_public</strong> in the chatroom to see this in action. Both commands are provided by our sample bot, the <em>multi bot</em>.</p>
-<div class="figure align-center" id="id2">
-<span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/slurk_taskroom.png"><img alt="_images/slurk_taskroom.png" src="_images/slurk_taskroom.png" style="width: 553.1999999999999px; height: 460.79999999999995px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Two users interacting in the taskroom</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p>Now lets create three tokens. For the user, the task has to be specified:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;task\&quot;: $TASK_ID}&quot; \
+       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
+</pre></div>
 </div>
-<p><em>Notice:</em> While the two users need to leave the waiting room in order to enter the taskroom, the multi bot remains in the waiting room and can join as many chatrooms as needed from there. This means: the multi bot (or bots in general) can exist in multiple rooms simultaneously whereas human users can only be present in one room.</p>
+<p>The token for the bot is stored in <code class="docutils literal notranslate"><span class="pre">BOT_TOKEN</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ BOT_TOKEN=$(curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;room_create&quot;: true, &quot;user_room_join&quot;: true}&#39; \
+       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;)
+</pre></div>
+</div>
+<p>Now start the concierge bot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$BOT_TOKEN --net=&quot;host&quot; slurk/concierge-bot
+</pre></div>
+</div>
+<p>The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, which has both the
+specified task assigned. Once, both has joined, the bot will create a new task room and moves both users into that room.</p>
 </div>
 
 

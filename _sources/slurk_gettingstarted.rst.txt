@@ -44,7 +44,7 @@ Create a room as landing page for our new token: ::
           -H "Authorization: Token $ADMIN_TOKEN" \
           -H "Content-Type: application/json" \
           -H "Accept: application/json" \
-          -d '{"name": "test_room", "label", "Test Room"}' \
+          -d '{"name": "test_room", "label": "Test Room"}' \
           localhost/api/v2/room
    {
      "current_users": {},

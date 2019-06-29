@@ -29,7 +29,7 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 
 **Slurk** (think "slack for mechanical turk"...) is a lightweight and easily extensible chat server built especially
 for conducting multimodal dialogue experiments or data collections. See :ref:`slurk_about` for a description of the
-main concepts. Or jump right in with the :ref:`slurk_quickstart` (after the :ref:`slurk_installation`, of course)!
+main concepts. Or jump right in with the :ref:`slurk_gettingstarted`!
 
 Slurk is built in Python, on top of flask_ and flask-socketio_.
 

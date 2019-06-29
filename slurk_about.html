@@ -90,7 +90,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
@@ -178,7 +178,7 @@ with the server by sending commands and responding to socket events. Unlike huma
 being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically
 includes writing one or multiple bots.</dd>
 <dt>Rooms</dt><dd>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
-room. The pairup example bot provides the <strong>Waiting Room</strong>, where users wait until a pre-determined number of members
+room. The concierge example bot provides the <strong>Waiting Room</strong>, where users wait until a pre-determined number of members
 is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.</dd>
 <dt>Technical concepts</dt><dd><p><strong>Events</strong>: Slurk is driven by events emitted by the server. All events have a certain type and corresponding
 information, which can be processed by bots and client-side scripts.</p>

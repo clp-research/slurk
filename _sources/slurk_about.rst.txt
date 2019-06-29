@@ -33,7 +33,7 @@ Bots
 
 Rooms
   Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
-  room. The pairup example bot provides the **Waiting Room**, where users wait until a pre-determined number of members
+  room. The concierge example bot provides the **Waiting Room**, where users wait until a pre-determined number of members
   is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
 
 Technical concepts
