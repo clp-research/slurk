@@ -1,0 +1,40 @@
+{
+  "title": "Slurk",
+  "subtitle": "Waiting for other player...",
+  "html": [
+    {
+      "layout-type": "div",
+      "id": "image-area",
+      "layout-content": [
+        {
+          "layout-type": "image",
+          "id": "current-image",
+          "class": "hidden",
+          "src": "",
+          "width": 500,
+          "height": 400
+        }
+      ]
+    },
+    {
+      "layout-type": "div",
+      "id": "status-box"
+    },
+    {
+      "layout-type": "div",
+      "id": "typing-area"
+    }
+  ],
+  "css": {
+    "#image-area": {
+      "align-content": "left",
+      "margin": "50px 20px 15px"
+    }
+  },
+  "scripts": {
+    "incoming-text": "display-text",
+    "incoming-image": "display-image",
+    "submit-message": "send-message",
+    "print-history": "plain-history"
+  }
+}
