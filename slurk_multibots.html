@@ -164,8 +164,9 @@ paired up and put into a new task-specific chatroom along with bots. We provided
 The <strong>concierge bot</strong> moves human users and other bots from the waiting room to a taskroom.</p>
 <p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the layout
 provided in the <em>sample_bots</em> directory:</p>
-<blockquote>
-<div>$ curl <a class="reference external" href="https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json" target="_blank">https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json</a> &gt; waiting_room_layout.json</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json &gt; waiting_room_layout.json
+</pre></div>
+</div>
 <p>This layout now has to be pushed to the server. For this command you may have to install <code class="docutils literal notranslate"><span class="pre">jq</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install jq
 $ WAITING_ROOM_LAYOUT=$(curl -X POST \
