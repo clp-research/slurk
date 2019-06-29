@@ -8,7 +8,7 @@ paired up and put into a new task-specific chatroom along with bots. We provided
 The **concierge bot** moves human users and other bots from the waiting room to a taskroom.
 
 First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let's take the layout
-provided in the *sample_bots* directory:
+provided in the *sample_bots* directory: ::
 
    $ curl https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json > waiting_room_layout.json
 
