@@ -152,9 +152,16 @@ def post_token():
     else:
         task = None
 
+    if 'room' in data and data['room']:
+        room = Room.query.get(data['room'])
+        if not room:
+            return make_response(jsonify({'error': 'room not found'}), 404)
+    else:
+        room = None
+
     try:
         token = Token(
-            room_name=data.get("room", None),
+            room_name=room.name,
             task=task,
             source=data.get("source", None),
             permissions=Permissions(
@@ -282,7 +289,7 @@ def post_task():
         if not layout:
             return make_response(jsonify({'error': 'layout not found'}), 404)
     else:
-        layout = None
+        layout = Layout.query.filter(Layout.name == "default").first()
 
     try:
         task = Task(
@@ -368,7 +375,7 @@ def get_room_layout(name):
 
 @api.route('/room', methods=['POST'])
 @auth.login_required
-def post_rooms():
+def post_room():
     if not g.current_permissions.room_create:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
@@ -388,7 +395,7 @@ def post_rooms():
         if not layout:
             return make_response(jsonify({'error': 'layout not found'}), 404)
     else:
-        layout = None
+        layout = Layout.query.filter(Layout.name == "default").first()
 
     try:
         room = Room(
