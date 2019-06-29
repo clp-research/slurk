@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2. Installation" href="slurk_installation.html" />
+    <link rel="next" title="2. Getting Started" href="slurk_gettingstarted.html" />
     <link rel="prev" title="Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection" href="index.html" /> 
 </head>
 
@@ -89,14 +89,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#some-basic-concepts">1.1. Some basic concepts</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -173,13 +172,26 @@
 <div class="section" id="some-basic-concepts">
 <h2>1.1. Some basic concepts<a class="headerlink" href="#some-basic-concepts" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
-<dt>Bots</dt><dd>Bots are little client programms (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms, being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically includes writing one or multiple bots.</dd>
-<dt>Rooms</dt><dd>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one room.
-The <strong>Waiting Room</strong> is a special room, realised by the <cite>pairup_bot</cite>, where users wait until a pre-determined number of members is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.</dd>
-<dt>Technical concepts</dt><dd><p><strong>Events</strong>: Slurk is driven by events emitted by the server. All events have a certain type and corresponding information, which can be processed by bots and client-side scripts. The events used in Slurk are defined in the file <cite>events.py</cite>.</p>
-<p><strong>Commands</strong>: Bots can communicate with the server using predefined commands, causing the server to emit corresponding events. For instance, they can be used to send room messages, connect or disconnect clients or alter the attributes of HTML elements.
-<strong>Slash-Commands</strong> are a special kind of commands: Registered in bot files, they can be used by human users to control the bot, which in turn communicates with the server. These commands are prefixed with a slash as, for instance, in <cite>/new_image_public</cite>. In this example (taken from the <cite>multi_bot</cite>), the command triggers a change of what is shown in the display area, visible to all clients in the current room.</p>
-<p><strong>Tokens</strong>: To provide control over who is allowed to log into the chat (since we’re not interested in running a public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is logging in with the token) to a specific task / room type.</p>
+<dt>Bots</dt><dd>Bots are little client programms (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can
+enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate
+with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms,
+being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically
+includes writing one or multiple bots.</dd>
+<dt>Rooms</dt><dd>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
+room. The pairup example bot provides the <strong>Waiting Room</strong>, where users wait until a pre-determined number of members
+is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.</dd>
+<dt>Technical concepts</dt><dd><p><strong>Events</strong>: Slurk is driven by events emitted by the server. All events have a certain type and corresponding
+information, which can be processed by bots and client-side scripts.</p>
+<p><strong>API</strong>: Bots can communicate with the server using a <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>, causing the server to emit corresponding
+events. For instance, they can be used to create rooms, connect or disconnect clients or generate tokens for logging
+in.</p>
+<p><strong>Commands</strong> are a special kind of interaction with the server: Registered via the API, they can be used by human
+users to control the bot, which in turn communicates with the server. Depending on the layout, commands are usually
+prefixed with a slash as, for instance, in <cite>/new_image_public</cite>. In this example, the command triggers a change of what
+is shown in the display area, visible to all clients in the current room.</p>
+<p><strong>Tokens</strong>: To provide control over who is allowed to log into the chat (since we’re not interested in running a
+public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is
+logging in with the token) to a specific task / room type.</p>
 </dd>
 </dl>
 </div>
@@ -193,7 +205,7 @@ The <strong>Waiting Room</strong> is a special room, realised by the <cite>pairu
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_installation.html" class="btn btn-neutral float-right" title="2. Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-right" title="2. Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

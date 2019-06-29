@@ -4,7 +4,8 @@
 Installation
 =========================================
 
-You will need Python 3.7+ and `pip`. To test the dialogue setup, you will also need to have two different web browsers on your system.
+You will need Python 3.7+ and `pip`. To test the dialogue setup, you will also need to have two different web browsers
+or a browser with the ability to create private tabs/windows.
 
 To install the requirements and prepare for testing, do the following. (We assume that you have cloned the repository.)
 

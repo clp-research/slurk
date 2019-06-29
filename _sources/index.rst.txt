@@ -9,13 +9,12 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
    :numbered:
 
    slurk_about
-   slurk_installation
    slurk_gettingstarted
    slurk_multibots
    slurk_layouts
    slurk_bots
    slurk_api
-   slurk_tools
+   slurk_deployment
    slurk_amt
 
 ..
@@ -28,7 +27,9 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
    meetup_main
    meetup_deployment
 
-**Slurk** (think "slack for mechanical turk"...) is a lightweight and easily extensible chat server built especially for conducting multimodal dialogue experiments or data collections. See :ref:`slurk_about` for a description of the main concepts. Or jump right in with the :ref:`slurk_quickstart` (after the :ref:`slurk_installation`, of course)!
+**Slurk** (think "slack for mechanical turk"...) is a lightweight and easily extensible chat server built especially
+for conducting multimodal dialogue experiments or data collections. See :ref:`slurk_about` for a description of the
+main concepts. Or jump right in with the :ref:`slurk_quickstart` (after the :ref:`slurk_installation`, of course)!
 
 Slurk is built in Python, on top of flask_ and flask-socketio_.
 

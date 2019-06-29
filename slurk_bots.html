@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Writing your own bots &mdash; slurk 1.1.1 documentation</title>
+  <title>5. Writing your own bots &mdash; slurk 1.1.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. REST API for slurk" href="slurk_api.html" />
-    <link rel="prev" title="5. Layouts and Plugins" href="slurk_layouts.html" /> 
+    <link rel="next" title="6. REST API for slurk" href="slurk_api.html" />
+    <link rel="prev" title="4. Layouts and Plugins" href="slurk_layouts.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,19 +86,18 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Writing your own bots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-minimal-bot">6.1. Dissecting the minimal bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-multi-bot">6.2. Dissecting the multi bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">6.3. Interacting with layouts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Writing your own bots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-minimal-bot">5.1. Dissecting the minimal bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-multi-bot">5.2. Dissecting the multi bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">5.3. Interacting with layouts</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -144,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>6. Writing your own bots</li>
+      <li>5. Writing your own bots</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,11 +163,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="writing-your-own-bots">
-<span id="slurk-bots"></span><h1>6. Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-bots"></span><h1>5. Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
 <p>Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
 <div class="section" id="dissecting-the-minimal-bot">
-<h2>6.1. Dissecting the minimal bot<a class="headerlink" href="#dissecting-the-minimal-bot" title="Permalink to this headline">¶</a></h2>
+<h2>5.1. Dissecting the minimal bot<a class="headerlink" href="#dissecting-the-minimal-bot" title="Permalink to this headline">¶</a></h2>
 <p>The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.</p>
 <p>The bot file has to be called providing the server URL and port as well as a valid login token as arguments. The bot is then connects to the server using the <cite>connectWithToken</cite> command within the LoginNamespace.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SocketIO</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">chat_host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">chat_port</span><span class="p">)</span> <span class="k">as</span> <span class="n">socketIO</span><span class="p">:</span>
@@ -221,7 +220,7 @@
 <p>Apart from changing image attributes, the minimal bot is able to send messages and image visible in the chat area using the <cite>text</cite> and <cite>image</cite> commands (private messages and images, if the user id of the intended receiver is provided). It can modify which parts of the interface are shown to users using the <cite>update_permissions</cite> command, and request the current permission information from the server (<cite>get_permissions</cite>). Finally, it can clear the chat history using the <cite>clear_chat</cite> command.</p>
 </div>
 <div class="section" id="dissecting-the-multi-bot">
-<h2>6.2. Dissecting the multi bot<a class="headerlink" href="#dissecting-the-multi-bot" title="Permalink to this headline">¶</a></h2>
+<h2>5.2. Dissecting the multi bot<a class="headerlink" href="#dissecting-the-multi-bot" title="Permalink to this headline">¶</a></h2>
 <p>The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.</p>
 <p>The main difference between the minimal bot and the multi bot lies in the latter not being bound to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event <cite>new_task_room</cite> is emmited by the server, the multi bot sends the command <cite>join_task</cite> with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_task_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -252,7 +251,7 @@
 </div>
 </div>
 <div class="section" id="interacting-with-layouts">
-<h2>6.3. Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
+<h2>5.3. Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
 <p>Bots can modify layouts in two ways: Setting texts and altering attribute values.</p>
 <p>For this, two functions are provided:</p>
 <ul>
@@ -324,10 +323,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_api.html" class="btn btn-neutral float-right" title="7. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_api.html" class="btn btn-neutral float-right" title="6. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_layouts.html" class="btn btn-neutral float-left" title="5. Layouts and Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_layouts.html" class="btn btn-neutral float-left" title="4. Layouts and Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

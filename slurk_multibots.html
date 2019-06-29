@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. Pairing up participants and running multiple rooms (and bots) &mdash; slurk 1.1.1 documentation</title>
+  <title>3. Pairing up participants and running multiple rooms (and bots) &mdash; slurk 1.1.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Layouts and Plugins" href="slurk_layouts.html" />
-    <link rel="prev" title="3. Getting started" href="slurk_gettingstarted.html" /> 
+    <link rel="next" title="4. Layouts and Plugins" href="slurk_layouts.html" />
+    <link rel="prev" title="2. Getting Started" href="slurk_gettingstarted.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,14 +86,13 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -139,7 +138,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>4. Pairing up participants and running multiple rooms (and bots)</li>
+      <li>3. Pairing up participants and running multiple rooms (and bots)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -159,7 +158,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="pairing-up-participants-and-running-multiple-rooms-and-bots">
-<span id="slurk-multibots"></span><h1>4. Pairing up participants and running multiple rooms (and bots)<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms-and-bots" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-multibots"></span><h1>3. Pairing up participants and running multiple rooms (and bots)<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms-and-bots" title="Permalink to this headline">¶</a></h1>
 <p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be paired up and put into a new task-specific chatroom along with bots. We provided an example bot handling this mechanism: The <strong>pairup bot</strong> moves human users and other bots from the waiting room to a taskroom. You can find it in the <em>sample_bots</em> directory.</p>
 <p>Again, we will start the chat server in development mode and assume that you will use the default values in the config.ini, serving slurk on <a class="reference external" href="http://127.0.0.1:5000" target="_blank">http://127.0.0.1:5000</a>.</p>
 <p>First, we need to log in the bots and then the users.</p>
@@ -223,14 +222,14 @@
 <p>Next we need a second user.</p>
 <div class="figure align-center" id="id1">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/slurk_waitingroom.png"><img alt="_images/slurk_waitingroom.png" src="_images/slurk_waitingroom.png" style="width: 657.0px; height: 446.4px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 4.1 </span><span class="caption-text">A single user in the waiting room, waiting for another player to join</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user in the waiting room, waiting for another player to join</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Step 7:</strong></p>
 <p>Now open the page again, but this time in a <strong>different browser</strong>. Fill the first field with a username and the second field with the other token from <em>Step 5</em>. Press “Enter Chatroom”.</p>
 <p>With two participants being present in the waiting room now the <em>pairup bot</em> will open a new chatroom. Both users will be removed from the waiting room and put into the newly created taskroom together with the <em>multi bot</em>. Now the users and the multi bot can interact with each other, e.g. you can use the commands <strong>/new_image_private</strong> and <strong>/new_image_public</strong> in the chatroom to see this in action. Both commands are provided by our sample bot, the <em>multi bot</em>.</p>
 <div class="figure align-center" id="id2">
 <span id="screenshot-privimage"></span><a class="reference internal image-reference" href="_images/slurk_taskroom.png"><img alt="_images/slurk_taskroom.png" src="_images/slurk_taskroom.png" style="width: 553.1999999999999px; height: 460.79999999999995px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 4.2 </span><span class="caption-text">Two users interacting in the taskroom</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Two users interacting in the taskroom</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p><em>Notice:</em> While the two users need to leave the waiting room in order to enter the taskroom, the multi bot remains in the waiting room and can join as many chatrooms as needed from there. This means: the multi bot (or bots in general) can exist in multiple rooms simultaneously whereas human users can only be present in one room.</p>
 </div>
@@ -243,10 +242,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_layouts.html" class="btn btn-neutral float-right" title="5. Layouts and Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_layouts.html" class="btn btn-neutral float-right" title="4. Layouts and Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-left" title="3. Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-left" title="2. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -72,7 +72,7 @@ Room
   ``uri``                    URI to query this room
   =========================  =================================================================================
 
-* ``GET /api/v2/rooms/<string:name>``
+* ``GET /api/v2/room/<string:name>``
 
   Returns the room by name:
 
@@ -89,7 +89,7 @@ Room
   ``users``                  List of users who were associated with this room at least once
   =========================  =================================================================================
 
-* ``POST /api/v2/rooms/``
+* ``POST /api/v2/room/``
 
   Creates a new room:
 
@@ -103,7 +103,7 @@ Room
   ``static``                 ``True`` if this room can be selected as login room
   =========================  =================================================================================
 
-* ``PUT /api/v2/rooms/<string:name>``
+* ``PUT /api/v2/room/<string:name>``
 
   Updates the room by name:
 
@@ -116,7 +116,7 @@ Room
   ``static``                 ``True`` if this room can be selected as login room
   =========================  =================================================================================
 
-* ``DELETE /api/v2/rooms/<string:name>``
+* ``DELETE /api/v2/room/<string:name>``
 
   Deletes the room by name if no associations to the room exist. Otherwise an error is returned.
 
@@ -125,7 +125,7 @@ Logging
 -------
 
 
-* ``GET /api/v2/rooms/<string:name>/logs``
+* ``GET /api/v2/room/<string:name>/logs``
 
   Returns the log of the room by name:
 
@@ -138,7 +138,7 @@ Logging
   ``data``                   Arbitrary data which is stored alongside the entry
   =========================  =================================================================================
 
-* ``GET /api/v2/users/<int:id>/logs``
+* ``GET /api/v2/user/<int:id>/logs``
 
   Returns a mapping for log entries for rooms of the specified user:
 
@@ -151,7 +151,7 @@ Logging
   ``data``                   Arbitrary data which is stored alongside the entry
   =========================  =================================================================================
 
-* ``POST /api/v2/users/<int:id>/logs``
+* ``POST /api/v2/user/<int:id>/logs``
 
   Creates a new log entry for the specified user
 

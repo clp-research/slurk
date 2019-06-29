@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Getting started &mdash; slurk 1.1.1 documentation</title>
+  <title>2. Getting Started &mdash; slurk 1.1.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Pairing up participants and running multiple rooms (and bots)" href="slurk_multibots.html" />
-    <link rel="prev" title="2. Installation" href="slurk_installation.html" /> 
+    <link rel="next" title="3. Pairing up participants and running multiple rooms (and bots)" href="slurk_multibots.html" />
+    <link rel="prev" title="1. Slurk: What’s this?" href="slurk_about.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,26 +86,20 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_installation.html">2. Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-docker">3.1. Using docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-by-step-minimal-example">3.2. Step by step minimal example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">3.3. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-the-example-bots">3.4. Running the example bots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-setup">3.5. Manual setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#general-description-and-requirements">3.5.1. General description and requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#serving-slurk-with-gunicorn">3.5.2. Serving Slurk with Gunicorn</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-nginx">3.5.3. Configuring Nginx</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-documentation">2.1. Building the documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-a-basic-test-of-the-server">2.2. “Hello World”: A basic test of the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">2.3. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chatting-with-a-bot">2.4. Chatting with a bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examining-the-log-files">2.5. Examining the log files</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms (and bots)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_tools.html">8. Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms (and bots)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">7. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">8. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -151,7 +145,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>3. Getting started</li>
+      <li>2. Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,30 +165,25 @@
            <div itemprop="articleBody">
             
   <div class="section" id="getting-started">
-<span id="slurk-deployment"></span><h1>3. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="using-docker">
-<h2>3.1. Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to deploy the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">docker</span>
+<span id="slurk-gettingstarted"></span><h1>2. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="building-the-documentation">
+<h2>2.1. Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>In order to build the documentation yourself, you additionally need the packages <em>sphinx</em> and <em>sphinx_rtd_theme</em>. Then
+you can create the documentation in the <em>docs</em> folder:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme
+<span class="nb">cd</span> docs
+make html
 </pre></div>
 </div>
-<p>In order to run the server on port 80, just run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
+<p>The generated documentation can then be found at <em>docs/_build/</em></p>
+</div>
+<div class="section" id="hello-world-a-basic-test-of-the-server">
+<h2>2.2. “Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to use system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
 </pre></div>
 </div>
-<p>These additional environment variables can be specified:</p>
-<ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>: admin token is <code class="docutils literal notranslate"><span class="pre">00000000-0000-0000-0000-000000000000</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_DATABASE_URI</span></code>: URI to the database, defaults to <code class="docutils literal notranslate"><span class="pre">sqlite:///:memory:</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_TRACK_MODIFICATIONS</span></code>: Tracks modifications in the database</li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_ECHO</span></code>: Prints all executed commands to the database</li>
-<li><code class="docutils literal notranslate"><span class="pre">DROP_DATABASE_ON_STARTUP</span></code>: Database will be recreated on restart</li>
-</ul>
-<p>If you don’t want to run it detached, you may omit <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
-</div>
-<div class="section" id="step-by-step-minimal-example">
-<h2>3.2. Step by step minimal example<a class="headerlink" href="#step-by-step-minimal-example" title="Permalink to this headline">¶</a></h2>
-<p>Start the server and store the container id:</p>
+<p>In order to run the server on port 80 and store the container id, run</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
 </pre></div>
 </div>
@@ -207,231 +196,93 @@
 b8b88080-b8d1-4eb2-af90-dccf7ece3d82
 </pre></div>
 </div>
+<p>Create a room as landing page for our new token:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &#39;{&quot;name&quot;: &quot;test_room&quot;, &quot;label&quot;, &quot;Test Room&quot;}&#39; \
+       localhost/api/v2/room
+{
+  &quot;current_users&quot;: {},
+  &quot;label&quot;: &quot;Test Room&quot;,
+  &quot;layout&quot;: null,
+  &quot;name&quot;: &quot;test_room&quot;,
+  &quot;read_only&quot;: false,
+  &quot;show_latency&quot;: true,
+  &quot;show_users&quot;: true,
+  &quot;static&quot;: false,
+  &quot;users&quot;: {}
+}
+</pre></div>
+</div>
 <p>Generate a new token for the clients (<code class="docutils literal notranslate"><span class="pre">sed</span></code> removes quotation from JSON-string):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot;
-       -H &quot;Content-Type: application/json&quot;
-       -H &quot;Accept: application/json&quot;
-       -d &#39;{&quot;room&quot;: &quot;test_room&quot;}&#39;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &#39;{&quot;room&quot;: &quot;test_room&quot;, &quot;message_text&quot;: true}&#39; \
        localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
-7dc2124e-f89f-4d06-9917-811df2a5bb89
+9e6f53ae-2da7-4c53-92c7-ec43f8fa50cd
 </pre></div>
 </div>
 <p>for a list of possible parameters see <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a></p>
 <p>Visit <a class="reference external" href="http://localhost" target="_blank">http://localhost</a> and enter whatever Name you like and this token, and click “enter chatroom”.</p>
 <p>This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).</p>
-<div class="figure align-center" id="id11">
+<div class="figure align-center" id="id1">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.</p>
+<p>This has confirmed that the server is working correctly, but so far this hasn’t really been very exciting. So we move on.
+.. _twobrowsers:</p>
 </div>
 <div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<span id="twobrowsers"></span><h2>3.3. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
-<p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an addtional token and, <strong>from a different web browser</strong>, log in with that token. You should now see both identities in the respective chat windows, and you should be able to talk with your two selves across these browsers. Hurray!</p>
-<p>(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network], this might work across machines, and so you can have a chat with an actual different person.)</p>
-<p>This has demonstrated the very basic capabilities – providing a chat environment –, but so far there hasn’t been any use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
+<h2>2.3. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an
+addtional token and, <strong>from a different web browser or in a private tab</strong>, log in with that token. You should now see
+both identities in the respective chat windows, and you should be able to talk with your two selves across these
+browsers. Hurray!</p>
+<p>(If your machine is set up in the right way [that is, the machine that is localhost is accessible from your network],
+this might work across machines, and so you can have a chat with an actual different person.)</p>
+<p>This has demonstrated the very basic capabilities – providing a chat environment –, but so far there hasn’t been any
+use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
-<div class="section" id="running-the-example-bots">
-<h2>3.4. Running the example bots<a class="headerlink" href="#running-the-example-bots" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="chatting-with-a-bot">
+<h2>2.4. Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
+<p>Without additional environment variables, the server uses an in-memory database and resets on every restart of the
+server. Now let’s restart the server to reset the database. Before we log onto the server in the way described above,
+let us create a bot user and let it log on first. Create two tokens as described above, one for the user and one for
+the bot.</p>
 <p>There are Docker containers for all example bots. To run these bots using docker, type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx slurk/concierge-bot
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$BOT_TOKEN --net=&quot;host&quot; slurk/echo
 </pre></div>
 </div>
-<ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">CHAT_HOST</span></code>: The host address (must include the protocol like “<a class="reference external" href="https://" target="_blank">https://</a>”)</li>
-<li><code class="docutils literal notranslate"><span class="pre">CHAT_PORT</span></code>: The port of the host</li>
-</ul>
+<p>You may provide additional environment variables, too:
+- <code class="docutils literal notranslate"><span class="pre">CHAT_HOST</span></code>: The host address (must include the protocol like “<a class="reference external" href="https://" target="_blank">https://</a>”)
+- <code class="docutils literal notranslate"><span class="pre">CHAT_PORT</span></code>: The port of the host</p>
 <p>Note, that you have to pass <code class="docutils literal notranslate"><span class="pre">--net=&quot;host&quot;</span></code> to docker in order to make <code class="docutils literal notranslate"><span class="pre">http://localhost</span></code> working.</p>
 </div>
-<div class="section" id="manual-setup">
-<h2>3.5. Manual setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h2>
-<p>If you don’t want to use docker for whatever reason, you can also manually setup the server.</p>
-<div class="section" id="general-description-and-requirements">
-<h3>3.5.1. General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h3>
-<p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
-with SSL connection.</p>
-<p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
-<code class="docutils literal notranslate"><span class="pre">server</span></code> and install required packages via executing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<div class="section" id="examining-the-log-files">
+<h2>2.5. Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
+<p>The point of all this, however, is not just to make interaction <em>possible</em>, it is to <em>record</em> these interactions to be
+able to later study them or train models on them.</p>
+<p>In order to read the logs, we use the API again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X GET \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       localhost/api/v2/room/test_room/logs
 </pre></div>
 </div>
-<p>Also please make sure that your Ubuntu server is running on Nginx <a class="footnote-reference" href="#id6" id="id1">[1]</a> and <code class="docutils literal notranslate"><span class="pre">systemd</span></code> package is installed.
-Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine <a class="footnote-reference" href="#id7" id="id2">[2]</a>.</p>
-</div>
-<div class="section" id="serving-slurk-with-gunicorn">
-<h3>3.5.2. Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h3>
-<p>You can serve our Flask application on a permanent basis.
-Such setup will allow you to have faster connections which are automatic since you are not required to manually start
-the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
-<a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04" target="_blank">this tutorial</a>.</p>
-<p>First, isolate your Flask application on your computer. For this you have to install <em>virtualenv</em> package.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">venv</span>
-</pre></div>
-</div>
-<p>Navigate to your project directory and create a new project environment there. Also activate the environment and
-install required packages:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">server</span>
-<span class="n">python3</span><span class="o">.</span><span class="mi">6</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">serverenv</span>
-<span class="n">source</span> <span class="n">serverenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>Now, assuming that <em>gunicorn</em> and <em>flask</em> are already installed, we will create the WSGI entry point for our application.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nano</span> <span class="o">~/</span><span class="n">server</span><span class="o">/</span><span class="n">wsgi</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The chat instance itself is created in <code class="docutils literal notranslate"><span class="pre">~/server/app/__init__.py</span></code>, and that is why we will use this instance in our <cite>wsgi.py</cite> file.
-Import this instance into the file, save and close it once you are finished:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="k">import</span> <span class="n">create_app</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Next step would be to configure Gunicorn, but first we should check if the application is served correctly <a class="footnote-reference" href="#id8" id="id3">[3]</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">server</span>
-<span class="n">gunicorn</span> <span class="o">--</span><span class="n">bind</span> <span class="n">host</span><span class="p">:</span><span class="mi">5000</span> <span class="o">-</span><span class="n">k</span> <span class="n">geventwebsocket</span><span class="o">.</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">GeventWebSocketWorker</span> <span class="n">wsgi</span><span class="p">:</span><span class="n">app</span>
-</pre></div>
-</div>
-<p>Visit you server’s address with the port <code class="docutils literal notranslate"><span class="pre">:5000</span></code> and check if you see the login page.
-If it functions properly, please press <code class="docutils literal notranslate"><span class="pre">CTRL-C</span></code> in your terminal window and deactivate your environment.</p>
-<p>Now we have to create the systemd service unit file. It will allow Ubuntu to automatically start our application
-once the machine boots.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">chat</span><span class="o">.</span><span class="n">service</span>
-</pre></div>
-</div>
-<p>Fill this service file with information about your application and adjust paths/variable names where required:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
-<span class="n">Description</span><span class="o">=</span><span class="n">Gunicorn</span> <span class="n">instance</span> <span class="n">to</span> <span class="n">serve</span> <span class="n">MeetUp</span>
-<span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">target</span>
-
-<span class="p">[</span><span class="n">Service</span><span class="p">]</span>
-<span class="n">User</span><span class="o">=</span><span class="n">user</span>
-<span class="n">Group</span><span class="o">=</span><span class="n">www</span><span class="o">-</span><span class="n">data</span>
-<span class="n">WorkingDirectory</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span>
-<span class="n">Environment</span><span class="o">=</span><span class="s2">&quot;PATH=/home/user/server/serverenv/bin&quot;</span>
-<span class="n">ExecStart</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">serverenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gunicorn</span> <span class="o">--</span><span class="n">bind</span> <span class="n">unix</span><span class="p">:</span><span class="n">myproject</span><span class="o">.</span><span class="n">sock</span> <span class="o">-</span><span class="n">k</span> <span class="n">geventwebsocket</span><span class="o">.</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">GeventWebSocketWorker</span> <span class="o">-</span><span class="n">m</span> <span class="mi">007</span> <span class="n">wsgi</span><span class="p">:</span><span class="n">app</span>
-
-<span class="p">[</span><span class="n">Install</span><span class="p">]</span>
-<span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="o">.</span><span class="n">target</span>
-</pre></div>
-</div>
-<p>Save and close this file. Now we will start the Gunicorn service and enable it so that it is active once our machine is booted:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">start</span> <span class="n">chat</span>
-<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">enable</span> <span class="n">chat</span>
-</pre></div>
-</div>
-<p>To be sure that it is active, check its status:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">status</span> <span class="n">chat</span>
-</pre></div>
-</div>
-<p>The output should be similar to the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chat.service - Gunicorn instance to serve meetup
-Loaded: loaded (/etc/systemd/system/chat.service; enabled; vendor preset: enabled)
-Active: active (running) since Fri 2018-08-17 11:25:12 CEST; 4h 20min ago
-Main PID: 18101 (gunicorn)
-Tasks: 2 (limit: 4915)
-CGroup: /system.slice/chat.service
-      ├─18101 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-      └─18103 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-</pre></div>
-</div>
-</div>
-<div class="section" id="configuring-nginx">
-<h3>3.5.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
-<p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
-First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">chat</span>
-</pre></div>
-</div>
-<p>We will have to specify location of our socket file, that serves the application
-and include certificates which were created earlier <a class="footnote-reference" href="#id9" id="id4">[4]</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="p">{</span>
-
-    <span class="n">listen</span> <span class="mi">5000</span> <span class="n">ssl</span> <span class="n">default_server</span><span class="p">;</span>
-    <span class="n">listen</span> <span class="p">[::]:</span><span class="mi">5000</span> <span class="n">ssl</span> <span class="n">default_server</span><span class="p">;</span>
-
-    <span class="n">server_name</span> <span class="n">_</span><span class="p">;</span>
-    <span class="n">root</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">app</span><span class="p">;</span>
-
-    <span class="n">access_log</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">nginx_logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">access</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
-    <span class="n">error_log</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">nginx_logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
-
-    <span class="n">include</span> <span class="n">snippets</span><span class="o">/</span><span class="n">certs</span><span class="o">.</span><span class="n">conf</span><span class="p">;</span>
-    <span class="n">include</span> <span class="n">snippets</span><span class="o">/</span><span class="n">ssl</span><span class="o">-</span><span class="n">params</span><span class="o">.</span><span class="n">conf</span><span class="p">;</span>
-
-    <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
-        <span class="n">include</span> <span class="n">proxy_params</span><span class="p">;</span>
-        <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">unix</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">chat</span><span class="o">.</span><span class="n">sock</span><span class="p">;</span>
-
-        <span class="p">}</span>
-
-    <span class="p">}</span>
-</pre></div>
-</div>
-<p>Do not forget to link this file to the <code class="docutils literal notranslate"><span class="pre">sites-enabled</span></code> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">myproject</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span>
-</pre></div>
-</div>
-<p>Test it for syntax errors and restart Nginx:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nginx</span> <span class="o">-</span><span class="n">t</span>
-<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">nginx</span>
-</pre></div>
-</div>
-<p>As the last step, adjust UFW setting once again, adding full access to the Nginx server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ufw</span> <span class="n">delete</span> <span class="n">allow</span> <span class="mi">5000</span>
-<span class="n">sudo</span> <span class="n">ufw</span> <span class="n">allow</span> <span class="s1">&#39;Nginx Full&#39;</span>
-</pre></div>
-</div>
-<p>When you navigate to your server’s domain name, you should be able to see the login interface <a class="footnote-reference" href="#id10" id="id5">[5]</a>.</p>
-<p>Congratulations! You have managed to fully deploy Slurk!</p>
-<hr class="docutils" />
-<table class="docutils footnote" frame="void" id="id6" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>There is a nice tutorial on <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04" target="_blank">how to install Nginx on Ubuntu 18.04</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id7" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04" target="_blank">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id8" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><p class="first">An important thing is that you specify type of the worker associated with the Gunicorn process. You should use websockets provided by <cite>gevent</cite> package:</p>
-<p><code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">geventwebsocket.gunicorn.workers.GeventWebSocketWorker</span></code></p>
-<p class="last">More information can be found in <a class="reference external" href="http://flask.pocoo.org/docs/1.0/deploying/wsgi-standalone/#gunicorn" target="_blank">official Flask documentation</a>.</p>
-</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id9" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td><p class="first">Different configurations require specification of static files’ location,
-which include CSS files of your applications. In order to enable it, add additional
-location block where you specify location of the static files:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">location</span> <span class="o">/</span><span class="n">static</span><span class="o">/</span> <span class="p">{</span>
-    <span class="n">alias</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="p">;</span>
-    <span class="p">}</span>
-</pre></div>
-</div>
-</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id10" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>Regarding the port that you use: some ports are not accessible for the use (for example, <code class="docutils literal notranslate"><span class="pre">7000</span></code> is used for internal processes), so be careful when deciding which port to use.
-If you choose incorrect one, the application will not be accessible from outside of your network, even if you adjust firewall settings.</td></tr>
-</tbody>
-</table>
-</div>
+<p>The returned data contains, as a JSON list, most of the
+events that the server handled, including all the messages that were sent. This should contain the information that you
+need for your particular purposes.</p>
+<p>This concludes the quick start. We now can be reasonably confident that the setup is working on your machine; and you
+also got a first introduction to the basic concepts. But what we have seen so far would only allow us to run a single
+room at a time. That may already be all you want if you conduct experiments locally with participants that you bring
+into the lab. If you want to make use of crowdsourcing, though, you will want to be able to automatically pair up</p>
+<blockquote>
+<div>participants and create task rooms for each pair. This will be explained in the next section.</div></blockquote>
 </div>
 </div>
 
@@ -443,10 +294,10 @@ If you choose incorrect one, the application will not be accessible from outside
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="4. Pairing up participants and running multiple rooms (and bots)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="3. Pairing up participants and running multiple rooms (and bots)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_installation.html" class="btn btn-neutral float-left" title="2. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_about.html" class="btn btn-neutral float-left" title="1. Slurk: What’s this?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
