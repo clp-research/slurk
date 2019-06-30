@@ -157,8 +157,8 @@ function submit_private_image(receiver, url, width, height, resolve, reject) {
     });
 }
 
-function submit_command(parameter, resolve, reject) {
-    socket.emit('command', { room: self_room, data: parameter }, (success, error) => {
+function submit_command(command, resolve, reject) {
+    socket.emit('message_command', { room: self_room, command: command }, (success, error) => {
         if (verify_query(success, error)) {
             if (resolve !== undefined)
                 resolve();

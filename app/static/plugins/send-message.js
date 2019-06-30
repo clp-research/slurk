@@ -1,5 +1,5 @@
 if (text.match("^/")) {
-    submit_command(text.substr(1).split(' '));
+    submit_command(text.substr(1));
     display_message(current_user, current_timestamp, text.substr(1), true);
 } else if (text.match("^image:")) {
     submit_image(text.substr(6), 300, 300, () => {

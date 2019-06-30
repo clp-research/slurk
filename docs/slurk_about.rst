@@ -44,10 +44,8 @@ Technical concepts
   events. For instance, they can be used to create rooms, connect or disconnect clients or generate tokens for logging
   in.
 
-  **Commands** are a special kind of interaction with the server: Registered via the API, they can be used by human
-  users to control the bot, which in turn communicates with the server. Depending on the layout, commands are usually
-  prefixed with a slash as, for instance, in `/new_image_public`. In this example, the command triggers a change of what
-  is shown in the display area, visible to all clients in the current room.
+  **Commands** is basically the same as a public text message, but is only send to the users with the required
+  permissions.
 
   **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a
   public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is

@@ -84,6 +84,42 @@ def message_text(payload):
     return True
 
 
+@socketio.on('message_command')
+@login_required
+def message_command(payload):
+    current_user_id = current_user.get_id()
+    if not current_user_id:
+        return False, "invalid session id"
+    if not current_user.token.permissions.message_command:
+        return False, "insufficient rights"
+    if 'command' not in payload:
+        return False, 'missing argument: "msg"'
+    if 'room' not in payload:
+        return False, 'missing argument: "room"'
+
+    broadcast = payload.get('broadcast', False)
+    if broadcast and not current_user.token.permissions.message_broadcast:
+        return False, "insufficient rights"
+
+    room = Room.query.get(payload['room'])
+    if not room:
+        return False, 'Room not found'
+
+    user = {
+        'id': current_user_id,
+        'name': current_user.name,
+    }
+    emit('command', {
+        'command': payload['command'],
+        'user': user,
+        'timestamp': timegm(datetime.now().utctimetuple()),
+    }, room=room.name, broadcast=broadcast)
+    log_event("command", current_user, room, data={'command': payload['command']})
+    for room in current_user.rooms:
+        emit('stop_typing', {'user': user}, room=room.name)
+    return True
+
+
 @socketio.on('image')
 @login_required
 def message_image(payload):
