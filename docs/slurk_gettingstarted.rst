@@ -143,4 +143,4 @@ This concludes the quick start. We now can be reasonably confident that the setu
 also got a first introduction to the basic concepts. But what we have seen so far would only allow us to run a single
 room at a time. That may already be all you want if you conduct experiments locally with participants that you bring
 into the lab. If you want to make use of crowdsourcing, though, you will want to be able to automatically pair up
- participants and create task rooms for each pair. This will be explained in the next section.
+participants and create task rooms for each pair. This will be explained in the next section.

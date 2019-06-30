@@ -15,7 +15,7 @@ The usage of both scripts is discribed below.
 Please note: Both startup scripts are designed to be used for testing purposes. For actual deployment it is recommended to manually set up Slurk.
 
 Start-up script for server and bots
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Using the script `start_server_and_bot.py`, you can easily set up a new Slurk session on the localhost.
 The script can be used by simply calling it with Python from the command line.
@@ -32,7 +32,7 @@ Example: To start the server and connect both the PairupBot and the MultiBot (lo
 
 
 Start-up script for clients
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `start_clients.py` can be used to automatically connect clients to a Slurk session. Some information has to be provided to the config file for the script to work properly. In particular, you should specify which web browsers you want to use by adding their respective type names (as found `here
 <https://docs.python.org/3.7/library/webbrowser.html>`_) to the `[tools]` section, using the keys `browser1` and `browser2`. If this information is missing, the script will try to use your default browser.

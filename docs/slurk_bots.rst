@@ -9,7 +9,7 @@ Bots are little client programms, which can both communicate with human clients 
 There are some sample bots provided as examples, two of which are dissected and explained below.
 
 Dissecting the minimal bot
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.
 
@@ -75,7 +75,7 @@ The minimal bot first changes the `src` attribute of the image with the id `curr
 Apart from changing image attributes, the minimal bot is able to send messages and image visible in the chat area using the `text` and `image` commands (private messages and images, if the user id of the intended receiver is provided). It can modify which parts of the interface are shown to users using the `update_permissions` command, and request the current permission information from the server (`get_permissions`). Finally, it can clear the chat history using the `clear_chat` command.
 
 Dissecting the multi bot
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.
 
@@ -111,7 +111,7 @@ Just as the minimal bot, the multi bot is able to change the images shown in the
         self.emit('leave_room', {'room': data['room']['id']})
 
 Interacting with layouts
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Bots can modify layouts in two ways: Setting texts and altering attribute values.
 

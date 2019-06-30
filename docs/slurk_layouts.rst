@@ -43,6 +43,7 @@ A layout is a JSON file with a top level dictionary with the following keys:
         "submit-message": "send-message",
         "print-history": "plain-history"
       }
+
   Predefined scripts:
     - ``"display-text"``: Displays text in the chat as they arrive
     - ``"display-image"``: Displays images in the chat as they arrive
