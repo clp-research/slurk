@@ -63,11 +63,6 @@ def before_request():
         if request.endpoint != 'login.index' and request.endpoint != "static":
             return login_manager.unauthorized()
 
-    if request.endpoint == 'admin.token' and not current_user.token.permissions.token_generate \
-            or request.endpoint == 'admin.task' and not current_user.token.permissions.task_create:
-        flash("Permission denied", "error")
-        return login_manager.unauthorized()
-
 
 if not Room.query.get("admin_room"):
     db.session.add(Room(name="admin_room",
@@ -78,11 +73,7 @@ if not Room.query.get("admin_room"):
                          id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
                          permissions=Permissions(
                              user_query=True,
-                             user_log_query=True,
                              user_log_event=True,
-                             user_permissions_query=True,
-                             user_permissions_update=True,
-                             user_room_query=True,
                              user_room_join=True,
                              user_room_leave=True,
                              message_text=True,
@@ -93,7 +84,6 @@ if not Room.query.get("admin_room"):
                              room_log_query=True,
                              room_create=True,
                              room_update=True,
-                             room_close=True,
                              room_delete=True,
                              layout_query=True,
                              layout_create=True,

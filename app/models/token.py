@@ -26,7 +26,7 @@ class Token(Base):
             'user': self.user_id,
             'task': self.task_id,
             'room': self.room_name,
-            'permissions': self.permissions_id,
+            'permissions': self.permissions.as_dict(),
             'source': self.source,
             'valid': self.valid,
         }, **super(Token, self).as_dict())

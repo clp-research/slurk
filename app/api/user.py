@@ -8,125 +8,6 @@ from ..models.user import User
 from ..api.log import log_event
 
 
-@socketio.on('get_user')
-def _get_user(id):
-    current_id = current_user.get_id()
-    if not current_id:
-        return False, "invalid session id"
-
-    if id and not current_user.token.permissions.user_query:
-        return False, "insufficient rights"
-    user = User.query.get(id or current_id)
-    if user:
-        return True, user.as_dict()
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user_task')
-def _get_user_task(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.task_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, user.token.task.as_dict() if user.token and user.token.task else None
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user_token')
-def _get_user_task(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.token_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, user.token.as_dict() if user.token else None
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user_permissions')
-def _get_user_permissions(id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if id and not current_user.token.permissions.permissions_query:
-        return False, "insufficient rights"
-
-    if id:
-        user = User.query.get(id)
-    else:
-        user = current_user
-
-    if user:
-        return True, user.token.permissions.as_dict()
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user_rooms')
-def _get_user_rooms(user_id):
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if user_id and not current_user.token.permissions.user_room_query:
-        return False, "insufficient rights"
-
-    if user_id:
-        user = User.query.get(user_id)
-    else:
-        user = current_user
-
-    if user:
-        return True, [room.as_dict() for room in user.rooms]
-    else:
-        return False, "user does not exist"
-
-
-@socketio.on('get_user_rooms_logs')
-def _get_user_rooms_logs(user_id):
-    from ..models.user import User
-
-    if not current_user.get_id():
-        return False, "invalid session id"
-    if user_id and not current_user.token.permissions.user_log_query:
-        return False, "insufficient rights"
-
-    if user_id:
-        user = User.query.get(user_id)
-    else:
-        user = current_user
-
-    def filter_private_messages(logs, id):
-        for log in logs:
-            if log['event'] == "text_message" or log['event'] == "image_message":
-                # Filter only messages
-                if log['receiver']:
-                    # Private message
-                    if int(log['receiver']) != id and log['user']['id'] != id:
-                        # User not affected, continue the loop
-                        continue
-            yield log
-
-    if user:
-        return True, {room.name: list(filter_private_messages([log.as_dict() for log in room.logs], user.id))
-                      for room in user.rooms}
-    else:
-        return False, "user does not exist"
-
-
 @socketio.on('join_room')
 def _join_room(data):
     id = data.get('user')
@@ -159,7 +40,6 @@ def _join_room(data):
         log_event("join", user, room)
     db.session.commit()
 
-    print("join room:", room, user.session_id)
     join_room(room.name, user.session_id)
 
     return True
@@ -172,7 +52,7 @@ def _leave_room(data):
 
     if not current_user.get_id():
         return False, "invalid session id"
-    if id and not current_user.token.permissions.user_room_join:
+    if id and not current_user.token.permissions.user_room_leave:
         return False, "insufficient rights"
 
     if id:
@@ -186,14 +66,11 @@ def _leave_room(data):
     if not room:
         return False, "room does not exist"
 
-    print(user.as_dict())
-    print(room)
     user.rooms.remove(room)
     user.current_rooms.remove(room)
     socketio.emit('left_room', room.name, room=user.session_id)
     log_event("leave", user, room)
     db.session.commit()
-    print("leave room:", room, user.session_id)
     leave_room(room.name, user.session_id)
 
     return True

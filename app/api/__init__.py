@@ -127,7 +127,7 @@ def get_tokens():
 @api.route('/token/<string:id>', methods=['GET'])
 @auth.login_required
 def get_token(id):
-    if not g.current_permissions.token_query:
+    if not g.current_permissions.token_query and str(g.current_user.token) != id:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     token = Token.query.get(id)
@@ -168,11 +168,7 @@ def post_token():
             source=data.get("source", None),
             permissions=Permissions(
                 user_query=data.get("user_query", False),
-                user_log_query=data.get("user_log_query", False),
                 user_log_event=data.get("user_log_event", False),
-                user_permissions_query=data.get("user_permissions_query", False),
-                user_permissions_update=data.get("user_permissions_update", False),
-                user_room_query=data.get("user_room_query", False),
                 user_room_join=data.get("user_room_join", False),
                 user_room_leave=data.get("user_room_leave", False),
                 message_text=data.get("message_text", False),
@@ -183,7 +179,6 @@ def post_token():
                 room_log_query=data.get("room_log_query", False),
                 room_create=data.get("room_create", False),
                 room_update=data.get("room_update", False),
-                room_close=data.get("room_close", False),
                 room_delete=data.get("room_delete", False),
                 layout_query=data.get("layout_query", False),
                 layout_create=data.get("layout_create", False),

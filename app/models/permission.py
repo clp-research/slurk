@@ -7,11 +7,7 @@ class Permissions(Base):
     __tablename__ = 'Permissions'
 
     user_query = db.Column(db.Boolean, nullable=False, default=False)
-    user_log_query = db.Column(db.Boolean, nullable=False, default=False)
     user_log_event = db.Column(db.Boolean, nullable=False, default=False)
-    user_permissions_query = db.Column(db.Boolean, nullable=False, default=False)
-    user_permissions_update = db.Column(db.Boolean, nullable=False, default=False)
-    user_room_query = db.Column(db.Boolean, nullable=False, default=False)
     user_room_join = db.Column(db.Boolean, nullable=False, default=False)
     user_room_leave = db.Column(db.Boolean, nullable=False, default=False)
     message_text = db.Column(db.Boolean, nullable=False, default=False)
@@ -22,7 +18,6 @@ class Permissions(Base):
     room_log_query = db.Column(db.Boolean, nullable=False, default=False)
     room_create = db.Column(db.Boolean, nullable=False, default=False)
     room_update = db.Column(db.Boolean, nullable=False, default=False)
-    room_close = db.Column(db.Boolean, nullable=False, default=False)
     room_delete = db.Column(db.Boolean, nullable=False, default=False)
     layout_query = db.Column(db.Boolean, nullable=False, default=False)
     layout_create = db.Column(db.Boolean, nullable=False, default=False)
@@ -41,12 +36,7 @@ class Permissions(Base):
             'user': {
                 'query': self.user_query,
                 'log': {
-                    'query': self.user_log_query,
                     'event': self.user_log_event,
-                },
-                'permissions': {
-                    'query': self.user_permissions_query,
-                    'update': self.user_permissions_update,
                 },
                 'room': {
                     'join': self.user_room_join,
@@ -63,7 +53,6 @@ class Permissions(Base):
                 'query': self.room_query,
                 'create': self.room_create,
                 'update': self.room_update,
-                'close': self.room_close,
                 'delete': self.room_delete,
                 'log': {
                     'query': self.room_log_query,

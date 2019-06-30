@@ -90,6 +90,7 @@ $(document).ready(() => {
 
         let user = await user_request;
         self_user = { id: user.id, name: user.name };
+        let token = $.get({ url: uri + "/token/" + user.token, beforeSend: headers });
 
         users = {};
         for (let user_id in room.current_users) {
@@ -104,20 +105,14 @@ $(document).ready(() => {
             print_history(history[room.name]);
         }
 
+        apply_user_permissions((await token).permissions);
+
     }
 
     async function left_room(data) {}
 
     socket.on('joined_room', joined_room);
     socket.on('left_room', left_room);
-
-    socket.on('connect', (data) => {
-        socket.emit("get_user_permissions", null, (success, permissions) => {
-            if (verify_query(success, permissions)) {
-                apply_user_permissions(permissions);
-            }
-        });
-    });
 
     socket.on('status', function (data) {
         if (typeof self_user === "undefined")
