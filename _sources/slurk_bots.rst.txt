@@ -184,3 +184,15 @@ If you want to change an image for example, you may use something like this:
      'attribute': "src",
      'value': url)
    })
+
+
+Commands
+~~~~~~~~
+
+Commands are very similar to text message, but requires a dedicated permission. Commands are sent to a room and a bot
+can listen to a command with ``on_command``:
+
+.. code-block:: python
+
+    def on_command(self, data):
+        do_something(data)

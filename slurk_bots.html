@@ -93,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#dissecting-the-concierge-bot">5.1. Dissecting the concierge bot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#joining-newly-created-task-rooms">5.2. Joining newly created task rooms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">5.3. Interacting with layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">5.4. Commands</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
@@ -342,6 +343,15 @@ the room.</p>
   <span class="s1">&#39;attribute&#39;</span><span class="p">:</span> <span class="s2">&quot;src&quot;</span><span class="p">,</span>
   <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
 <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="commands">
+<h2>5.4. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<p>Commands are very similar to text message, but requires a dedicated permission. Commands are sent to a room and a bot
+can listen to a command with <code class="docutils literal notranslate"><span class="pre">on_command</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
