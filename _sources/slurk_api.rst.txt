@@ -17,6 +17,33 @@ will also return as JSON. Example::
 Token
 -----
 
+* ``GET /api/v2/tokens``
+
+  Returns a list of tokens:
+
+  =========================  =================================================================================
+  ``id``                     ID of the token
+  ``permissions``            List of permissions for the token
+  ``room``                   Room to land in with this token
+  ``source``                 Optional source string
+  ``task``                   Task assigned to this token
+  ``user``                   User associated with this token
+  ``uri``                    URI to query this token
+  =========================  =================================================================================
+
+* ``GET /api/v2/token/<string:id>``
+
+  Returns the layout by id:
+
+  =========================  =================================================================================
+  ``id``                     ID of the token
+  ``permissions``            List of permissions for the token
+  ``room``                   Room to land in with this token
+  ``source``                 Optional source string
+  ``task``                   Task assigned to this token
+  ``user``                   User associated with this token
+  =========================  =================================================================================
+
 * ``POST /api/v2/token``
 
   Generates a new token:
@@ -24,11 +51,7 @@ Token
   =============================  ===========================================================================================================
   ``room`` *                     Room to land when using this token as login
   ``user_query``                 Can query other users
-  ``user_log_query``             Can query the logs for an arbitrary user, the logs the user is in can always be queried
   ``user_log_event``             Can create custom log events
-  ``user_permissions_query``     Can query permissions of other user, the permissions for the current can always be queried
-  ``user_permissions_update``    Can update permissions of a user
-  ``user_room_query``            Can query the rooms for an arbitrary user, the rooms the user is in can always be queried
   ``user_room_join``             Can make users join a room
   ``user_room_leave``            Can make users leave a room
   ``message_text``               Can send text messages
@@ -39,7 +62,6 @@ Token
   ``room_log_query``             Can query logs for an arbitrary rooms. Without this permission only the current room can be queried
   ``room_create``                Can create a room
   ``room_update``                Can update a rooms properties
-  ``room_close``                 Can close a room
   ``room_delete``                Can delete a room if there are no backrefs to it (tokens, users etc.)
   ``layout_query``               Can query layouts of arbitrary rooms. The layout from the rooms the user is in can always be queried
   ``task_create``                Can generate tasks. Needed to open the task form
@@ -49,6 +71,114 @@ Token
   ``token_invalidate``           Can invalidate tokens
   ``token_remove``               Can remove tokens
   =============================  ===========================================================================================================
+
+
+* ``DELETE /api/v2/token/<string:id>``
+
+  Invalidates the token
+
+User
+----
+
+* ``GET /api/v2/users``
+
+  Returns a list of users:
+
+  =========================  =================================================================================
+  ``id``                     ID of the user
+  ``name``                   Name of the user
+  ``rooms``                  List of rooms, where the user is present
+  ``session_id``             Session ID used by SocketIO
+  ``token``                  Token associated with the user
+  ``uri``                    URI to query this user
+  =========================  =================================================================================
+
+* ``GET /api/v2/user/<int:id>``
+
+  Returns the specified user:
+
+  =========================  =================================================================================
+  ``id``                     ID of the user
+  ``name``                   Name of the user
+  ``rooms``                  List of rooms, where the user is present
+  ``session_id``             Session ID used by SocketIO
+  ``token``                  Token associated with the user
+  =========================  =================================================================================
+
+* ``GET /api/v2/tasks``
+
+  Returns a list of tasks:
+
+  =========================  =================================================================================
+  ``id``                     ID of the task
+  ``name``                   Name of the task
+  ``num_users``              Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  ``tokens``                 Tokens associated with this task
+  ``uri``                    URI to query this task
+  =========================  =================================================================================
+
+
+Task
+----
+
+* ``GET /api/v2/user/<int:id>/task``
+
+  Returns the task for the specified user if any:
+
+  =========================  =================================================================================
+  ``id``                     ID of the task
+  ``name``                   Name of the task
+  ``num_users``              Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  ``tokens``                 Tokens associated with this task
+  ``uri``                    URI to query this task
+  =========================  =================================================================================
+
+* ``GET /api/v2/tasks``
+
+  Returns a list of tasks:
+
+  =========================  =================================================================================
+  ``id``                     ID of the task
+  ``name``                   Name of the task
+  ``num_users``              Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  ``tokens``                 Tokens associated with this task
+  ``uri``                    URI to query this task
+  =========================  =================================================================================
+
+* ``GET /api/v2/task/<int:id>``
+
+  Returns the specified user:
+
+  =========================  =================================================================================
+  ``id``                     ID of the task
+  ``name``                   Name of the task
+  ``num_users``              Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  ``tokens``                 Tokens associated with this task
+  =========================  =================================================================================
+
+* ``POST /api/v2/task``
+
+  Creates a new task:
+
+  =========================  =================================================================================
+  ``name`` *                 Name of the task
+  ``num_users`` *            Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  =========================  =================================================================================
+
+* ``PUT /api/v2/task/<int:id>``
+
+  Updates the specified task:
+
+  =========================  =================================================================================
+  ``name``                   Name of the task
+  ``num_users``              Number of user needed for this task
+  ``layout``                 Layout used for task rooms
+  =========================  =================================================================================
 
 
 Room
@@ -89,7 +219,7 @@ Room
   ``users``                  List of users who were associated with this room at least once
   =========================  =================================================================================
 
-* ``POST /api/v2/room/``
+* ``POST /api/v2/room``
 
   Creates a new room:
 
@@ -119,6 +249,49 @@ Room
 * ``DELETE /api/v2/room/<string:name>``
 
   Deletes the room by name if no associations to the room exist. Otherwise an error is returned.
+
+Layouts
+-------
+
+* ``GET /api/v2/layouts``
+
+  Returns a list of layouts:
+
+  =========================  =================================================================================
+  ``name``                   Unique name for the layout
+  ``id``                     ID of the layout
+  ``title``                  Title of the layout
+  ``subtitle``               Subtitle of the layout
+  ``html``                   HTML present in the layout
+  ``css``                    CSS present in the layout
+  ``tokens``                 List of tokens which are associated with this room
+  ``script``                 Javascript present in this layout
+  ``uri``                    URI to query this layout
+  =========================  =================================================================================
+
+* ``GET /api/v2/layout/<int:id>``
+
+  Returns the layout by id:
+
+  =========================  =================================================================================
+  ``name``                   Unique name for the layout
+  ``id``                     ID of the layout
+  ``title``                  Title of the layout
+  ``subtitle``               Subtitle of the layout
+  ``html``                   HTML present in the layout
+  ``css``                    CSS present in the layout
+  ``tokens``                 List of tokens which are associated with this room
+  ``script``                 Javascript present in this layout
+  =========================  =================================================================================
+
+* ``POST /api/v2/layout``
+
+  Creates a layout from the layout data. See :ref:`slurk_layouts` for more parameters
+
+* ``PUT /api/v2/layout``
+
+  Updates the layout from the layout data. See :ref:`slurk_layouts` for more parameters
+
 
 
 Logging

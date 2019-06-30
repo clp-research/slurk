@@ -63,7 +63,7 @@ The token for the bot is stored in ``CONCIERGE_BOT_TOKEN``: ::
           -H "Authorization: Token $ADMIN_TOKEN" \
           -H "Content-Type: application/json" \
           -H "Accept: application/json" \
-          -d '{"room": "waiting_room", "message_text": true, "room_create": true, "user_room_join": true}' \
+          -d '{"room": "waiting_room", "message_text": true, "room_create": true, "user_room_join": true, "user_room_leave": true}' \
           localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/')
 
 Now start the concierge bot: ::
