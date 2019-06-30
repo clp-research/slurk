@@ -8,117 +8,142 @@ Bots are little client programms, which can both communicate with human clients 
 
 There are some sample bots provided as examples, two of which are dissected and explained below.
 
-Dissecting the minimal bot
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dissecting the concierge bot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.
+The concierge bot is an example for a bot able group up users and move them into a newly created room.
 
-The bot file has to be called providing the server URL and port as well as a valid login token as arguments. The bot is then connects to the server using the `connectWithToken` command within the LoginNamespace.
-
-.. code-block:: python
-
-    with SocketIO(args.chat_host, args.chat_port) as socketIO:
-        login_namespace = socketIO.define(LoginNamespace, '/login')
-
-        login_namespace.emit('connectWithToken', {
-                             'token': args.token, 'name': "minimal bot"})
-
-If the connection was successfull, the bot connects to the ChatNamespace:
+The bot has to be started with a valid token and optionally with a server URL and Port. ``args`` are parameters to the
+bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:
 
 .. code-block:: python
 
-    # verify login status
-    def on_login_status(self, data):
-        global chat_namespace
-        if data["success"]:
-            chat_namespace = socketIO.define(ChatNamespace, '/chat')
+    socketIO = SocketIO(args.chat_host, args.chat_port,
+                        headers={'Authorization': args.token, 'Name': 'Concierge Bot'},
+                        Namespace=ChatNamespace)
+
+If the connection was successful, the bot connects to the ``ChatNamespace``. From now on it listens to the events
+emitted by the server. Listening on events is straight forward with adding new methods to the ``ChatNamespace`` class.
+
+The bot has to be notified, when a user joins or leaves the room:
+
+.. code-block:: python
+
+    # Called on `status` events
+    def on_status(self, status):
+        # We are interested in "join" and "leave" events.
+        if status['type'] == 'join':
+            # Get the user, who has joined a room
+            user = status['user']
+            # Read the task associated with the user
+            task = self.get_user_task(user)
+            if task:
+                # Join the task, if any
+                self.user_task_join(user, task, status['room'])
+        elif status['type'] == 'leave':
+            user = status['user']
+            task = self.get_user_task(user)
+            if task:
+                # Leave the task as the user is not present anymore.
+                self.user_task_leave(user, task)
+
+
+    @staticmethod
+    def get_user_task(user):
+        # REST call to the server.
+        task = requests.get(f"{uri}/user/{user['id']}/task", headers={'Authorization': f"Token {token}"})
+        if not task.ok:
+            print("Could not get user task")
+            sys.exit(2)
+        # Return the task as dictionary
+        return task.json()
+
+
+    def user_task_join(self, user, task, room):
+        task_id = task['id']
+        user_id = user['id']
+        user_name = user['name']
+
+        # Check if the bot is already aware if this task. If not create it
+        if task_id not in self.tasks:
+            self.tasks[task_id] = {}
+        # The tasks are determined by the `task_id` and the `user_id`. We store the room, where the user is present.
+        self.tasks[task_id][user_id] = room
+
+        # If we reach the required user for the task, move those users into a new task room.
+        if len(self.tasks[task_id]) == task['num_users']:
+            # First of all, create a new task room
+            new_room = self.create_room(task['name'], task['layout'])
+            # Notify the server, that the room was created, thus bots can join this room as well.
+            # This is needed as separate step, as the socketio interface is not connected to the REST API.
+            self.emit("room_created", {'room': new_room['name'], 'task': task_id}, self.room_created_feedback)
+
+            for user, old_room in self.tasks[task_id].items():
+                # Let every user join the new room and leave the old one.
+                self.emit("join_room", {'user': user, 'room': new_room['name']}, self.join_room_feedback)
+                self.emit("leave_room", {'user': user, 'room': old_room}, self.leave_room_feedback)
+            # clear the task as the users are now moved. This shouldn't be necessary, but let's stay conservative.
+            del self.tasks[task_id]
         else:
-            print("Could not login to server:", data['message'])
-            sys.exit(1)
+            # If we don't have enough users for a task, send the new user a message
+            self.emit('text', {'msg': f'Hello, {user_name}! I am looking for a partner for you, it might take some '
+                               'time, so be patient, please...',
+                               'receiver_id': user_id,
+                               'room': room}, message_response)
 
-The methods defined within the ChatNamespace class determine which actions the minimal bot is able to perform in task rooms. All bot actions are triggered by either events emmitted by the server or slash commands typed in using the chat interface. A new event handler has to be defined within the ChatNamespace class for every event or command the bot should react to. The syntax is the same for both cases:
-
-.. code-block:: python
-
-    def on_event(self,data):
-        do_something(data)
-
-On joining the room, all slash commands are registered using the `listen_to` command:
+In order to verify emits, a callback is provided to every call. Every callback is invoked with a success flag as the
+first argument and an error message as second argument, if the success flag is ``False``:
 
 .. code-block:: python
 
-    def on_joined_room(self, data):
-        self.emit("command", {'room': data['room']['id'], 'data': [
-                  'listen_to', 'new_image_private']})
-        self.emit("command", {'room': data['room']['id'], 'data': [
-                  'listen_to', 'new_image_public']})
-        # ...
+    @staticmethod
+    def join_room_feedback(success, error=None):
+        if not success:
+            print("Could not join room:", error)
+            sys.exit(4)
+        print("user joined room")
+        sys.stdout.flush()
 
-Subsequently, event handlers for server events and registered slash commands are added to the namespace class. For example, the minimal bot can change the image visible to all clients in the room using the registered slash command. The following method is called every time a client submits `/new_image_public` via the chat interface:
+    @staticmethod
+    def leave_room_feedback(success, error=None):
+        if not success:
+            print("Could not leave room:", error)
+            sys.exit(5)
+        print("user left room")
+        sys.stdout.flush()
 
-.. code-block:: python
+    @staticmethod
+    def room_created_feedback(success, error=None):
+        if not success:
+            print("Could not create task room:", error)
+            sys.exit(6)
+        print("task room created")
+        sys.stdout.flush()
 
-    def on_new_image_public(self, data):
-        print(data)
-        self.emit('set_attribute', {
-            'room': data['room']['id'],
-            'id': "current-image",
-            'attribute': "src",
-            'value': "https://picsum.photos/400/200?" + str(randint(1, 200000000))
-        })
+Joining newly created task rooms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        self.emit('log', {'message': "I have received a command, wohoo \\o/"})
-    print(f"new public image requested: {data}")
+When the concierge bot creates a new room, it will move the assigned user to this room. In order to join those task
+rooms as bot, they may listen to the ``new_task_room`` event just like the echo bot:
 
-The minimal bot first changes the `src` attribute of the image with the id `current-image` to a random image URL using the `set_attribute` command. Then it sends a message to the task log.
-
-Apart from changing image attributes, the minimal bot is able to send messages and image visible in the chat area using the `text` and `image` commands (private messages and images, if the user id of the intended receiver is provided). It can modify which parts of the interface are shown to users using the `update_permissions` command, and request the current permission information from the server (`get_permissions`). Finally, it can clear the chat history using the `clear_chat` command.
-
-Dissecting the multi bot
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.
-
-The main difference between the minimal bot and the multi bot lies in the latter not being bound to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event `new_task_room` is emmited by the server, the multi bot sends the command `join_task` with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.
 
 .. code-block:: python
 
     def on_new_task_room(self, data):
-        print("hello!!! I have been triggered!")
-        if data['task']['name'] != 'meetup':
-            return
+        if data['task'] == TASK_ID:
+            self.emit("join_room", {'user': self.id, 'room': data['room']})
 
-        room = data['room']
-        print("Joining room", room['name'])
-        self.emit('join_task', {'room': room['id']})
-        self.emit("command", {'room': room['id'], 'data': [
-                  'listen_to', 'new_image_private']})
-        self.emit("command", {'room': room['id'], 'data': [
-                  'listen_to', 'new_image_public']})
-        self.emit("command", {'room': room['id'], 'data': [
-                  'listen_to', 'end_meetup']})
-
-Just as the minimal bot, the multi bot is able to change the images shown in the image area. Apart from that, it stores the ids of clients joining any room the multi bot is in. If the slash command `/end_meetup` is submitted, every client in the current room is sent back to the waiting room:
-
-.. code-block:: python
-
-    def on_end_meetup(self, data):
-        print(data)
-        for user in users[data['room']['id']]:
-            print(user, "leaving room", data['room']['name'])
-            self.emit('leave_room', {'room': data['room']['id'], 'user': user})
-            self.emit('join_room', {'room': 1, 'user': user})
-        self.emit('leave_room', {'room': data['room']['id']})
+At the point where a task room has been opened, it compares the task id of the task room with the specified id and joins
+the room.
 
 Interacting with layouts
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Bots can modify layouts in two ways: Setting texts and altering attribute values.
 
-For this, two functions are provided:
+For this, four events are provided:
 
 - ``set_attribute``: Sets a javascript attribute to a new value. Those are the fields, which may be passed:
-
     - ``attribute``: The attribute to be updated
     - ``value``: The value to be set for the given attribute
     - ``id`` (Optional): The id of the element, which is going to be updated
@@ -127,22 +152,22 @@ For this, two functions are provided:
     - ``receiver_id`` (Optional): Sends the attribute to this receiver only
     - ``room`` (Optional): Sends the attribute to this room. Either ``receiver_id`` or ``room`` is required
     - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
-- ``set_text``: Sets a html text element  by id to a new value. Those are the fields, which may be passed:
 
+- ``set_text``: Sets a html text element  by id to a new value. Those are the fields, which may be passed:
     - ``id``: The id of the text element, which is going to be updated
     - ``text``: The text to be set
     - ``receiver_id`` (Optional): Sends the text to this receiver only
     - ``room`` (Optional): Sends the text to this room. Either ``receiver_id`` or ``room`` is required
     - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
-- ``add_class``: Adds the html class to an element by id. Those are the fields, which may be passed:
 
+- ``add_class``: Adds the html class to an element by id. Those are the fields, which may be passed:
     - ``id``: The id of the element, which is going to be updated
     - ``text``: The class to be added
     - ``receiver_id`` (Optional): Adds the class for this receiver only
     - ``room`` (Optional): Adds the class for all receivers in this room. Either ``receiver_id`` or ``room`` is required
     - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
-- ``remove_class``: Removes the html class from an element by id. Those are the fields, which may be passed:
 
+- ``remove_class``: Removes the html class from an element by id. Those are the fields, which may be passed:
     - ``id``: The id of the element, which is going to be updated
     - ``text``: The class to be removed
     - ``receiver_id`` (Optional): Removes the class for this receiver only
@@ -154,7 +179,7 @@ If you want to change an image for example, you may use something like this:
 .. code-block:: python
 
    self.emit('set_attribute', {
-     'room': room_id,
+     'room': room,
      'id': "image",
      'attribute': "src",
      'value': url)

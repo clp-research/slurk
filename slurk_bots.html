@@ -90,8 +90,8 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5. Writing your own bots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-minimal-bot">5.1. Dissecting the minimal bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-multi-bot">5.2. Dissecting the multi bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-concierge-bot">5.1. Dissecting the concierge bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joining-newly-created-task-rooms">5.2. Joining newly created task rooms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">5.3. Interacting with layouts</a></li>
 </ul>
 </li>
@@ -166,98 +166,129 @@
 <span id="slurk-bots"></span><h1>5. Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
 <p>Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
-<div class="section" id="dissecting-the-minimal-bot">
-<h2>5.1. Dissecting the minimal bot<a class="headerlink" href="#dissecting-the-minimal-bot" title="Permalink to this headline">¶</a></h2>
-<p>The minimal bot is an example for a bot able to perform basic tasks, such as sending messages and images to clients joining the current room or changing the image shown in the image area. Furthermore, the minimal bot can display and change user permissions.</p>
-<p>The bot file has to be called providing the server URL and port as well as a valid login token as arguments. The bot is then connects to the server using the <cite>connectWithToken</cite> command within the LoginNamespace.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SocketIO</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">chat_host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">chat_port</span><span class="p">)</span> <span class="k">as</span> <span class="n">socketIO</span><span class="p">:</span>
-    <span class="n">login_namespace</span> <span class="o">=</span> <span class="n">socketIO</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="n">LoginNamespace</span><span class="p">,</span> <span class="s1">&#39;/login&#39;</span><span class="p">)</span>
-
-    <span class="n">login_namespace</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;connectWithToken&#39;</span><span class="p">,</span> <span class="p">{</span>
-                         <span class="s1">&#39;token&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;minimal bot&quot;</span><span class="p">})</span>
+<div class="section" id="dissecting-the-concierge-bot">
+<h2>5.1. Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
+<p>The concierge bot is an example for a bot able group up users and move them into a newly created room.</p>
+<p>The bot has to be started with a valid token and optionally with a server URL and Port. <code class="docutils literal notranslate"><span class="pre">args</span></code> are parameters to the
+bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">socketIO</span> <span class="o">=</span> <span class="n">SocketIO</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">chat_host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">chat_port</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Concierge Bot&#39;</span><span class="p">},</span>
+                    <span class="n">Namespace</span><span class="o">=</span><span class="n">ChatNamespace</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If the connection was successfull, the bot connects to the ChatNamespace:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># verify login status</span>
-<span class="k">def</span> <span class="nf">on_login_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">chat_namespace</span>
-    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
-        <span class="n">chat_namespace</span> <span class="o">=</span> <span class="n">socketIO</span><span class="o">.</span><span class="n">define</span><span class="p">(</span><span class="n">ChatNamespace</span><span class="p">,</span> <span class="s1">&#39;/chat&#39;</span><span class="p">)</span>
+<p>If the connection was successful, the bot connects to the <code class="docutils literal notranslate"><span class="pre">ChatNamespace</span></code>. From now on it listens to the events
+emitted by the server. Listening on events is straight forward with adding new methods to the <code class="docutils literal notranslate"><span class="pre">ChatNamespace</span></code> class.</p>
+<p>The bot has to be notified, when a user joins or leaves the room:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Called on `status` events</span>
+<span class="k">def</span> <span class="nf">on_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+    <span class="c1"># We are interested in &quot;join&quot; and &quot;leave&quot; events.</span>
+    <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;join&#39;</span><span class="p">:</span>
+        <span class="c1"># Get the user, who has joined a room</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+        <span class="c1"># Read the task associated with the user</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_task</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span><span class="p">:</span>
+            <span class="c1"># Join the task, if any</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_task_join</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;leave&#39;</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_task</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span><span class="p">:</span>
+            <span class="c1"># Leave the task as the user is not present anymore.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_task_leave</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">get_user_task</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="c1"># REST call to the server.</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{uri}/user/{user[&#39;id&#39;]}/task&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;Token {token}&quot;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not get user task&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># Return the task as dictionary</span>
+    <span class="k">return</span> <span class="n">task</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">user_task_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">room</span><span class="p">):</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">task</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">user_name</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Check if the bot is already aware if this task. If not create it</span>
+    <span class="k">if</span> <span class="n">task_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># The tasks are determined by the `task_id` and the `user_id`. We store the room, where the user is present.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">][</span><span class="n">user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">room</span>
+
+    <span class="c1"># If we reach the required user for the task, move those users into a new task room.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">])</span> <span class="o">==</span> <span class="n">task</span><span class="p">[</span><span class="s1">&#39;num_users&#39;</span><span class="p">]:</span>
+        <span class="c1"># First of all, create a new task room</span>
+        <span class="n">new_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_room</span><span class="p">(</span><span class="n">task</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">task</span><span class="p">[</span><span class="s1">&#39;layout&#39;</span><span class="p">])</span>
+        <span class="c1"># Notify the server, that the room was created, thus bots can join this room as well.</span>
+        <span class="c1"># This is needed as separate step, as the socketio interface is not connected to the REST API.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;room_created&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">new_room</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">room_created_feedback</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">user</span><span class="p">,</span> <span class="n">old_room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Let every user join the new room and leave the old one.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;join_room&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span> <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">new_room</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]},</span> <span class="bp">self</span><span class="o">.</span><span class="n">join_room_feedback</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;leave_room&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span> <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">old_room</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">leave_room_feedback</span><span class="p">)</span>
+        <span class="c1"># clear the task as the users are now moved. This shouldn&#39;t be necessary, but let&#39;s stay conservative.</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not login to server:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># If we don&#39;t have enough users for a task, send the new user a message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s1">&#39;Hello, {user_name}! I am looking for a partner for you, it might take some &#39;</span>
+                           <span class="s1">&#39;time, so be patient, please...&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;receiver_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span>
+                           <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">},</span> <span class="n">message_response</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The methods defined within the ChatNamespace class determine which actions the minimal bot is able to perform in task rooms. All bot actions are triggered by either events emmitted by the server or slash commands typed in using the chat interface. A new event handler has to be defined within the ChatNamespace class for every event or command the bot should react to. The syntax is the same for both cases:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>On joining the room, all slash commands are registered using the <cite>listen_to</cite> command:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_joined_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_private&#39;</span><span class="p">]})</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_public&#39;</span><span class="p">]})</span>
-    <span class="c1"># ...</span>
-</pre></div>
-</div>
-<p>Subsequently, event handlers for server events and registered slash commands are added to the namespace class. For example, the minimal bot can change the image visible to all clients in the room using the registered slash command. The following method is called every time a client submits <cite>/new_image_public</cite> via the chat interface:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_image_public</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;set_attribute&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s2">&quot;current-image&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;attribute&#39;</span><span class="p">:</span> <span class="s2">&quot;src&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s2">&quot;https://picsum.photos/400/200?&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200000000</span><span class="p">))</span>
-    <span class="p">})</span>
+<p>In order to verify emits, a callback is provided to every call. Every callback is invoked with a success flag as the
+first argument and an error message as second argument, if the success flag is <code class="docutils literal notranslate"><span class="pre">False</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">join_room_feedback</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not join room:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;user joined room&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s2">&quot;I have received a command, wohoo </span><span class="se">\\</span><span class="s2">o/&quot;</span><span class="p">})</span>
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;new public image requested: {data}&quot;</span><span class="p">)</span>
+<span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">leave_room_feedback</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not leave room:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;user left room&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">room_created_feedback</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Could not create task room:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;task room created&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The minimal bot first changes the <cite>src</cite> attribute of the image with the id <cite>current-image</cite> to a random image URL using the <cite>set_attribute</cite> command. Then it sends a message to the task log.</p>
-<p>Apart from changing image attributes, the minimal bot is able to send messages and image visible in the chat area using the <cite>text</cite> and <cite>image</cite> commands (private messages and images, if the user id of the intended receiver is provided). It can modify which parts of the interface are shown to users using the <cite>update_permissions</cite> command, and request the current permission information from the server (<cite>get_permissions</cite>). Finally, it can clear the chat history using the <cite>clear_chat</cite> command.</p>
 </div>
-<div class="section" id="dissecting-the-multi-bot">
-<h2>5.2. Dissecting the multi bot<a class="headerlink" href="#dissecting-the-multi-bot" title="Permalink to this headline">¶</a></h2>
-<p>The multi bot and the minimal bot share a large part of their features. The overall structure, including the procedure for connecting to the server, is the same for both bots.</p>
-<p>The main difference between the minimal bot and the multi bot lies in the latter not being bound to a single room. Unlike the minimal bot, the multi bot is able to join new task rooms once they are created, potentially being simultaneously active in multiple rooms. If the event <cite>new_task_room</cite> is emmited by the server, the multi bot sends the command <cite>join_task</cite> with the corresponding room id. After joining the respective room, slash commands are registered in the same way as for the minimal bot.</p>
+<div class="section" id="joining-newly-created-task-rooms">
+<h2>5.2. Joining newly created task rooms<a class="headerlink" href="#joining-newly-created-task-rooms" title="Permalink to this headline">¶</a></h2>
+<p>When the concierge bot creates a new room, it will move the assigned user to this room. In order to join those task
+rooms as bot, they may listen to the <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> event just like the echo bot:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_task_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;hello!!! I have been triggered!&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;meetup&#39;</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="n">room</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">]</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Joining room&quot;</span><span class="p">,</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;join_task&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]})</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_private&#39;</span><span class="p">]})</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;new_image_public&#39;</span><span class="p">]})</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s1">&#39;listen_to&#39;</span><span class="p">,</span> <span class="s1">&#39;end_meetup&#39;</span><span class="p">]})</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TASK_ID</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;join_room&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">]})</span>
 </pre></div>
 </div>
-<p>Just as the minimal bot, the multi bot is able to change the images shown in the image area. Apart from that, it stores the ids of clients joining any room the multi bot is in. If the slash command <cite>/end_meetup</cite> is submitted, every client in the current room is sent back to the waiting room:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_end_meetup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]]:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;leaving room&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;leave_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;join_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;leave_room&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;room&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]})</span>
-</pre></div>
-</div>
+<p>At the point where a task room has been opened, it compares the task id of the task room with the specified id and joins
+the room.</p>
 </div>
 <div class="section" id="interacting-with-layouts">
 <h2>5.3. Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
 <p>Bots can modify layouts in two ways: Setting texts and altering attribute values.</p>
-<p>For this, two functions are provided:</p>
-<ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">set_attribute</span></code>: Sets a javascript attribute to a new value. Those are the fields, which may be passed:</p>
-<blockquote>
-<div><ul class="simple">
+<p>For this, four events are provided:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">set_attribute</span></code>: Sets a javascript attribute to a new value. Those are the fields, which may be passed:</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">attribute</span></code>: The attribute to be updated</li>
 <li><code class="docutils literal notranslate"><span class="pre">value</span></code>: The value to be set for the given attribute</li>
 <li><code class="docutils literal notranslate"><span class="pre">id</span></code> (Optional): The id of the element, which is going to be updated</li>
@@ -267,45 +298,46 @@
 <li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Sends the attribute to this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
 <li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">set_text</span></code>: Sets a html text element  by id to a new value. Those are the fields, which may be passed:</p>
-<blockquote>
-<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">set_text</span></code>: Sets a html text element  by id to a new value. Those are the fields, which may be passed:</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">id</span></code>: The id of the text element, which is going to be updated</li>
 <li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The text to be set</li>
 <li><code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> (Optional): Sends the text to this receiver only</li>
 <li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Sends the text to this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
 <li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">add_class</span></code>: Adds the html class to an element by id. Those are the fields, which may be passed:</p>
-<blockquote>
-<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">add_class</span></code>: Adds the html class to an element by id. Those are the fields, which may be passed:</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">id</span></code>: The id of the element, which is going to be updated</li>
 <li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The class to be added</li>
 <li><code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> (Optional): Adds the class for this receiver only</li>
 <li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Adds the class for all receivers in this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
 <li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">remove_class</span></code>: Removes the html class from an element by id. Those are the fields, which may be passed:</p>
-<blockquote>
-<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">remove_class</span></code>: Removes the html class from an element by id. Those are the fields, which may be passed:</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">id</span></code>: The id of the element, which is going to be updated</li>
 <li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The class to be removed</li>
 <li><code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> (Optional): Removes the class for this receiver only</li>
 <li><code class="docutils literal notranslate"><span class="pre">room</span></code> (Optional): Removes the class for all receivers in this room. Either <code class="docutils literal notranslate"><span class="pre">receiver_id</span></code> or <code class="docutils literal notranslate"><span class="pre">room</span></code> is required</li>
 <li><code class="docutils literal notranslate"><span class="pre">sender_id</span></code> (Optional): The sender of the message. Defaults to the current user</li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
 </ul>
 <p>If you want to change an image for example, you may use something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;set_attribute&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room_id</span><span class="p">,</span>
+  <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">,</span>
   <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
   <span class="s1">&#39;attribute&#39;</span><span class="p">:</span> <span class="s2">&quot;src&quot;</span><span class="p">,</span>
   <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
