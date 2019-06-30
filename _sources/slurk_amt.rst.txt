@@ -34,7 +34,7 @@ in any way.
 
 
 Building and Publishing HITs
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In AMT setting, requester (HIT publisher) needs to specify the format that will be used to display HITs to workers.
 Slurk uses HTMLQuestion scheme [1]_ as it allows requesters to have more control over the data collection, putting less
