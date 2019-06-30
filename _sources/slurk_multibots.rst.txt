@@ -57,7 +57,7 @@ the task: ::
           -d '{"name": "Echo Task", "num_users": 2}' \
           localhost/api/v2/task | jq .id)
 
-The token for the bot is stored in ``BOT_TOKEN``: ::
+The token for the bot is stored in ``CONCIERGE_BOT_TOKEN``: ::
 
    $ CONCIERGE_BOT_TOKEN=$(curl -X POST \
           -H "Authorization: Token $ADMIN_TOKEN" \
@@ -85,7 +85,7 @@ bot, too: ::
           -d '{"room": "waiting_room", "message_text": true, "user_room_join": true}' \
           localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/')
 
-This bots has an optional ``task-id`` parameter, to listen to specific tasks to join. Let's start it: ::
+This bot has an optional ``task-id`` parameter, to listen to specific tasks to join. Let's start it: ::
 
    $ docker run -e TOKEN=$ECHO_BOT_TOKEN -e ECHO_TASK_ID=$TASK_ID --net="host" slurk/echo-bot
 
@@ -100,5 +100,3 @@ Now lets create two user tokens and specify the task: ::
 
 Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
 users to a new room. The echo bot will also join this room and replies to every chat message.
-
-In the Next Section, we will see, how to write bots.

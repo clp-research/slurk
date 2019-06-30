@@ -212,7 +212,7 @@ the task:</p>
        localhost/api/v2/task | jq .id)
 </pre></div>
 </div>
-<p>The token for the bot is stored in <code class="docutils literal notranslate"><span class="pre">BOT_TOKEN</span></code>:</p>
+<p>The token for the bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ CONCIERGE_BOT_TOKEN=$(curl -X POST \
        -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
        -H &quot;Content-Type: application/json&quot; \
@@ -238,7 +238,7 @@ bot, too:</p>
        localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;)
 </pre></div>
 </div>
-<p>This bots has an optional <code class="docutils literal notranslate"><span class="pre">task-id</span></code> parameter, to listen to specific tasks to join. Let’s start it:</p>
+<p>This bot has an optional <code class="docutils literal notranslate"><span class="pre">task-id</span></code> parameter, to listen to specific tasks to join. Let’s start it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$ECHO_BOT_TOKEN -e ECHO_TASK_ID=$TASK_ID --net=&quot;host&quot; slurk/echo-bot
 </pre></div>
 </div>
@@ -253,7 +253,6 @@ bot, too:</p>
 </div>
 <p>Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
 users to a new room. The echo bot will also join this room and replies to every chat message.</p>
-<p>In the Next Section, we will see, how to write bots.</p>
 </div>
 
 

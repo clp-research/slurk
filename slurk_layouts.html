@@ -89,12 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Layouts and Plugins</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#layout-development-in-practice">4.1. Layout development in practice</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#customizing-the-existing-waiting-room-layout">4.1.1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-main-layout">4.1.2. The Main Layout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plugin-development-in-practice">4.1.3. Plugin development in practice</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#layout-development-in-practice">4.1. Layout development in practice</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">5. Writing your own bots</a></li>
@@ -200,7 +195,9 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </dd>
 </dl>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code>: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which maps different triggers to scripts or a list of scripts. Scripts can either lie in <em>app/static/plugins</em> or can be passed by link. Example:</p>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code>: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which
+maps different triggers to scripts or a list of scripts. Scripts can either be a predefined one, or can be passed by
+link. Example:</p>
 <blockquote>
 <div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">&quot;incoming-message&quot;</span><span class="p">:</span> <span class="s2">&quot;display-message&quot;</span><span class="p">,</span>
@@ -210,19 +207,39 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </pre></div>
 </div>
 </div></blockquote>
+<dl class="docutils">
+<dt>Predefined scripts:</dt><dd><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&quot;display-text&quot;</span></code>: Displays text in the chat as they arrive</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;display-image&quot;</span></code>: Displays images in the chat as they arrive</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;plain-history&quot;</span></code>: Shows messages in the chat, which has arrived before login</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;send-message&quot;</span></code>: Sends text, images, and commands depending on the entered text.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Displays the currently typing users in the <code class="docutils literal notranslate"><span class="pre">#typing</span></code> element.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;ask-reload&quot;</span></code>: A popup asks on page reload, if this is the desired action.</li>
+</ul>
+</dd>
+</dl>
 </li>
 </ul>
 <p>These are the currently defined triggers:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-message&quot;</span></code>: Called, when a new message arrives. These are the passed parameters</dt><dd><ul>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code>: Called, when a new message arrives. These are the passed parameters</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user, who has send the message</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.privateMessage</span></code>: A boolean value if this was a direct message or visible to the room</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.msg</span></code> (Optional): The message string the sent message if any</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.image</span></code> (Optional): The image url of the sent message if any (Either <code class="docutils literal notranslate"><span class="pre">data.msg</span></code> or <code class="docutils literal notranslate"><span class="pre">data.image</span></code> are available)</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.width</span></code> (Optional): The width of the sent image (available if <code class="docutils literal notranslate"><span class="pre">data.image</span></code> is set)</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.height</span></code> (Optional): The height of the sent image (available if <code class="docutils literal notranslate"><span class="pre">data.image</span></code> is set)</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value if this was a direct message or visible to the room</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.msg</span></code>: The message string the sent message if any</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code>: Called, when a new message arrives. These are the passed parameters</dt><dd><ul>
+<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user, who has send the message</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value if this was a direct message or visible to the room</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.image</span></code>: The image url of the sent message if any (Either <code class="docutils literal notranslate"><span class="pre">data.msg</span></code> or <code class="docutils literal notranslate"><span class="pre">data.image</span></code> are available)</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.width</span></code>: The width of the sent image (available if <code class="docutils literal notranslate"><span class="pre">data.image</span></code> is set)</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.height</span></code>: The height of the sent image (available if <code class="docutils literal notranslate"><span class="pre">data.image</span></code> is set)</li>
 </ul>
 </dd>
 </dl>
@@ -238,17 +255,16 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </li>
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code>: Triggered, when the server sends the history of the chat on joining a room</dt><dd><ul>
-<li><code class="docutils literal notranslate"><span class="pre">element.type</span></code>: Type of the event. Either <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;command&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;status&quot;</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">element.event</span></code>: Type of the event. Either <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;command&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;status&quot;</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">element.user</span></code>: The user who send the event</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.timestamp</span></code>: The timestamp of the event</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.msg</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>): The message of the text event</li>
+<li><code class="docutils literal notranslate"><span class="pre">element.message</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>): The message of the text event</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.receiver_id</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>, Optional): The receiver id, if it was a private message</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.command</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;command&quot;</span></code>): The command which was executed</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code>: Triggered, when the server sends the history of the chat on joining a room</li>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code>: Inserted into the JQuery <code class="docutils literal notranslate"><span class="pre">$(document).ready</span></code> function</li>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code>: Inserted as plain script into the chat</li>
 <li><dl class="first docutils">
@@ -270,220 +286,49 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </ul>
 <div class="section" id="layout-development-in-practice">
 <h2>4.1. Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this headline">¶</a></h2>
-<p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with existing ones.</p>
-<p>The following steps demonstrate how to build your own layout, using snippets from the layout for the <em>CoLA</em>-game as examples.</p>
-<div class="section" id="customizing-the-existing-waiting-room-layout">
-<h3>4.1.1. Customizing the existing <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout<a class="headerlink" href="#customizing-the-existing-waiting-room-layout" title="Permalink to this headline">¶</a></h3>
-<p>First of all, you should consider checking whether you want to modify the <code class="docutils literal notranslate"><span class="pre">waiting_room</span></code> layout which will be loaded by default when the Waiting Room is created (<em>see app/main/database.py, line 136</em>).</p>
-<p><em>EXAMPLE:</em></p>
-<p>The CoLA waiting room is supposed to have a different title (l. 2), a different image (l. 12) and a blue theme (l. 23):</p>
+<p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and
+chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with
+existing ones.</p>
+<p>The following steps demonstrate how to build your own layout for an example waiting room used by the concierge bot.</p>
+<p>The waiting room is supposed to have a custom title, an image on the right, and a blue theme (l. 23):</p>
 <blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
-  &quot;title&quot;: &quot;CoLA - Waiting Room&quot;,
-  &quot;subtitle&quot;: &quot;Waiting for another player...&quot;,
-  &quot;html&quot;: [
-    {
-      &quot;layout-type&quot;: &quot;div&quot;,
-      &quot;id&quot;: &quot;image-area&quot;,
-      &quot;layout-content&quot;: [
-        {
-          &quot;layout-type&quot;: &quot;image&quot;,
-          &quot;id&quot;: &quot;current-image&quot;,
-          &quot;src&quot;: &quot;https://example.de:8000/cola_data/The-Waiting-Room.jpg&quot;,
-          &quot;width&quot;: 500,
-          &quot;height&quot;: 400
-        }
-      ]
-    },
-    [...]
-  ],
-  &quot;css&quot;: {
-    &quot;header, footer&quot;: {
-      &quot;background&quot;: &quot;#115E91&quot;
-    },
-    [...]
-  },
-  &quot;scripts&quot;: {
-    [...]
-  }
-}
-</pre></div>
-</div>
-</div></blockquote>
-</div>
-<div class="section" id="the-main-layout">
-<h3>4.1.2. The Main Layout<a class="headerlink" href="#the-main-layout" title="Permalink to this headline">¶</a></h3>
-<p>The main layout defines <strong>your</strong> chatroom and it will be loaded as soon as a <em>New Task Room</em> is opened.
-By default, the <code class="docutils literal notranslate"><span class="pre">pairup-bot</span></code> will load the <code class="docutils literal notranslate"><span class="pre">meetup_task</span></code>-layout.
-In order to use yours you need to replace “meetup_task” with the name of your layout (<em>see pairup_bot.py, line 159</em>).
-Here it would be “cola_task” (assuming that a file <em>cola_task.json</em> was created in /app/static/layouts).</p>
-<p><em>EXAMPLE:</em></p>
-<p>The CoLA chatroom has to be able to, e.g. display images (on the right side of the chatroom). In order to display several images belonging to different categories in a structured way a table can be used. How can this be realized in the layout?</p>
-<p><strong>HTML:</strong></p>
-<ol class="arabic">
-<li><p class="first">Specify the area where the table should lie (ll. 5-7).</p>
-</li>
-<li><p class="first">Define the table (ll. 9,10).</p>
-</li>
-<li><p class="first">Define the first row of the table (ll. 12,13).</p>
-</li>
-<li><p class="first">Define the first cell of the first row (ll. 15,16).</p>
-</li>
-<li><p class="first">Define an image-tag inside the first cell of the first row (ll. 18-23).
-Now there is a placeholder with the id <strong>r0c0</strong> for one image. Its <em>src</em>-attribute can be enriched with a value anytime.</p>
-</li>
-<li><p class="first">Define the second cell of the first row (ll. 28,29).</p>
-</li>
-<li><p class="first">Define an image-tag in the second cell of the first row (ll. 31-36)</p>
-</li>
-<li><p class="first">Etc.</p>
-<blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
-  &quot;title&quot;: &quot;CoLA - Chatroom&quot;,
-  &quot;html&quot;: [
-    {
-      &quot;layout-type&quot;: &quot;div&quot;,
-      &quot;id&quot;: &quot;show-area&quot;,
-      &quot;layout-content&quot;: [
-        {
-          &quot;layout-type&quot;: &quot;table&quot;,
-          &quot;layout-content&quot;: [
-            {
-              &quot;layout-type&quot;: &quot;tr&quot;,
-              &quot;layout-content&quot;: [
-                {
-                  &quot;layout-type&quot;: &quot;td&quot;,
-                  &quot;layout-content&quot;: [
-                    {
-                      &quot;layout-type&quot;: &quot;image&quot;,
-                      &quot;id&quot;: &quot;r0c0&quot;,
-                      &quot;src&quot;: &quot;&quot;,
-                      &quot;class&quot;: &quot;hidden&quot;,
-                      &quot;width&quot;: 128,
-                      &quot;height&quot;: 128
-                    }
-                  ]
-                },
-                {
-                  &quot;layout-type&quot;: &quot;td&quot;,
-                  &quot;layout-content&quot;: [
-                    {
-                      &quot;layout-type&quot;: &quot;image&quot;,
-                      &quot;id&quot;: &quot;r0c1&quot;,
-                      &quot;src&quot;: &quot;&quot;,
-                      &quot;class&quot;: &quot;hidden&quot;,
-                      &quot;width&quot;: 128,
-                      &quot;height&quot;: 128
-                    }
-                  ]
-                },
-                [...]
-            ]}
-        ]}
-    ]}
-]}
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ol>
-<p><strong>CSS:</strong></p>
-<ol class="arabic">
-<li><p class="first">Format the area where the table lies, referring to it by its ID (ll. 2-8).</p>
-</li>
-<li><p class="first">Format the table (ll. 10-19).</p>
-</li>
-<li><p class="first">Etc.</p>
-<blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>&quot;css&quot;: {
-    &quot;#show-area&quot;: {
-      &quot;display&quot;: &quot;block&quot;,
-      &quot;margin-left&quot;: &quot;auto&quot;,
-      &quot;margin-right&quot;: &quot;auto&quot;,
-      &quot;width&quot;: &quot;900px&quot;,
-      &quot;background-color&quot;: &quot;rgb(182, 226, 226)&quot;
-    },
-    &quot;table&quot;: {
-      &quot;display&quot;: &quot;block&quot;,
-      &quot;margin-left&quot;: &quot;auto&quot;,
-      &quot;margin-right&quot;: &quot;auto&quot;,
-      &quot;margin-bottom&quot;: &quot;20px&quot;,
-      &quot;padding-top&quot;: &quot;20px&quot;,
-      &quot;padding-bottom&quot;: &quot;20px&quot;,
-      &quot;width&quot;: &quot;840px&quot;,
-      &quot;border-collapse&quot;: &quot;collapse&quot;,
-      &quot;border-spacing&quot;: &quot;0&quot;
-    },
-    [...]
-}
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ol>
-</div>
-<div class="section" id="plugin-development-in-practice">
-<h3>4.1.3. Plugin development in practice<a class="headerlink" href="#plugin-development-in-practice" title="Permalink to this headline">¶</a></h3>
-<p>You can use plugins to implement additional client-side functionality to Slurk. The steps neccessary to do this are illustrated below, using the example of a simple mechanism for capturing mouse clicks. Creating and injecting a new plugin consists of the following steps:</p>
-<ol class="arabic">
-<li><p class="first">Choosing an appropriate trigger</p>
-<p>Depending on the functionality you want to add to Slurk, you can choose between different triggers. Mouse clicks neither depend on messages nor the chat history, therefore the trigger <code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code> is used.</p>
-</li>
-<li><p class="first">Creating the plugin file</p>
-<p>Create a new JavaScript file and save it in the directory <em>/app/static/plugins</em>, using an appropriate name (e.g. “mouse-clicks.js”).</p>
-<p>Add the necessary code to the file:</p>
-<blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">mousePos</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
-<span class="kd">var</span> <span class="nx">offset</span><span class="p">;</span>
-
-<span class="kd">function</span> <span class="nx">getPosition</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">area</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">offset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">area</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
-    <span class="nx">mousePos</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">-</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
-    <span class="nx">mousePos</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">-</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Waiting Room&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;subtitle&quot;</span><span class="p">:</span> <span class="s2">&quot;waiting for other players...&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;html&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;layout-type&quot;</span><span class="p">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;image-area&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;layout-content&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="nt">&quot;layout-type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;current-image&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;src&quot;</span><span class="p">:</span> <span class="s2">&quot;https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+          <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">400</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
     <span class="p">}</span>
-
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#current-image&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
-    <span class="nx">getPosition</span><span class="p">(</span><span class="nx">evt</span><span class="p">,</span> <span class="s2">&quot;#current-image&quot;</span><span class="p">);</span>
-    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;mousePosition&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;click&#39;</span><span class="p">,</span>
-        <span class="nx">element</span><span class="o">:</span><span class="s2">&quot;#current-image&quot;</span><span class="p">,</span>
-        <span class="nx">coordinates</span><span class="o">:</span><span class="nx">mousePos</span><span class="p">,</span>
-        <span class="nx">room</span><span class="o">:</span><span class="nx">self_room</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first">Injecting the plugin</p>
-<p>Inject your plugin to Slurk by adding trigger and plugin (without the file extension) to the <code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code> dictionary in the layout file you’re using:</p>
-<blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span>&quot;script&quot;: {
-  &quot;document-ready&quot;: &quot;mouse-clicks&quot;
-}
-</pre></div>
-</div>
-</div></blockquote>
-<p>The JavaScript code is now embedded as follows:</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-
-  <span class="kd">var</span> <span class="nx">mousePosition</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
-  <span class="kd">var</span> <span class="nx">offset</span><span class="p">;</span>
-
-  <span class="kd">function</span> <span class="nx">getPosition</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">area</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">[...]</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;css&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;header, footer&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;#115E91&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;#image-area&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;align-content&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;margin&quot;</span><span class="p">:</span> <span class="s2">&quot;50px 20px 15px&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;incoming-text&quot;</span><span class="p">:</span> <span class="s2">&quot;display-text&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;incoming-image&quot;</span><span class="p">:</span> <span class="s2">&quot;display-image&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;submit-message&quot;</span><span class="p">:</span> <span class="s2">&quot;send-message&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;print-history&quot;</span><span class="p">:</span> <span class="s2">&quot;plain-history&quot;</span>
   <span class="p">}</span>
-
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#current-image&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
-    <span class="p">[...]</span>
-  <span class="p">});</span>
-
-<span class="p">});</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-</li>
-</ol>
-</div>
+</div></blockquote>
 </div>
 </div>
 
