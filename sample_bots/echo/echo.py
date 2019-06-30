@@ -4,6 +4,8 @@ import sys
 import os
 import argparse
 
+TASK_ID = None
+
 
 # Define the namespace
 class ChatNamespace(BaseNamespace):
@@ -68,6 +70,11 @@ class ChatNamespace(BaseNamespace):
                                 'height': data['height']},
                       self.get_message_response)
 
+    def on_new_task_room(self, data):
+        print("new task room", data)
+        if data['task'] == TASK_ID:
+            self.emit("join_room", {'user': self.id, 'room': data['room']})
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run Echo bot')
@@ -87,6 +94,11 @@ if __name__ == '__main__':
     else:
         chat_port = {'default': None}
 
+    if 'ECHO_TASK_ID' in os.environ:
+        task_id = {'default': os.environ['ECHO_TASK_ID']}
+    else:
+        task_id = {'default': None}
+
     parser.add_argument('-t', '--token',
                         help='token for logging in as bot (see SERVURL/token)',
                         **token)
@@ -97,7 +109,12 @@ if __name__ == '__main__':
                         type=int,
                         help='port of chat server',
                         **chat_port)
+    parser.add_argument('--task_id',
+                        type=int,
+                        help='Task to join',
+                        **task_id)
     args = parser.parse_args()
+    TASK_ID = args.task_id
 
     uri = args.chat_host
     if args.chat_port:

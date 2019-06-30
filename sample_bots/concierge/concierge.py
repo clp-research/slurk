@@ -30,12 +30,12 @@ class ChatNamespace(BaseNamespace):
             sys.exit(2)
         return task.json()
 
-    @staticmethod
-    def create_room(label, layout=None, read_only=False, show_users=True, show_latency=True):
+    def create_room(self, label, layout=None, read_only=False, show_users=True, show_latency=True):
+        name = '%s-%s' % (label, uuid1())
         room = requests.post(f"{uri}/room",
                              headers={'Authorization': f"Token {token}"},
                              json=dict(
-                                 name='%s-%s' % (label, uuid1()),
+                                 name=name,
                                  label=label,
                                  layout=layout,
                                  read_only=read_only,
@@ -76,6 +76,7 @@ class ChatNamespace(BaseNamespace):
 
         if len(self.tasks[task_id]) == task['num_users']:
             new_room = self.create_room(task['name'], task['layout'])
+            self.emit("room_created", {'room': new_room['name'], 'task': task_id}, self.room_created_feedback)
             print(self.tasks[task_id])
             for user, old_room in self.tasks[task_id].items():
                 self.emit("join_room", {'user': user, 'room': new_room['name']}, self.join_room_feedback)
@@ -112,6 +113,14 @@ class ChatNamespace(BaseNamespace):
             print("Could not leave room:", error)
             sys.exit(5)
         print("user left room")
+        sys.stdout.flush()
+
+    @staticmethod
+    def room_created_feedback(success, error=None):
+        if not success:
+            print("Could not create task room:", error)
+            sys.exit(6)
+        print("task room created")
         sys.stdout.flush()
 
 

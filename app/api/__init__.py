@@ -1,16 +1,18 @@
-from flask import g
+from flask import g, make_response, jsonify, Blueprint, request
 from flask_httpauth import HTTPTokenAuth
 
-from sqlalchemy.exc import StatementError
+from sqlalchemy.exc import StatementError, IntegrityError
 
-from .room import *
-from .token import *
-from .user import *
-from .task import *
-
+from ..models.token import Token
+from ..models.layout import Layout
+from ..models.task import Task
 from ..models.permission import Permissions
 
-from flask import Blueprint, request
+
+from .log import log_event
+from .room import *
+from .user import *
+
 
 auth = HTTPTokenAuth(scheme='Token')
 api = Blueprint('api', __name__, url_prefix="/api/v2/")
@@ -200,12 +202,6 @@ def post_token():
         return jsonify(token.id)
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
-
-
-@api.route('/token/<string:id>', methods=['PUT'])
-@auth.login_required
-def put_token(id):
-    raise "TODO: Implement PUT /token/<id>"
 
 
 @api.route('/token/<string:id>', methods=['DELETE'])
