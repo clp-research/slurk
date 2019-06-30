@@ -1,18 +1,4 @@
 {
-    "subtitle": "Default Room",
-    "html": [
-        {
-            "id": "layout-title",
-            "layout-type": "h1",
-            "layout-content": "This is the default layout. Please provide a layout for this room!"
-        }
-    ],
-    "css": {
-        "#layout-title": {
-            "align-content": "left",
-            "padding": "50px 20px 15px"
-        }
-    },
     "scripts": {
         "incoming-text": "display-text",
         "incoming-image": "display-image",

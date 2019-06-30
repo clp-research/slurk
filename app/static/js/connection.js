@@ -24,9 +24,13 @@ function apply_layout(layout) {
         return;
     if (layout.html !== "") {
         $("#sidebar").html(layout.html);
+    } else {
+        $("#sidebar").empty();
     }
     if (layout.css !== "") {
         $("#custom-styles").html(layout.css);
+    } else {
+        $("#custom-styles").empty();
     }
     if (layout.script !== "") {
         window.eval(layout.script);
@@ -122,6 +126,7 @@ $(document).ready(() => {
             case "join":
                 let user = data.user;
                 updateUsers();
+                $("#chat-area").empty();
                 break;
             case "leave":
                 delete users[data.user.id];

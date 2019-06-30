@@ -1,40 +1,17 @@
 {
-  "title": "Slurk Test",
-  "subtitle": "This is just a test room",
+  "title": "Waiting Room",
+  "subtitle": "waiting for other players...",
   "html": [
     {
       "layout-type": "div",
       "id": "image-area",
       "layout-content": [
         {
-          "layout-type": "b",
-          "id": "status-text",
-          "layout-content": "This is a test room, have fun!"
-        },
-        {
-          "layout-type": "br"
-        },
-        {
           "layout-type": "image",
           "id": "current-image",
           "src": "https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
-          "width": 300,
-          "height": 200
-        },
-        {
-          "layout-type": "br"
-        },
-        {
-          "layout-type": "span",
-          "id": "typing"
-        },
-        {
-          "layout-type": "br"
-        },
-        {
-          "layout-type": "button",
-          "layout-content": "Click me!",
-          "onclick": "doMyStuff();"
+          "width": 500,
+          "height": 400
         }
       ]
     },
@@ -44,10 +21,13 @@
     },
     {
       "layout-type": "div",
-      "id": "typing-area"
+      "id": "typing"
     }
   ],
   "css": {
+    "header, footer": {
+      "background": "#115E91"
+    },
     "#image-area": {
       "align-content": "left",
       "margin": "50px 20px 15px"
@@ -58,9 +38,6 @@
     "incoming-image": "display-image",
     "submit-message": "send-message",
     "print-history": "plain-history",
-    "plain": [
-      "do-my-stuff"
-    ],
     "typing-users": "typing-users"
   }
 }
