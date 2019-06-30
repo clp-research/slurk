@@ -48,9 +48,8 @@ class ChatNamespace(BaseNamespace):
             sys.exit(3)
         return room.json()
 
+    # Called on `status` events
     def on_status(self, status):
-        print(status)
-        sys.stdout.flush()
         if status['type'] == 'join':
             user = status['user']
             task = self.get_user_task(user)
@@ -63,9 +62,6 @@ class ChatNamespace(BaseNamespace):
                 self.user_task_leave(user, task)
 
     def user_task_join(self, user, task, room):
-        if not task:
-            return
-
         task_id = task['id']
         user_id = user['id']
         user_name = user['name']

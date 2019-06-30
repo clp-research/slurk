@@ -105,7 +105,7 @@ existing ones.
 
 The following steps demonstrate how to build your own layout for an example waiting room used by the concierge bot.
 
-The waiting room is supposed to have a custom title, an image on the right, and a blue theme (l. 23):
+The waiting room is supposed to have a custom title, an image on the right, and a blue theme:
 
     .. code-block:: json
 
