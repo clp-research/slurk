@@ -212,17 +212,8 @@ the task:</p>
        localhost/api/v2/task | jq .id)
 </pre></div>
 </div>
-<p>Now lets create three tokens. For the user, the task has to be specified:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;task\&quot;: $TASK_ID}&quot; \
-       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
-</pre></div>
-</div>
 <p>The token for the bot is stored in <code class="docutils literal notranslate"><span class="pre">BOT_TOKEN</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ BOT_TOKEN=$(curl -X POST \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ CONCIERGE_BOT_TOKEN=$(curl -X POST \
        -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
        -H &quot;Content-Type: application/json&quot; \
        -H &quot;Accept: application/json&quot; \
@@ -231,11 +222,38 @@ the task:</p>
 </pre></div>
 </div>
 <p>Now start the concierge bot:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$BOT_TOKEN --net=&quot;host&quot; slurk/concierge-bot
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$CONCIERGE_BOT_TOKEN --net=&quot;host&quot; slurk/concierge-bot
 </pre></div>
 </div>
 <p>The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, which has both the
-specified task assigned. Once, both has joined, the bot will create a new task room and moves both users into that room.</p>
+specified task assigned. Once, both has joined, the bot will create a new task room and moves both users into that room.
+We want the echo-bot to join this task room as well. The concierge bot emits two events, when creating a new task room:
+<code class="docutils literal notranslate"><span class="pre">new_room</span></code> and <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code>. The echo bot is able to listen to those events. So let’s create a token for this
+bot, too:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ECHO_BOT_TOKEN=$(curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;user_room_join&quot;: true}&#39; \
+       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;)
+</pre></div>
+</div>
+<p>This bots has an optional <code class="docutils literal notranslate"><span class="pre">task-id</span></code> parameter, to listen to specific tasks to join. Let’s start it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$ECHO_BOT_TOKEN -e ECHO_TASK_ID=$TASK_ID --net=&quot;host&quot; slurk/echo-bot
+</pre></div>
+</div>
+<p>Now lets create two user tokens and specify the task:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
+       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
+       -H &quot;Content-Type: application/json&quot; \
+       -H &quot;Accept: application/json&quot; \
+       -d &quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;task\&quot;: $TASK_ID}&quot; \
+       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
+</pre></div>
+</div>
+<p>Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
+users to a new room. The echo bot will also join this room and replies to every chat message.</p>
+<p>In the Next Section, we will see, how to write bots.</p>
 </div>
 
 
