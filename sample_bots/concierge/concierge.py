@@ -72,8 +72,10 @@ class ChatNamespace(BaseNamespace):
 
         if len(self.tasks[task_id]) == task['num_users']:
             new_room = self.create_room(task['name'], task['layout'])
-            self.emit("room_created", {'room': new_room['name'], 'task': task_id}, self.room_created_feedback)
-            print(self.tasks[task_id])
+            self.emit("room_created", {'room': new_room['name'],
+                                       'task': task_id,
+                                       'users': list(self.tasks[task_id].keys())},
+                      self.room_created_feedback)
             for user, old_room in self.tasks[task_id].items():
                 self.emit("join_room", {'user': user, 'room': new_room['name']}, self.join_room_feedback)
                 self.emit("leave_room", {'user': user, 'room': old_room}, self.leave_room_feedback)

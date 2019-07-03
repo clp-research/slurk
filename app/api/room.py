@@ -13,7 +13,13 @@ def room_created(data):
         return False, "No room specified"
     emit('new_room', {'room': data['room']}, broadcast=True)
     if 'task' in data:
-        emit('new_task_room', {'room': data['room'], 'task': data['task']}, broadcast=True)
+        users = []
+        if 'users' in data:
+            for user in data['users']:
+                user = User.query.get(user)
+                if user:
+                    users.append({'id': user.id, 'name': user.name})
+        emit('new_task_room', {'room': data['room'], 'task': data['task'], 'users': users}, broadcast=True)
     return True
 
 
@@ -152,7 +158,7 @@ def add_class(data):
 
 
 @socketio.on('remove_class')
-def add_class(data):
+def remove_class(data):
     """
     Adds the html class to an element by id.
 
