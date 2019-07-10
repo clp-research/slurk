@@ -100,6 +100,8 @@ $(document).ready(() => {
 
         updateUsers();
         apply_layout(await layout);
+        $("#chat-area").empty();
+
         history = await history;
         if (typeof print_history !== "undefined") {
             print_history(history[room.name]);
@@ -121,7 +123,6 @@ $(document).ready(() => {
             case "join":
                 let user = data.user;
                 updateUsers();
-                $("#chat-area").empty();
                 break;
             case "leave":
                 delete users[data.user.id];
