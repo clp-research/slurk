@@ -5,7 +5,10 @@ REST API for slurk
 =================================================
 
 Slurk provides a REST API. As authorization the token has to be provided. Data has to be passed as JSON. The responds
-will also return as JSON. Example::
+will also return as JSON. Example:
+
+.. code-block:: bash
+
 
   curl -X POST
        -H "Authorization: 00000000-0000-0000-0000-000000000000"

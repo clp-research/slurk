@@ -40,9 +40,7 @@ jobs:
     name: Documentation
     language: python
     python: 3.7
-    install:
-    - pip install sphinx
-    - pip install sphinx_rtd_theme
+    install: pip install sphinx sphinx_rtd_theme
     script: (cd docs && make html)
     after_success: touch docs/_build/html/.nojekyll
     deploy:

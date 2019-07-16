@@ -13,13 +13,17 @@ so that it can be only readable and accessible, but not writable.
 
 Create a new file in your Nginx directory ``sudo nano /etc/nginx/snippets/certs.conf``
 and set ``ssl_certificate`` and ``ssl_certificate_key`` directives there. Your ``certs.conf`` should look similar
-to the next block::
+to the next block:
+
+.. code-block:: nginx
 
   ssl_certificate /home/user/project/certificates/cert.pem;
   ssl_certificate_key /home/user/project/certificates/key.pem;
 
 You also need to configure strong encryption settings for SSL connection.
-Please execute ``sudo nano /etc/nginx/snippets/ssl-params.conf`` and specify next parameters::
+Please execute ``sudo nano /etc/nginx/snippets/ssl-params.conf`` and specify next parameters:
+
+.. code-block:: nginx
 
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_prefer_server_ciphers on;
@@ -40,7 +44,9 @@ Please execute ``sudo nano /etc/nginx/snippets/ssl-params.conf`` and specify nex
 For more information, address `Nginx's HTTPS configuration <http://nginx.org/en/docs/http/configuring_https_servers.html>`_.
 
 The next step would be to create a new server block where our Nginx will serve image directory.
-Open a new server block in your default nginx configuration file, which can be found in ``/etc/nginx/sites-available``::
+Open a new server block in your default nginx configuration file, which can be found in ``/etc/nginx/sites-available``:
+
+.. code-block:: nginx
 
   server {
 
@@ -61,7 +67,9 @@ Open a new server block in your default nginx configuration file, which can be f
 This block takes SSL certificate and its key along with location of images, and serves it on the port 8000.
 
 Do not forget to build symlinks between two directories: `sites-available` and `sites-enabled`, where the first one is used
-to store your server configuration, while the latter enables your block. This can be done via the following command::
+to store your server configuration, while the latter enables your block. This can be done via the following command:
+
+.. code-block:: bash
 
   sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled
 
