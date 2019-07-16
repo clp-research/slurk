@@ -164,65 +164,65 @@ paired up and put into a new task-specific chatroom along with bots. We provided
 The <strong>concierge bot</strong> moves human users and other bots from the waiting room to a taskroom.</p>
 <p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the layout
 provided in the <em>sample_bots</em> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json &gt; waiting_room_layout.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/concierge/layout.json &gt; waiting_room_layout.json
 </pre></div>
 </div>
 <p>This layout now has to be pushed to the server. For this command you may have to install <code class="docutils literal notranslate"><span class="pre">jq</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install jq
-$ WAITING_ROOM_LAYOUT=$(curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d @waiting_room_layout.json \
-       localhost/api/v2/layout | jq .id)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install jq
+$ <span class="nv">WAITING_ROOM_LAYOUT</span><span class="o">=</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d @waiting_room_layout.json <span class="se">\</span>
+       localhost/api/v2/layout <span class="p">|</span> jq .id<span class="k">)</span>
 </pre></div>
 </div>
 <p>Ensure we have a valid id:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $WAITING_ROOM_LAYOUT
-2
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$WAITING_ROOM_LAYOUT</span>
+<span class="m">2</span>
 </pre></div>
 </div>
 <p>We can now create the waiting room with the associated layout:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &quot;{\&quot;name\&quot;: \&quot;waiting_room\&quot;, \&quot;label\&quot;: \&quot;Waiting Room\&quot;, \&quot;layout\&quot;: $WAITING_ROOM_LAYOUT}&quot; \
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s2">&quot;{\&quot;name\&quot;: \&quot;waiting_room\&quot;, \&quot;label\&quot;: \&quot;Waiting Room\&quot;, \&quot;layout\&quot;: </span><span class="nv">$WAITING_ROOM_LAYOUT</span><span class="s2">}&quot;</span> <span class="se">\</span>
        localhost/api/v2/room
-{
-  &quot;current_users&quot;: {},
-  &quot;label&quot;: &quot;Waiting Room&quot;,
-  &quot;layout&quot;: null,
-  &quot;name&quot;: &quot;waiting_room&quot;,
-  &quot;read_only&quot;: false,
-  &quot;show_latency&quot;: true,
-  &quot;show_users&quot;: true,
-  &quot;static&quot;: false,
-  &quot;users&quot;: {}
-}
+<span class="o">{</span>
+  <span class="s2">&quot;current_users&quot;</span>: <span class="o">{}</span>,
+  <span class="s2">&quot;label&quot;</span>: <span class="s2">&quot;Waiting Room&quot;</span>,
+  <span class="s2">&quot;layout&quot;</span>: null,
+  <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;waiting_room&quot;</span>,
+  <span class="s2">&quot;read_only&quot;</span>: false,
+  <span class="s2">&quot;show_latency&quot;</span>: true,
+  <span class="s2">&quot;show_users&quot;</span>: true,
+  <span class="s2">&quot;static&quot;</span>: false,
+  <span class="s2">&quot;users&quot;</span>: <span class="o">{}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The next step is to create a task. Each task contains information about the number of user required in order to start
 the task:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TASK_ID=$(curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &#39;{&quot;name&quot;: &quot;Echo Task&quot;, &quot;num_users&quot;: 2}&#39; \
-       localhost/api/v2/task | jq .id)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s1">&#39;{&quot;name&quot;: &quot;Echo Task&quot;, &quot;num_users&quot;: 2}&#39;</span> <span class="se">\</span>
+       localhost/api/v2/task <span class="p">|</span> jq .id<span class="k">)</span>
 </pre></div>
 </div>
 <p>The token for the bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ CONCIERGE_BOT_TOKEN=$(curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;room_create&quot;: true, &quot;user_room_join&quot;: true, &quot;user_room_leave&quot;: true}&#39; \
-       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CONCIERGE_BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s1">&#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;room_create&quot;: true, &quot;user_room_join&quot;: true, &quot;user_room_leave&quot;: true}&#39;</span> <span class="se">\</span>
+       localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span><span class="k">)</span>
 </pre></div>
 </div>
 <p>Now start the concierge bot:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$CONCIERGE_BOT_TOKEN --net=&quot;host&quot; slurk/concierge-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/concierge-bot
 </pre></div>
 </div>
 <p>The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, which has both the
@@ -230,25 +230,25 @@ specified task assigned. Once, both has joined, the bot will create a new task r
 We want the echo-bot to join this task room as well. The concierge bot emits two events, when creating a new task room:
 <code class="docutils literal notranslate"><span class="pre">new_room</span></code> and <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code>. The echo bot is able to listen to those events. So let’s create a token for this
 bot, too:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ECHO_BOT_TOKEN=$(curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;user_room_join&quot;: true}&#39; \
-       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ECHO_BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s1">&#39;{&quot;room&quot;: &quot;waiting_room&quot;, &quot;message_text&quot;: true, &quot;user_room_join&quot;: true}&#39;</span> <span class="se">\</span>
+       localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span><span class="k">)</span>
 </pre></div>
 </div>
 <p>This bot has an optional <code class="docutils literal notranslate"><span class="pre">task-id</span></code> parameter, to listen to specific tasks to join. Let’s start it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$ECHO_BOT_TOKEN -e ECHO_TASK_ID=$TASK_ID --net=&quot;host&quot; slurk/echo-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$ECHO_BOT_TOKEN</span> -e <span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
 </pre></div>
 </div>
 <p>Now lets create two user tokens and specify the task:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;task\&quot;: $TASK_ID}&quot; \
-       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s2">&quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;task\&quot;: </span><span class="nv">$TASK_ID</span><span class="s2">}&quot;</span> <span class="se">\</span>
+       localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>
 </div>
 <p>Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both

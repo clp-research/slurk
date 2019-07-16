@@ -93,7 +93,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#dissecting-the-concierge-bot">5.1. Dissecting the concierge bot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#joining-newly-created-task-rooms">5.2. Joining newly created task rooms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">5.3. Interacting with layouts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#commands">5.4. Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#messages">5.4. Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">5.5. Commands</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_api.html">6. REST API for slurk</a></li>
@@ -346,14 +347,51 @@ the room.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="messages">
+<h2>5.4. Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h2>
+<p>Bots can listen to messages with <code class="docutils literal notranslate"><span class="pre">on_text_message</span></code> and <code class="docutils literal notranslate"><span class="pre">on_image_message</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_text_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">on_text_message</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">msg</span></code>: the text, which was sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> of the user, who submitted the command</li>
+<li><code class="docutils literal notranslate"><span class="pre">room</span></code>: the id of the room, where the command was entered, or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">private</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is a private message like direct messages. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_image_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">on_image_message</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code>: URL of the image to display</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> of the user, who submitted the command</li>
+<li><code class="docutils literal notranslate"><span class="pre">room</span></code>: the id of the room, where the command was entered, or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">width</span></code>: the recommended width of the image</li>
+<li><code class="docutils literal notranslate"><span class="pre">height</span></code>: the recommended height of the image</li>
+<li><code class="docutils literal notranslate"><span class="pre">private</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is a private message like direct messages. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></li>
+</ul>
+</div>
 <div class="section" id="commands">
-<h2>5.4. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<h2>5.5. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <p>Commands are very similar to text message, but requires a dedicated permission. Commands are sent to a room and a bot
 can listen to a command with <code class="docutils literal notranslate"><span class="pre">on_command</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">command</span></code>: the sent command</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> of the user, who submitted the command</li>
+<li><code class="docutils literal notranslate"><span class="pre">room</span></code>: the id of the room, where the command was entered, or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></li>
+</ul>
 </div>
 </div>
 

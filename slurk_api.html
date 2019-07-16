@@ -169,12 +169,12 @@
 <span id="slurk-api"></span><h1>6. REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this headline">¶</a></h1>
 <p>Slurk provides a REST API. As authorization the token has to be provided. Data has to be passed as JSON. The responds
 will also return as JSON. Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span>
-     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Authorization: 00000000-0000-0000-0000-000000000000&quot;</span>
-     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span>
-     <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Accept: application/json&quot;</span>
-     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;name&quot;: &quot;test_room2&quot;, &quot;label&quot;: &quot;Test Raum&quot;, &quot;static&quot;: false}&#39;</span>
-     <span class="n">localhost</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v2</span><span class="o">/</span><span class="n">rooms</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -X POST
+     -H <span class="s2">&quot;Authorization: 00000000-0000-0000-0000-000000000000&quot;</span>
+     -H <span class="s2">&quot;Content-Type: application/json&quot;</span>
+     -H <span class="s2">&quot;Accept: application/json&quot;</span>
+     -d <span class="s1">&#39;{&quot;name&quot;: &quot;test_room2&quot;, &quot;label&quot;: &quot;Test Raum&quot;, &quot;static&quot;: false}&#39;</span>
+     localhost:5000/api/v2/rooms
 </pre></div>
 </div>
 <div class="section" id="token">

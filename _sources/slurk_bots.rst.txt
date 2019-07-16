@@ -186,6 +186,39 @@ If you want to change an image for example, you may use something like this:
    })
 
 
+Messages
+~~~~~~~~
+
+Bots can listen to messages with ``on_text_message`` and ``on_image_message``:
+
+.. code-block:: python
+
+    def on_text_message(self, data):
+        do_something(data)
+
+``data`` in ``on_text_message`` has this structure:
+
+- ``msg``: the text, which was sent
+- ``user``: dictionary of ``id`` and ``name`` of the user, who submitted the command
+- ``room``: the id of the room, where the command was entered, or ``None``
+- ``private``: ``True`` if this is a private message like direct messages. ``False`` otherwise
+- ``timestamp``
+
+.. code-block:: python
+
+    def on_image_message(self, data):
+        do_something(data)
+
+``data`` in ``on_image_message`` has this structure:
+
+- ``url``: URL of the image to display
+- ``user``: dictionary of ``id`` and ``name`` of the user, who submitted the command
+- ``room``: the id of the room, where the command was entered, or ``None``
+- ``width``: the recommended width of the image
+- ``height``: the recommended height of the image
+- ``private``: ``True`` if this is a private message like direct messages. ``False`` otherwise
+- ``timestamp``
+
 Commands
 ~~~~~~~~
 
@@ -196,3 +229,11 @@ can listen to a command with ``on_command``:
 
     def on_command(self, data):
         do_something(data)
+
+``data`` has this structure:
+
+- ``command``: the sent command
+- ``user``: dictionary of ``id`` and ``name`` of the user, who submitted the command
+- ``room``: the id of the room, where the command was entered, or ``None``
+- ``timestamp``
+

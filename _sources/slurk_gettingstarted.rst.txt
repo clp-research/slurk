@@ -21,24 +21,34 @@ The generated documentation can then be found at *docs/_build/*
 "Hello World": A basic test of the server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to use system is using Docker. For this, ``docker`` is recommended: ::
+The easiest way to use system is using Docker. For this, ``docker`` is recommended:
+
+.. code-block:: bash
 
   $ sudo apt-get install docker
 
-In order to run the server on port 80 and store the container id, run ::
+In order to run the server on port 80 and store the container id, run
+
+.. code-block:: bash
 
     $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
 
-Read the admin token from the logs: ::
+Read the admin token from the logs:
+
+.. code-block:: bash
 
     $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
 
-Verify you have a proper UUID token: ::
+Verify you have a proper UUID token:
+
+.. code-block:: bash
 
     $ echo $ADMIN_TOKEN
     b8b88080-b8d1-4eb2-af90-dccf7ece3d82
 
-Create a room as landing page for our new token: ::
+Create a room as landing page for our new token:
+
+.. code-block:: bash
 
    $ curl -X POST \
           -H "Authorization: Token $ADMIN_TOKEN" \
@@ -59,7 +69,9 @@ Create a room as landing page for our new token: ::
    }
 
 
-Generate a new token for the clients (``sed`` removes quotation from JSON-string): ::
+Generate a new token for the clients (``sed`` removes quotation from JSON-string):
+
+.. code-block:: bash
 
    $ curl -X POST \
           -H "Authorization: Token $ADMIN_TOKEN" \
@@ -110,7 +122,9 @@ server. Now let's restart the server to reset the database. Before we log onto t
 let us create a bot user and let it log on first. Create two tokens as described above, one for the user and one for
 the bot.
 
-There are Docker containers for all example bots. To run these bots using docker, type ::
+There are Docker containers for all example bots. To run these bots using docker, type
+
+.. code-block:: bash
 
    $ docker run -e TOKEN=$BOT_TOKEN --net="host" slurk/echo
 
@@ -126,7 +140,9 @@ Examining the log files
 The point of all this, however, is not just to make interaction *possible*, it is to *record* these interactions to be
 able to later study them or train models on them.
 
-In order to read the logs, we use the API again: ::
+In order to read the logs, we use the API again:
+
+.. code-block:: bash
 
    $ curl -X GET \
           -H "Authorization: Token $ADMIN_TOKEN" \

@@ -180,49 +180,49 @@ make html
 <div class="section" id="hello-world-a-basic-test-of-the-server">
 <h2>2.2. “Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to use system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
 </pre></div>
 </div>
 <p>In order to run the server on port 80 and store the container id, run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">SLURK_SERVER_ID</span><span class="o">=</span><span class="k">$(</span>docker run -p <span class="m">80</span>:5000 -e <span class="nv">SECRET_KEY</span><span class="o">=</span>your-key -d slurk/server<span class="k">)</span>
 </pre></div>
 </div>
 <p>Read the admin token from the logs:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2&gt; /dev/null | sed -n &#39;/admin token:/{n;p;}&#39;)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ADMIN_TOKEN</span><span class="o">=</span><span class="k">$(</span>docker logs <span class="nv">$SLURK_SERVER_ID</span> <span class="m">2</span>&gt; /dev/null <span class="p">|</span> sed -n <span class="s1">&#39;/admin token:/{n;p;}&#39;</span><span class="k">)</span>
 </pre></div>
 </div>
 <p>Verify you have a proper UUID token:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $ADMIN_TOKEN
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$ADMIN_TOKEN</span>
 b8b88080-b8d1-4eb2-af90-dccf7ece3d82
 </pre></div>
 </div>
 <p>Create a room as landing page for our new token:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &#39;{&quot;name&quot;: &quot;test_room&quot;, &quot;label&quot;: &quot;Test Room&quot;}&#39; \
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s1">&#39;{&quot;name&quot;: &quot;test_room&quot;, &quot;label&quot;: &quot;Test Room&quot;}&#39;</span> <span class="se">\</span>
        localhost/api/v2/room
-{
-  &quot;current_users&quot;: {},
-  &quot;label&quot;: &quot;Test Room&quot;,
-  &quot;layout&quot;: null,
-  &quot;name&quot;: &quot;test_room&quot;,
-  &quot;read_only&quot;: false,
-  &quot;show_latency&quot;: true,
-  &quot;show_users&quot;: true,
-  &quot;static&quot;: false,
-  &quot;users&quot;: {}
-}
+<span class="o">{</span>
+  <span class="s2">&quot;current_users&quot;</span>: <span class="o">{}</span>,
+  <span class="s2">&quot;label&quot;</span>: <span class="s2">&quot;Test Room&quot;</span>,
+  <span class="s2">&quot;layout&quot;</span>: null,
+  <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;test_room&quot;</span>,
+  <span class="s2">&quot;read_only&quot;</span>: false,
+  <span class="s2">&quot;show_latency&quot;</span>: true,
+  <span class="s2">&quot;show_users&quot;</span>: true,
+  <span class="s2">&quot;static&quot;</span>: false,
+  <span class="s2">&quot;users&quot;</span>: <span class="o">{}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Generate a new token for the clients (<code class="docutils literal notranslate"><span class="pre">sed</span></code> removes quotation from JSON-string):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X POST \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
-       -d &#39;{&quot;room&quot;: &quot;test_room&quot;, &quot;message_text&quot;: true}&#39; \
-       localhost/api/v2/token | sed &#39;s/^&quot;\(.*\)&quot;$/\1/&#39;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+       -d <span class="s1">&#39;{&quot;room&quot;: &quot;test_room&quot;, &quot;message_text&quot;: true}&#39;</span> <span class="se">\</span>
+       localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 9e6f53ae-2da7-4c53-92c7-ec43f8fa50cd
 </pre></div>
 </div>
@@ -254,7 +254,7 @@ server. Now let’s restart the server to reset the database. Before we log onto
 let us create a bot user and let it log on first. Create two tokens as described above, one for the user and one for
 the bot.</p>
 <p>There are Docker containers for all example bots. To run these bots using docker, type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -e TOKEN=$BOT_TOKEN --net=&quot;host&quot; slurk/echo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo
 </pre></div>
 </div>
 <p>You may provide additional environment variables, too:
@@ -267,10 +267,10 @@ the bot.</p>
 <p>The point of all this, however, is not just to make interaction <em>possible</em>, it is to <em>record</em> these interactions to be
 able to later study them or train models on them.</p>
 <p>In order to read the logs, we use the API again:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -X GET \
-       -H &quot;Authorization: Token $ADMIN_TOKEN&quot; \
-       -H &quot;Content-Type: application/json&quot; \
-       -H &quot;Accept: application/json&quot; \
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X GET <span class="se">\</span>
+       -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+       -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
        localhost/api/v2/room/test_room/logs
 </pre></div>
 </div>

@@ -171,11 +171,11 @@
 <div class="section" id="using-docker">
 <h2>7.1. Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
 <p>As described in <a class="reference internal" href="slurk_gettingstarted.html#slurk-gettingstarted"><span class="std std-ref">Getting Started</span></a>, the easiest way is to use <code class="docutils literal notranslate"><span class="pre">docker</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">docker</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install docker
 </pre></div>
 </div>
 <p>In order to run the server on port 80, just run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -p <span class="m">80</span>:5000 -e <span class="nv">SECRET_KEY</span><span class="o">=</span>your-key -d slurk/server
 </pre></div>
 </div>
 <p>These additional environment variables can be specified:</p>
@@ -196,8 +196,8 @@
 <p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
 with SSL connection.</p>
 <p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
-<code class="docutils literal notranslate"><span class="pre">server</span></code> and install required packages via executing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<code class="docutils literal notranslate"><span class="pre">server</span></code> and install required packages via executing</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
 </pre></div>
 </div>
 <p>Also please make sure that your Ubuntu server is running on Nginx <a class="footnote-reference" href="#id6" id="id1">[1]</a> and <code class="docutils literal notranslate"><span class="pre">systemd</span></code> package is installed.
@@ -209,75 +209,75 @@ Do not forget to check if UFW (Uncomplicated Firewall) is installed on your mach
 Such setup will allow you to have faster connections which are automatic since you are not required to manually start
 the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
 <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04" target="_blank">this tutorial</a>.</p>
-<p>First, isolate your Flask application on your computer. For this you have to install <em>virtualenv</em> package.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">venv</span>
+<p>First, isolate your Flask application on your computer. For this you have to install <em>virtualenv</em> package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install python3-venv
 </pre></div>
 </div>
 <p>Navigate to your project directory and create a new project environment there. Also activate the environment and
-install required packages:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">server</span>
-<span class="n">python3</span><span class="o">.</span><span class="mi">6</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">serverenv</span>
-<span class="n">source</span> <span class="n">serverenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+install required packages</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/server
+python3.6 -m venv serverenv
+<span class="nb">source</span> serverenv/bin/activate
+pip install -r requirements.txt
 </pre></div>
 </div>
-<p>Now, assuming that <em>gunicorn</em> and <em>flask</em> are already installed, we will create the WSGI entry point for our application.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nano</span> <span class="o">~/</span><span class="n">server</span><span class="o">/</span><span class="n">wsgi</span><span class="o">.</span><span class="n">py</span>
+<p>Now, assuming that <em>gunicorn</em> and <em>flask</em> are already installed, we will create the WSGI entry point for our application.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nano ~/server/wsgi.py
 </pre></div>
 </div>
 <p>The chat instance itself is created in <code class="docutils literal notranslate"><span class="pre">~/server/app/__init__.py</span></code>, and that is why we will use this instance in our <cite>wsgi.py</cite> file.
-Import this instance into the file, save and close it once you are finished:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="k">import</span> <span class="n">create_app</span>
+Import this instance into the file, save and close it once you are finished</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">create_app</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Next step would be to configure Gunicorn, but first we should check if the application is served correctly <a class="footnote-reference" href="#id8" id="id3">[3]</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">server</span>
-<span class="n">gunicorn</span> <span class="o">--</span><span class="n">bind</span> <span class="n">host</span><span class="p">:</span><span class="mi">5000</span> <span class="o">-</span><span class="n">k</span> <span class="n">geventwebsocket</span><span class="o">.</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">GeventWebSocketWorker</span> <span class="n">wsgi</span><span class="p">:</span><span class="n">app</span>
+<p>Next step would be to configure Gunicorn, but first we should check if the application is served correctly <a class="footnote-reference" href="#id8" id="id3">[3]</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/server
+gunicorn --bind host:5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker wsgi:app
 </pre></div>
 </div>
 <p>Visit you server’s address with the port <code class="docutils literal notranslate"><span class="pre">:5000</span></code> and check if you see the login page.
 If it functions properly, please press <code class="docutils literal notranslate"><span class="pre">CTRL-C</span></code> in your terminal window and deactivate your environment.</p>
 <p>Now we have to create the systemd service unit file. It will allow Ubuntu to automatically start our application
-once the machine boots.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">chat</span><span class="o">.</span><span class="n">service</span>
+once the machine boots.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nano /etc/systemd/system/chat.service
 </pre></div>
 </div>
-<p>Fill this service file with information about your application and adjust paths/variable names where required:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
-<span class="n">Description</span><span class="o">=</span><span class="n">Gunicorn</span> <span class="n">instance</span> <span class="n">to</span> <span class="n">serve</span> <span class="n">MeetUp</span>
-<span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">target</span>
+<p>Fill this service file with information about your application and adjust paths/variable names where required</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Gunicorn instance to serve MeetUp</span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 
-<span class="p">[</span><span class="n">Service</span><span class="p">]</span>
-<span class="n">User</span><span class="o">=</span><span class="n">user</span>
-<span class="n">Group</span><span class="o">=</span><span class="n">www</span><span class="o">-</span><span class="n">data</span>
-<span class="n">WorkingDirectory</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span>
-<span class="n">Environment</span><span class="o">=</span><span class="s2">&quot;PATH=/home/user/server/serverenv/bin&quot;</span>
-<span class="n">ExecStart</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">serverenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gunicorn</span> <span class="o">--</span><span class="n">bind</span> <span class="n">unix</span><span class="p">:</span><span class="n">myproject</span><span class="o">.</span><span class="n">sock</span> <span class="o">-</span><span class="n">k</span> <span class="n">geventwebsocket</span><span class="o">.</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">GeventWebSocketWorker</span> <span class="o">-</span><span class="n">m</span> <span class="mi">007</span> <span class="n">wsgi</span><span class="p">:</span><span class="n">app</span>
+<span class="k">[Service]</span>
+<span class="na">User</span><span class="o">=</span><span class="s">user</span>
+<span class="na">Group</span><span class="o">=</span><span class="s">www-data</span>
+<span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/user/server</span>
+<span class="na">Environment</span><span class="o">=</span><span class="s">&quot;PATH=/home/user/server/serverenv/bin&quot;</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/home/user/server/serverenv/bin/gunicorn --bind unix:myproject.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -m 007 wsgi:app</span>
 
-<span class="p">[</span><span class="n">Install</span><span class="p">]</span>
-<span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="o">.</span><span class="n">target</span>
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </pre></div>
 </div>
-<p>Save and close this file. Now we will start the Gunicorn service and enable it so that it is active once our machine is booted:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">start</span> <span class="n">chat</span>
-<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">enable</span> <span class="n">chat</span>
+<p>Save and close this file. Now we will start the Gunicorn service and enable it so that it is active once our machine is booted</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo systemctl start chat
+sudo systemctl <span class="nb">enable</span> chat
 </pre></div>
 </div>
-<p>To be sure that it is active, check its status:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">status</span> <span class="n">chat</span>
+<p>To be sure that it is active, check its status</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo systemctl status chat
 </pre></div>
 </div>
-<p>The output should be similar to the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chat.service - Gunicorn instance to serve meetup
-Loaded: loaded (/etc/systemd/system/chat.service; enabled; vendor preset: enabled)
-Active: active (running) since Fri 2018-08-17 11:25:12 CEST; 4h 20min ago
-Main PID: 18101 (gunicorn)
-Tasks: 2 (limit: 4915)
+<p>The output should be similar to the following</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chat.service - Gunicorn instance to serve meetup
+Loaded: loaded <span class="o">(</span>/etc/systemd/system/chat.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+Active: active <span class="o">(</span>running<span class="o">)</span> since Fri <span class="m">2018</span>-08-17 <span class="m">11</span>:25:12 CEST<span class="p">;</span> 4h 20min ago
+Main PID: <span class="m">18101</span> <span class="o">(</span>gunicorn<span class="o">)</span>
+Tasks: <span class="m">2</span> <span class="o">(</span>limit: <span class="m">4915</span><span class="o">)</span>
 CGroup: /system.slice/chat.service
       ├─18101 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
       └─18103 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
@@ -287,47 +287,47 @@ CGroup: /system.slice/chat.service
 <div class="section" id="configuring-nginx">
 <h3>7.2.3. Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
 <p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
-First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">chat</span>
+First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nano /etc/nginx/sites-available/chat
 </pre></div>
 </div>
 <p>We will have to specify location of our socket file, that serves the application
-and include certificates which were created earlier <a class="footnote-reference" href="#id9" id="id4">[4]</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="p">{</span>
+and include certificates which were created earlier <a class="footnote-reference" href="#id9" id="id4">[4]</a></p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
 
-    <span class="n">listen</span> <span class="mi">5000</span> <span class="n">ssl</span> <span class="n">default_server</span><span class="p">;</span>
-    <span class="n">listen</span> <span class="p">[::]:</span><span class="mi">5000</span> <span class="n">ssl</span> <span class="n">default_server</span><span class="p">;</span>
+    <span class="kn">listen</span> <span class="mi">5000</span> <span class="s">ssl</span> <span class="s">default_server</span><span class="p">;</span>
+    <span class="kn">listen</span> <span class="s">[::]:5000</span> <span class="s">ssl</span> <span class="s">default_server</span><span class="p">;</span>
 
-    <span class="n">server_name</span> <span class="n">_</span><span class="p">;</span>
-    <span class="n">root</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">app</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">_</span><span class="p">;</span>
+    <span class="kn">root</span> <span class="s">/home/user/slurk/server/app</span><span class="p">;</span>
 
-    <span class="n">access_log</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">nginx_logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">access</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
-    <span class="n">error_log</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">nginx_logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+    <span class="kn">access_log</span> <span class="s">/home/user/slurk/server/nginx_logs/nginx-access.log</span><span class="p">;</span>
+    <span class="kn">error_log</span> <span class="s">/home/user/slurk/server/nginx_logs/nginx-error.log</span><span class="p">;</span>
 
-    <span class="n">include</span> <span class="n">snippets</span><span class="o">/</span><span class="n">certs</span><span class="o">.</span><span class="n">conf</span><span class="p">;</span>
-    <span class="n">include</span> <span class="n">snippets</span><span class="o">/</span><span class="n">ssl</span><span class="o">-</span><span class="n">params</span><span class="o">.</span><span class="n">conf</span><span class="p">;</span>
+    <span class="kn">include</span> <span class="s">snippets/certs.conf</span><span class="p">;</span>
+    <span class="kn">include</span> <span class="s">snippets/ssl-params.conf</span><span class="p">;</span>
 
-    <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
-        <span class="n">include</span> <span class="n">proxy_params</span><span class="p">;</span>
-        <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">unix</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">slurk</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">chat</span><span class="o">.</span><span class="n">sock</span><span class="p">;</span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">include</span> <span class="s">proxy_params</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://unix:/home/user/slurk/server/chat.sock</span><span class="p">;</span>
 
         <span class="p">}</span>
 
     <span class="p">}</span>
 </pre></div>
 </div>
-<p>Do not forget to link this file to the <code class="docutils literal notranslate"><span class="pre">sites-enabled</span></code> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">myproject</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span>
+<p>Do not forget to link this file to the <code class="docutils literal notranslate"><span class="pre">sites-enabled</span></code> directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
 </pre></div>
 </div>
-<p>Test it for syntax errors and restart Nginx:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">nginx</span> <span class="o">-</span><span class="n">t</span>
-<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">nginx</span>
+<p>Test it for syntax errors and restart Nginx</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nginx -t
+sudo systemctl restart nginx
 </pre></div>
 </div>
-<p>As the last step, adjust UFW setting once again, adding full access to the Nginx server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ufw</span> <span class="n">delete</span> <span class="n">allow</span> <span class="mi">5000</span>
-<span class="n">sudo</span> <span class="n">ufw</span> <span class="n">allow</span> <span class="s1">&#39;Nginx Full&#39;</span>
+<p>As the last step, adjust UFW setting once again, adding full access to the Nginx server</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo ufw delete allow <span class="m">5000</span>
+sudo ufw allow <span class="s1">&#39;Nginx Full&#39;</span>
 </pre></div>
 </div>
 <p>When you navigate to your server’s domain name, you should be able to see the login interface <a class="footnote-reference" href="#id10" id="id5">[5]</a>.</p>
