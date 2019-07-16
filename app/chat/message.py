@@ -112,6 +112,7 @@ def message_command(payload):
     emit('command', {
         'command': payload['command'],
         'user': user,
+        'room': room.id,
         'timestamp': timegm(datetime.now().utctimetuple()),
     }, room=room.name, broadcast=broadcast)
     log_event("command", current_user, room, data={'command': payload['command']})
