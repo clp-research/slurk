@@ -48,7 +48,7 @@ function display_image(user, time, url, width, height, privateMessage) {
     }
 
     let classes = "";
-    if (self_user === user.id) {
+    if (Number(self_user.id) === Number(user.id)) {
         classes += "self";
     } else {
         classes += "other";
@@ -71,7 +71,8 @@ function display_image(user, time, url, width, height, privateMessage) {
     let text = $(
         "<li class='" + classes + "'>" +
         "  <div class='message-box'>" +
-        "    <div class='user'>" +
+        "    <div>" +
+        "      <span class='user'></span>" +
         "      <time></time>" +
         "    </div>" +
         "    <img/>" +
