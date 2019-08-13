@@ -67,7 +67,8 @@ def _leave_room(data):
         return False, "room does not exist"
 
     user.rooms.remove(room)
-    user.current_rooms.remove(room)
+    if room in user.current_rooms:
+        user.current_rooms.remove(room)
     socketio.emit('left_room', room.name, room=user.session_id)
     log_event("leave", user, room)
     db.session.commit()
