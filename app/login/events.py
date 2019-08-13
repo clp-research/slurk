@@ -19,8 +19,8 @@ def connect():
         current_user.rooms.append(current_user.token.room)
     for room in current_user.rooms:
         join_room(room.name)
-        if current_user not in room.current_users:
-            current_user.current_rooms.append(current_user.token.room)
+        if room not in current_user.current_rooms:
+            current_user.current_rooms.append(room)
         socketio.emit('status', {
             'type': 'join',
             'user': {
@@ -58,7 +58,8 @@ def disconnect():
             socketio.emit('left_room', room.name, room=current_user.session_id)
         leave_room(room.name)
         log_event("leave", current_user, room)
-        current_user.current_rooms.remove(current_user.token.room)
+        current_user.current_rooms.remove(room)
     db.session.commit()
     log_event("disconnect", current_user)
     logout_user()
+
