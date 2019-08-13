@@ -39,7 +39,7 @@ def set_attribute(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.get(data['sender_id'])
+    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -49,18 +49,18 @@ def set_attribute(data):
         return False, "`set_attribute` requires `attribute`"
     if 'value' not in data:
         return False, "`set_attribute` requires `value`"
-    if 'receiver_id' in data:
-        receiver = User.get(data['receiver_id'])
-        if not receiver:
-            return False, "receiver not found"
-        target = receiver.session_id
-    elif 'room' in data:
+    if 'room' in data:
         room = Room.query.get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
     else:
-        return False, "`set_attribute` requires `room` or `receiver_id`"
+        return False, "`set_attribute` requires a `room`"
+    if 'receiver_id' in data:
+        receiver = User.query.get(data['receiver_id'])
+        if not receiver:
+            return False, "receiver not found"
+        target = receiver.session_id
 
     emit('attribute_update', {
         'user': sender.id,
@@ -68,7 +68,7 @@ def set_attribute(data):
         'class': data.get('class'),
         'element': data.get('element'),
         'attribute': data['attribute'],
-        'value': data['value'],
+        'value': data['value']
     }, room=target)
     return True
 
@@ -86,7 +86,7 @@ def set_text(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.get(data['sender_id'])
+    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -95,7 +95,7 @@ def set_text(data):
     if 'text' not in data:
         return False, "`set_text` requires `text`"
     if 'receiver_id' in data:
-        receiver = User.get(data['receiver_id'])
+        receiver = User.query.get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
@@ -128,7 +128,7 @@ def add_class(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.get(data['sender_id'])
+    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -137,7 +137,7 @@ def add_class(data):
     if 'class' not in data:
         return False, "`add_class` requires `class`"
     if 'receiver_id' in data:
-        receiver = User.get(data['receiver_id'])
+        receiver = User.query.get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
@@ -170,7 +170,7 @@ def remove_class(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.get(data['sender_id'])
+    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -179,7 +179,7 @@ def remove_class(data):
     if 'class' not in data:
         return False, "`remove_class` requires `class`"
     if 'receiver_id' in data:
-        receiver = User.get(data['receiver_id'])
+        receiver = User.query.get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
