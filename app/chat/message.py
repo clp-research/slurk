@@ -50,6 +50,9 @@ def message_text(payload):
         return False, "insufficient rights"
 
     room = Room.query.get(payload['room'])
+    if not room:
+        return False, 'Room not found'
+
     if room.read_only:
         return False, 'Room "%s" is read-only' % room.label
 
@@ -93,7 +96,7 @@ def message_command(payload):
     if not current_user.token.permissions.message_command:
         return False, "insufficient rights"
     if 'command' not in payload:
-        return False, 'missing argument: "msg"'
+        return False, 'missing argument: "command"'
     if 'room' not in payload:
         return False, 'missing argument: "room"'
 
@@ -105,6 +108,17 @@ def message_command(payload):
     if not room:
         return False, 'Room not found'
 
+    if 'receiver_id' in payload:
+        receiver_id = payload['receiver_id']
+        user = User.query.get(receiver_id)
+        if not user or not user.session_id:
+            return False, 'User "%s" does not exist' % receiver_id
+        receiver = user.session_id
+        private = True
+    else:
+        receiver = room.name
+        private = False
+
     user = {
         'id': current_user_id,
         'name': current_user.name,
@@ -112,10 +126,12 @@ def message_command(payload):
     emit('command', {
         'command': payload['command'],
         'user': user,
-        'room': room.id,
+        'room': room.name if room else None,
         'timestamp': timegm(datetime.now().utctimetuple()),
-    }, room=room.name, broadcast=broadcast)
-    log_event("command", current_user, room, data={'command': payload['command']})
+        'private': private,
+    }, room=receiver, broadcast=broadcast)
+    log_event("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
+        payload['command']})
     for room in current_user.rooms:
         emit('stop_typing', {'user': user}, room=room.name)
     return True
