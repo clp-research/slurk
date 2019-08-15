@@ -131,5 +131,5 @@ $(document).ready(() => {
         }
     });
 
-    socket.emit("ready")
+    socket.emit("ready");
 });

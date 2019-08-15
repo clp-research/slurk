@@ -1,0 +1,45 @@
+{
+  "title": "Video Room",
+  "subtitle": "Room with video livestream support",
+  "html": [
+    {
+      "layout-type": "div",
+      "id": "subscribers"
+    },
+    {
+      "layout-type": "div",
+      "id": "publisher"
+    },
+    {
+      "layout-type": "div",
+      "id": "status-box"
+    },
+    {
+      "layout-type": "div",
+      "id": "typing"
+    },
+    {
+      "layout-type": "input",
+      "type": "hidden",
+      "id": "openvidu-token",
+      "name": "openvidu-token"
+    }
+  ],
+  "css": {
+    "header, footer": {
+      "background": "#8d6a63"
+    },
+    "#image-area": {
+      "align-content": "left",
+      "margin": "50px 20px 15px"
+    }
+  },
+  "scripts": {
+    "incoming-text": "display-text",
+    "incoming-image": "display-image",
+    "submit-message": "send-message",
+    "print-history": "plain-history",
+    "typing-users": "typing-users",
+    "document-ready": "https://raw.githubusercontent.com/clp-research/slurk/master/sample_bots/video/plugins/video.js"
+  }
+}
