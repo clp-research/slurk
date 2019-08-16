@@ -62,6 +62,14 @@ def set_attribute(data):
             return False, "receiver not found"
         target = receiver.session_id
 
+    log_event("set_attribute", sender, room, data={
+                                                     'id': data.get('id'),
+                                                     'class': data.get('class'),
+                                                     'element': data.get('element'),
+                                                     'attribute': data['attribute'],
+                                                     'value': data['value']
+                                                    })
+
     emit('attribute_update', {
         'user': sender.id,
         'id': data.get('id'),
@@ -106,6 +114,11 @@ def set_text(data):
         target = room.name
     else:
         return False, "`set_text` requires `room` or `receiver_id`"
+
+    log_event("set_text", sender, room, data={
+                                                'id': data.get('id'),
+                                                'text': data['text']
+                                                })
 
     emit('text_update', {
         'user': sender.id,
