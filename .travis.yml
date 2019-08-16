@@ -17,6 +17,7 @@ jobs:
     - docker build -t slurk/concierge-bot -f sample_bots/concierge/Dockerfile .
     - docker build -t slurk/minimal-bot -f sample_bots/minimal/Dockerfile  .
     - docker build -t slurk/echo-bot -f sample_bots/echo/Dockerfile  .
+    - docker build -t slurk/video-bot -f sample_bots/video/Dockerfile  .
     before_deploy:
         - echo "$REPOSITORY_PASS" | docker login -u "$REPOSITORY_USER" --password-stdin
     deploy:

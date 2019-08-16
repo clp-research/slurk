@@ -3,6 +3,7 @@ from flask_login import current_user
 
 from ..models.room import Room
 from ..models.user import User
+from ..api.log import log_event
 
 from .. import socketio
 
