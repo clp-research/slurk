@@ -64,12 +64,12 @@ def set_attribute(data):
         target = receiver.session_id
 
     log_event("set_attribute", sender, room, data={
-                                                     'id': data.get('id'),
-                                                     'class': data.get('class'),
-                                                     'element': data.get('element'),
-                                                     'attribute': data['attribute'],
-                                                     'value': data['value']
-                                                    })
+        'id': data.get('id'),
+        'class': data.get('class'),
+        'element': data.get('element'),
+        'attribute': data['attribute'],
+        'value': data['value']
+    })
 
     emit('attribute_update', {
         'user': sender.id,
@@ -103,23 +103,23 @@ def set_text(data):
         return False, "`set_text` requires `id`"
     if 'text' not in data:
         return False, "`set_text` requires `text`"
-    if 'receiver_id' in data:
-        receiver = User.query.get(data['receiver_id'])
-        if not receiver:
-            return False, "receiver not found"
-        target = receiver.session_id
-    elif 'room' in data:
+    if 'room' in data:
         room = Room.query.get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
     else:
         return False, "`set_text` requires `room` or `receiver_id`"
+    if 'receiver_id' in data:
+        receiver = User.query.get(data['receiver_id'])
+        if not receiver:
+            return False, "receiver not found"
+        target = receiver.session_id
 
     log_event("set_text", sender, room, data={
-                                                'id': data.get('id'),
-                                                'text': data['text']
-                                                })
+        'id': data.get('id'),
+        'text': data['text']
+    })
 
     emit('text_update', {
         'user': sender.id,
