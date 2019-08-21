@@ -9,7 +9,7 @@ WTForms == 2.2.1
 bson == 0.5.8
 
 # Tools and utilities
-Werkzeug == 0.15.2
+Werkzeug == 0.15.3
 SQLAlchemy-utils == 0.33.11
 psycopg2-binary == 2.8.1
 
