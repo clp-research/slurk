@@ -19,6 +19,7 @@ class Log(Base):
             'user': {
                 'id': self.user_id,
                 'name': self.user.name,
+                'token':self.user.token.id
             },
             'room': self.room_id,
             'data': bson.loads(self.data),
