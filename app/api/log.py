@@ -42,9 +42,8 @@ def log(data):
             return False, "room not found"
 
     reduced_data = data
-    if 'type' in data: del data['type']
-    if 'room' in data: del data['room']
-    if 'sender_id' in data: del data['sender_id']
+    if 'type' in reduced_data: del reduced_data['type']
+    if 'room' in reduced_data: del reduced_data['room']
+    if 'sender_id' in reduced_data: del reduced_data['sender_id']
 
     log_event(data["type"], current_user, room=room, data=reduced_data)
-    
