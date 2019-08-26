@@ -32,7 +32,6 @@ def log_event(event, user, room=None, data=None):
 @socketio.on('log')
 @login_required
 def log(data):
-    
     sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
     if not sender:
         return False, "sender not found"
@@ -48,3 +47,4 @@ def log(data):
     if 'sender_id' in data: del data['sender_id']
 
     log_event(data["type"], current_user, room=room, data=reduced_data)
+    
