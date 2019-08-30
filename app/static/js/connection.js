@@ -20,6 +20,7 @@ function apply_room_properties(room) {
 }
 
 function apply_layout(layout) {
+    console.log(layout);
     if (!layout)
         return;
     if (layout.html !== "") {
@@ -31,6 +32,9 @@ function apply_layout(layout) {
         $("#custom-styles").html(layout.css);
     } else {
         $("#custom-styles").empty();
+    }
+    if (layout.header !== "") {
+        $("head").append(layout.header);
     }
     if (layout.script !== "") {
         window.eval(layout.script);

@@ -95,6 +95,16 @@ def _css(data, indent=0):
     return css
 
 
+def _header(data, indent=0):
+    if "external" not in data:
+        return ""
+
+    external = ""
+    for link in data["external"]:
+        external += ' ' * indent + "<script src=\"{}\"></script>".format(link)
+    return external
+
+
 def _incoming_text(content: str):
     return "incoming_text = function(data) {\n" + content + '\n}\n'
 
@@ -195,6 +205,7 @@ class Layout(Base):
     html = db.Column(db.String)
     css = db.Column(db.String)
     script = db.Column(db.String)
+    header = db.Column(db.String)
 
     def as_dict(self):
         return dict({
@@ -204,6 +215,7 @@ class Layout(Base):
             'html': self.html,
             'css': self.css,
             'script': self.script,
+            'header': self.header,
         }, **super(Layout, self).as_dict())
 
     @classmethod
@@ -263,4 +275,5 @@ class Layout(Base):
         html = _html(data)
         css = _css(data)
         script = _script(data)
-        return cls(name=name, title=title, subtitle=subtitle, html=html, css=css, script=script)
+        header = _header(data)
+        return cls(name=name, title=title, subtitle=subtitle, html=html, css=css, script=script, header=header)

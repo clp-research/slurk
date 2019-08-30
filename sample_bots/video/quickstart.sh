@@ -6,7 +6,7 @@ docker rm video-server > /dev/null 2> /dev/null
 docker kill concierge-bot > /dev/null 2> /dev/null
 docker rm concierge-bot > /dev/null 2> /dev/null
 
-#docker build -t slurk/server -f docker/slurk/Dockerfile .
+docker build -t slurk/server -f docker/slurk/Dockerfile .
 
 set -eux
 

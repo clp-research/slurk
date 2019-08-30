@@ -6,7 +6,7 @@ var TOKEN = null;
 
 var REFRESH_INTERVAL = null;
 
-$.getScript('https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/openvidu-browser-2.11.0.min.js', function () {
+$(document).ready(() => {
     OV = new OpenVidu();
     session = OV.initSession();
 
