@@ -14,8 +14,6 @@ $.getScript('https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/open
 		session.subscribe(event.stream, "subscribers");
 	});
 
-    console.log("script");
-
     REFRESH_INTERVAL = setInterval(() => {
         const token = document.getElementById("openvidu-token").value;
         console.log("Waiting for openvidu token...");
