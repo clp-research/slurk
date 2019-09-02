@@ -163,6 +163,11 @@ def add_class(data):
     else:
         return False, "`add_class` requires `room` or `receiver_id`"
 
+    log_event("class_add", sender, target, data={
+        'id': data.get('id'),
+        'class': data['class']
+    })
+
     emit('class_add', {
         'user': sender.id,
         'id': data.get('id'),
@@ -204,6 +209,11 @@ def remove_class(data):
         target = room.name
     else:
         return False, "`remove_class` requires `room` or `receiver_id`"
+
+    log_event("class_removed", sender, target, data={
+        'id': data.get('id'),
+        'class': data['class']
+    })
 
     emit('class_removed', {
         'user': sender.id,
