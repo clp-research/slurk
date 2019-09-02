@@ -43,6 +43,13 @@ A layout is a JSON file with a top level dictionary with the following keys:
         "submit-message": "send-message",
         "print-history": "plain-history"
       }
+- ``"external"``: A list of javascript links to load. Example:
+
+    .. code-block:: json
+
+      [
+        "https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/openvidu-browser-2.11.0.min.js"
+      ]
 
   Predefined scripts:
     - ``"display-text"``: Displays text in the chat as they arrive
