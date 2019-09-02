@@ -50,10 +50,6 @@ class ChatNamespace(BaseNamespace):
         if not session:
             return
 
-        user_token = session['tokens'].get(user_id)
-        if user_token:
-            return user_token
-
         resp = requests.post(OPENVIDU_URL + '/api/tokens', verify=False,
                              headers={
                                  "Authorization": OPENVIDU_AUTH_TOKEN,
