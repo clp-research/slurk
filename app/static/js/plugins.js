@@ -11,7 +11,7 @@ function _getTime(timestamp) {
     return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : "" + currentDate.getMinutes());
 }
 
-function display_message(user, time, message, privateMessage) {
+function display_message(user, time, message, privateMessage, html=false) {
     if (self_user === undefined) {
         return;
     }
@@ -37,7 +37,11 @@ function display_message(user, time, message, privateMessage) {
         "  </div>" +
         "</li>");
     text.find(".user").text(self_user.id === user.id ? "You" : user.name);
-    text.find(".msg").text(message);
+    if (html) {
+        text.find(".msg").html(message);
+    } else {
+        text.find(".msg").text(message);
+    }
     text.find("time").text(_getTime(time));
     _append(text);
 }

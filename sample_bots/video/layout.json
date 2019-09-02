@@ -34,15 +34,11 @@
       "margin": "50px 20px 15px"
     }
   },
-  "external": [
-    "https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/openvidu-browser-2.11.0.min.js"
-  ],
   "scripts": {
-    "incoming-text": "display-text",
+    "incoming-text": "markdown",
     "incoming-image": "display-image",
     "submit-message": "send-message",
     "print-history": "plain-history",
-    "print-history": "attribute-history",
     "typing-users": "typing-users",
     "document-ready": "video"
   }

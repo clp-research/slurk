@@ -79,6 +79,8 @@ CLIENT_TOKEN_2=$(curl -X POST \
        -d "{\"room\": \"waiting_room\", \"task\": $TASK_ID, \"message_text\": true}" \
        localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/')
 echo $CLIENT_TOKEN_2
-firefox --private-window "localhost/login/?next=%2F&name=client2&token=$CLIENT_TOKEN_2"
+#firefox --private-window "localhost/login/?next=%2F&name=client2&token=$CLIENT_TOKEN_2"
 
-python sample_bots/video/video.py -t "$VIDEO_BOT_TOKEN" --task_id "$TASK_ID" --openvidu-secret-key "MY_SECRET"
+#python sample_bots/video/video.py -t "$VIDEO_BOT_TOKEN" --task_id "$TASK_ID" --openvidu-secret-key "MY_SECRET"
+
+docker logs -f "$SLURK_SERVER_ID"

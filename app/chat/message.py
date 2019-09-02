@@ -79,9 +79,10 @@ def message_text(payload):
         'room': room.name if room else None,
         'timestamp': timegm(datetime.now().utctimetuple()),
         'private': private,
+        'html': payload.get('html', False)
     }, room=receiver, broadcast=broadcast)
     log_event("text_message", current_user, room, data={'receiver': payload['receiver_id'] if private else None,
-                                                        'message': payload['msg']})
+                                                        'message': payload['msg'], 'html': payload.get('html', False)})
     for room in current_user.rooms:
         emit('stop_typing', {'user': user}, room=room.name)
     return True

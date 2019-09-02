@@ -33,9 +33,6 @@ function apply_layout(layout) {
     } else {
         $("#custom-styles").empty();
     }
-    if (layout.header !== "") {
-        $("head").append(layout.header);
-    }
     if (layout.script !== "") {
         window.eval(layout.script);
     }

@@ -34,10 +34,10 @@
     }
   },
   "scripts": {
-    "incoming-text": "display-text",
+    "incoming-text": "markdown",
     "incoming-image": "display-image",
     "submit-message": "send-message",
-    "print-history": "plain-history",
+    "print-history": "markdown-history",
     "typing-users": "typing-users"
   }
 }

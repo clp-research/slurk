@@ -83,10 +83,11 @@ class ChatNamespace(BaseNamespace):
             print("created room:", new_room)
             sys.stdout.flush()
         else:
-            self.emit('text', {'msg': f'Hello, {user_name}! I am looking for a partner for you, it might take some '
-                               'time, so be patient, please...',
+            self.emit('text', {'msg': f'### Hello, {user_name}!\n\nI am looking for a partner for you, it might take '
+                                      f'some time, so be patient, please...',
                                'receiver_id': user_id,
-                               'room': room}, message_response)
+                               'room': room,
+                               'html': True}, message_response)
 
     def user_task_leave(self, user, task):
         if not task:
