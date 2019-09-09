@@ -41,7 +41,7 @@ def log(data):
         if not room:
             return False, "room not found"
 
-    reduced_data = data
+    reduced_data = data.copy()
     if 'type' in reduced_data: del reduced_data['type']
     if 'room' in reduced_data: del reduced_data['room']
     if 'sender_id' in reduced_data: del reduced_data['sender_id']
