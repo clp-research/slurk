@@ -20,3 +20,6 @@ gunicorn == 19.9.0
 
 # Bots
 SocketIO-client == 0.7.2
+
+# other libs
+tornado == 6.0.3

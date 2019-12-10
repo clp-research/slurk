@@ -4,3 +4,4 @@ log/
 _build
 
 *.db
+/.idea/
