@@ -145,7 +145,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>5. Writing your own bots</li>
+      <li><span class="section-number">5. </span>Writing your own bots</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,11 +165,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="writing-your-own-bots">
-<span id="slurk-bots"></span><h1>5. Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-bots"></span><h1><span class="section-number">5. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
 <p>Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
 <div class="section" id="dissecting-the-concierge-bot">
-<h2>5.1. Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
 <p>The concierge bot is an example for a bot able group up users and move them into a newly created room.</p>
 <p>The bot has to be started with a valid token and optionally with a server URL and Port. <code class="docutils literal notranslate"><span class="pre">args</span></code> are parameters to the
 bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:</p>
@@ -273,7 +273,7 @@ first argument and an error message as second argument, if the success flag is <
 </div>
 </div>
 <div class="section" id="joining-newly-created-task-rooms">
-<h2>5.2. Joining newly created task rooms<a class="headerlink" href="#joining-newly-created-task-rooms" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.2. </span>Joining newly created task rooms<a class="headerlink" href="#joining-newly-created-task-rooms" title="Permalink to this headline">¶</a></h2>
 <p>When the concierge bot creates a new room, it will move the assigned user to this room. In order to join those task
 rooms as bot, they may listen to the <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> event just like the echo bot:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_task_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -285,7 +285,7 @@ rooms as bot, they may listen to the <code class="docutils literal notranslate">
 the room.</p>
 </div>
 <div class="section" id="interacting-with-layouts">
-<h2>5.3. Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.3. </span>Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
 <p>Bots can modify layouts in two ways: Setting texts and altering attribute values.</p>
 <p>For this, four events are provided:</p>
 <ul class="simple">
@@ -348,7 +348,7 @@ the room.</p>
 </div>
 </div>
 <div class="section" id="messages">
-<h2>5.4. Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.4. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h2>
 <p>Bots can listen to messages with <code class="docutils literal notranslate"><span class="pre">on_text_message</span></code> and <code class="docutils literal notranslate"><span class="pre">on_image_message</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_text_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -378,7 +378,7 @@ the room.</p>
 </ul>
 </div>
 <div class="section" id="commands">
-<h2>5.5. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.5. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <p>Commands are very similar to text message, but requires a dedicated permission. Commands are sent to a room and a bot
 can listen to a command with <code class="docutils literal notranslate"><span class="pre">on_command</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>

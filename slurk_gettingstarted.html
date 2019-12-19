@@ -145,7 +145,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>2. Getting Started</li>
+      <li><span class="section-number">2. </span>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,9 +165,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="getting-started">
-<span id="slurk-gettingstarted"></span><h1>2. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-gettingstarted"></span><h1><span class="section-number">2. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="building-the-documentation">
-<h2>2.1. Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.1. </span>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
 <p>In order to build the documentation yourself, you additionally need the packages <em>sphinx</em> and <em>sphinx_rtd_theme</em>. Then
 you can create the documentation in the <em>docs</em> folder:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme
@@ -178,7 +178,7 @@ make html
 <p>The generated documentation can then be found at <em>docs/_build/</em></p>
 </div>
 <div class="section" id="hello-world-a-basic-test-of-the-server">
-<h2>2.2. “Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.2. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to use system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
 </pre></div>
@@ -237,7 +237,7 @@ b8b88080-b8d1-4eb2-af90-dccf7ece3d82
 .. _twobrowsers:</p>
 </div>
 <div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<h2>2.3. “Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.3. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
 <p>Run the steps from the previous section (starting the server, creating a token and logging in), and then create an
 addtional token and, <strong>from a different web browser or in a private tab</strong>, log in with that token. You should now see
 both identities in the respective chat windows, and you should be able to talk with your two selves across these
@@ -248,13 +248,13 @@ this might work across machines, and so you can have a chat with an actual diffe
 use made of the display window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
 <div class="section" id="chatting-with-a-bot">
-<h2>2.4. Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.4. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
 <p>Without additional environment variables, the server uses an in-memory database and resets on every restart of the
 server. Now let’s restart the server to reset the database. Before we log onto the server in the way described above,
 let us create a bot user and let it log on first. Create two tokens as described above, one for the user and one for
 the bot.</p>
 <p>There are Docker containers for all example bots. To run these bots using docker, type</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
 </pre></div>
 </div>
 <p>You may provide additional environment variables, too:
@@ -263,7 +263,7 @@ the bot.</p>
 <p>Note, that you have to pass <code class="docutils literal notranslate"><span class="pre">--net=&quot;host&quot;</span></code> to docker in order to make <code class="docutils literal notranslate"><span class="pre">http://localhost</span></code> working.</p>
 </div>
 <div class="section" id="examining-the-log-files">
-<h2>2.5. Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.5. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
 <p>The point of all this, however, is not just to make interaction <em>possible</em>, it is to <em>record</em> these interactions to be
 able to later study them or train models on them.</p>
 <p>In order to read the logs, we use the API again:</p>
