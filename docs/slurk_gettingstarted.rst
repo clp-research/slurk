@@ -126,7 +126,7 @@ There are Docker containers for all example bots. To run these bots using docker
 
 .. code-block:: bash
 
-   $ docker run -e TOKEN=$BOT_TOKEN --net="host" slurk/echo
+   $ docker run -e TOKEN=$BOT_TOKEN --net="host" slurk/echo-bot
 
 You may provide additional environment variables, too:
 - ``CHAT_HOST``: The host address (must include the protocol like "https://")
