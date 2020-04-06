@@ -5,7 +5,7 @@ Layouts and Plugins
 =========================================
 
 In Slurk you have the possibility to integrate your own layouts.
-With layouts it is possible to modify the right side and specify a stylesheet.
+With layouts it is possible to modify the display area on the right side and specify a stylesheet.
 
 A layout is a JSON file with a top level dictionary with the following keys:
 
