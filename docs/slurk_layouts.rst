@@ -51,36 +51,36 @@ A layout is a JSON file with a top level dictionary with the following keys:
         "https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/openvidu-browser-2.11.0.min.js"
       ]
 
-  Predefined scripts:
-    - ``"display-text"``: Displays text in the chat as they arrive
+Predefined scripts:
+    - ``"display-text"``: Displays texts in the chat as they arrive
     - ``"display-image"``: Displays images in the chat as they arrive
-    - ``"plain-history"``: Shows messages in the chat, which has arrived before login
-    - ``"send-message"``: Sends text, images, and commands depending on the entered text.
-    - ``"typing-users"``: Displays the currently typing users in the ``#typing`` element.
-    - ``"ask-reload"``: A popup asks on page reload, if this is the desired action.
+    - ``"plain-history"``: Shows messages in the chat, which have arrived before login
+    - ``"send-message"``: Sends text, images, and commands depending on the entered text
+    - ``"typing-users"``: Displays the currently typing users in the ``#typing`` element
+    - ``"ask-reload"``: A popup asks on page reload, if this is the desired action
 
 
 These are the currently defined triggers:
 
-- ``"incoming-text"``: Called, when a new message arrives. These are the passed parameters
-    - ``data.user``: The user, who has send the message
+- ``"incoming-text"``: Called when a new message arrives. These are the passed parameters
+    - ``data.user``: The user who has sent the message
     - ``data.timestamp``: The timestamp of the message
     - ``data.private``: A boolean value if this was a direct message or visible to the room
-    - ``data.msg``: The message string the sent message if any
-- ``"incoming-image"``: Called, when a new message arrives. These are the passed parameters
-    - ``data.user``: The user, who has send the message
+    - ``data.msg``: The message string of the sent message if any
+- ``"incoming-image"``: Called when a new message arrives. These are the passed parameters
+    - ``data.user``: The user who has sent the message
     - ``data.timestamp``: The timestamp of the message
     - ``data.private``: A boolean value if this was a direct message or visible to the room
     - ``data.image``: The image url of the sent message if any (Either ``data.msg`` or ``data.image`` are available)
     - ``data.width``: The width of the sent image (available if ``data.image`` is set)
     - ``data.height``: The height of the sent image (available if ``data.image`` is set)
-- ``"submit-message"``: Called, when the user hits RETURN on the typing area
+- ``"submit-message"``: Called when the user hits RETURN on the typing area
     - ``text``: The text which was entered in the typing area
-    - ``current_user``: The user, which just hit RETURN
+    - ``current_user``: The user who just hit RETURN
     - ``current_timestamp``: The current timestamp
-- ``"print-history"``: Triggered, when the server sends the history of the chat on joining a room
+- ``"print-history"``: Triggered when the server sends the history of the chat on joining a room
     - ``element.event``: Type of the event. Either ``"text"``, ``"command"`` or ``"status"``
-    - ``element.user``: The user who send the event
+    - ``element.user``: The user who sent the event
     - ``element.timestamp``: The timestamp of the event
     - ``element.message`` (``"text"``): The message of the text event
     - ``element.receiver_id`` (``"text"``, Optional): The receiver id, if it was a private message
@@ -88,9 +88,9 @@ These are the currently defined triggers:
 - ``"document-ready"``: Inserted into the JQuery ``$(document).ready`` function
 - ``"plain"``: Inserted as plain script into the chat
 - ``"typing-users"``: Triggered when a user starts or stops typing
-    - ``users``: A map of currently typing users, with it's id as the key
+    - ``users``: A map of currently typing users, with its id as the key
 
-Additional, some functions are guarantied to exist:
+Additionally, some functions are guaranteed to exist:
 
 - ``display_message(sender, time, message, privateMessage)``
 - ``display_image(sender, time, url, width, height, privateMessage)``
