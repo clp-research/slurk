@@ -23,7 +23,7 @@ A layout is a JSON file with a top level dictionary with the following keys:
       }
 
     corresponds to the HTML of ``<span id="box">Text</span>``
-- ``"css"``: A dictionary, which is similar to a typical css stylesheet. Example:
+- ``"css"``: A dictionary which is similar to a typical css stylesheet. Example:
     .. code-block:: json
 
        {
