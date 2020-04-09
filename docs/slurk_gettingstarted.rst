@@ -96,6 +96,7 @@ This should transport you to the chat interface, where you then can happily type
    A single user talking to no one in particular
 
 This has confirmed that the server is working correctly, but so far this hasn't really been very exciting. So we move on.
+
 .. _twobrowsers:
 
 "Hello World" -- "Hello Other Browser": Testing with two browsers
