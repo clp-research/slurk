@@ -55,7 +55,7 @@ We can now create the waiting room with the associated layout:
      "users": {}
    }
 
-The next step is to create a task. Each task contains information about the number of user required in order to start
+The next step is to create a task. Each task contains information about the number of users required in order to start
 the task:
 
 .. code-block:: bash
@@ -85,9 +85,9 @@ Now start the concierge bot:
    $ docker run -e TOKEN=$CONCIERGE_BOT_TOKEN --net="host" slurk/concierge-bot
 
 
-The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, which has both the
-specified task assigned. Once, both has joined, the bot will create a new task room and moves both users into that room.
-We want the echo-bot to join this task room as well. The concierge bot emits two events, when creating a new task room:
+The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, who both have the
+specified task assigned. Once both have joined, the bot will create a new task room and moves both users into that room.
+We want the echo bot to join this task room as well. The concierge bot emits two events, when creating a new task room:
 ``new_room`` and ``new_task_room``. The echo bot is able to listen to those events. So let's create a token for this
 bot, too:
 
@@ -107,7 +107,7 @@ This bot has an optional ``task-id`` parameter, to listen to specific tasks to j
 
    $ docker run -e TOKEN=$ECHO_BOT_TOKEN -e ECHO_TASK_ID=$TASK_ID --net="host" slurk/echo-bot
 
-Now lets create two user tokens and specify the task:
+Now let's create two user tokens and specify the task:
 
 .. code-block:: bash
 
