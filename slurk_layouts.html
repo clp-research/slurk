@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -163,7 +163,7 @@
   <div class="section" id="layouts-and-plugins">
 <span id="slurk-layouts"></span><h1><span class="section-number">4. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this headline">¶</a></h1>
 <p>In Slurk you have the possibility to integrate your own layouts.
-With layouts it is possible to modify the right side and specify a stylesheet.</p>
+With layouts it is possible to modify the display area on the right side and specify a stylesheet.</p>
 <p>A layout is a JSON file with a top level dictionary with the following keys:</p>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">&quot;title&quot;</span></code>: String displayed in the header. If no title is specified, “Slurk” is used.</p>
@@ -184,7 +184,7 @@ With layouts it is possible to modify the right side and specify a stylesheet.</
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;css&quot;</span></code>: A dictionary, which is similar to a typical css stylesheet. Example:</dt><dd><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;css&quot;</span></code>: A dictionary which is similar to a typical css stylesheet. Example:</dt><dd><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">&quot;#image-area&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="nt">&quot;align-content&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
     <span class="nt">&quot;margin&quot;</span><span class="p">:</span> <span class="s2">&quot;50px 20px 15px&quot;</span>
@@ -216,34 +216,34 @@ link. Example:</p>
 </pre></div>
 </div>
 </div></blockquote>
+</li>
+</ul>
 <dl class="docutils">
 <dt>Predefined scripts:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;display-text&quot;</span></code>: Displays text in the chat as they arrive</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;display-text&quot;</span></code>: Displays texts in the chat as they arrive</li>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;display-image&quot;</span></code>: Displays images in the chat as they arrive</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;plain-history&quot;</span></code>: Shows messages in the chat, which has arrived before login</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;send-message&quot;</span></code>: Sends text, images, and commands depending on the entered text.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Displays the currently typing users in the <code class="docutils literal notranslate"><span class="pre">#typing</span></code> element.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;ask-reload&quot;</span></code>: A popup asks on page reload, if this is the desired action.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;plain-history&quot;</span></code>: Shows messages in the chat, which have arrived before login</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;send-message&quot;</span></code>: Sends text, images, and commands depending on the entered text</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Displays the currently typing users in the <code class="docutils literal notranslate"><span class="pre">#typing</span></code> element</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;ask-reload&quot;</span></code>: A popup asks on page reload, if this is the desired action</li>
 </ul>
 </dd>
 </dl>
-</li>
-</ul>
 <p>These are the currently defined triggers:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code>: Called, when a new message arrives. These are the passed parameters</dt><dd><ul>
-<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user, who has send the message</li>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code>: Called when a new message arrives. These are the passed parameters</dt><dd><ul>
+<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value if this was a direct message or visible to the room</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.msg</span></code>: The message string the sent message if any</li>
+<li><code class="docutils literal notranslate"><span class="pre">data.msg</span></code>: The message string of the sent message if any</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code>: Called, when a new message arrives. These are the passed parameters</dt><dd><ul>
-<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user, who has send the message</li>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code>: Called when a new message arrives. These are the passed parameters</dt><dd><ul>
+<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value if this was a direct message or visible to the room</li>
 <li><code class="docutils literal notranslate"><span class="pre">data.image</span></code>: The image url of the sent message if any (Either <code class="docutils literal notranslate"><span class="pre">data.msg</span></code> or <code class="docutils literal notranslate"><span class="pre">data.image</span></code> are available)</li>
@@ -254,18 +254,18 @@ link. Example:</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code>: Called, when the user hits RETURN on the typing area</dt><dd><ul>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code>: Called when the user hits RETURN on the typing area</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The text which was entered in the typing area</li>
-<li><code class="docutils literal notranslate"><span class="pre">current_user</span></code>: The user, which just hit RETURN</li>
+<li><code class="docutils literal notranslate"><span class="pre">current_user</span></code>: The user who just hit RETURN</li>
 <li><code class="docutils literal notranslate"><span class="pre">current_timestamp</span></code>: The current timestamp</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code>: Triggered, when the server sends the history of the chat on joining a room</dt><dd><ul>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code>: Triggered when the server sends the history of the chat on joining a room</dt><dd><ul>
 <li><code class="docutils literal notranslate"><span class="pre">element.event</span></code>: Type of the event. Either <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;command&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;status&quot;</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">element.user</span></code>: The user who send the event</li>
+<li><code class="docutils literal notranslate"><span class="pre">element.user</span></code>: The user who sent the event</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.timestamp</span></code>: The timestamp of the event</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.message</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>): The message of the text event</li>
 <li><code class="docutils literal notranslate"><span class="pre">element.receiver_id</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code>, Optional): The receiver id, if it was a private message</li>
@@ -278,13 +278,13 @@ link. Example:</p>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code>: Inserted as plain script into the chat</li>
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Triggered when a user starts or stops typing</dt><dd><ul>
-<li><code class="docutils literal notranslate"><span class="pre">users</span></code>: A map of currently typing users, with it’s id as the key</li>
+<li><code class="docutils literal notranslate"><span class="pre">users</span></code>: A map of currently typing users, with its id as the key</li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
-<p>Additional, some functions are guarantied to exist:</p>
+<p>Additionally, some functions are guaranteed to exist:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">display_message(sender,</span> <span class="pre">time,</span> <span class="pre">message,</span> <span class="pre">privateMessage)</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">display_image(sender,</span> <span class="pre">time,</span> <span class="pre">url,</span> <span class="pre">width,</span> <span class="pre">height,</span> <span class="pre">privateMessage)</span></code></li>

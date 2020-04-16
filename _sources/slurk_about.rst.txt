@@ -4,11 +4,11 @@
 Slurk: What's this?
 =========================================
 
-Many fields of research have profited in the last years from the availability, through so-called "crowd working platforms", of a large pool of workers that can do small, web-based tasks. This has helped research in psychology as well as, dramatically so, research in artificial intelligence, where it made possible the collection of large amounts of labelled data from which models can be derived. While the common platforms offer templates for tasks such as image labelling or anwering questions, there a no such templates for dialogue tasks, where more than one participant is needed at the same time.
+Many fields of research have profited in the last years from the availability, through so-called "crowdworking platforms", of a large pool of workers that can do small, web-based tasks. This has helped research in psychology as well as, dramatically so, research in artificial intelligence, where it made possible the collection of large amounts of labelled data from which models can be derived. While the common platforms offer templates for tasks such as image labelling or answering questions, there are no such templates for dialogue tasks, where more than one participant is needed at the same time.
 
 To facilitate web-based dialogue experiments, we built **slurk**. (Think: "slack for mechanical turk"...) Slurk is a chat server onto which human participants as well as "bots" can log on to interact. Conversations happen in *rooms*, which are closed off to each other: While the server can handle many separate conversations in parallel, a given user will only be in one room and hence in one conversation.
 
-We were specifically interested in multimodal dialogues which involve more than just words. A paradigmatic example for such a type of dialogue would be a discussion about an image that is being shown to the users in a room. To enable such a setting, we distinguish in the interface presented to users between what we call the *display area*, where some media (e.g., an image) can be displayed, and the *chat* and *input* area, in which the chat history is shown and the user's utterance is being composed, respectively. This display area can be controlled by a bot, which might cause the display to change in response to what was said. Bots in slurk have far-reaching control over what human users in a room can type and over what they can see. This provides a way to specfiy and control a dialogue task programmatically.
+We were specifically interested in multimodal dialogues which involve more than just words. A paradigmatic example for such a type of dialogue would be a discussion about an image that is being shown to the users in a room. To enable such a setting, we distinguish in the interface presented to users between what we call the *display area*, where some media (e.g., an image) can be displayed, and the *chat* and *input* area, in which the chat history is shown and the user's utterance is being composed, respectively. This display area can be controlled by a bot, which might cause the display to change in response to what was said. Bots in slurk have far-reaching control over what human users in a room can type and over what they can see. This provides a way to specify and control a dialogue task programmatically.
 
 
 
@@ -25,7 +25,7 @@ Some basic concepts
 ~~~~~~~~~~~~~~~~~~~~
 
 Bots
-  Bots are little client programms (written in python, and connecting to the slurk server via `socket.io`) that can
+  Bots are little client programs (written in python, and connecting to the slurk server via `socket.io`) that can
   enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate
   with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms,
   being responsible for handling certain dialogue *tasks*. Defining an experimental or data collection setting typically
@@ -34,7 +34,7 @@ Bots
 Rooms
   Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
   room. The concierge example bot provides the **Waiting Room**, where users wait until a pre-determined number of members
-  is reached (lets say, 2), in which case all members are moved to a newly created task-specific room.
+  is reached (let's say, 2), in which case all members are moved to a newly created task-specific room.
 
 Technical concepts
   **Events**: Slurk is driven by events emitted by the server. All events have a certain type and corresponding
@@ -44,7 +44,7 @@ Technical concepts
   events. For instance, they can be used to create rooms, connect or disconnect clients or generate tokens for logging
   in.
 
-  **Commands** is basically the same as a public text message, but is only send to the users with the required
+  **Commands**: is basically the same as a public text message, but is only sent to the users with the required
   permissions.
 
   **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a

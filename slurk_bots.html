@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -166,11 +166,11 @@
             
   <div class="section" id="writing-your-own-bots">
 <span id="slurk-bots"></span><h1><span class="section-number">5. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
-<p>Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
+<p>Bots are little client programs, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
 <div class="section" id="dissecting-the-concierge-bot">
 <h2><span class="section-number">5.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
-<p>The concierge bot is an example for a bot able group up users and move them into a newly created room.</p>
+<p>The concierge bot is an example for a bot able to group up users and move them into a newly created room.</p>
 <p>The bot has to be started with a valid token and optionally with a server URL and Port. <code class="docutils literal notranslate"><span class="pre">args</span></code> are parameters to the
 bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">socketIO</span> <span class="o">=</span> <span class="n">SocketIO</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">chat_host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">chat_port</span><span class="p">,</span>
@@ -180,7 +180,7 @@ bot itself and consists of a host, a port, and a token. For authorization the to
 </div>
 <p>If the connection was successful, the bot connects to the <code class="docutils literal notranslate"><span class="pre">ChatNamespace</span></code>. From now on it listens to the events
 emitted by the server. Listening on events is straight forward with adding new methods to the <code class="docutils literal notranslate"><span class="pre">ChatNamespace</span></code> class.</p>
-<p>The bot has to be notified, when a user joins or leaves the room:</p>
+<p>The bot has to be notified when a user joins or leaves the room:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Called on `status` events</span>
 <span class="k">def</span> <span class="nf">on_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
     <span class="c1"># We are interested in &quot;join&quot; and &quot;leave&quot; events.</span>
@@ -203,7 +203,7 @@ emitted by the server. Listening on events is straight forward with adding new m
 <span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">get_user_task</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
     <span class="c1"># REST call to the server.</span>
-    <span class="n">task</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{uri}</span><span class="s2">/user/</span><span class="si">{user[&#39;id&#39;]}</span><span class="s2">/task&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Token </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">})</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">/user/</span><span class="si">{</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/task&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Token </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not get user task&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -238,7 +238,7 @@ emitted by the server. Listening on events is straight forward with adding new m
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># If we don&#39;t have enough users for a task, send the new user a message</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{user_name}</span><span class="s1">! I am looking for a partner for you, it might take some &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">! I am looking for a partner for you, it might take some &#39;</span>
                            <span class="s1">&#39;time, so be patient, please...&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;receiver_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span>
                            <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">},</span> <span class="n">message_response</span><span class="p">)</span>

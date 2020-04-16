@@ -4,14 +4,14 @@
 Writing your own bots
 =========================================
 
-Bots are little client programms, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.
+Bots are little client programs, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.
 
 There are some sample bots provided as examples, two of which are dissected and explained below.
 
 Dissecting the concierge bot
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The concierge bot is an example for a bot able group up users and move them into a newly created room.
+The concierge bot is an example for a bot able to group up users and move them into a newly created room.
 
 The bot has to be started with a valid token and optionally with a server URL and Port. ``args`` are parameters to the
 bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:
@@ -25,7 +25,7 @@ bot itself and consists of a host, a port, and a token. For authorization the to
 If the connection was successful, the bot connects to the ``ChatNamespace``. From now on it listens to the events
 emitted by the server. Listening on events is straight forward with adding new methods to the ``ChatNamespace`` class.
 
-The bot has to be notified, when a user joins or leaves the room:
+The bot has to be notified when a user joins or leaves the room:
 
 .. code-block:: python
 
@@ -236,4 +236,3 @@ can listen to a command with ``on_command``:
 - ``user``: dictionary of ``id`` and ``name`` of the user, who submitted the command
 - ``room``: the id of the room, where the command was entered, or ``None``
 - ``timestamp``
-
