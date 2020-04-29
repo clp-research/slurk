@@ -51,8 +51,8 @@ This will return the room settings::
      "users": {}
    }
 
-Generate a new token for the room you just created (the room name) for
-the clients:
+Generate a new token for the room you just created (the room
+name). The clients need this token to log in:
 
 .. code-block:: bash
 
@@ -112,8 +112,9 @@ the server to reset the database::
 
 Before we log onto the server in the way described above, we need to
 create a bot user and let it log on first. Create two tokens as
-described above (make sure to use the correct room names and
-labels). One of these tokens is for the user and one is for the bot.
+described above (if you used a different room name or label, make sure
+specify the correct ones). One of these tokens is for the user and one
+is for the bot.
 
 There are Docker containers for all example bots. To run the echo-bot
 using docker, you need to type the following, inserting your bot
