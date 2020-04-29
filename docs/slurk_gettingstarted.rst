@@ -13,35 +13,27 @@ The easiest way to use system is using Docker. For this, ``docker`` is recommend
 
   $ sudo apt-get install docker
 
-In order to run the server on port 80 and store the container id, run
+In order to run the server on port 80, store the container id, and read the admin token, run:
 
 .. code-block:: bash
 
-    $ SLURK_SERVER_ID=$(docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server)
+    $ source scripts/start_docker_server.sh
+    $ source scripts/get_admin_token.sh
 
-Read the admin token from the logs:
-
-.. code-block:: bash
-
-    $ ADMIN_TOKEN=$(docker logs $SLURK_SERVER_ID 2> /dev/null | sed -n '/admin token:/{n;p;}')
-
-Verify you have a proper UUID token:
+Verify you have a server id and proper UUID token (neither of these should be empty):
 
 .. code-block:: bash
 
+    $ echo $SLURK_SERVER_ID
     $ echo $ADMIN_TOKEN
-    b8b88080-b8d1-4eb2-af90-dccf7ece3d82
 
-Create a room as landing page for our new token:
+Create a room as landing page for our new token. In order to create a room,
+specify the token, the room name (as identifier), and a label:
 
 .. code-block:: bash
 
-   $ curl -X POST \
-          -H "Authorization: Token $ADMIN_TOKEN" \
-          -H "Content-Type: application/json" \
-          -H "Accept: application/json" \
-          -d '{"name": "test_room", "label": "Test Room"}' \
-          localhost/api/v2/room
+   $ sh scripts/create_room.sh $ADMIN_TOKEN test_room "Test Room"
+
    {
      "current_users": {},
      "label": "Test Room",
@@ -55,23 +47,19 @@ Create a room as landing page for our new token:
    }
 
 
-Generate a new token for the clients (``sed`` removes quotation from JSON-string):
+Generate a new token for the room you just created (the room name) for the clients:
 
 .. code-block:: bash
 
-   $ curl -X POST \
-          -H "Authorization: Token $ADMIN_TOKEN" \
-          -H "Content-Type: application/json" \
-          -H "Accept: application/json" \
-          -d '{"room": "test_room", "message_text": true}' \
-          localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
-   9e6f53ae-2da7-4c53-92c7-ec43f8fa50cd
+   $ sh scripts/create_token.sh $ADMIN_TOKEN test_room
 
-for a list of possible parameters see :ref:`slurk_api`
+If you want to set other parameters see :ref:`slurk_api` and modify the script accordingly.
 
-Visit http://localhost and enter whatever Name you like and this token, and click "enter chatroom".
+Visit http://localhost and enter whatever Name you like and the token you
+generated, and click "enter chatroom".
 
-This should transport you to the chat interface, where you then can happily type messages which no one will see (apart from you, that is).
+This should transport you to the chat interface, where you then can happily
+type messages which no one will see (apart from you, that is).
 
 
 .. _screenshot_void:
@@ -81,7 +69,8 @@ This should transport you to the chat interface, where you then can happily type
 
    A single user talking to no one in particular
 
-This has confirmed that the server is working correctly, but so far this hasn't really been very exciting. So we move on.
+This has confirmed that the server is working correctly, but so far this hasn't
+really been very exciting. So we move on.
 
 .. _twobrowsers:
 
