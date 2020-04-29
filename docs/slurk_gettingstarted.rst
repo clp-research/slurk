@@ -4,20 +4,6 @@
 Getting Started
 =========================================
 
-Building the documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In order to build the documentation yourself, you additionally need the packages *sphinx* and *sphinx_rtd_theme*. Then
-you can create the documentation in the *docs* folder:
-
-.. code-block:: sh
-
-    pip install sphinx sphinx_rtd_theme
-    cd docs
-    make html
-
-The generated documentation can then be found at *docs/_build/*
-
 "Hello World": A basic test of the server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
