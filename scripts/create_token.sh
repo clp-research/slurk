@@ -16,5 +16,5 @@ then
          localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
 else
   echo "You need to specify the authorization token and a room identifier"
-  echo "Ex: 'sh create_token.sh \$ADMIN_TOKEN test_room'"
+  echo "Ex: 'sh $0 \$ADMIN_TOKEN test_room'"
 fi
