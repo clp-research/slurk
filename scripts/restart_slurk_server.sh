@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# restart the server named slurky
+
 # stop running containers
 sudo docker kill slurky
 sudo docker rm slurky

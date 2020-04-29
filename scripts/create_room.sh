@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# create a slurk room with TOKEN NAME and LABEL
+# create a slurk room with TOKEN, NAME and LABEL
 
 TOKEN=$1
 NAME=$2
