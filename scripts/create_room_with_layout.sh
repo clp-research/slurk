@@ -17,7 +17,7 @@ then
          -H "Authorization: Token $ADMIN_TOKEN" \
          -H "Content-Type: application/json" \
          -H "Accept: application/json" \
-         -d "{\"name\": \"waiting_room\", \"label\": \"Waiting Room\", \"layout\": $LAYOUT}" \
+         -d "{\"name\": \"$NAME\", \"label\": \"$LABEL\", \"layout\": $LAYOUT}" \
          localhost/api/v2/room
 else
   echo "You need to supply a token, a room name and a label"
