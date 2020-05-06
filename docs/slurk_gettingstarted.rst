@@ -108,7 +108,7 @@ Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. Now let's restart
 the server to reset the database::
 
-  sh scripts/restart_slurk_server.sh
+  source scripts/restart_slurk_server.sh
 
 Before we log onto the server in the way described above, we need to
 create a bot user and let it log on first. Create two tokens as
