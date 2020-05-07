@@ -108,13 +108,20 @@ Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. Now let's restart
 the server to reset the database::
 
-  source scripts/start_slurk_server.sh
+  $ source scripts/start_slurk_server.sh
+
+You also need to reset the $ADMIN_TOKEN, and create the test room again::
+
+  $ source scripts/get_admin_token.sh
+  $ sh scripts/create_room.sh $ADMIN_TOKEN test_room "Test Room"
 
 Before we log onto the server in the way described above, we need to
 create a bot user and let it log on first. Create two tokens as
 described above (if you used a different room name or label, make sure
-specify the correct ones). One of these tokens is for the user and one
-is for the bot.
+to specify the correct ones). One of these tokens is for the user and one
+is for the bot::
+
+  $ sh scripts/create_token.sh $ADMIN_TOKEN test_room
 
 There are Docker containers for all example bots. To run the echo-bot
 using docker, you need to type the following, inserting your bot
