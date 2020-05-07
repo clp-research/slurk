@@ -19,7 +19,7 @@ read the admin token, run:
 
 .. code-block:: bash
 
-    $ source scripts/start_docker_server.sh
+    $ source scripts/start_slurk_server.sh
     $ source scripts/get_admin_token.sh
 
 Verify you have a server id and proper UUID token (neither of these
@@ -108,7 +108,7 @@ Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. Now let's restart
 the server to reset the database::
 
-  source scripts/restart_slurk_server.sh
+  source scripts/start_slurk_server.sh
 
 Before we log onto the server in the way described above, we need to
 create a bot user and let it log on first. Create two tokens as
