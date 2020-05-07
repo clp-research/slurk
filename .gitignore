@@ -5,3 +5,6 @@ _build
 
 *.db
 /.idea/
+
+env/
+venv/
