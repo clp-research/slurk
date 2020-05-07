@@ -6,11 +6,9 @@ if [ "$(docker ps -qa -f name=slurky)" ]
 then
     if [ "$(docker ps -qa -f status=running -f name=slurky)" ];
     then
-        echo 'there is a running slurky'
         sudo docker kill slurky
     fi
 
-    echo 'there is a slurky (running or stopped)'
     sudo docker rm slurky
 fi
 
