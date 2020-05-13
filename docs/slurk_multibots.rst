@@ -31,7 +31,7 @@ Create a waiting room and a task
 ----------------------------------
 
 First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let's take the layout
-provided in the *sample_bots* directory of the slurk-bots repository:
+provided in the slurk-bots repository:
 
 .. code-block:: bash
 
