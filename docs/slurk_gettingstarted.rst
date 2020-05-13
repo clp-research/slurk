@@ -100,17 +100,20 @@ environment – but so far there hasn't been any use made of the display
 window. Let's change that by inviting a bot into our chat room.
 
 
-
 Chatting with a bot
 ~~~~~~~~~~~~~~~~~~~
 
 Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. Now let's restart
-the server to reset the database::
+the server to reset the database:
+
+.. code-block:: bash
 
   $ source scripts/start_slurk_server.sh
 
-You also need to reset the $ADMIN_TOKEN, and create the test room again::
+You also need to reset the $ADMIN_TOKEN, and create the test room again:
+
+.. code-block:: bash
 
   $ source scripts/get_admin_token.sh
   $ sh scripts/create_room.sh $ADMIN_TOKEN test_room "Test Room"
@@ -119,7 +122,9 @@ Before we log onto the server in the way described above, we need to
 create a bot user and let it log on first. Create two tokens as
 described above (if you used a different room name or label, make sure
 to specify the correct ones). One of these tokens is for the user and one
-is for the bot::
+is for the bot:
+
+.. code-block:: bash
 
   $ sh scripts/create_token.sh $ADMIN_TOKEN test_room
 
