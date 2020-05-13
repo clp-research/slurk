@@ -13,7 +13,7 @@ then
         -H "Authorization: Token $ADMIN" \
         -H "Content-Type: application/json" \
         -H "Accept: application/json" \
-        -d "{\"room\": \"$ROOM\", \"message_text\": true, \"task\": $TASK_ID}" \
+        -d "{\"room\": \"$ROOM\", \"message_text\": true, \"task\": $TASK}" \
         localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
 else
   echo "You need to specify the authorization token, a room identifier and a task identifier"

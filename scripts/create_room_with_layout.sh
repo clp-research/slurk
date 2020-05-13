@@ -11,10 +11,10 @@ NAME=$2
 LABEL=$3
 LAYOUT=$4
 
-if [ $# -eq 3 ]
+if [ $# -eq 4 ]
 then
   curl -X POST \
-         -H "Authorization: Token $ADMIN_TOKEN" \
+         -H "Authorization: Token $TOKEN" \
          -H "Content-Type: application/json" \
          -H "Accept: application/json" \
          -d "{\"name\": \"$NAME\", \"label\": \"$LABEL\", \"layout\": $LAYOUT}" \

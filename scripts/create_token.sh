@@ -27,10 +27,10 @@ then
 elif [ "$#" -eq 3 ] && [ $3 == '--echo' ]
 then
   curl -X POST \
-        -H "Authorization: Token $ADMIN_TOKEN" \
+        -H "Authorization: Token $ADMIN" \
         -H "Content-Type: application/json" \
         -H "Accept: application/json" \
-        -d '{"room": "waiting_room", "message_text": true, "user_room_join": true}' \
+        -d "{\"room\": \"$ROOM\", \"message_text\": true, \"user_room_join\": true}" \
         localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
 
 else
