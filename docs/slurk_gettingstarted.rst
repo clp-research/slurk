@@ -136,7 +136,7 @@ token:
 
    $ sh scripts/run_echo_bot.sh TOKEN
 
-After the bot has logged, you can log yourself in as a user, using the
+After the bot has logged in, you can log yourself in as a user, using the
 other generated token and seeing the bot perform.
 
 Examining the log files
