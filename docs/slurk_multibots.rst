@@ -14,6 +14,19 @@ Install the ``jq`` command::
 
   $ sudo apt-get install jq
 
+Start the server if it's not running already (it might ask for your computer's password):
+
+.. code-block:: bash
+
+  $ source scripts/start_slurk_server.sh
+  $ source scripts/get_admin_token.sh
+
+Check your admin token, you may need it later when running bots in different shells:
+
+.. code-block:: bash
+
+  $ echo $ADMIN_TOKEN
+
 Create a waiting room and a task
 ----------------------------------
 
@@ -22,13 +35,13 @@ provided in the *sample_bots* directory of the slurk-bots repository:
 
 .. code-block:: bash
 
-   $ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/sample_bots/concierge/layout.json > waiting_room_layout.json
+   $ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/layout.json > waiting_room_layout.json
 
 This layout now has to be pushed to the server:
 
 .. code-block:: bash
 
-   $ source scripts/push_room_layout.sh $ADMIN_TOKEN waiting_room_layout.json WAITING_ROOM_LAYOUT
+  $ WAITING_ROOM_LAYOUT=$(scripts/push_room_layout.sh $ADMIN_TOKEN waiting_room_layout.json)
 
 Ensure we have a valid id:
 
@@ -59,7 +72,14 @@ The token for the concierge bot is stored in ``CONCIERGE_BOT_TOKEN``:
 
 .. code-block:: bash
 
-   $ CONCIERGE_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --concierge)
+  $ CONCIERGE_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --concierge)
+
+The token for the echo bot is stored in ``ECHO_BOT_TOKEN``:
+
+.. code-block:: bash
+
+  $ ECHO_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --echo)
+  $ echo $ECHO_BOT_TOKEN
 
 Now start the concierge bot using the token you just created:
 
@@ -70,14 +90,9 @@ Now start the concierge bot using the token you just created:
 The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, who both have the
 specified task assigned. Once both have joined, the bot will create a new task room and move both users into that room.
 We want the echo bot to join this task room as well. The concierge bot emits two events when creating a new task room:
-``new_room`` and ``new_task_room``. The echo bot is able to listen to those events. So let's create a token for this
-bot, too:
+``new_room`` and ``new_task_room``.
 
-.. code-block:: bash
-
-   $ ECHO_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --echo)
-
-This bot has an optional ``ECHO_TASK_ID`` parameter, to listen to specific tasks to join. Let's start it:
+The echo bot is able to listen to those events. This bot has an optional ``ECHO_TASK_ID`` parameter, to listen to specific tasks to join. Let's start it:
 
 .. code-block:: bash
 
