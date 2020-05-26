@@ -4,10 +4,10 @@
 Security and Permissions
 =========================================
 
-Security and permissions are important aspect to consider when giving access to 
+Security and permissions are important aspects to consider when giving access to 
 bots and users. The permission should be set when creating tokens. For example, to 
-give the user access to write text and command in the room for a specific task, you can set ``message_text`` 
-and ``message_command`` parameter for the token creation:
+give the user access to write texts and commands in a room for a specific task, you can set ``message_text`` 
+and ``message_command`` parameter during user token creation:
 
 .. code-block:: bash
 
@@ -22,7 +22,6 @@ Here is a list of permission that can be granted to bots/users:
 
 
   =============================  ===========================================================================================================
-  ``room`` *                     Room to land when using this token as login
   ``user_query``                 Can query other users
   ``user_log_event``             Can create custom log events
   ``user_room_join``             Can make users join a room
