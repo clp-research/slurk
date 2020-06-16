@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>5. Security and Permissions &mdash; slurk 2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. Writing your own bots" href="slurk_bots.html" />
+    <link rel="prev" title="4. Layouts and Plugins" href="slurk_layouts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Security and Permissions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li><span class="section-number">5. </span>Security and Permissions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_permission.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="security-and-permissions">
+<span id="slurk-permission"></span><h1><span class="section-number">5. </span>Security and Permissions<a class="headerlink" href="#security-and-permissions" title="Permalink to this headline">¶</a></h1>
+<p>Security and permissions are important aspects to consider when giving access to
+bots and users. The permission should be set when creating tokens. For example, to
+give the user access to write texts and commands in a room for a specific task, you can set <code class="docutils literal notranslate"><span class="pre">message_text</span></code>
+and <code class="docutils literal notranslate"><span class="pre">message_command</span></code> parameter during user token creation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
+   -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+   -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+   -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+   -d <span class="s2">&quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;message_command\&quot;: true, \&quot;task\&quot;: </span><span class="nv">$TASK_ID</span><span class="s2">}&quot;</span> <span class="se">\</span>
+   localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
+</pre></div>
+</div>
+<p>Here is a list of permission that can be granted to bots/users:</p>
+<blockquote>
+<div><table border="1" class="docutils align-default">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">user_query</span></code></td>
+<td>Can query other users</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">user_log_event</span></code></td>
+<td>Can create custom log events</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">user_room_join</span></code></td>
+<td>Can make users join a room</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">user_room_leave</span></code></td>
+<td>Can make users leave a room</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">message_text</span></code></td>
+<td>Can send text messages</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">message_image</span></code></td>
+<td>Can send images</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">message_command</span></code></td>
+<td>Can submit commands</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">message_broadcast</span></code></td>
+<td>Can broadcast messages</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_query</span></code></td>
+<td>Can query arbitrary rooms</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">room_log_query</span></code></td>
+<td>Can query logs for an arbitrary rooms. Without this permission only the current room can be queried</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_create</span></code></td>
+<td>Can create a room</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">room_update</span></code></td>
+<td>Can update a rooms properties</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_delete</span></code></td>
+<td>Can delete a room if there are no backrefs to it (tokens, users etc.)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">layout_query</span></code></td>
+<td>Can query layouts of arbitrary rooms. The layout from the rooms the user is in can always be queried</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">task_create</span></code></td>
+<td>Can generate tasks. Needed to open the task form</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">task_query</span></code></td>
+<td>Can query tasks</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">token_generate</span></code></td>
+<td>Can generate tokens</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">token_query</span></code></td>
+<td>Can query tokens. The token from the current user can always be queried</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">token_invalidate</span></code></td>
+<td>Can invalidate tokens</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">token_remove</span></code></td>
+<td>Can remove tokens</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="slurk_bots.html" class="btn btn-neutral float-right" title="6. Writing your own bots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="slurk_layouts.html" class="btn btn-neutral float-left" title="4. Layouts and Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018 DSG Bielefeld, 2019 CL Potsdam
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
