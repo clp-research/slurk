@@ -14,27 +14,11 @@ jobs:
     - docker
     script:
     - docker build -t slurk/server -f docker/slurk/Dockerfile .
-    - docker build -t slurk/concierge-bot -f sample_bots/concierge/Dockerfile .
-    - docker build -t slurk/minimal-bot -f sample_bots/minimal/Dockerfile  .
-    - docker build -t slurk/echo-bot -f sample_bots/echo/Dockerfile  .
-    - docker build -t slurk/video-bot -f sample_bots/video/Dockerfile  .
     before_deploy:
         - echo "$REPOSITORY_PASS" | docker login -u "$REPOSITORY_USER" --password-stdin
     deploy:
       - provider: script
         script: docker push slurk/server
-        on:
-          branch: master
-      - provider: script
-        script: docker push slurk/concierge-bot
-        on:
-          branch: master
-      - provider: script
-        script: docker push slurk/minimal-bot
-        on:
-          branch: master
-      - provider: script
-        script: docker push slurk/echo-bot
         on:
           branch: master
   - stage: deploy
