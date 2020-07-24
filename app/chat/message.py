@@ -32,6 +32,19 @@ def keypress(message):
             emit('stop_typing', {'user': user}, room=room.name)
 
 
+@socketio.on('typed_message')
+def typed_message(payload):
+    current_user_id = current_user.get_id()
+    if not current_user_id:
+        return
+
+    for room in current_user.rooms:
+        user = {
+             'id': current_user_id,
+             'name': current_user.name,
+        }
+        emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
+
 @socketio.on('text')
 @login_required
 def message_text(payload):
