@@ -7,7 +7,7 @@ Getting Started
 "Hello World": A basic test of the server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to use system is using Docker. For this, ``docker`` is
+The easiest way to use system is using Docker (https://www.docker.com/products/docker-desktop). For this, ``docker`` is
 recommended:
 
 .. code-block:: bash

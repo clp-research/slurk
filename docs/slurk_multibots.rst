@@ -43,7 +43,7 @@ This layout now has to be pushed to the server:
 
   $ WAITING_ROOM_LAYOUT=$(sh scripts/push_room_layout.sh $ADMIN_TOKEN waiting_room_layout.json)
 
-Ensure we have a valid id:
+Ensure we have a valid id (should not be empty):
 
 .. code-block:: bash
 
