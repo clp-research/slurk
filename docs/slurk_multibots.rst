@@ -95,7 +95,7 @@ We want the echo bot to join this task room as well. The concierge bot emits two
 ``new_room`` and ``new_task_room``.
 
 The echo bot is able to listen to those events. This bot has an optional ``ECHO_TASK_ID`` parameter, to listen to specific tasks to join. Let's start it 
-from the new terminal that contains echo bot token:
+from the new terminal that contains the echo bot token:
 
 .. code-block:: bash
 
