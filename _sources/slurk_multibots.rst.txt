@@ -43,7 +43,7 @@ This layout now has to be pushed to the server:
 
   $ WAITING_ROOM_LAYOUT=$(sh scripts/push_room_layout.sh $ADMIN_TOKEN waiting_room_layout.json)
 
-Ensure we have a valid id:
+Ensure we have a valid id (should not be empty):
 
 .. code-block:: bash
 
@@ -73,6 +73,7 @@ The token for the concierge bot is stored in ``CONCIERGE_BOT_TOKEN``:
 .. code-block:: bash
 
   $ CONCIERGE_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --concierge)
+  $ echo $CONCIERGE_BOT_TOKEN
 
 The token for the echo bot is stored in ``ECHO_BOT_TOKEN``:
 
@@ -81,7 +82,8 @@ The token for the echo bot is stored in ``ECHO_BOT_TOKEN``:
   $ ECHO_BOT_TOKEN=$(sh scripts/create_token.sh $ADMIN_TOKEN waiting_room --echo)
   $ echo $ECHO_BOT_TOKEN
 
-Now start the concierge bot using the token you just created:
+Open two new terminals and copy ``CONCIERGE_BOT_TOKEN`` to one terminal and ``ECHO_BOT_TOKEN`` & ``TASK_ID`` to another terminal.
+Now start the concierge bot using the token you just created from the new terminal:
 
 .. code-block:: bash
 
@@ -92,7 +94,8 @@ specified task assigned. Once both have joined, the bot will create a new task r
 We want the echo bot to join this task room as well. The concierge bot emits two events when creating a new task room:
 ``new_room`` and ``new_task_room``.
 
-The echo bot is able to listen to those events. This bot has an optional ``ECHO_TASK_ID`` parameter, to listen to specific tasks to join. Let's start it:
+The echo bot is able to listen to those events. This bot has an optional ``ECHO_TASK_ID`` parameter, to listen to specific tasks to join. Let's start it 
+from the new terminal that contains the echo bot token:
 
 .. code-block:: bash
 
@@ -101,7 +104,7 @@ The echo bot is able to listen to those events. This bot has an optional ``ECHO_
 Create user tokens for the task
 --------------------------------
 
-Now let's create two user tokens (run the command twice) and specify the task:
+Now let's create two user tokens from the original terminal (run the command twice) and specify the task:
 
 .. code-block:: bash
 

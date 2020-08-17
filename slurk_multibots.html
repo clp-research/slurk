@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,18 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -29,10 +34,6 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4. Layouts and Plugins" href="slurk_layouts.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> slurk
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> slurk
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><span class="section-number">3. </span>Pairing up participants and running multiple rooms</li>
     
@@ -196,7 +199,7 @@ provided in the slurk-bots repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_LAYOUT</span><span class="o">=</span><span class="k">$(</span>sh scripts/push_room_layout.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room_layout.json<span class="k">)</span>
 </pre></div>
 </div>
-<p>Ensure we have a valid id:</p>
+<p>Ensure we have a valid id (should not be empty):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$WAITING_ROOM_LAYOUT</span>
 </pre></div>
 </div>
@@ -216,6 +219,7 @@ $ <span class="nb">echo</span> <span class="nv">$TASK_ID</span>
 <p>Each bot needs a token in order to be run.
 The token for the concierge bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CONCIERGE_BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>sh scripts/create_token.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room --concierge<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_BOT_TOKEN</span>
 </pre></div>
 </div>
 <p>The token for the echo bot is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_BOT_TOKEN</span></code>:</p>
@@ -223,7 +227,8 @@ The token for the concierge bot is stored in <code class="docutils literal notra
 $ <span class="nb">echo</span> <span class="nv">$ECHO_BOT_TOKEN</span>
 </pre></div>
 </div>
-<p>Now start the concierge bot using the token you just created:</p>
+<p>Open two new terminals and copy <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code> to one terminal and <code class="docutils literal notranslate"><span class="pre">ECHO_BOT_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">TASK_ID</span></code> to another terminal.
+Now start the concierge bot using the token you just created from the new terminal:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/concierge-bot
 </pre></div>
 </div>
@@ -231,14 +236,15 @@ $ <span class="nb">echo</span> <span class="nv">$ECHO_BOT_TOKEN</span>
 specified task assigned. Once both have joined, the bot will create a new task room and move both users into that room.
 We want the echo bot to join this task room as well. The concierge bot emits two events when creating a new task room:
 <code class="docutils literal notranslate"><span class="pre">new_room</span></code> and <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code>.</p>
-<p>The echo bot is able to listen to those events. This bot has an optional <code class="docutils literal notranslate"><span class="pre">ECHO_TASK_ID</span></code> parameter, to listen to specific tasks to join. Let’s start it:</p>
+<p>The echo bot is able to listen to those events. This bot has an optional <code class="docutils literal notranslate"><span class="pre">ECHO_TASK_ID</span></code> parameter, to listen to specific tasks to join. Let’s start it
+from the new terminal that contains the echo bot token:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$ECHO_BOT_TOKEN</span> -e <span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
 </pre></div>
 </div>
 </div>
 <div class="section" id="create-user-tokens-for-the-task">
 <h2><span class="section-number">3.4. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this headline">¶</a></h2>
-<p>Now let’s create two user tokens (run the command twice) and specify the task:</p>
+<p>Now let’s create two user tokens from the original terminal (run the command twice) and specify the task:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_token_for_task.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room <span class="nv">$TASK_ID</span>
 </pre></div>
 </div>
@@ -267,11 +273,19 @@ users to a new room. The echo bot will also join this room and reply to every ch
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017-2018 DSG Bielefeld, 2019 CL Potsdam
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -282,7 +296,6 @@ users to a new room. The echo bot will also join this room and reply to every ch
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
