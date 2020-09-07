@@ -49,6 +49,7 @@ def typed_message(payload):
              'name': current_user.name,
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
 =======
         emit('user_message', {'user': user, 
@@ -57,6 +58,13 @@ def typed_message(payload):
                               'private': False
                               }, room=room.name)
 >>>>>>> 2b29bd3... added live typing frontend
+=======
+        emit('user_message', {'user': user, 
+                              'msg': payload['msg'],
+                              'timestamp': timegm(datetime.now().utctimetuple()),
+                              'private': False
+                              }, room=room.name)
+>>>>>>> 317aa99... added live typing front end. TODO: how to display in dynamic textbox
 
 
 @socketio.on('text')

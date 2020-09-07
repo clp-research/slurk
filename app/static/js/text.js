@@ -16,6 +16,15 @@ $(document).ready(() => {
         }
     });
 
+    socket.on("user_message", function (data) {
+        if (self_user === undefined) {
+            return;
+        }
+        if (incoming_text !== undefined && data.user.id !== self_user.id) {
+            incoming_text(data)
+        }
+    });
+
     socket.on("image_message", function (data) {
         if (self_user === undefined) {
             return;
