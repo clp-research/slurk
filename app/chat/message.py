@@ -48,8 +48,8 @@ def typed_message(payload):
              'id': current_user_id,
              'name': current_user.name,
         }
-        emit('user_message', {'user': user,
-                              'message': payload['msg'],
+        emit('user_message', {'user': user, 
+                              'msg': payload['msg'],
                               'timestamp': timegm(datetime.now().utctimetuple()),
                               'private': False
                               }, room=room.name)
