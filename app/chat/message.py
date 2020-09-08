@@ -36,7 +36,7 @@ def keypress(message):
 def typed_message(payload):
     """
     This function handles live-typing mode. It is called when 'typed_message'
-    event is fired and broadcasts the current message that the user typed to 
+    event is fired and broadcasts the current message that the user typed to
     the room through 'user_message' event.
     """
     current_user_id = current_user.get_id()
@@ -48,7 +48,7 @@ def typed_message(payload):
              'id': current_user_id,
              'name': current_user.name,
         }
-        emit('user_message', {'user': user, 
+        emit('user_message', {'user': user,
                               'message': payload['msg'],
                               'timestamp': timegm(datetime.now().utctimetuple()),
                               'private': False
