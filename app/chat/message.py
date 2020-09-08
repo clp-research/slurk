@@ -48,7 +48,15 @@ def typed_message(payload):
              'id': current_user_id,
              'name': current_user.name,
         }
+<<<<<<< HEAD
         emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
+=======
+        emit('user_message', {'user': user, 
+                              'message': payload['msg'],
+                              'timestamp': timegm(datetime.now().utctimetuple()),
+                              'private': False
+                              }, room=room.name)
+>>>>>>> 2b29bd3... added live typing frontend
 
 
 @socketio.on('text')
