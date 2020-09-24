@@ -4,7 +4,7 @@
 Prerequisites
 =========================================
 
-The easiest way to use system is using Docker. For this, ``docker`` is recommended.
+The easiest way to use the system is using Docker. For this, ``docker`` is recommended.
 
 - If you are operating on Ubuntu, then follow :ref:`label-install-ubuntu`
 - If you are operating on Windows 10, then follow :ref:`label-install-wsl`
@@ -108,7 +108,7 @@ Install docker into Ubuntu
 Potential after-installation steps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Start the docker deamon manually (if not already started):
+Start the docker daemon manually (if not already started):
 
 .. code-block:: bash
 
