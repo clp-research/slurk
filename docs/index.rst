@@ -9,6 +9,7 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
    :numbered:
 
    slurk_about
+   slurk_prerequisites
    slurk_gettingstarted
    slurk_multibots
    slurk_layouts
