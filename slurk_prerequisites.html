@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. Prerequisites &mdash; slurk 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Getting Started" href="slurk_gettingstarted.html" />
+    <link rel="prev" title="1. Slurk: What’s this?" href="slurk_about.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-windows-10">2.1. Prepare Windows 10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-wsl-2">2.1.1. Setting up WSL 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-ubuntu-20-04-1-using-the-app-store">2.1.2. Install Ubuntu-20.04.1 using the App Store</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#install-docker-into-ubuntu">2.2. Install docker into Ubuntu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#potential-after-installation-steps">2.3. Potential after-installation steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkout-and-run-slurk">2.4. Checkout and run slurk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#side-notes">2.5. Side-notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">2. </span>Prerequisites</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/slurk_prerequisites.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="prerequisites">
+<span id="slurk-prerequisites"></span><h1><span class="section-number">2. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
+<p>The easiest way to use the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended.</p>
+<ul class="simple">
+<li>If you are operating on Ubuntu, then follow <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a></li>
+<li>If you are operating on Windows 10, then follow <a class="reference internal" href="#label-install-wsl"><span class="std std-ref">Prepare Windows 10</span></a></li>
+</ul>
+<p>For other operating systems, please see the official docker documentation.</p>
+<div class="section" id="prepare-windows-10">
+<span id="label-install-wsl"></span><h2><span class="section-number">2.1. </span>Prepare Windows 10<a class="headerlink" href="#prepare-windows-10" title="Permalink to this headline">¶</a></h2>
+<p>Docker cannot easily run on Windows by default. Thus we enable the Windows Subsystem for Linux.
+Make sure that Windows 10 has the latest updates installed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This guide follows the <a class="reference external" href="https://docs.microsoft.com/de-de/windows/wsl/install-win10" target="_blank">official WSL2 documentation</a>, so have a look into these for more details.
+These instructions use experimental features for Docker on Windows and thus could be outdated at any time.
+Furthermore, this guide is a response to a <a class="reference external" href="https://github.com/clp-research/slurk/issues/99" target="_blank">Problem with getting an admin token (Ubuntu on WSL)</a>.</p>
+</div>
+<div class="section" id="setting-up-wsl-2">
+<h3><span class="section-number">2.1.1. </span>Setting up WSL 2<a class="headerlink" href="#setting-up-wsl-2" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Open a Powershell as Administrator</li>
+<li>Enable WSL with the following command:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart<span class="sb">``</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Upgrade to WSL2 with the following command:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Set WSL2 as the default for linux distributions:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; wsl --set-default-version <span class="m">2</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Restart the system</li>
+</ol>
+</div>
+<div class="section" id="install-ubuntu-20-04-1-using-the-app-store">
+<h3><span class="section-number">2.1.2. </span>Install Ubuntu-20.04.1 using the App Store<a class="headerlink" href="#install-ubuntu-20-04-1-using-the-app-store" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>After the installation is complete click <em>Launch</em></li>
+<li>Set a Unix username and password</li>
+<li>Open a Powershell</li>
+<li>Check the used WSL version for each distribution using PS:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; wsl --list --verbose
+  NAME                   STATE           VERSION
+  Ubuntu-20.04           Running         <span class="m">2</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Open a shell for the Ubuntu sub-system and follow the <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a> guide.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="install-docker-into-ubuntu">
+<span id="label-install-ubuntu"></span><h2><span class="section-number">2.2. </span>Install docker into Ubuntu<a class="headerlink" href="#install-docker-into-ubuntu" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This guide follows the <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">official docker documentation</a>, so have a look into these for more details.</p>
+</div>
+<ol class="arabic simple">
+<li>Uninstall old versions:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get remove docker docker-engine docker.io containerd runc
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Install docker using the repository:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get update
+$&gt; sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Add Docker’s official GPG key:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Use the following command to set up the stable repository.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo add-apt-repository <span class="s2">&quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Install the docker engine</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get update
+$&gt; sudo apt-get install docker-ce docker-ce-cli containerd.io
+</pre></div>
+</div>
+</div>
+<div class="section" id="potential-after-installation-steps">
+<h2><span class="section-number">2.3. </span>Potential after-installation steps<a class="headerlink" href="#potential-after-installation-steps" title="Permalink to this headline">¶</a></h2>
+<p>Start the docker daemon manually (if not already started):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo service docker status
+$&gt; sudo service docker start
+</pre></div>
+</div>
+<p>Add the non-root user to the docker group and re-login:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo groupadd docker
+$&gt; sudo usermod -aG docker <span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+$&gt; su -s <span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkout-and-run-slurk">
+<h2><span class="section-number">2.4. </span>Checkout and run slurk<a class="headerlink" href="#checkout-and-run-slurk" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">WSL users need to checkout the project using the WSL otherwise the line-endings are not correct!</p>
+</div>
+<ol class="arabic simple">
+<li>Generate a ssh key pair (with defaults)</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; ssh-keygen
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Upload or copy the generated public key to your github SSH settings</li>
+<li>Clone the repository</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; git clone git@github.com:clp-research/slurk.git
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Go into the slurk top directory</li>
+<li>Start the server</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; <span class="nb">source</span> ./start_slurk_server.sh
+$&gt; <span class="nb">echo</span> <span class="nv">$SLURK_SERVER_ID</span>
+ce96a2009c0be81f6a82161f611db2f5fd74ed95e8d9b8ea434aeb1bcbb2342b
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li>Fetch the admin token</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; <span class="nb">source</span> ./get_admin_token.sh
+$&gt; <span class="nb">echo</span> <span class="nv">$ADMIN_TOKEN</span>
+d858f508-da42-4ffb-847c-c7f378c35e02
+</pre></div>
+</div>
+<p>These commands have to be called with source, because they export environment variables.</p>
+</div>
+<div class="section" id="side-notes">
+<h2><span class="section-number">2.5. </span>Side-notes<a class="headerlink" href="#side-notes" title="Permalink to this headline">¶</a></h2>
+<p>The installation of the docker-ce using the WSL showed “failures”, but these seem not to have an impact on the docker engine.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Setting up docker-ce-cli <span class="o">(</span><span class="m">5</span>:19.03.13~3-0~ubuntu-focal<span class="o">)</span> ...
+Setting up pigz <span class="o">(</span><span class="m">2</span>.4-1<span class="o">)</span> ...
+Setting up cgroupfs-mount <span class="o">(</span><span class="m">1</span>.4<span class="o">)</span> ...
+invoke-rc.d: could not determine current runlevel
+Setting up grub2-common <span class="o">(</span><span class="m">2</span>.04-1ubuntu26.4<span class="o">)</span> ...
+Setting up grub-pc-bin <span class="o">(</span><span class="m">2</span>.04-1ubuntu26.4<span class="o">)</span> ...
+Setting up docker-ce <span class="o">(</span><span class="m">5</span>:19.03.13~3-0~ubuntu-focal<span class="o">)</span> ...
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /lib/systemd/system/docker.service.
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /lib/systemd/system/docker.socket.
+invoke-rc.d: could not determine current runlevel
+Setting up grub-pc <span class="o">(</span><span class="m">2</span>.04-1ubuntu26.4<span class="o">)</span> ...
+
+Creating config file /etc/default/grub with new version
+Setting up grub-gfxpayload-lists <span class="o">(</span><span class="m">0</span>.7<span class="o">)</span> ...
+Processing triggers <span class="k">for</span> install-info <span class="o">(</span><span class="m">6</span>.7.0.dfsg.2-5<span class="o">)</span> ...
+Processing triggers <span class="k">for</span> libc-bin <span class="o">(</span><span class="m">2</span>.31-0ubuntu9<span class="o">)</span> ...
+Processing triggers <span class="k">for</span> systemd <span class="o">(</span><span class="m">245</span>.4-4ubuntu3.2<span class="o">)</span> ...
+Processing triggers <span class="k">for</span> man-db <span class="o">(</span><span class="m">2</span>.9.1-1<span class="o">)</span> ...
+Processing triggers <span class="k">for</span> linux-image-unsigned-5.6.0-1028-oem <span class="o">(</span><span class="m">5</span>.6.0-1028.28<span class="o">)</span> ...
+/etc/kernel/postinst.d/initramfs-tools:
+update-initramfs: Generating /boot/initrd.img-5.6.0-1028-oem
+W: mkconf: MD subsystem is not loaded, thus I cannot scan <span class="k">for</span> arrays.
+W: mdadm: failed to auto-generate temporary mdadm.conf file.
+</pre></div>
+</div>
+<p>This is discussed in the following issue:</p>
+<blockquote class="pull-quote">
+<div><a class="reference external" href="https://github.com/microsoft/WSL/issues/4903" target="_blank">microsoft/WSL#4903 (mdadm 4.1-2 causes unrecoverable grub config loop in dpkg, apt)</a>
+Spiritually similar #4763 (over there it was LVM). WSL2 does not load the Linux kernel with GRUB (and WSL1 doesn’t load a Linux kernel at all). Linux RAID (mdadm) isn’t applicable for lack of Multiple Disks. Somehow those were installed on your system. Purging those packages should help.</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-right" title="3. Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="slurk_about.html" class="btn btn-neutral float-left" title="1. Slurk: What’s this?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2017-2018 DSG Bielefeld, 2019 CL Potsdam
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

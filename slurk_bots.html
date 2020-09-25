@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Writing your own bots &mdash; slurk 2.0.0 documentation</title>
+  <title>7. Writing your own bots &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. REST API for slurk" href="slurk_api.html" />
-    <link rel="prev" title="5. Security and Permissions" href="slurk_permission.html" /> 
+    <link rel="next" title="8. REST API for slurk" href="slurk_api.html" />
+    <link rel="prev" title="6. Security and Permissions" href="slurk_permission.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,21 +88,22 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">5. Security and Permissions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Writing your own bots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-concierge-bot">6.1. Dissecting the concierge bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#joining-newly-created-task-rooms">6.2. Joining newly created task rooms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">6.3. Interacting with layouts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#messages">6.4. Messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#commands">6.5. Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Writing your own bots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dissecting-the-concierge-bot">7.1. Dissecting the concierge bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joining-newly-created-task-rooms">7.2. Joining newly created task rooms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interacting-with-layouts">7.3. Interacting with layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#messages">7.4. Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">7.5. Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -149,7 +150,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">6. </span>Writing your own bots</li>
+      <li><span class="section-number">7. </span>Writing your own bots</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -169,11 +170,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="writing-your-own-bots">
-<span id="slurk-bots"></span><h1><span class="section-number">6. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-bots"></span><h1><span class="section-number">7. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this headline">¶</a></h1>
 <p>Bots are little client programs, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, two of which are dissected and explained below.</p>
 <div class="section" id="dissecting-the-concierge-bot">
-<h2><span class="section-number">6.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this headline">¶</a></h2>
 <p>The concierge bot is an example for a bot able to group up users and move them into a newly created room.</p>
 <p>The bot has to be started with a valid token and optionally with a server URL and Port. <code class="docutils literal notranslate"><span class="pre">args</span></code> are parameters to the
 bot itself and consists of a host, a port, and a token. For authorization the token has to be provided in the headers:</p>
@@ -277,7 +278,7 @@ first argument and an error message as second argument, if the success flag is <
 </div>
 </div>
 <div class="section" id="joining-newly-created-task-rooms">
-<h2><span class="section-number">6.2. </span>Joining newly created task rooms<a class="headerlink" href="#joining-newly-created-task-rooms" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.2. </span>Joining newly created task rooms<a class="headerlink" href="#joining-newly-created-task-rooms" title="Permalink to this headline">¶</a></h2>
 <p>When the concierge bot creates a new room, it will move the assigned user to this room. In order to join those task
 rooms as bot, they may listen to the <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> event just like the echo bot:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_new_task_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -289,7 +290,7 @@ rooms as bot, they may listen to the <code class="docutils literal notranslate">
 the room.</p>
 </div>
 <div class="section" id="interacting-with-layouts">
-<h2><span class="section-number">6.3. </span>Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.3. </span>Interacting with layouts<a class="headerlink" href="#interacting-with-layouts" title="Permalink to this headline">¶</a></h2>
 <p>Bots can modify layouts in two ways: Setting texts and altering attribute values.</p>
 <p>For this, four events are provided:</p>
 <ul class="simple">
@@ -352,7 +353,7 @@ the room.</p>
 </div>
 </div>
 <div class="section" id="messages">
-<h2><span class="section-number">6.4. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.4. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h2>
 <p>Bots can listen to messages with <code class="docutils literal notranslate"><span class="pre">on_text_message</span></code> and <code class="docutils literal notranslate"><span class="pre">on_image_message</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_text_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -382,7 +383,7 @@ the room.</p>
 </ul>
 </div>
 <div class="section" id="commands">
-<h2><span class="section-number">6.5. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.5. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <p>Commands are very similar to text message, but requires a dedicated permission. Commands are sent to a room and a bot
 can listen to a command with <code class="docutils literal notranslate"><span class="pre">on_command</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -407,10 +408,10 @@ can listen to a command with <code class="docutils literal notranslate"><span cl
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_api.html" class="btn btn-neutral float-right" title="7. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_api.html" class="btn btn-neutral float-right" title="8. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_permission.html" class="btn btn-neutral float-left" title="5. Security and Permissions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_permission.html" class="btn btn-neutral float-left" title="6. Security and Permissions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

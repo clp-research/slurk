@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. REST API for slurk &mdash; slurk 2.0.0 documentation</title>
+  <title>8. REST API for slurk &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. Deployment of the system" href="slurk_deployment.html" />
-    <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
+    <link rel="next" title="9. Deployment of the system" href="slurk_deployment.html" />
+    <link rel="prev" title="7. Writing your own bots" href="slurk_bots.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,22 +88,23 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">2. Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">5. Security and Permissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. REST API for slurk</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#token">7.1. Token</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#user">7.2. User</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#task">7.3. Task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#room">7.4. Room</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#layouts">7.5. Layouts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#logging">7.6. Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. REST API for slurk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#token">8.1. Token</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user">8.2. User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task">8.3. Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#room">8.4. Room</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layouts">8.5. Layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">8.6. Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -150,7 +151,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">7. </span>REST API for slurk</li>
+      <li><span class="section-number">8. </span>REST API for slurk</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -170,7 +171,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="rest-api-for-slurk">
-<span id="slurk-api"></span><h1><span class="section-number">7. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-api"></span><h1><span class="section-number">8. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this headline">¶</a></h1>
 <p>Slurk provides a REST API. As authorization the token has to be provided. Data has to be passed as JSON. The responds
 will also return as JSON. Example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -X POST
@@ -182,7 +183,7 @@ will also return as JSON. Example:</p>
 </pre></div>
 </div>
 <div class="section" id="token">
-<h2><span class="section-number">7.1. </span>Token<a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.1. </span>Token<a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/tokens</span></code></p>
 <p>Returns a list of tokens:</p>
@@ -325,7 +326,7 @@ will also return as JSON. Example:</p>
 </ul>
 </div>
 <div class="section" id="user">
-<h2><span class="section-number">7.2. </span>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.2. </span>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/users</span></code></p>
 <p>Returns a list of users:</p>
@@ -414,7 +415,7 @@ will also return as JSON. Example:</p>
 </ul>
 </div>
 <div class="section" id="task">
-<h2><span class="section-number">7.3. </span>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.3. </span>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/user/&lt;int:id&gt;/task</span></code></p>
 <p>Returns the task for the specified user if any:</p>
@@ -543,7 +544,7 @@ will also return as JSON. Example:</p>
 </ul>
 </div>
 <div class="section" id="room">
-<h2><span class="section-number">7.4. </span>Room<a class="headerlink" href="#room" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.4. </span>Room<a class="headerlink" href="#room" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/rooms</span></code></p>
 <p>Returns a list of rooms:</p>
@@ -697,7 +698,7 @@ will also return as JSON. Example:</p>
 </ul>
 </div>
 <div class="section" id="layouts">
-<h2><span class="section-number">7.5. </span>Layouts<a class="headerlink" href="#layouts" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.5. </span>Layouts<a class="headerlink" href="#layouts" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/layouts</span></code></p>
 <p>Returns a list of layouts:</p>
@@ -781,7 +782,7 @@ will also return as JSON. Example:</p>
 </ul>
 </div>
 <div class="section" id="logging">
-<h2><span class="section-number">7.6. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.6. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/room/&lt;string:name&gt;/logs</span></code></p>
 <p>Returns the log of the room by name:</p>
@@ -873,10 +874,10 @@ will also return as JSON. Example:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_deployment.html" class="btn btn-neutral float-right" title="8. Deployment of the system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_deployment.html" class="btn btn-neutral float-right" title="9. Deployment of the system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="7. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

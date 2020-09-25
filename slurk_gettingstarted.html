@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Getting Started &mdash; slurk 2.0.0 documentation</title>
+  <title>3. Getting Started &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="3. Pairing up participants and running multiple rooms" href="slurk_multibots.html" />
-    <link rel="prev" title="1. Slurk: What’s this?" href="slurk_about.html" /> 
+    <link rel="next" title="4. Pairing up participants and running multiple rooms" href="slurk_multibots.html" />
+    <link rel="prev" title="2. Prerequisites" href="slurk_prerequisites.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,20 +88,21 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-a-basic-test-of-the-server">2.1. “Hello World”: A basic test of the server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">2.2. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#chatting-with-a-bot">2.3. Chatting with a bot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examining-the-log-files">2.4. Examining the log files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-a-basic-test-of-the-server">3.1. “Hello World”: A basic test of the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-hello-other-browser-testing-with-two-browsers">3.2. “Hello World” – “Hello Other Browser”: Testing with two browsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chatting-with-a-bot">3.3. Chatting with a bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examining-the-log-files">3.4. Examining the log files</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">3. Pairing up participants and running multiple rooms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">4. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">5. Security and Permissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -148,7 +149,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">2. </span>Getting Started</li>
+      <li><span class="section-number">3. </span>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,9 +169,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="getting-started">
-<span id="slurk-gettingstarted"></span><h1><span class="section-number">2. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="hello-world-a-basic-test-of-the-server">
-<h2><span class="section-number">2.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to use system is using Docker (<a class="reference external" href="https://www.docker.com/products/docker-desktop" target="_blank">https://www.docker.com/products/docker-desktop</a>). For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is
 recommended:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
@@ -220,13 +221,13 @@ you generated, and click “enter chatroom”.</p>
 happily type messages which no one will see (apart from you, that is).</p>
 <div class="figure align-center" id="id1">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>This has confirmed that the server is working correctly, but so far
 this hasn’t really been very exciting. So we move on.</p>
 </div>
 <div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<span id="twobrowsers"></span><h2><span class="section-number">2.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
+<span id="twobrowsers"></span><h2><span class="section-number">3.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline">¶</a></h2>
 <p>Run the steps from the previous section (starting the server, creating
 a token and logging in), and then create an additional token by
 running the create_token script with the same parameters again. <strong>From
@@ -242,7 +243,7 @@ environment – but so far there hasn’t been any use made of the display
 window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
 <div class="section" id="chatting-with-a-bot">
-<h2><span class="section-number">2.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
 <p>Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. Now let’s restart
 the server to reset the database:</p>
@@ -272,7 +273,7 @@ token:</p>
 other generated token and seeing the bot perform.</p>
 </div>
 <div class="section" id="examining-the-log-files">
-<h2><span class="section-number">2.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
 <p>The point of all this, however, is not just to make interaction
 <em>possible</em>, it is to <em>record</em> these interactions to be able to later
 study them or train models on them.</p>
@@ -304,10 +305,10 @@ section.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="3. Pairing up participants and running multiple rooms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="slurk_multibots.html" class="btn btn-neutral float-right" title="4. Pairing up participants and running multiple rooms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="slurk_about.html" class="btn btn-neutral float-left" title="1. Slurk: What’s this?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="slurk_prerequisites.html" class="btn btn-neutral float-left" title="2. Prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
