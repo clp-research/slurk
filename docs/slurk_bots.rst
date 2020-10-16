@@ -242,8 +242,8 @@ Testing bots
 ~~~~~~~~~~~~
 
 You can also test your custom bots locally using ``docker``. First, you should create a ``Dockerfile``
-inside the folder where your bots reside. The content of the ``Dockerfile`` should follow the one available
-under ``clp-research/slurk-bots``. Afterwards, you can build the docker container using 
+inside the folder where your bots reside. The content of the ``Dockerfile`` should follow ``Dockerfile.template`` available
+in ``clp-research/slurk-bots``. Afterwards, you can build the docker container using 
 the following command and run it:
 
 .. code-block:: bash
