@@ -4,19 +4,9 @@ let keypress = undefined;
 let incoming_text = undefined;
 let incoming_image = undefined;
 let is_typing = -1;
-let live_typing = 1;
 
 $(document).ready(() => {
     socket.on("text_message", function (data) {
-        if (self_user === undefined) {
-            return;
-        }
-        if (incoming_text !== undefined && data.user.id !== self_user.id) {
-            incoming_text(data)
-        }
-    });
-
-    socket.on("user_message", function (data) {
         if (self_user === undefined) {
             return;
         }
@@ -87,16 +77,6 @@ $(document).ready(() => {
             let date = new Date();
             let time = date.getTime() - date.getTimezoneOffset() * 60000;
             keypress(self_room, self_user, time / 1000, text);
-        }
-    });
-
-    $('#text').keyup(function(e) {
-        if (keypress === undefined || $('#text').is('[readonly]')) {
-            return;
-        }
-        if (live_typing === 1) {
-            let text = $(e.target).val();
-            socket.emit("typed_message", {"msg": text});
         }
     });
 });

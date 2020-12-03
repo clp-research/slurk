@@ -1,13 +1,5 @@
 function _append(text) {
-    //$('#chat-area').pop();
-    //TODO: ensure message display properly after submitting the message, and how to prevent overwritting chat box
-    var listItems = document.getElementById("chat-area").getElementsByTagName("li");
-    if (listItems.length > 0) {
-        var last = listItems[listItems.length - 1];
-        last.parentNode.removeChild(last);
-    }
     $('#chat-area').append(text);
-    //$('#chat-area').val(text);
     let content = $('#content');
     content.animate({ scrollTop: content.prop("scrollHeight") }, 0);
 }
