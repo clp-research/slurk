@@ -48,7 +48,7 @@ def typed_message(payload):
              'id': current_user_id,
              'name': current_user.name,
         }
-        emit('user_message', {'user': user, 
+        emit('user_message', {'user': user,
                               'message': payload['msg'],
                               'timestamp': timegm(datetime.now().utctimetuple()),
                               'private': False
@@ -154,8 +154,12 @@ def message_command(payload):
         'timestamp': timegm(datetime.now().utctimetuple()),
         'private': private,
     }, room=receiver, broadcast=broadcast)
-    log_event("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
-        payload['command']})
+    log_event("command",
+              current_user,
+              room,
+              data={'receiver': payload['receiver_id'] if private else None,
+                    'command': payload['command']
+                    })
     for room in current_user.rooms:
         emit('stop_typing', {'user': user}, room=room.name)
     return True
