@@ -1,4 +1,4 @@
-FROM python:3.7.2
+FROM python:3.9
 
 RUN mkdir -p /usr/src/slurk
 WORKDIR /usr/src/slurk
