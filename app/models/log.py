@@ -11,7 +11,7 @@ class Log(Base):
     event = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("User.id"), nullable=False)
     room_id = db.Column(db.String, db.ForeignKey("Room.name"))
-    data = db.Column(db.Binary, nullable=False)
+    data = db.Column(db.LargeBinary, nullable=False)
 
     def as_dict(self):
         base = dict({
