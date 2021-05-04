@@ -33,8 +33,11 @@ def connect():
         log_event("join", current_user, room)
     db.session.commit()
 
+    for room in current_user.current_rooms:
+        socketio.emit("joined_room", dict(user=current_user.id, room=room.name), room=request.sid)
 
-@socketio.on('ready')
+
+# @socketio.on('ready')
 @login_required
 def ready():
     for room in current_user.current_rooms:
@@ -62,4 +65,3 @@ def disconnect():
     db.session.commit()
     log_event("disconnect", current_user)
     logout_user()
-

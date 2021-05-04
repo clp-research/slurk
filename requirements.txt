@@ -1,25 +1,26 @@
-# Server
-Flask == 1.0.2
-Flask-Login == 0.4.1
-Flask-SocketIO == 3.3.2
-Flask-SQLAlchemy == 2.3.2
-Flask-WTF == 0.14.2
-Flask-HTTPAuth == 3.2.4
-WTForms == 2.2.1
-bson == 0.5.8
-
-# Tools and utilities
-Werkzeug == 0.15.3
-SQLAlchemy-utils == 0.33.11
-psycopg2-binary == 2.8.1
-
-# Deployment
-gevent == 1.4.0
-gevent-websocket == 0.10.1
-gunicorn == 19.9.0
-
-# Bots
-SocketIO-client == 0.7.2
-
-# other libs
-tornado == 6.0.3
+bidict==0.21.2
+bson==0.5.10
+click==7.1
+Flask==1.1
+Flask-HTTPAuth==4.2
+Flask-Login==0.5
+Flask-SocketIO==5.0
+Flask-SQLAlchemy==2.5
+Flask-WTF==0.14
+gevent==21.1
+gevent-websocket==0.10
+greenlet==1.0
+gunicorn==20.1
+itsdangerous==1.1
+Jinja2==2.11
+MarkupSafe==1.1
+python-dateutil==2.8
+python-engineio==4.1
+python-socketio==5.2
+six==1.15
+SQLAlchemy==1.4
+SQLAlchemy-Utils==0.37
+Werkzeug==1.0
+WTForms==2.3
+zope.event==4.5
+zope.interface==5.4
