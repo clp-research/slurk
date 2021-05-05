@@ -1,16 +1,16 @@
-from .. import db
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
-from . import Base
-from .token import Token
+from .common import Common
 
 
-class Task(Base):
+class Task(Common):
     __tablename__ = 'Task'
 
-    name = db.Column(db.String, nullable=False)
-    num_users = db.Column(db.Integer)
-    layout_id = db.Column(db.ForeignKey("Layout.id"))
-    tokens = db.relationship(Token.__tablename__, backref="task")
+    name = Column(String, nullable=False)
+    num_users = Column(Integer)
+    layout_id = Column(ForeignKey("Layout.id"))
+    tokens = relationship('Token', backref="task")
 
     def as_dict(self):
         return dict({

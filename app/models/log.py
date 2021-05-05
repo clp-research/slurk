@@ -1,17 +1,17 @@
-from .. import db
-
-from . import Base
-
 import bson
 
+from sqlalchemy import String, Integer, ForeignKey, LargeBinary, Column
 
-class Log(Base):
+from .common import Common
+
+
+class Log(Common):
     __tablename__ = 'Log'
 
-    event = db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("User.id"), nullable=False)
-    room_id = db.Column(db.String, db.ForeignKey("Room.name"))
-    data = db.Column(db.LargeBinary, nullable=False)
+    event = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
+    room_id = Column(String, ForeignKey("Room.name"))
+    data = Column(LargeBinary, nullable=False)
 
     def as_dict(self):
         base = dict({

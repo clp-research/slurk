@@ -1,11 +1,14 @@
-from logging import getLogger
 import json
 import os
 import urllib.request
 import urllib.error
 
-from . import Base
-from .. import db
+from logging import getLogger
+
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
+
+from .common import Common
 
 
 def _title(data):
@@ -184,17 +187,17 @@ def _script(data):
     return script
 
 
-class Layout(Base):
+class Layout(Common):
     __tablename__ = 'Layout'
 
-    name = db.Column(db.String, nullable=False, unique=True)
-    rooms = db.relationship("Room", backref="layout")
-    tasks = db.relationship("Task", backref="layout")
-    title = db.Column(db.String)
-    subtitle = db.Column(db.String)
-    html = db.Column(db.String)
-    css = db.Column(db.String)
-    script = db.Column(db.String)
+    name = Column(String, nullable=False, unique=True)
+    rooms = relationship("Room", backref="layout")
+    tasks = relationship("Task", backref="layout")
+    title = Column(String)
+    subtitle = Column(String)
+    html = Column(String)
+    css = Column(String)
+    script = Column(String)
 
     def as_dict(self):
         return dict({

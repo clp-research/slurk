@@ -1,7 +1,7 @@
 from flask_login import current_user
 from flask_socketio import join_room, leave_room
 
-from .. import socketio, db
+from .. import socketio
 
 from ..models.room import Room
 from ..models.user import User

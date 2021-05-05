@@ -1,17 +1,15 @@
 import bson
 from logging import getLogger
 
-from ..models.room import Room
-from ..models.user import User
+from flask import current_app
 
+from ..models import Room, User, Log
 from .. import socketio
 
 from flask_login import login_required, current_user
 
 
 def log_event(event, user, room=None, data=None):
-    from .. import db, Log
-
     if not data:
         data = {}
 
@@ -25,8 +23,10 @@ def log_event(event, user, room=None, data=None):
         getLogger("slurk").info('%s disconnected', user.name)
 
     log = Log(event=event, user=user, room=room, data=bson.dumps(data))
-    db.session.add(log)
-    db.session.commit()
+
+    db = current_app.session
+    db.add(log)
+    db.commit()
     return log
 
 @socketio.on('log')
