@@ -7,6 +7,12 @@ env:
 
 jobs:
   include:
+  - stage: test
+    name: Test
+    language: python
+    python: 3.9
+    install: pip install -r requirements.txt
+    script: python -m pytest tests/
   - stage: deploy
     name: Docker
     language: ruby
@@ -24,7 +30,7 @@ jobs:
   - stage: deploy
     name: Documentation
     language: python
-    python: 3.7
+    python: 3.9
     install: pip install sphinx sphinx_rtd_theme
     script: (cd docs && make html)
     after_success: touch docs/_build/html/.nojekyll
