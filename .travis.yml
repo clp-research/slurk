@@ -12,7 +12,7 @@ jobs:
     language: python
     python: 3.9
     install: pip install autopep8
-    script: autopep8 --exit-code . || git --no-pager diff .
+    script: autopep8 --exit-code . || (git --no-pager diff .; exit 1)
   - stage: deploy
     name: Docker
     language: ruby
