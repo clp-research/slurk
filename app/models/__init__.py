@@ -45,9 +45,13 @@ class Model:
 
     def generate_admin_token(self, token=None, api_token=True):
         token_id = None
-        room = Room(name='admin_room',
+        if not api_token:
+            room = Room(name='admin_room',
                     label='Admin Room',
-                    layout=Layout.from_json_file('default')) if not api_token else None
+                    layout=Layout.from_json_file('default'))
+        else:
+            room = None
+
         with self.create_session() as session:
             token_data = Token(
                 id=token,
@@ -112,7 +116,7 @@ class Model:
                 Permissions.token_update
             )
             if tokens.count() == 0:
-                return self.generate_admin_token(api_token=False)
+                return self.generate_admin_token()
             else:
                 return tokens[0]
 

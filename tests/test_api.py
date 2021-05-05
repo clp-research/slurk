@@ -6,7 +6,7 @@ from app.models import Token
 from logging import getLogger
 
 
-def test_tokens(client, app):
+def test_get_tokens(client):
     # TODO(TimDiekmann): Add tests for different permissions
     rv = client.post('/api/v2/token', json=dict(room=None))
     custom_token = rv.get_json()
@@ -17,7 +17,7 @@ def test_tokens(client, app):
     assert str(custom_token) in json_data
 
 
-def test_get_token(client, app):
+def test_get_token(client):
     rv = client.post('/api/v2/token', json=dict(room=None))
     custom_token = rv.get_json()
 

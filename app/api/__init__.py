@@ -141,12 +141,10 @@ def get_token(id):
 @auth.login_required
 def post_token():
     from logging import getLogger
-    getLogger("slurk").info("post_token")
     if not g.current_permissions.token_generate:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     data = request.get_json(force=True) if request.is_json else None
-    getLogger("slurk").info(f"data: {data}")
     if not data:
         return make_response(jsonify({'error': 'bad request'}, 400))
 
