@@ -1,6 +1,7 @@
 import os
 import logging
 
+
 def environ_as_boolean(env, default):
     var = os.environ.get(env)
     if var is None:
@@ -26,4 +27,5 @@ if DEBUG:
 SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
 DATABASE = os.environ.get("DATABASE", default=None)
 if DATABASE == 'sqlite:///' or DATABASE == 'sqlite:///:memory:':
-    logging.getLogger("slurk").error("Using the memory as database is not supported. Pass an URI with `DATABASE` as environment variable or define it in `config.py`.")
+    logging.getLogger("slurk").error(
+        "Using the memory as database is not supported. Pass an URI with `DATABASE` as environment variable or define it in `config.py`.")

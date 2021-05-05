@@ -25,7 +25,7 @@
 # @pytest.fixture
 # def token(app):
 #     from slurk.models import Token, Permissions, Room, Layout
-    
+
 #     db = app.session
 #     print(db.query(Layout).all())
 #     token = Token(
@@ -62,7 +62,6 @@
 
 # def test_login(app, client, token):
 #     pass
-    
 
 
 # def test_(app):

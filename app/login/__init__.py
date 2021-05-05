@@ -27,10 +27,7 @@ def load_user_from_request(request):
 
     db = current_app.session
     if token_id:
-        try:
-            token = db.query(Token).get(token_id)
-        except:
-            return None
+        token = db.query(Token).get(token_id)
     if not token:
         token_id = request.args.get('token')
         if token_id:

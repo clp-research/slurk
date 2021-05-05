@@ -3,7 +3,6 @@ import logging
 from logging import getLogger
 
 from flask import Flask, request, flash, make_response, jsonify, _app_ctx_stack
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_socketio import SocketIO
 
@@ -16,6 +15,7 @@ logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
 socketio = SocketIO(ping_interval=5, ping_timeout=120, async_mode="gevent")
 login_manager = LoginManager()
 model = Model()
+
 
 def create_app(test_config=None, engine=None):
     app = Flask(__name__)
@@ -48,7 +48,6 @@ def create_app(test_config=None, engine=None):
 
         socketio.init_app(app)
 
-
     @app.before_request
     def before_request():
         print("Before request", request.endpoint)
@@ -60,43 +59,3 @@ def create_app(test_config=None, engine=None):
                 return login_manager.unauthorized()
 
     return app
-
-
-
-# if not Room.query.get("admin_room"):
-#     db.session.add(Room(name="admin_room",
-#                         label="Admin Room",
-#                         layout=Layout.from_json_file("default"),
-#                         static=True))
-#     db.session.add(Token(room_name='admin_room',
-#                          id='00000000-0000-0000-0000-000000000000' if settings.debug else None,
-#                          permissions=Permissions(
-#                              user_query=True,
-#                              user_log_event=True,
-#                              user_room_join=True,
-#                              user_room_leave=True,
-#                              message_text=True,
-#                              message_image=True,
-#                              message_command=True,
-#                              message_broadcast=True,
-#                              room_query=True,
-#                              room_log_query=True,
-#                              room_create=True,
-#                              room_update=True,
-#                              room_delete=True,
-#                              layout_query=True,
-#                              layout_create=True,
-#                              layout_update=True,
-#                              task_create=True,
-#                              task_query=True,
-#                              task_update=True,
-#                              token_generate=True,
-#                              token_query=True,
-#                              token_invalidate=True,
-#                              token_update=True,
-#                          )))
-#     db.session.commit()
-#     getLogger("slurk").info("generating admin room and token...")
-# print("admin token:")
-# print(Token.query.order_by(Token.date_created).first().id)
-# sys.stdout.flush()

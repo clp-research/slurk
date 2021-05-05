@@ -13,6 +13,7 @@ from .task import Task
 from .token import Token
 from .user import User
 
+
 class Model:
     _engine = None
     _session = sessionmaker()
@@ -86,35 +87,34 @@ class Model:
     def admin_token(self, default=None):
         with self.create_session() as session:
             tokens = session.query(Token).join(Permissions).filter(
-                    Permissions.user_query==True,
-                    Permissions.user_log_event==True,
-                    Permissions.user_room_join==True,
-                    Permissions.user_room_leave==True,
-                    Permissions.message_text==True,
-                    Permissions.message_image==True,
-                    Permissions.message_command==True,
-                    Permissions.message_broadcast==True,
-                    Permissions.room_query==True,
-                    Permissions.room_log_query==True,
-                    Permissions.room_create==True,
-                    Permissions.room_update==True,
-                    Permissions.room_delete==True,
-                    Permissions.layout_query==True,
-                    Permissions.layout_create==True,
-                    Permissions.layout_update==True,
-                    Permissions.task_create==True,
-                    Permissions.task_query==True,
-                    Permissions.task_update==True,
-                    Permissions.token_generate==True,
-                    Permissions.token_query==True,
-                    Permissions.token_invalidate==True,
-                    Permissions.token_update==True
-                )
+                Permissions.user_query,
+                Permissions.user_log_event,
+                Permissions.user_room_join,
+                Permissions.user_room_leave,
+                Permissions.message_text,
+                Permissions.message_image,
+                Permissions.message_command,
+                Permissions.message_broadcast,
+                Permissions.room_query,
+                Permissions.room_log_query,
+                Permissions.room_create,
+                Permissions.room_update,
+                Permissions.room_delete,
+                Permissions.layout_query,
+                Permissions.layout_create,
+                Permissions.layout_update,
+                Permissions.task_create,
+                Permissions.task_query,
+                Permissions.task_update,
+                Permissions.token_generate,
+                Permissions.token_query,
+                Permissions.token_invalidate,
+                Permissions.token_update
+            )
             if tokens.count() == 0:
                 return self.generate_admin_token(api_token=False)
             else:
                 return tokens[0]
-
 
     def init_app(self, app):
         from flask import _app_ctx_stack, current_app
