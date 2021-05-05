@@ -154,7 +154,7 @@ def _parse_trigger(trigger, script_file):
     try:
         with urllib.request.urlopen(script_file) as url:
             script += _create_script(trigger, url.read().decode("utf-8")) + "\n\n\n"
-    except:
+    except BaseException:
         pass
 
     plugin_path = \
@@ -237,7 +237,7 @@ class Layout(Base):
             with urllib.request.urlopen(name) as url:
                 getLogger("slurk").info("loading layout from %s", url)
                 return cls.from_json_data(name, json.loads(url.read().decode()))
-        except:
+        except BaseException:
             pass
 
         layout_path = \

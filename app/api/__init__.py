@@ -42,7 +42,7 @@ def get_layouts():
     if not g.current_permissions.layout_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/layout/"+str(layout.id), **layout.as_dict()) for layout in Layout.query.all()])
+    return jsonify([dict(uri="/layout/" + str(layout.id), **layout.as_dict()) for layout in Layout.query.all()])
 
 
 @api.route('/layout/<int:id>', methods=['GET'])
@@ -121,7 +121,7 @@ def get_tokens():
     if not g.current_permissions.token_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/token/"+str(token.id), **token.as_dict()) for token in Token.query.all()])
+    return jsonify([dict(uri="/token/" + str(token.id), **token.as_dict()) for token in Token.query.all()])
 
 
 @api.route('/token/<string:id>', methods=['GET'])
@@ -217,7 +217,7 @@ def invalidate_token(id):
 @api.route('/users', methods=['GET'])
 @auth.login_required
 def get_users():
-    return jsonify([dict(uri="/users/"+str(user.id), **user.as_dict()) for user in User.query.all()])
+    return jsonify([dict(uri="/users/" + str(user.id), **user.as_dict()) for user in User.query.all()])
 
 
 @api.route('/user/<int:id>', methods=['GET'])
@@ -238,7 +238,7 @@ def get_tasks():
     if not g.current_permissions.task_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/task/"+str(task.id), **task.as_dict()) for task in Task.query.all()])
+    return jsonify([dict(uri="/task/" + str(task.id), **task.as_dict()) for task in Task.query.all()])
 
 
 @api.route('/task/<int:id>', methods=['GET'])
@@ -335,7 +335,7 @@ def get_rooms():
     if not g.current_permissions.room_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/room/"+room.name, **room.as_dict()) for room in Room.query.all()])
+    return jsonify([dict(uri="/room/" + room.name, **room.as_dict()) for room in Room.query.all()])
 
 
 @api.route('/room/<string:name>', methods=['GET'])
@@ -355,7 +355,8 @@ def get_room(name):
 @auth.login_required
 def get_room_layout(name):
     room = Room.query.get(name)
-    if room not in g.current_user.current_rooms and (not g.current_permissions.room_query or not g.current_permissions.layout_query):
+    if room not in g.current_user.current_rooms and (
+            not g.current_permissions.room_query or not g.current_permissions.layout_query):
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     if room:

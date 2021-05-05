@@ -18,9 +18,15 @@ class Base(db.Model):
         }
 
 
-user_room = db.Table('User_Room', Base.metadata,
-                     db.Column('user_id', db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"), primary_key=True),
-                     db.Column('room_name', db.String, db.ForeignKey('Room.name', ondelete="CASCADE"), primary_key=True))
-current_user_room = db.Table('User_Room_current', Base.metadata,
-                             db.Column('user_id', db.Integer, db.ForeignKey('User.id', ondelete="CASCADE"), primary_key=True),
-                             db.Column('room_name', db.String, db.ForeignKey('Room.name', ondelete="CASCADE"), primary_key=True))
+user_room = db.Table(
+    'User_Room', Base.metadata, db.Column(
+        'user_id', db.Integer, db.ForeignKey(
+            'User.id', ondelete="CASCADE"), primary_key=True), db.Column(
+                'room_name', db.String, db.ForeignKey(
+                    'Room.name', ondelete="CASCADE"), primary_key=True))
+current_user_room = db.Table(
+    'User_Room_current', Base.metadata, db.Column(
+        'user_id', db.Integer, db.ForeignKey(
+            'User.id', ondelete="CASCADE"), primary_key=True), db.Column(
+                'room_name', db.String, db.ForeignKey(
+                    'Room.name', ondelete="CASCADE"), primary_key=True))

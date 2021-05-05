@@ -31,8 +31,10 @@ class PatchedHTMLTranslator(HTMLTranslator):
             node['target'] = '_blank'
         super().visit_reference(node)
 
+
 def setup(app):
     app.set_translator('html', PatchedHTMLTranslator)
+
 
 def get_version():
     """
@@ -57,7 +59,7 @@ def get_version():
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.viewcode']
+              'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -122,7 +124,6 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_build/html/_static']
-
 
 
 # -- Options for HTMLHelp output ------------------------------------------

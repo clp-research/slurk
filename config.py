@@ -1,6 +1,7 @@
 import os
 import logging
 
+
 def environ_as_boolean(env, default=False):
     var = os.environ.get(env)
     if var is None:

@@ -53,7 +53,7 @@ def load_user_from_request(request):
     if token_id:
         try:
             token = Token.query.get(token_id)
-        except:
+        except BaseException:
             return None
     if not token:
         token_id = request.args.get('token')

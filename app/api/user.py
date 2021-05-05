@@ -35,7 +35,7 @@ def _join_room(data):
         user.current_rooms.append(room)
         socketio.emit('joined_room', {
             'room': room.name,
-            'user':  user.id,
+            'user': user.id,
         }, room=user.session_id)
         log_event("join", user, room)
     db.session.commit()

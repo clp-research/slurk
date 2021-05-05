@@ -62,4 +62,3 @@ def disconnect():
     db.session.commit()
     log_event("disconnect", current_user)
     logout_user()
-
