@@ -15,9 +15,11 @@ def abort(ex):
     from flask import abort
     abort(make_response({'error': ex.description}, ex.code))
 
+
 @api.errorhandler(Exception)
 def handle_exception(ex):
     abort(BadRequest(str(ex)))
+
 
 @auth.error_handler
 def unauthorized():
@@ -142,7 +144,7 @@ def get_token(id):
         abort(Forbidden)
 
     db = current_app.session
-    
+
     token = db.query(Token).get(id)
     if token:
         return make_response(token.as_dict())

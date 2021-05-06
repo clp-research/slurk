@@ -1,5 +1,6 @@
 from .. import *
 
+
 def test_post(client):
     # Authorization token is overridden, we don't login with a valid token
     response = client.post('/api/v2/token', headers={'Authorization': ''})
@@ -60,7 +61,6 @@ def test_defaults(client):
     assert not token['permissions']['token']['update']
 
 
-
 def test_invalidation(client):
     response = client.post('/api/v2/token')
     assert response.status_code == 200, response.json['error']
@@ -101,6 +101,7 @@ def test_room(client):
 
     # assert room.name == token['room']
 
+
 # TODO(TimDiekmann): Create a task and test if it's properly assigned
 def test_room(client):
     pass
@@ -113,6 +114,7 @@ def test_room(client):
     # token = response.json
 
     # assert task.id == token['task']
+
 
 def test_get(client):
     response = client.post('/api/v2/token')
@@ -130,6 +132,7 @@ def test_get(client):
 
     # TODO(TimDiekmann): Test different get commands
     pass
+
 
 def test_gets(client):
     response = client.post('/api/v2/token')
