@@ -5,12 +5,12 @@ from flask_login import login_user
 
 from sqlalchemy.exc import StatementError
 
-login = Blueprint('login', __name__, url_prefix="/login")
-
 from .. import login_manager
 from ..models import User, Token
 from .forms import LoginForm
 from .events import *
+
+login = Blueprint('login', __name__, url_prefix="/login")
 
 
 @login_manager.user_loader
@@ -21,29 +21,27 @@ def load_user(id):
 
 @login_manager.request_loader
 def load_user_from_request(request):
-    token = None
-    token_id = request.headers.get('Authorization')
+    token_id = request.headers.get('Authorization') or request.args.get('token')
+    if not token_id:
+        return None
+
     getLogger("slurk").debug(f"loading user from token {token_id}")
 
     db = current_app.session
-    if token_id:
-        token = db.query(Token).get(token_id)
-    if not token:
-        token_id = request.args.get('token')
-        if token_id:
-            token = db.query(Token).get(token_id)
+    token = db.query(Token).filter_by(valid=True).filter(Token.room).one()
 
-    if token and token.valid and token.room:
-        if not token.user:
-            name = request.headers.get('name')
-            if not name:
-                name = request.args.get('name')
-            if not name:
-                name = "<unnamed>"
-            token.user = User(name=name, rooms=[token.room])
-            db.commit()
-        return token.user
-    return None
+    if not token:
+        return None
+
+    if not token.user:
+        name = request.headers.get('name')
+        if not name:
+            name = request.args.get('name')
+        if not name:
+            name = "<unnamed>"
+        token.user = User(name=name, rooms=[token.room])
+        db.commit()
+    return token.user
 
 
 @login.route('/', methods=['GET', 'POST'])

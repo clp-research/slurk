@@ -2,11 +2,10 @@ import bson
 from logging import getLogger
 
 from flask import current_app
+from flask_login import login_required, current_user
 
 from ..models import Room, User, Log
 from .. import socketio
-
-from flask_login import login_required, current_user
 
 
 def log_event(event, user, room=None, data=None):

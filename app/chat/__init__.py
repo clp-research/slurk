@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app
 from flask_login import login_required, current_user
 
-chat = Blueprint('chat', __name__)
-
-from .message import *
-from .connection import *
 from ..api import *
+from .connection import *
+from .message import *
+
+chat = Blueprint('chat', __name__)
 
 
 @chat.route('/', methods=['GET', 'POST'])

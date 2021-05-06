@@ -3,6 +3,7 @@ from uuid import uuid4
 from sqlalchemy_utils.types.uuid import UUIDType
 from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship
+
 from .common import Common
 
 

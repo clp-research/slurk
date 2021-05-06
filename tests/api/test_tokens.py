@@ -1,6 +1,6 @@
 import json
 
-from . import *
+from .. import *
 from app.models import Token
 
 from logging import getLogger

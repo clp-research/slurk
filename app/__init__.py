@@ -50,7 +50,6 @@ def create_app(test_config=None, engine=None):
 
     @app.before_request
     def before_request():
-        print("Before request", request.endpoint)
         if request.endpoint and request.endpoint.startswith("api."):
             return
 

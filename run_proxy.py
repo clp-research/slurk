@@ -2,9 +2,9 @@ import os
 from gevent import monkey
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-monkey.patch_all(subprocess=True)
+monkey.patch_all(subprocess=True)    # NOQA
 
-from app import app, socketio
+from app import create_app, socketio
 
 if __name__ == '__main__':
     host = os.environ.get('HOST', '0.0.0.0')
@@ -12,5 +12,12 @@ if __name__ == '__main__':
 
     app = ProxyFix(app, x_for=1, x_prefix=1)
 
-    socketio.run(app, host, port,
-                 extra_files=["app/templates", "app/static/js", "app/static/css", "app/static/layouts"])
+    socketio.run(
+        app,
+        host,
+        port,
+        extra_files=[
+            "app/templates",
+            "app/static/js",
+            "app/static/css",
+            "app/static/layouts"])

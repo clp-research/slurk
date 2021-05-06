@@ -12,7 +12,6 @@ api = Blueprint('api', __name__, url_prefix="/api/v2/")
 
 @auth.error_handler
 def unauthorized():
-    print("unauthorized")
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 
@@ -36,7 +35,7 @@ def get_layouts():
     if not g.current_permissions.layout_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri=f'/layout/{layout.id}', **layout.as_dict()) for layout in Layout.query.all()])
+    return jsonify([dict(uri=f'/layout/{layout.id}', **layout.as_dict()) for layout in current_app.session.query(Layout).all()])
 
 
 @api.route('/layout/<int:id>', methods=['GET'])
@@ -120,7 +119,7 @@ def get_tokens():
 
     db = current_app.session
     return jsonify({str(token.id): dict(uri=f'/token/{token.id}', **token.as_dict())
-                   for token in db.query(Token).all()})
+                    for token in db.query(Token).all()})
 
 
 @api.route('/token/<string:id>', methods=['GET'])
@@ -344,20 +343,18 @@ def get_rooms():
     if not g.current_permissions.room_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    db = current_app.session
-    return jsonify([dict(uri=f'/room/{room.name}', **room.as_dict()) for room in db.query(Room).all()])
+    return jsonify([dict(uri='/rooms', **room.as_dict()) for room in current_app.session.query(Room).all()])
 
 
 @api.route('/room/<string:name>', methods=['GET'])
 @auth.login_required
 def get_room(name):
-    db = current_app.session
-    room = db.query(Room).get(name)
-    if room not in g.current_user.current_rooms and not g.current_permissions.room_query:
+    if room not in g.current_user.rooms and not g.current_permissions.room_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
+    room = current_app.session.query(Room).get(name)
     if room:
-        return jsonify(room.as_dict())
+        return jsonify(dict(uri=f'/room/{room.name}', **room.as_dict()))
     else:
         return make_response(jsonify({'error': 'room not found'}), 404)
 

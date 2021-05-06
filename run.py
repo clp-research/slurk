@@ -1,7 +1,7 @@
 import os
 from gevent import monkey
 
-monkey.patch_all(subprocess=True)
+monkey.patch_all(subprocess=True)  # NOQA
 
 from app import create_app, socketio
 

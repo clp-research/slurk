@@ -28,5 +28,4 @@ class Room(Base):
             'show_latency': self.show_latency,
             'static': self.static,
             'users': {user.id: user.name for user in self.users},
-            'current_users': {user.id: user.name for user in self.current_users},
         }

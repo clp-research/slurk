@@ -3,7 +3,7 @@ from logging import getLogger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-Base = declarative_base()
+Base = declarative_base()   # NOQA
 
 from .layout import Layout
 from .log import Log
@@ -30,7 +30,7 @@ class Model:
         return self._engine
 
     def create_session(self):
-        getLogger('slurk').debug("Creating new database session")
+        getLogger('slurk').debug("Created database session")
         return self._session()
 
     def bind(self, engine):
@@ -47,8 +47,8 @@ class Model:
         token_id = None
         if not api_token:
             room = Room(name='admin_room',
-                    label='Admin Room',
-                    layout=Layout.from_json_file('default'))
+                        label='Admin Room',
+                        layout=Layout.from_json_file('default'))
         else:
             room = None
 
@@ -115,38 +115,30 @@ class Model:
                 Permissions.token_invalidate,
                 Permissions.token_update
             )
-            if tokens.count() == 0:
-                return self.generate_admin_token()
-            else:
-                return tokens[0]
+            return tokens[0] if tokens.count() > 0 else self.generate_admin_token()
 
     def init_app(self, app):
         from flask import _app_ctx_stack, current_app
         from sqlalchemy import create_engine
         from sqlalchemy.orm import scoped_session
 
-        with app.app_context():
-            @app.teardown_appcontext
-            def cleanup(resp_or_exc):
-                if current_app.session:
-                    getLogger('slurk').debug("Closing session")
-                    current_app.session.remove()
-                else:
-                    getLogger('slurk').debug("Attempting to close session but none exist")
+        if not self.engine:
+            self.bind(engine=create_engine(current_app.config['DATABASE']))
 
-            if not self.engine:
-                self.bind(engine=create_engine(current_app.config['DATABASE']))
+        app.session = scoped_session(lambda: self.create_session(), scopefunc=_app_ctx_stack.__ident_func__)
 
-            app.session = scoped_session(
-                lambda: self.create_session(), scopefunc=_app_ctx_stack.__ident_func__)
+        self.init()
 
-            self.init()
+        if app.config['DEBUG']:
+            admin_token = '00000000-0000-0000-0000-000000000000'
+            if not app.session.query(Token).get(admin_token):
+                self.generate_admin_token(token=admin_token, api_token=False)
+        else:
+            admin_token = self.admin_token
+        getLogger('slurk').info(f'Admin token: {admin_token}')
 
-            if current_app.config['DEBUG']:
-                admin_token = '00000000-0000-0000-0000-000000000000'
-                with self.create_session() as session:
-                    if not session.query(Token).get(admin_token):
-                        self.generate_admin_token(token=admin_token, api_token=False)
-            else:
-                admin_token = self.admin_token
-            getLogger('slurk').info(f'Admin token: {admin_token}')
+        @app.teardown_appcontext
+        def cleanup(resp_or_exc):
+            if current_app.session.is_active:
+                current_app.session.remove()
+                getLogger('slurk').debug("Closed database session")
