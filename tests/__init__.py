@@ -42,16 +42,22 @@ def client(app, admin_token):
     from flask import testing
     from werkzeug.datastructures import Headers
 
-    class TestClient(testing.FlaskClient):
+    class Client(testing.FlaskClient):
         def open(self, *args, **kwargs):
             headers = kwargs.pop('headers', Headers())
             if isinstance(headers, dict):
                 headers = Headers(headers)
-            headers.add('Authorization', f'Token {admin_token}')
+            if 'Authorization' not in headers:
+                headers.add('Authorization', f'Token {admin_token}')
             kwargs['headers'] = headers
             return super().open(*args, **kwargs)
 
-    app.test_client_class = TestClient
+    app.test_client_class = Client
+    return app.test_client()
+
+
+@pytest.fixture
+def unauthorized_client(app):
     return app.test_client()
 
 
