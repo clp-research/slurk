@@ -103,7 +103,7 @@ def test_room(client):
 
 
 # TODO(TimDiekmann): Create a task and test if it's properly assigned
-def test_room(client):
+def test_task(client):
     pass
     # response = client.post('/api/v2/task', json=dict(...))
     # assert response.status_code == 200, response.json['error']
