@@ -1,22 +1,22 @@
-from .. import db
+from sqlalchemy import Column, Boolean, String, Integer, ForeignKey, asc
+from sqlalchemy.orm import relationship
 
-from . import user_room, current_user_room
+from . import Base
+from .common import user_room
 
 
-class Room(db.Model):
+class Room(Base):
     __tablename__ = 'Room'
 
-    name = db.Column(db.String, primary_key=True)
-    label = db.Column(db.String, nullable=False)
-    layout_id = db.Column(db.Integer, db.ForeignKey("Layout.id"), nullable=False)
-    read_only = db.Column(db.Boolean, default=False, nullable=False)
-    show_users = db.Column(db.Boolean, default=True, nullable=False)
-    show_latency = db.Column(db.Boolean, default=True, nullable=False)
-    static = db.Column(db.Boolean, default=False, nullable=False)
-    tokens = db.relationship("Token", backref="room")
-    users = db.relationship("User", secondary=user_room, back_populates="rooms")
-    current_users = db.relationship("User", secondary=current_user_room, back_populates="current_rooms")
-    logs = db.relationship("Log", backref="room", order_by=db.asc("date_modified"))
+    name = Column(String, primary_key=True)
+    label = Column(String, nullable=False)
+    layout_id = Column(Integer, ForeignKey("Layout.id"), nullable=False)
+    read_only = Column(Boolean, default=False, nullable=False)
+    show_users = Column(Boolean, default=True, nullable=False)
+    show_latency = Column(Boolean, default=True, nullable=False)
+    static = Column(Boolean, default=False, nullable=False)
+    users = relationship("User", secondary=user_room, back_populates="rooms")
+    logs = relationship("Log", backref="room", order_by=asc("date_modified"))
 
     def as_dict(self):
         return {
@@ -28,5 +28,4 @@ class Room(db.Model):
             'show_latency': self.show_latency,
             'static': self.static,
             'users': {user.id: user.name for user in self.users},
-            'current_users': {user.id: user.name for user in self.current_users},
         }

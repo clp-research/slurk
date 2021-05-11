@@ -7,7 +7,6 @@ from flask_login import login_required, current_user
 from .. import socketio
 from ..models.user import User
 from ..models.room import Room
-
 from ..api.log import log_event
 
 

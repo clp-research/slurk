@@ -1,11 +1,10 @@
 from flask_socketio import emit
 from flask_login import current_user
 
+from .. import socketio
 from ..models.room import Room
 from ..models.user import User
 from ..api.log import log_event
-
-from .. import socketio
 
 
 @socketio.on('room_created')
