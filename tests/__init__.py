@@ -55,48 +55,6 @@ def client(app, admin_token):
     app.test_client_class = Client
     return app.test_client()
 
-
-@pytest.fixture
-def unauthorized_client(app):
-    return app.test_client()
-
-
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
-
-
-@pytest.fixture(autouse=True)
-def environment():
-    old_environ = dict(os.environ)
-    os.environ.clear()
-    database_file = tempfile.NamedTemporaryFile()
-    os.environ.update({
-        'SECRET_KEY': 'test',
-        'DATABASE': f'sqlite:///{database_file.name}.db'
-    })
-
-    yield
-
-    os.environ.clear()
-    os.environ.update(old_environ)
-
-
-# @pytest.fixture
-# def token(app):
-#     from app.models import Token, Permissions, Room, Layout
-
-#     db = app.session
-#     print(db.query(Layout).all())
-#     token = Token(
-#         id='00000000-0000-0000-0000-000000000000',
-#         permissions=Permissions(
-#             token_query=True,
-#         ),
-#         room=Room(
-#             name="test_room",
-#             label="Test Room",
-#             layout=Layout.from_json_file("default"),
-#             static=True))
-#     db.add(token)
-#     db.commit()
