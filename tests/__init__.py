@@ -55,6 +55,7 @@ def client(app, admin_token):
     app.test_client_class = Client
     return app.test_client()
 
+
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
