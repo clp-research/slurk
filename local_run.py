@@ -8,7 +8,7 @@ from app import create_app, socketio
 os.environ["SECRET_KEY"] = "TEST"
 os.environ["DEBUG"] = "True"
 basedir = os.path.abspath(os.path.dirname(__file__))
-os.environ["DATABASE"] = f"sqlite:///{os.path.join(basedir, 'app.sqlite')}"
+os.environ["DATABASE"] = f"sqlite:///{os.path.join(basedir, 'slurk.db')}"
 
 if __name__ == '__main__':
     host = os.environ.get('HOST', '0.0.0.0')
