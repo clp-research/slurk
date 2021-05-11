@@ -1,8 +1,7 @@
 from flask_login import current_user
 from flask_socketio import join_room, leave_room
 
-from .. import socketio, db
-
+from .. import socketio
 from ..models.room import Room
 from ..models.user import User
 from ..api.log import log_event
@@ -31,11 +30,9 @@ def _join_room(data):
 
     if room not in user.rooms:
         user.rooms.append(room)
-    if room not in user.current_rooms:
-        user.current_rooms.append(room)
         socketio.emit('joined_room', {
             'room': room.name,
-            'user':  user.id,
+            'user': user.id,
         }, room=user.session_id)
         log_event("join", user, room)
     db.session.commit()
@@ -67,8 +64,6 @@ def _leave_room(data):
         return False, "room does not exist"
 
     user.rooms.remove(room)
-    if room in user.current_rooms:
-        user.current_rooms.remove(room)
     socketio.emit('left_room', room.name, room=user.session_id)
     log_event("leave", user, room)
     db.session.commit()

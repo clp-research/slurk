@@ -1,0 +1,12 @@
+[tool.autopep8]
+max_line_length = 120
+in-place = true
+recursive = true
+aggressive = 3
+
+[tool.pytest.ini_options]
+log_cli = 1
+log_cli_level = "WARN"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+testpaths = "tests/"

@@ -1,22 +1,23 @@
 from uuid import uuid4
 
 from sqlalchemy_utils.types.uuid import UUIDType
+from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
+from sqlalchemy.orm import relationship
 
-from .. import db
-
-from . import Base
+from .common import Common
 
 
-class Token(Base):
+class Token(Common):
     __tablename__ = "Token"
 
-    id = db.Column(UUIDType(binary=False), default=uuid4, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    task_id = db.Column(db.Integer, db.ForeignKey('Task.id'))
-    room_name = db.Column(db.String, db.ForeignKey('Room.name'), nullable=False)
-    permissions_id = db.Column(db.Integer, db.ForeignKey("Permissions.id"), nullable=False)
-    source = db.Column(db.String)
-    valid = db.Column(db.Boolean, default=True, nullable=False)
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid4)
+    user_id = Column(Integer, ForeignKey('User.id'))
+    task_id = Column(Integer, ForeignKey('Task.id'))
+    room_name = Column(String, ForeignKey('Room.name'))
+    room = relationship('Room', lazy='subquery')
+    permissions_id = Column(Integer, ForeignKey("Permissions.id"), nullable=False)
+    source = Column(String)
+    valid = Column(Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return str(self.id)

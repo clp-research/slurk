@@ -7,7 +7,6 @@ from flask_login import login_required, current_user
 from .. import socketio
 from ..models.user import User
 from ..models.room import Room
-
 from ..api.log import log_event
 
 
@@ -36,7 +35,7 @@ def keypress(message):
 def typed_message(payload):
     """
     This function handles live-typing mode. It is called when 'typed_message'
-    event is fired and broadcasts the current message that the user typed to 
+    event is fired and broadcasts the current message that the user typed to
     the room through 'user_message' event.
     """
     current_user_id = current_user.get_id()
@@ -45,8 +44,8 @@ def typed_message(payload):
 
     for room in current_user.rooms:
         user = {
-             'id': current_user_id,
-             'name': current_user.name,
+            'id': current_user_id,
+            'name': current_user.name,
         }
         emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
 
@@ -151,7 +150,7 @@ def message_command(payload):
         'private': private,
     }, room=receiver, broadcast=broadcast)
     log_event("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
-        payload['command']})
+                                                   payload['command']})
     for room in current_user.rooms:
         emit('stop_typing', {'user': user}, room=room.name)
     return True
