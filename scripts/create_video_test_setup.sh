@@ -35,8 +35,7 @@ function shutdown {
 
 function build_docker {
     errcho 'Building docker image... '
-    docker build -t slurk/server -f docker/slurk/Dockerfile .
-    errcho 'done'
+    docker build -t slurk/server_local -f docker/slurk/Dockerfile_local .
 }
 
 function start_server {
@@ -44,7 +43,15 @@ function start_server {
     docker kill slurky 2> /dev/null | true
     docker rm slurky 2> /dev/null | true
 
-    SLURK_SERVER_ID=$(docker run --name=slurky -p $PORT:5000 -e DEBUG=$DEBUG -e SECRET_KEY=$RANDOM -v $DATABASE:/slurk.db -e DATABASE=sqlite:////slurk.db -d slurk/server)
+    SLURK_SERVER_ID=$(docker run -d \
+                          --name=slurky \
+                          -p $PORT:5000 \
+                          -e DEBUG=$DEBUG \
+                          -e SECRET_KEY=$RANDOM \
+                          -v "$(pwd):/app:ro" \
+                          -v "$(pwd)/slurk.db:/slurk.db" \
+                          -e DATABASE=sqlite:////slurk.db \
+                          slurk/server_local)
     errcho 'done'
 }
 

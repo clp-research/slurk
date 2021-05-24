@@ -1,0 +1,10 @@
+FROM python:3.9
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY requirements.txt /app
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+ENTRYPOINT ["gunicorn", "-w", "1", "-b", ":5000", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "run:app"]
