@@ -43,15 +43,15 @@ function start_server {
     docker kill slurky 2> /dev/null | true
     docker rm slurky 2> /dev/null | true
 
-    SLURK_SERVER_ID=$(docker run -d \
-                          --name=slurky \
-                          -p $PORT:5000 \
-                          -e DEBUG=$DEBUG \
-                          -e SECRET_KEY=$RANDOM \
-                          -v "$(pwd):/app:ro" \
-                          -v "$(pwd)/slurk.db:/slurk.db" \
-                          -e DATABASE=sqlite:////slurk.db \
-                          slurk/server_local)
+    docker run -d \
+        --name=slurky \
+        -p $PORT:5000 \
+        -e DEBUG=$DEBUG \
+        -e SECRET_KEY=$RANDOM \
+        -v "$(pwd):/app:ro" \
+        -v "$(pwd)/slurk.db:/slurk.db" \
+        -e DATABASE=sqlite:////slurk.db \
+        slurk/server_local > /dev/null
     errcho 'done'
 }
 
@@ -171,3 +171,5 @@ errcho "$TOKEN_2"
 
 #brave "http://localhost/login/?next=%2F&name=TOKEN1&token=$TOKEN_1"
 #firefox "http://localhost/login/?next=%2F&name=TOKEN2&token=$TOKEN_2"
+
+docker container attach slurky
