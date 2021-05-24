@@ -1,4 +1,4 @@
-from flask_socketio import emit
+from flask.globals import current_app
 from flask_login import current_user
 
 from .. import socketio
@@ -15,8 +15,9 @@ def room_created(data):
     if 'task' in data:
         users = []
         if 'users' in data:
+            db = current_app.session
             for user in data['users']:
-                user = User.query.get(user)
+                user = db.query(User).get(user)
                 if user:
                     users.append({'id': user.id, 'name': user.name})
         emit('new_task_room', {'room': data['room'], 'task': data['task'], 'users': users}, broadcast=True)
@@ -39,7 +40,8 @@ def set_attribute(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
+    db = current_app.session
+    sender = current_user if 'sender_id' not in data else db.query(User).get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -50,14 +52,14 @@ def set_attribute(data):
     if 'value' not in data:
         return False, "`set_attribute` requires `value`"
     if 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
     else:
         return False, "`set_attribute` requires a `room`"
     if 'receiver_id' in data:
-        receiver = User.query.get(data['receiver_id'])
+        receiver = db.query(User).get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
@@ -70,7 +72,7 @@ def set_attribute(data):
         'value': data['value']
     })
 
-    emit('attribute_update', {
+    socketio.emit('attribute_update', {
         'user': sender.id,
         'id': data.get('id'),
         'class': data.get('class'),
@@ -94,7 +96,8 @@ def set_text(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
+    db = current_app.session
+    sender = current_user if 'sender_id' not in data else db.query(User).get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -103,14 +106,14 @@ def set_text(data):
     if 'text' not in data:
         return False, "`set_text` requires `text`"
     if 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
     else:
         return False, "`set_text` requires `room` or `receiver_id`"
     if 'receiver_id' in data:
-        receiver = User.query.get(data['receiver_id'])
+        receiver = db.query(User).get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
@@ -120,7 +123,7 @@ def set_text(data):
         'text': data['text']
     })
 
-    emit('text_update', {
+    socketio.emit('text_update', {
         'user': sender.id,
         'id': data.get('id'),
         'text': data['text'],
@@ -141,7 +144,8 @@ def add_class(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
+    db = current_app.session
+    sender = current_user if 'sender_id' not in data else db.query(User).get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -150,12 +154,12 @@ def add_class(data):
     if 'class' not in data:
         return False, "`add_class` requires `class`"
     if 'receiver_id' in data:
-        receiver = User.query.get(data['receiver_id'])
+        receiver = db.query(User).get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
     elif 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
@@ -167,7 +171,7 @@ def add_class(data):
         'class': data['class']
     })
 
-    emit('class_add', {
+    socketio.mit('class_add', {
         'user': sender.id,
         'id': data.get('id'),
         'class': data['class'],
@@ -188,7 +192,8 @@ def remove_class(data):
         - ``sender_id`` (Optional): The sender of the message. Defaults to the current user
     """
 
-    sender = current_user if 'sender_id' not in data else User.query.get(data['sender_id'])
+    db = current_app.session
+    sender = current_user if 'sender_id' not in data else db.query(User).get(data['sender_id'])
     if not sender:
         return False, "sender not found"
 
@@ -197,12 +202,12 @@ def remove_class(data):
     if 'class' not in data:
         return False, "`remove_class` requires `class`"
     if 'receiver_id' in data:
-        receiver = User.query.get(data['receiver_id'])
+        receiver = db.query(User).get(data['receiver_id'])
         if not receiver:
             return False, "receiver not found"
         target = receiver.session_id
     elif 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return False, "room not found"
         target = room.name
@@ -214,7 +219,7 @@ def remove_class(data):
         'class': data['class']
     })
 
-    emit('class_removed', {
+    socketio.emit('class_removed', {
         'user': sender.id,
         'id': data.get('id'),
         'class': data['class'],

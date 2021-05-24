@@ -37,7 +37,8 @@ def log(data):
         return False, "sender not found"
 
     if 'room' in data:
-        room = Room.query.get(data['room'])
+        db = current_app.session
+        room = db.query(Room).get(data['room'])
         if not room:
             return False, "room not found"
 
