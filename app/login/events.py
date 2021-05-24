@@ -27,10 +27,10 @@ def connect():
             'timestamp': timegm(datetime.now().utctimetuple())
         }, room=room.name)
         socketio.emit('joined_room',
-            dict(
-                user=current_user.id,
-                room=room.name),
-            room=request.sid)
+                      dict(
+                          user=current_user.id,
+                          room=room.name),
+                      room=request.sid)
         log_event("join", current_user, room)
 
     log_event("connect", current_user)
