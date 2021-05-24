@@ -1,9 +1,11 @@
 from flask import g, make_response, jsonify, Blueprint, request, current_app
 from flask_httpauth import HTTPTokenAuth
 from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, NotFound
+from logging import getLogger
 
 from sqlalchemy.exc import StatementError, IntegrityError
 
+from .. import socketio
 from ..models import Token, Layout, Task, Permissions, Room, User
 from .log import log_event
 
@@ -238,6 +240,7 @@ def get_users():
 @auth.login_required
 def get_user(id):
     if id != g.current_user.id and not g.current_permissions.user_query:
+        getLogger('slurk').warning(f'get_user: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
     db = current_app.session
     user = db.query(User).get(id) if id != g.current_user.id else g.current_user
@@ -360,7 +363,11 @@ def get_rooms():
 @api.route('/room/<string:name>', methods=['GET'])
 @auth.login_required
 def get_room(name):
-    if room not in g.current_user.rooms and not g.current_permissions.room_query:
+    if name not in g.current_user.room_names and not g.current_permissions.room_query:
+        getLogger('slurk').warning(f'get_room: insufficient rights for user {g.current_user.id}')
+        getLogger('slurk').warning(f'room: {name}')
+        getLogger('slurk').warning(f'current_user: {g.current_user.as_dict()}')
+
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     room = current_app.session.query(Room).get(name)
@@ -375,8 +382,8 @@ def get_room(name):
 def get_room_layout(name):
     db = current_app.session
     if name not in g.current_user.room_names and (
-    if room not in g.current_user.rooms and (
             not g.current_permissions.room_query or not g.current_permissions.layout_query):
+        getLogger('slurk').warning(f'get_room_layout: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     room = db.query(Room).get(name)
@@ -494,6 +501,7 @@ def delete_rooms(name):
 @auth.login_required
 def get_room_logs(name):
     if not g.current_permissions.room_log_query:
+        getLogger('slurk').warning(f'get_room_logs: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
     db = current_app.session

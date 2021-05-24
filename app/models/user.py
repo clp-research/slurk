@@ -33,5 +33,9 @@ class User(Common):
             'session_id': self.session_id,
         }, **super(User, self).as_dict())
 
+    @property
+    def room_names(self):
+        return [str(room.name) for room in self.rooms]
+
     def get_id(self):
         return self.id
