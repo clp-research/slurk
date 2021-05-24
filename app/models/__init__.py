@@ -135,7 +135,7 @@ class Model:
                 self.generate_admin_token(token=admin_token, api_token=False)
         else:
             admin_token = self.admin_token
-        getLogger('slurk').info(f'Admin token: {admin_token}')
+        print(f"admin token:\n{admin_token}", flush=True)
 
         @app.teardown_appcontext
         def cleanup(resp_or_exc):
