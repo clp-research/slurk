@@ -374,11 +374,12 @@ def get_room(name):
 @auth.login_required
 def get_room_layout(name):
     db = current_app.session
-    room = db.query(Room).get(name)
+    if name not in g.current_user.room_names and (
     if room not in g.current_user.rooms and (
             not g.current_permissions.room_query or not g.current_permissions.layout_query):
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
+    room = db.query(Room).get(name)
     if room:
         return jsonify(room.layout.as_dict())
     else:
@@ -446,7 +447,7 @@ def put_rooms(name):
         if 'label' in data:
             room.label = data['label']
         if 'layout' in data and data['layout']:
-            layout = Layout.query.get(data['layout'])
+            layout = db.query(Layout).get(data['layout'])
             if not layout:
                 return make_response(jsonify({'error': 'layout not found'}), 404)
             room.layout = layout
@@ -482,7 +483,7 @@ def delete_rooms(name):
                 socketio.emit('left_room', room.name, room=user.session_id)
                 log_event("leave", user, room)
         socketio.close_room(room.name)
-        Room.query.filter_by(name=room.name).delete()
+        db.query(Room).filter_by(name=room.name).delete()
         db.commit()
         return jsonify({'result': True})
     except IntegrityError as e:
@@ -557,7 +558,7 @@ def post_user_logs(id):
         return make_response(jsonify({'error': 'missing parameter: `event`'}, 400))
 
     if 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return make_response(jsonify({'error': 'room not found'}), 404)
     else:
