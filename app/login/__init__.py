@@ -1,4 +1,5 @@
 from logging import getLogger
+import uuid
 
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 from flask_login import login_user
@@ -27,8 +28,15 @@ def load_user_from_request(request):
 
     getLogger("slurk").debug(f"loading user from token {token_id}")
 
+    if token_id:
+        try:
+            token_id = uuid.UUID(token_id)
+        except ValueError as e:
+            getLogger("slurk").debug(f"Invalid token: {e}")
+            token_id = None
+
     db = current_app.session
-    token = db.query(Token).filter_by(valid=True).filter(Token.room).one()
+    token = db.query(Token).filter_by(id=token_id, valid=True).filter(Token.room).one_or_none()
 
     if not token:
         return None
@@ -46,20 +54,27 @@ def load_user_from_request(request):
 
 @login.route('/', methods=['GET', 'POST'])
 def index():
-    token = request.args.get("token", None) if request.method == 'GET' else ""
-    name = request.args.get("name", None) if request.method == 'GET' else None
-
-    getLogger("slurk").debug(f"Login with token {token}")
+    token = request.args.get("token", None)
+    name = request.args.get("name", None)
 
     form = LoginForm()
     if form.validate_on_submit():
         name = form.name.data
-        token = form.token.data if form.token.data != '' else None
+        token = form.token.data
+
+    if token:
+        try:
+            token = uuid.UUID(token)
+        except ValueError as e:
+            getLogger("slurk").debug(f'Invalid token "{token}": {e}')
+            flash("The token is either expired, was already used, or isn't correct at all.", "error")
+            token = None
 
     if name and token:
         db = current_app.session
-        token = current_app.session.query(Token).get(token)
-        if token and token.valid:
+        token = db.query(Token).filter_by(id=token, valid=True).filter(Token.room).one_or_none()
+        getLogger("slurk").debug(f"Login with token {token}")
+        if token:
             if token.room:
                 if token.user is None:
                     user = User(name=name, token=token)
