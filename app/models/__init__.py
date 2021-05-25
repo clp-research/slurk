@@ -30,7 +30,6 @@ class Model:
         return self._engine
 
     def create_session(self):
-        getLogger('slurk').debug("Created database session")
         return self._session()
 
     def bind(self, engine):
@@ -141,4 +140,3 @@ class Model:
         def cleanup(resp_or_exc):
             if current_app.session.is_active:
                 current_app.session.remove()
-                getLogger('slurk').debug("Closed database session")
