@@ -67,16 +67,19 @@ function updateUsers() {
 }
 
 function headers(xhr) {
-    xhr.setRequestHeader ("Authorization", "Token " + TOKEN);
+    xhr.setRequestHeader("Authorization", "Token " + TOKEN);
 }
 
 $(document).ready(() => {
     let uri = location.protocol + '//' + document.domain + ':' + location.port + "/api/v2";
     socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-    socket.on("pong", (data) => {
-        $("#ping").text(data);
-    });
+    setInterval(() => {
+        const start = Date.now();
+        socket.volatile.emit("ping", () => {
+            $("#ping").text(Date.now() - start);
+        });
+    }, 5000);
 
     async function joined_room(data) {
         self_room = data['room'];
@@ -112,7 +115,7 @@ $(document).ready(() => {
 
     }
 
-    async function left_room(data) {}
+    async function left_room(data) { }
 
     socket.on('joined_room', joined_room);
     socket.on('left_room', left_room);
