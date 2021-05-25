@@ -1,11 +1,12 @@
 import os
 import logging
 
-def environ_as_boolean(env, default=False):
+
+def environ_as_boolean(env, default):
     var = os.environ.get(env)
     if var is None:
         return default
-    return var.lower() not in ("f", "false", "0", "no", "off")
+    return var.lower() in ("y", "ye", "yeah", "yes", "true", "1", "on")
 
 
 # Server config
@@ -21,14 +22,10 @@ if DEBUG:
     eio_logger.addFilter(NoPing())
     logging.getLogger("socketio.server").addFilter(NoPing())
     logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger("slurk").setLevel(logging.DEBUG)
 
 SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY not set for application")
-
-
-# SQLAlchemy config
-SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", default="sqlite:///:memory:")
-SQLALCHEMY_TRACK_MODIFICATIONS = environ_as_boolean("DATABASE_TRACK_MODIFICATIONS", default=False)
-SQLALCHEMY_ECHO = environ_as_boolean("DATABASE_ECHO", default=False)
-DROP_DATABASE_ON_STARTUP = environ_as_boolean("DROP_DATABASE_ON_STARTUP", default=False)
+DATABASE = os.environ.get("DATABASE", default=None)
+if DATABASE == 'sqlite:///' or DATABASE == 'sqlite:///:memory:':
+    logging.getLogger("slurk").error(
+        "Using the memory as database is not supported. Pass an URI with `DATABASE` as environment variable or define it in `config.py`.")

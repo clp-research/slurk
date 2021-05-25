@@ -1,32 +1,44 @@
-from flask import g, make_response, jsonify, Blueprint, request
+from flask import g, make_response, jsonify, Blueprint, request, current_app
 from flask_httpauth import HTTPTokenAuth
+from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, NotFound
+from logging import getLogger
 
 from sqlalchemy.exc import StatementError, IntegrityError
 
-from ..models.token import Token
-from ..models.layout import Layout
-from ..models.task import Task
-from ..models.permission import Permissions
-
-
+from .. import socketio
+from ..models import Token, Layout, Task, Permissions, Room, User
 from .log import log_event
-from .room import *
-from .user import *
-
 
 auth = HTTPTokenAuth(scheme='Token')
 api = Blueprint('api', __name__, url_prefix="/api/v2/")
 
 
+def abort(ex):
+    from flask import abort
+    abort(make_response({'error': ex.description}, ex.code))
+
+
+@api.errorhandler(Exception)
+def handle_exception(ex):
+    abort(BadRequest(str(ex)))
+
+
 @auth.error_handler
 def unauthorized():
-    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+    abort(Unauthorized)
+
+
+def get_json(request):
+    if request.data != b'' and not request.is_json:
+        abort(BadRequest(description="Data has to be passed as JSON string"))
+    return request.json or {}
 
 
 @auth.verify_token
 def verify_token(token):
+    db = current_app.session
     try:
-        token = Token.query.get(token)
+        token = db.query(Token).get(token)
     except StatementError:
         return False
     if token:
@@ -42,7 +54,8 @@ def get_layouts():
     if not g.current_permissions.layout_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/layout/"+str(layout.id), **layout.as_dict()) for layout in Layout.query.all()])
+    return jsonify([dict(uri=f'/layout/{layout.id}', **layout.as_dict())
+                    for layout in current_app.session.query(Layout).all()])
 
 
 @api.route('/layout/<int:id>', methods=['GET'])
@@ -51,7 +64,8 @@ def get_layout(id):
     if not g.current_permissions.layout_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    layout = Layout.query.get(id)
+    db = current_app.session
+    layout = db.query(Layout).get(id)
     if layout:
         return jsonify(layout.as_dict())
     else:
@@ -73,8 +87,9 @@ def post_layout():
         if not name:
             name = data.get("subtitle", "Unnamed")
         layout = Layout.from_json_data(name, data)
-        db.session.add(layout)
-        db.session.commit()
+        db = current_app.session
+        db.add(layout)
+        db.commit()
         return jsonify(layout.as_dict())
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -86,11 +101,10 @@ def put_layout(id):
     if not g.current_permissions.layout_update:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    data = request.get_json(force=True) if request.is_json else None
-    if not data:
-        return make_response(jsonify({'error': 'bad request'}, 400))
+    data = get_json(request)
 
-    layout = Layout.query.get(id)
+    db = current_app.session
+    layout = db.query(Layout).get(id)
     if not layout:
         return make_response(jsonify({'error': 'layout not found'}), 404)
 
@@ -109,7 +123,7 @@ def put_layout(id):
         layout.title = new_layout.title
 
     try:
-        db.session.commit()
+        db.commit()
         return jsonify(layout.as_dict())
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -119,20 +133,23 @@ def put_layout(id):
 @auth.login_required
 def get_tokens():
     if not g.current_permissions.token_query:
-        return make_response(jsonify({'error': 'insufficient rights'}), 403)
+        abort(Forbidden)
 
-    return jsonify([dict(uri="/token/"+str(token.id), **token.as_dict()) for token in Token.query.all()])
+    db = current_app.session
+    return jsonify({str(token.id): token.as_dict() for token in db.query(Token).all()})
 
 
 @api.route('/token/<string:id>', methods=['GET'])
 @auth.login_required
 def get_token(id):
-    if not g.current_permissions.token_query and str(g.current_user.token) != id:
-        return make_response(jsonify({'error': 'insufficient rights'}), 403)
+    if not g.current_permissions.token_query and not (g.current_user and str(g.current_user.token) == id):
+        abort(Forbidden)
 
-    token = Token.query.get(id)
+    db = current_app.session
+
+    token = db.query(Token).get(id)
     if token:
-        return jsonify(token.as_dict())
+        return make_response(token.as_dict())
     else:
         return make_response(jsonify({'error': 'token not found'}), 404)
 
@@ -141,91 +158,92 @@ def get_token(id):
 @auth.login_required
 def post_token():
     if not g.current_permissions.token_generate:
-        return make_response(jsonify({'error': 'insufficient rights'}), 403)
+        abort(Forbidden)
 
-    data = request.get_json(force=True) if request.is_json else None
-    if not data:
-        return make_response(jsonify({'error': 'bad request'}, 400))
+    data = get_json(request)
 
+    db = current_app.session
     if 'task' in data and data['task']:
-        task = Task.query.get(data['task'])
+        task = db.query(Task).get(data['task'])
         if not task:
-            return make_response(jsonify({'error': 'task not found'}), 404)
+            abort(NotFound(description='task not found'))
     else:
         task = None
 
     if 'room' in data and data['room']:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
-            return make_response(jsonify({'error': 'room not found'}), 404)
+            abort(NotFound(description='room not found'))
     else:
         room = None
 
-    try:
-        token = Token(
-            room_name=room.name,
-            task=task,
-            source=data.get("source", None),
-            permissions=Permissions(
-                user_query=data.get("user_query", False),
-                user_log_event=data.get("user_log_event", False),
-                user_room_join=data.get("user_room_join", False),
-                user_room_leave=data.get("user_room_leave", False),
-                message_text=data.get("message_text", False),
-                message_image=data.get("message_image", False),
-                message_command=data.get("message_command", False),
-                message_broadcast=data.get("message_broadcast", False),
-                room_query=data.get("room_query", False),
-                room_log_query=data.get("room_log_query", False),
-                room_create=data.get("room_create", False),
-                room_update=data.get("room_update", False),
-                room_delete=data.get("room_delete", False),
-                layout_query=data.get("layout_query", False),
-                layout_create=data.get("layout_create", False),
-                layout_update=data.get("layout_update", False),
-                task_create=data.get("task_create", False),
-                task_query=data.get("task_query", False),
-                task_update=data.get("task_update", False),
-                token_generate=data.get("token_generate", False),
-                token_query=data.get("token_query", False),
-                token_update=data.get("token_update", False),
-                token_invalidate=data.get("token_invalidate", False),
-            )
+    token = Token(
+        task=task,
+        room=room,
+        source=data.get("source", None),
+        permissions=Permissions(
+            user_query=data.get("user_query", False),
+            user_log_event=data.get("user_log_event", False),
+            user_room_join=data.get("user_room_join", False),
+            user_room_leave=data.get("user_room_leave", False),
+            message_text=data.get("message_text", False),
+            message_image=data.get("message_image", False),
+            message_command=data.get("message_command", False),
+            message_broadcast=data.get("message_broadcast", False),
+            room_query=data.get("room_query", False),
+            room_log_query=data.get("room_log_query", False),
+            room_create=data.get("room_create", False),
+            room_update=data.get("room_update", False),
+            room_delete=data.get("room_delete", False),
+            layout_query=data.get("layout_query", False),
+            layout_create=data.get("layout_create", False),
+            layout_update=data.get("layout_update", False),
+            task_create=data.get("task_create", False),
+            task_query=data.get("task_query", False),
+            task_update=data.get("task_update", False),
+            token_generate=data.get("token_generate", False),
+            token_query=data.get("token_query", False),
+            token_update=data.get("token_update", False),
+            token_invalidate=data.get("token_invalidate", False),
         )
-        db.session.add(token)
-        db.session.commit()
-        return jsonify(token.id)
-    except (IntegrityError, StatementError) as e:
-        return make_response(jsonify({'error': str(e)}), 400)
+    )
+    db.add(token)
+    db.commit()
+
+    return make_response(token.as_dict())
 
 
 @api.route('/token/<string:id>', methods=['DELETE'])
 @auth.login_required
 def invalidate_token(id):
     if not g.current_permissions.token_invalidate:
-        return make_response(jsonify({'error': 'insufficient rights'}), 403)
+        abort(Forbidden)
 
-    token = Token.query.get(id)
-    if token:
-        token.valid = False
-        db.session.commit()
-        return jsonify(token.as_dict())
-    else:
-        return make_response(jsonify({'error': 'token not found'}), 404)
+    db = current_app.session
+    token = db.query(Token).get(id)
+    if not token:
+        abort(NotFound(description='token not found'))
+
+    token.valid = False
+    db.commit()
+    return jsonify(token.as_dict())
 
 
 @api.route('/users', methods=['GET'])
 @auth.login_required
 def get_users():
-    return jsonify([dict(uri="/users/"+str(user.id), **user.as_dict()) for user in User.query.all()])
+    db = current_app.session
+    return jsonify([dict(uri=f'/users/{user.id}', **user.as_dict()) for user in db.query(User).all()])
 
 
 @api.route('/user/<int:id>', methods=['GET'])
 @auth.login_required
 def get_user(id):
     if id != g.current_user.id and not g.current_permissions.user_query:
+        getLogger('slurk').warning(f'get_user: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
-    user = User.query.get(id) if id != g.current_user.id else g.current_user
+    db = current_app.session
+    user = db.query(User).get(id) if id != g.current_user.id else g.current_user
     if user:
         return jsonify(user.as_dict())
     else:
@@ -238,7 +256,8 @@ def get_tasks():
     if not g.current_permissions.task_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/task/"+str(task.id), **task.as_dict()) for task in Task.query.all()])
+    db = current_app.session
+    return jsonify([dict(uri=f'/task/{task.id}', **task.as_dict()) for task in db.query(Task).all()])
 
 
 @api.route('/task/<int:id>', methods=['GET'])
@@ -247,7 +266,8 @@ def get_task(id):
     if not g.current_permissions.task_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    task = Task.query.get(id)
+    db = current_app.session
+    task = db.query(Task).get(id)
     if task:
         return jsonify(task.as_dict())
     else:
@@ -275,12 +295,13 @@ def post_task():
     except ValueError:
         return make_response(jsonify({'error': 'invalid number: `num_users`'}, 400))
 
+    db = current_app.session
     if 'layout' in data and data['layout']:
         layout = Layout.query.get(data['layout'])
         if not layout:
             return make_response(jsonify({'error': 'layout not found'}), 404)
     else:
-        layout = Layout.query.filter(Layout.name == "default").first()
+        layout = db.query(Layout).filter(Layout.name == "default").first()
 
     try:
         task = Task(
@@ -288,8 +309,8 @@ def post_task():
             num_users=num_users,
             layout=layout,
         )
-        db.session.add(task)
-        db.session.commit()
+        db.add(task)
+        db.commit()
         return jsonify(task.as_dict())
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -310,6 +331,7 @@ def put_task(id):
         return make_response(jsonify({'error': 'room not found'}), 404)
 
     try:
+        db = current_app.session
         if 'num_users' in data:
             try:
                 task.num_users = int(data['num_users'])
@@ -318,12 +340,12 @@ def put_task(id):
         if 'name' in data:
             task.name = data['name']
         if 'layout' in data and data['layout']:
-            layout = Layout.query.get(data['layout'])
+            layout = db.query(Layout).get(data['layout'])
             if not layout:
                 return make_response(jsonify({'error': 'layout not found'}), 404)
             task.layout = layout
 
-        db.session.commit()
+        db.commit()
         return jsonify(task.as_dict())
     except (IntegrityError, StatementError, ValueError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -335,18 +357,22 @@ def get_rooms():
     if not g.current_permissions.room_query:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    return jsonify([dict(uri="/room/"+room.name, **room.as_dict()) for room in Room.query.all()])
+    return jsonify([dict(uri='/rooms', **room.as_dict()) for room in current_app.session.query(Room).all()])
 
 
 @api.route('/room/<string:name>', methods=['GET'])
 @auth.login_required
 def get_room(name):
-    room = Room.query.get(name)
-    if room not in g.current_user.current_rooms and not g.current_permissions.room_query:
+    if name not in g.current_user.room_names and not g.current_permissions.room_query:
+        getLogger('slurk').warning(f'get_room: insufficient rights for user {g.current_user.id}')
+        getLogger('slurk').warning(f'room: {name}')
+        getLogger('slurk').warning(f'current_user: {g.current_user.as_dict()}')
+
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
+    room = current_app.session.query(Room).get(name)
     if room:
-        return jsonify(room.as_dict())
+        return jsonify(dict(uri=f'/room/{room.name}', **room.as_dict()))
     else:
         return make_response(jsonify({'error': 'room not found'}), 404)
 
@@ -354,10 +380,13 @@ def get_room(name):
 @api.route('/room/<string:name>/layout', methods=['GET'])
 @auth.login_required
 def get_room_layout(name):
-    room = Room.query.get(name)
-    if room not in g.current_user.current_rooms and (not g.current_permissions.room_query or not g.current_permissions.layout_query):
+    db = current_app.session
+    if name not in g.current_user.room_names and (
+            not g.current_permissions.room_query or not g.current_permissions.layout_query):
+        getLogger('slurk').warning(f'get_room_layout: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
+    room = db.query(Room).get(name)
     if room:
         return jsonify(room.layout.as_dict())
     else:
@@ -381,12 +410,13 @@ def post_room():
     if not label:
         return make_response(jsonify({'error': 'missing parameter: `label`'}, 400))
 
+    db = current_app.session
     if 'layout' in data and data['layout']:
-        layout = Layout.query.get(data['layout'])
+        layout = db.query(Layout).get(data['layout'])
         if not layout:
             return make_response(jsonify({'error': 'layout not found'}), 404)
     else:
-        layout = Layout.query.filter(Layout.name == "default").first()
+        layout = db.query(Layout).filter(Layout.name == "default").first()
 
     try:
         room = Room(
@@ -398,8 +428,8 @@ def post_room():
             show_latency=data.get('show_latency'),
             static=data.get('static'),
         )
-        db.session.add(room)
-        db.session.commit()
+        db.add(room)
+        db.commit()
         return jsonify(room.as_dict())
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -415,7 +445,8 @@ def put_rooms(name):
     if not data:
         return make_response(jsonify({'error': 'bad request'}, 400))
 
-    room = Room.query.get(name)
+    db = current_app.session
+    room = db.query(Room).get(name)
     if not room:
         return make_response(jsonify({'error': 'room not found'}), 404)
 
@@ -423,7 +454,7 @@ def put_rooms(name):
         if 'label' in data:
             room.label = data['label']
         if 'layout' in data and data['layout']:
-            layout = Layout.query.get(data['layout'])
+            layout = db.query(Layout).get(data['layout'])
             if not layout:
                 return make_response(jsonify({'error': 'layout not found'}), 404)
             room.layout = layout
@@ -436,7 +467,7 @@ def put_rooms(name):
         if 'static' in data:
             room.static = data['static']
 
-        db.session.commit()
+        db.commit()
         return jsonify(room.as_dict())
     except (IntegrityError, StatementError) as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -448,7 +479,8 @@ def delete_rooms(name):
     if not g.current_permissions.room_delete:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    room = Room.query.get(name)
+    db = current_app.session
+    room = db.query(Room).get(name)
     if not room:
         return make_response(jsonify({'error': 'room not found'}), 404)
 
@@ -458,8 +490,8 @@ def delete_rooms(name):
                 socketio.emit('left_room', room.name, room=user.session_id)
                 log_event("leave", user, room)
         socketio.close_room(room.name)
-        Room.query.filter_by(name=room.name).delete()
-        db.session.commit()
+        db.query(Room).filter_by(name=room.name).delete()
+        db.commit()
         return jsonify({'result': True})
     except IntegrityError as e:
         return make_response(jsonify({'error': str(e)}), 400)
@@ -469,9 +501,11 @@ def delete_rooms(name):
 @auth.login_required
 def get_room_logs(name):
     if not g.current_permissions.room_log_query:
+        getLogger('slurk').warning(f'get_room_logs: insufficient rights for user {g.current_user.id}')
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    room = Room.query.get(name)
+    db = current_app.session
+    room = db.query(Room).get(name)
     if room:
         return jsonify([log.as_dict() for log in room.logs])
     else:
@@ -492,7 +526,8 @@ def get_user_logs(id):
                         continue
             yield log
 
-    user = User.query.get(id)
+    db = current_app.session
+    user = db.query(User).get(id)
     if user:
         return jsonify({room.name: list(filter_private_messages([log.as_dict() for log in room.logs], user.id))
                         for room in user.rooms})
@@ -503,7 +538,8 @@ def get_user_logs(id):
 @api.route('/user/<int:id>/task', methods=['GET'])
 @auth.login_required
 def get_user_task(id):
-    user = User.query.get(id)
+    db = current_app.session
+    user = db.query(User).get(id)
     if user:
         return jsonify(user.token.task.as_dict() if user.token.task else None)
     else:
@@ -516,7 +552,8 @@ def post_user_logs(id):
     if not g.current_permissions.user_log_event:
         return make_response(jsonify({'error': 'insufficient rights'}), 403)
 
-    user = User.query.get(id)
+    db = current_app.session
+    user = db.query(User).get(id)
     if not user:
         return make_response(jsonify({'error': 'user not found'}), 404)
 
@@ -529,7 +566,7 @@ def post_user_logs(id):
         return make_response(jsonify({'error': 'missing parameter: `event`'}, 400))
 
     if 'room' in data:
-        room = Room.query.get(data['room'])
+        room = db.query(Room).get(data['room'])
         if not room:
             return make_response(jsonify({'error': 'room not found'}), 404)
     else:

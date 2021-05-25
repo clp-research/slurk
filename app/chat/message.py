@@ -1,13 +1,11 @@
 from calendar import timegm
 from datetime import datetime
 
-from flask_socketio import emit
+from flask import current_app
 from flask_login import login_required, current_user
 
 from .. import socketio
-from ..models.user import User
-from ..models.room import Room
-
+from ..models import User, Room
 from ..api.log import log_event
 
 
@@ -27,16 +25,16 @@ def keypress(message):
             'name': current_user.name,
         }
         if last_typing == 0:
-            emit('start_typing', {'user': user}, room=room.name)
+            socketio.emit('start_typing', {'user': user}, room=room.name)
         elif last_typing == 3:
-            emit('stop_typing', {'user': user}, room=room.name)
+            socketio.emit('stop_typing', {'user': user}, room=room.name)
 
 
 @socketio.on('typed_message')
 def typed_message(payload):
     """
     This function handles live-typing mode. It is called when 'typed_message'
-    event is fired and broadcasts the current message that the user typed to 
+    event is fired and broadcasts the current message that the user typed to
     the room through 'user_message' event.
     """
     current_user_id = current_user.get_id()
@@ -45,10 +43,10 @@ def typed_message(payload):
 
     for room in current_user.rooms:
         user = {
-             'id': current_user_id,
-             'name': current_user.name,
+            'id': current_user_id,
+            'name': current_user.name,
         }
-        emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
+        socketio.emit('user_message', {'user': user, 'message': payload['msg']}, room=room.name)
 
 
 @socketio.on('text')
@@ -68,7 +66,8 @@ def message_text(payload):
     if broadcast and not current_user.token.permissions.message_broadcast:
         return False, "insufficient rights"
 
-    room = Room.query.get(payload['room'])
+    db = current_app.session
+    room = db.query(Room).get(payload['room'])
     if not room:
         return False, 'Room not found'
 
@@ -79,7 +78,7 @@ def message_text(payload):
         if not current_user.token.permissions.message_text:
             return False, 'You are not allowed to send private text messages'
         receiver_id = payload['receiver_id']
-        user = User.query.get(receiver_id)
+        user = db.query(User).get(receiver_id)
         if not user or not user.session_id:
             return False, 'User "%s" does not exist' % receiver_id
         receiver = user.session_id
@@ -92,7 +91,7 @@ def message_text(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    emit('text_message', {
+    socketio.emit('text_message', {
         'msg': payload['msg'],
         'user': user,
         'room': room.name if room else None,
@@ -103,7 +102,7 @@ def message_text(payload):
     log_event("text_message", current_user, room, data={'receiver': payload['receiver_id'] if private else None,
                                                         'message': payload['msg'], 'html': payload.get('html', False)})
     for room in current_user.rooms:
-        emit('stop_typing', {'user': user}, room=room.name)
+        socketio.emit('stop_typing', {'user': user}, room=room.name)
     return True
 
 
@@ -124,13 +123,14 @@ def message_command(payload):
     if broadcast and not current_user.token.permissions.message_broadcast:
         return False, "insufficient rights"
 
-    room = Room.query.get(payload['room'])
+    db = current_app.session
+    room = db.query(Room).get(payload['room'])
     if not room:
         return False, 'Room not found'
 
     if 'receiver_id' in payload:
         receiver_id = payload['receiver_id']
-        user = User.query.get(receiver_id)
+        user = db.query(User).get(receiver_id)
         if not user or not user.session_id:
             return False, 'User "%s" does not exist' % receiver_id
         receiver = user.session_id
@@ -143,7 +143,7 @@ def message_command(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    emit('command', {
+    socketio.emit('command', {
         'command': payload['command'],
         'user': user,
         'room': room.name if room else None,
@@ -151,9 +151,9 @@ def message_command(payload):
         'private': private,
     }, room=receiver, broadcast=broadcast)
     log_event("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
-        payload['command']})
+                                                   payload['command']})
     for room in current_user.rooms:
-        emit('stop_typing', {'user': user}, room=room.name)
+        socketio.emit('stop_typing', {'user': user}, room=room.name)
     return True
 
 
@@ -174,7 +174,8 @@ def message_image(payload):
     if broadcast and not current_user.token.permissions.message_broadcast:
         return False, "insufficient rights"
 
-    room = Room.query.get(payload['room'])
+    db = current_app.session
+    room = db.query(Room).get(payload['room'])
     if room.read_only:
         return False, 'Room "%s" is read-only' % room.label
 
@@ -182,7 +183,7 @@ def message_image(payload):
         if not current_user.token.permissions.message_text:
             return False, 'You are not allowed to send private image messages'
         receiver_id = payload['receiver_id']
-        user = User.query.get(receiver_id)
+        user = db.query(User).get(receiver_id)
         if not user or not user.session_id:
             return False, 'User "%s" does not exist' % receiver_id
         receiver = user.session_id
@@ -197,7 +198,7 @@ def message_image(payload):
     }
     width = payload['width'] if 'width' in payload else None
     height = payload['height'] if 'height' in payload else None
-    emit('image_message', {
+    socketio.emit('image_message', {
         'url': payload['url'],
         'user': user,
         'width': width,
@@ -211,5 +212,5 @@ def message_image(payload):
                                                          'width': width,
                                                          'height': height})
     for room in current_user.rooms:
-        emit('stop_typing', {'user': user}, room=room.name)
+        socketio.emit('stop_typing', {'user': user}, room=room.name)
     return True

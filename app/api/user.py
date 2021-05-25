@@ -1,8 +1,8 @@
 from flask_login import current_user
+from flask import current_app
 from flask_socketio import join_room, leave_room
 
-from .. import socketio, db
-
+from .. import socketio
 from ..models.room import Room
 from ..models.user import User
 from ..api.log import log_event
@@ -12,6 +12,7 @@ from ..api.log import log_event
 def _join_room(data):
     id = data.get('user')
     room = data.get('room')
+    db = current_app.session
 
     if not current_user.get_id():
         return False, "invalid session id"
@@ -19,26 +20,24 @@ def _join_room(data):
         return False, "insufficient rights"
 
     if id:
-        user = User.query.get(id)
+        user = db.query(User).get(id)
     else:
         user = current_user
     if not user or not user.session_id:
         return False, "user does not exist"
 
-    room = Room.query.get(room)
+    room = db.query(Room).get(room)
     if not room:
         return False, "room does not exist"
 
     if room not in user.rooms:
         user.rooms.append(room)
-    if room not in user.current_rooms:
-        user.current_rooms.append(room)
         socketio.emit('joined_room', {
             'room': room.name,
-            'user':  user.id,
+            'user': user.id,
         }, room=user.session_id)
         log_event("join", user, room)
-    db.session.commit()
+    db.commit()
 
     join_room(room.name, user.session_id)
 
@@ -49,6 +48,7 @@ def _join_room(data):
 def _leave_room(data):
     id = data.get('user')
     room = data.get('room')
+    db = current_app.session
 
     if not current_user.get_id():
         return False, "invalid session id"
@@ -56,22 +56,20 @@ def _leave_room(data):
         return False, "insufficient rights"
 
     if id:
-        user = User.query.get(id)
+        user = db.query(User).get(id)
     else:
         user = current_user
     if not user or not user.session_id:
         return False, "user does not exist"
 
-    room = Room.query.get(room)
+    room = db.query(Room).get(room)
     if not room:
         return False, "room does not exist"
 
     user.rooms.remove(room)
-    if room in user.current_rooms:
-        user.current_rooms.remove(room)
     socketio.emit('left_room', room.name, room=user.session_id)
     log_event("leave", user, room)
-    db.session.commit()
+    db.commit()
     leave_room(room.name, user.session_id)
 
     return True

@@ -1,35 +1,36 @@
-from .. import db
+from sqlalchemy import Column, Boolean
+from sqlalchemy.orm import relationship
 
-from . import Base
+from .common import Common
 
 
-class Permissions(Base):
+class Permissions(Common):
     __tablename__ = 'Permissions'
 
-    user_query = db.Column(db.Boolean, nullable=False, default=False)
-    user_log_event = db.Column(db.Boolean, nullable=False, default=False)
-    user_room_join = db.Column(db.Boolean, nullable=False, default=False)
-    user_room_leave = db.Column(db.Boolean, nullable=False, default=False)
-    message_text = db.Column(db.Boolean, nullable=False, default=False)
-    message_image = db.Column(db.Boolean, nullable=False, default=False)
-    message_command = db.Column(db.Boolean, nullable=False, default=False)
-    message_broadcast = db.Column(db.Boolean, nullable=False, default=False)
-    room_query = db.Column(db.Boolean, nullable=False, default=False)
-    room_log_query = db.Column(db.Boolean, nullable=False, default=False)
-    room_create = db.Column(db.Boolean, nullable=False, default=False)
-    room_update = db.Column(db.Boolean, nullable=False, default=False)
-    room_delete = db.Column(db.Boolean, nullable=False, default=False)
-    layout_query = db.Column(db.Boolean, nullable=False, default=False)
-    layout_create = db.Column(db.Boolean, nullable=False, default=False)
-    layout_update = db.Column(db.Boolean, nullable=False, default=False)
-    task_create = db.Column(db.Boolean, nullable=False, default=False)
-    task_update = db.Column(db.Boolean, nullable=False, default=False)
-    task_query = db.Column(db.Boolean, nullable=False, default=False)
-    token_generate = db.Column(db.Boolean, nullable=False, default=False)
-    token_query = db.Column(db.Boolean, nullable=False, default=False)
-    token_invalidate = db.Column(db.Boolean, nullable=False, default=False)
-    token_update = db.Column(db.Boolean, nullable=False, default=False)
-    token = db.relationship("Token", backref="permissions", uselist=False)
+    user_query = Column(Boolean, nullable=False, default=False)
+    user_log_event = Column(Boolean, nullable=False, default=False)
+    user_room_join = Column(Boolean, nullable=False, default=False)
+    user_room_leave = Column(Boolean, nullable=False, default=False)
+    message_text = Column(Boolean, nullable=False, default=False)
+    message_image = Column(Boolean, nullable=False, default=False)
+    message_command = Column(Boolean, nullable=False, default=False)
+    message_broadcast = Column(Boolean, nullable=False, default=False)
+    room_query = Column(Boolean, nullable=False, default=False)
+    room_log_query = Column(Boolean, nullable=False, default=False)
+    room_create = Column(Boolean, nullable=False, default=False)
+    room_update = Column(Boolean, nullable=False, default=False)
+    room_delete = Column(Boolean, nullable=False, default=False)
+    layout_query = Column(Boolean, nullable=False, default=False)
+    layout_create = Column(Boolean, nullable=False, default=False)
+    layout_update = Column(Boolean, nullable=False, default=False)
+    task_create = Column(Boolean, nullable=False, default=False)
+    task_update = Column(Boolean, nullable=False, default=False)
+    task_query = Column(Boolean, nullable=False, default=False)
+    token_generate = Column(Boolean, nullable=False, default=False)
+    token_query = Column(Boolean, nullable=False, default=False)
+    token_invalidate = Column(Boolean, nullable=False, default=False)
+    token_update = Column(Boolean, nullable=False, default=False)
+    token = relationship("Token", backref="permissions", uselist=False)
 
     def as_dict(self):
         return dict({

@@ -7,6 +7,18 @@ env:
 
 jobs:
   include:
+  - stage: test
+    name: Format
+    language: python
+    python: 3.9
+    install: pip install autopep8
+    script: autopep8 --exit-code . || (git --no-pager diff .; exit 1)
+  - stage: test
+    name: Test
+    language: python
+    python: 3.9
+    install: pip install -r requirements.txt
+    script: pytest
   - stage: deploy
     name: Docker
     language: ruby
@@ -24,7 +36,7 @@ jobs:
   - stage: deploy
     name: Documentation
     language: python
-    python: 3.7
+    python: 3.9
     install: pip install sphinx sphinx_rtd_theme
     script: (cd docs && make html)
     after_success: touch docs/_build/html/.nojekyll

@@ -20,7 +20,6 @@ function apply_room_properties(room) {
 }
 
 function apply_layout(layout) {
-    console.log(layout);
     if (!layout)
         return;
     if (layout.html !== "") {
@@ -67,23 +66,26 @@ function updateUsers() {
 }
 
 function headers(xhr) {
-    xhr.setRequestHeader ("Authorization", "Token " + TOKEN);
+    xhr.setRequestHeader("Authorization", "Token " + TOKEN);
 }
 
 $(document).ready(() => {
     let uri = location.protocol + '//' + document.domain + ':' + location.port + "/api/v2";
     socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-    socket.on("pong", (data) => {
-        $("#ping").text(data);
-    });
+    setInterval(() => {
+        const start = Date.now();
+        socket.volatile.emit("ping", () => {
+            $("#ping").text(Date.now() - start);
+        });
+    }, 5000);
 
     async function joined_room(data) {
         self_room = data['room'];
 
-        let room_request = $.get({ url: uri + "/room/" + data['room'], beforeSend: headers });
+        let room_request = $.get({ url: uri + "/room/" + self_room, beforeSend: headers });
         let user_request = $.get({ url: uri + "/user/" + data['user'], beforeSend: headers });
-        let layout = $.get({ url: uri + "/room/" + data['room'] + "/layout", beforeSend: headers });
+        let layout = $.get({ url: uri + "/room/" + self_room + "/layout", beforeSend: headers });
         let history = $.get({ url: uri + "/user/" + data['user'] + "/logs", beforeSend: headers });
 
         let room = await room_request;
@@ -94,9 +96,9 @@ $(document).ready(() => {
         let token = $.get({ url: uri + "/token/" + user.token, beforeSend: headers });
 
         users = {};
-        for (let user_id in room.current_users) {
+        for (let user_id in room.users) {
             if (Number(user_id) !== self_user.id)
-                users[user_id] = room.current_users[user_id];
+                users[user_id] = room.users[user_id];
         }
 
         updateUsers();
@@ -112,7 +114,7 @@ $(document).ready(() => {
 
     }
 
-    async function left_room(data) {}
+    async function left_room(data) { }
 
     socket.on('joined_room', joined_room);
     socket.on('left_room', left_room);
@@ -123,6 +125,7 @@ $(document).ready(() => {
         switch (data.type) {
             case "join":
                 let user = data.user;
+                users[user.id] = user.name;
                 updateUsers();
                 break;
             case "leave":
