@@ -297,7 +297,7 @@ def post_task():
 
     db = current_app.session
     if 'layout' in data and data['layout']:
-        layout = Layout.query.get(data['layout'])
+        layout = db.query(Layout).get(data['layout'])
         if not layout:
             return make_response(jsonify({'error': 'layout not found'}), 404)
     else:
@@ -326,12 +326,12 @@ def put_task(id):
     if not data:
         return make_response(jsonify({'error': 'bad request'}, 400))
 
-    task = Task.query.get(id)
+    db = current_app.session
+    task = db.query(Task).get(id)
     if not task:
         return make_response(jsonify({'error': 'room not found'}), 404)
 
     try:
-        db = current_app.session
         if 'num_users' in data:
             try:
                 task.num_users = int(data['num_users'])
