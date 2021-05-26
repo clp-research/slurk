@@ -1,3 +1,4 @@
+from app.models import openvidu
 from sqlalchemy import Column, Boolean, String, Integer, ForeignKey, asc
 from sqlalchemy.orm import relationship
 
@@ -15,6 +16,7 @@ class Room(Base):
     show_users = Column(Boolean, default=True, nullable=False)
     show_latency = Column(Boolean, default=True, nullable=False)
     static = Column(Boolean, default=False, nullable=False)
+    openvidu_id = Column(String, ForeignKey('OpenViduSession.id'))
     users = relationship("User", secondary=user_room, back_populates="rooms")
     logs = relationship("Log", backref="room", order_by=asc("date_modified"))
 
@@ -27,5 +29,6 @@ class Room(Base):
             'show_users': self.show_users,
             'show_latency': self.show_latency,
             'static': self.static,
+            'openvidu': self.openvidu.as_dict() if self.openvidu else None,
             'users': {user.id: user.name for user in self.users},
         }

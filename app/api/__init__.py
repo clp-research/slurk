@@ -1,3 +1,4 @@
+from app.models.openvidu import OpenViduSession
 from flask import g, make_response, jsonify, Blueprint, request, current_app
 from flask_httpauth import HTTPTokenAuth
 from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, NotFound
@@ -190,6 +191,10 @@ def post_token():
             message_image=data.get("message_image", False),
             message_command=data.get("message_command", False),
             message_broadcast=data.get("message_broadcast", False),
+            audio_join=data.get("audio_join", False),
+            audio_publish=data.get("audio_publish", False),
+            video_join=data.get("video_join", False),
+            video_publish=data.get("video_publish", False),
             room_query=data.get("room_query", False),
             room_log_query=data.get("room_log_query", False),
             room_create=data.get("room_create", False),
@@ -418,6 +423,13 @@ def post_room():
     else:
         layout = db.query(Layout).filter(Layout.name == "default").first()
 
+    audio = data.get('audio', False)
+    video = data.get('video', False)
+
+    ovidu = None
+    if audio or video:
+        ovidu = OpenViduSession(audio=audio, video=video)
+
     try:
         room = Room(
             name=name,
@@ -427,6 +439,7 @@ def post_room():
             show_users=data.get('show_users'),
             show_latency=data.get('show_latency'),
             static=data.get('static'),
+            openvidu=ovidu
         )
         db.add(room)
         db.commit()
@@ -466,6 +479,10 @@ def put_rooms(name):
             room.show_users = data['show_latency']
         if 'static' in data:
             room.static = data['static']
+        if 'audio' in data:
+            room.audio = data['audio']
+        if 'video' in data:
+            room.video = data['video']
 
         db.commit()
         return jsonify(room.as_dict())

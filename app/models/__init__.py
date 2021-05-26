@@ -12,6 +12,7 @@ from .room import Room
 from .task import Task
 from .token import Token
 from .user import User
+from .openvidu import OpenViduSession
 
 
 class Model:
@@ -64,6 +65,10 @@ class Model:
                     message_image=True,
                     message_command=True,
                     message_broadcast=True,
+                    audio_join=True,
+                    audio_publish=True,
+                    video_join=True,
+                    video_publish=True,
                     room_query=True,
                     room_log_query=True,
                     room_create=True,
@@ -98,6 +103,10 @@ class Model:
                 Permissions.message_image,
                 Permissions.message_command,
                 Permissions.message_broadcast,
+                Permissions.audio_join,
+                Permissions.audio_publish,
+                Permissions.video_join,
+                Permissions.video_publish,
                 Permissions.room_query,
                 Permissions.room_log_query,
                 Permissions.room_create,

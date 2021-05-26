@@ -25,6 +25,13 @@ if DEBUG:
     logging.getLogger("slurk").setLevel(logging.DEBUG)
 
 SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
+
+if "OPENVIDU_URL" in os.environ:
+    OPENVIDU_URL = os.environ["OPENVIDU_URL"]
+    OPENVIDU_SECRET = os.environ.get("OPENVIDU_SECRET")
+    OPENVIDU_PORT = int(os.environ.get("OPENVIDU_PORT", default='4443'))
+    OPENVIDU_VERIFY = environ_as_boolean("OPENVIDU_VERIFY", default=True)
+
 if 'DATABASE' in os.environ:
     DATABASE = os.environ['DATABASE']
 

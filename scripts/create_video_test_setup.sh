@@ -5,10 +5,8 @@ set -eu
 PORT=80
 DATABASE=$(pwd)/slurk.db
 DEBUG=true
-
-# reset database
-rm -f $DATABASE
-touch $DATABASE
+OPENVIDU_URL='https://localhost'
+OPENVIDU_PORT=4443
 
 function errcho {
     echo "$@" 1>&2
@@ -22,7 +20,7 @@ function check_command {
 }
 
 function shutdown {
-    errcho -n 'Shutting down server... '
+    errcho -n 'Shutting down slurk... '
     docker stop -t 10 slurky 2> /dev/null | true
     local stdout=$(docker logs slurky 2> /dev/null)
     local stderr=$(docker logs slurky 2>&1 >/dev/null)
@@ -30,7 +28,20 @@ function shutdown {
     errcho 'done'
     [ -z "$stdout" ] || >&2 printf "\nstdout:\n$stdout\n"
     [ -z "$stderr" ] || >&2 printf "\nstderr:\n$stderr\n"
+
+    errcho -n 'Shutting down openvidu... '
+    docker stop -t 10 openvidu 2> /dev/null | true
+    docker rm openvidu 2> /dev/null | true
+    errcho 'done'
     exit 1
+}
+
+function reset_database {
+    local DATABASE=$1
+    errcho -n 'Resetting database... '
+    rm -f $DATABASE
+    touch $DATABASE
+    errcho 'done'
 }
 
 function build_docker {
@@ -38,18 +49,60 @@ function build_docker {
     docker build -t slurk/server_local -f docker/slurk/Dockerfile_local .
 }
 
-function start_server {
-    errcho -n 'Starting server... '
+function start_openvidu {
+    local OPENVIDU_PORT=$1
+    local OPENVIDU_SECRET=$RANDOM
+
+    errcho -n 'Starting openvidu...'
+    docker kill openvidu 2> /dev/null | true
+    docker rm openvidu 2> /dev/null | true
+
+    docker run -d \
+        --name=openvidu \
+        -p $OPENVIDU_PORT:4443 \
+        -e OPENVIDU_SECRET=$OPENVIDU_SECRET \
+        openvidu/openvidu-server-kms:2.13.0 > /dev/null
+
+    for i in {1..600}; do
+        local logs=$(docker logs openvidu 2>&1)
+        if echo $logs | grep -q 'OpenVidu is ready'; then
+            errcho " done"
+            echo $OPENVIDU_SECRET
+            return 0
+        fi
+        sleep 1
+        errcho -n .
+        if [ $(($i % 20)) = 0 ]; then
+            errcho
+        fi
+    done
+
+    errcho " timed out!"
+    return 1
+}
+
+function start_slurk {
+    local DATABASE=$1
+    local OPENVIDU_URL=$2
+    local OPENVIDU_PORT=$3
+    local OPENVIDU_SECRET=$4
+
+    errcho -n 'Starting slurk... '
     docker kill slurky 2> /dev/null | true
     docker rm slurky 2> /dev/null | true
 
     docker run -d \
         --name=slurky \
-        -p $PORT:5000 \
+        --network host \
         -e DEBUG=$DEBUG \
         -e SECRET_KEY=$RANDOM \
+        -e OPENVIDU_URL=$OPENVIDU_URL \
+        -e OPENVIDU_PORT=$OPENVIDU_PORT \
+        -e OPENVIDU_SECRET=$OPENVIDU_SECRET \
+        -e OPENVIDU_VERIFY=no \
+        -e PYTHONWARNINGS='ignore:Unverified HTTPS request' \
         -v "$(pwd):/app:ro" \
-        -v "$(pwd)/slurk.db:/slurk.db" \
+        -v "$DATABASE:/slurk.db" \
         -e DATABASE=sqlite:////slurk.db \
         slurk/server_local > /dev/null
     errcho 'done'
@@ -59,7 +112,7 @@ function wait_for_admin_token {
     errcho -n "Waiting for admin token..."
     for i in {1..60}; do
         local logs=$(docker logs slurky 2>&1)
-        if echo $logs | grep -q admin; then
+        if echo $logs | grep -q 'admin token'; then
             ADMIN_TOKEN=$(echo "$logs" | sed -n '/admin token/{n;p;}')
             break
         fi
@@ -129,7 +182,7 @@ function create_room {
          -H "Authorization: Token $TOKEN" \
          -H "Content-Type: application/json" \
          -H "Accept: application/json" \
-         -d "{\"name\": \"$NAME\", \"label\": \"$LABEL\", \"layout\": $LAYOUT}" \
+         -d "{\"name\": \"$NAME\", \"label\": \"$LABEL\", \"layout\": $LAYOUT, \"audio\": true, \"video\": true}" \
          localhost:$PORT/api/v2/room)
     check_error "$response"
 
@@ -147,7 +200,7 @@ function create_token {
          -H "Authorization: Token $TOKEN" \
          -H "Content-Type: application/json" \
          -H "Accept: application/json" \
-         -d "{\"room\": \"$ROOM\", \"message_text\": true}" \
+         -d "{\"room\": \"$ROOM\", \"message_text\": true, \"audio_join\": true, \"audio_publish\": true, \"video_join\": true, \"video_publish\": true}" \
          localhost:$PORT/api/v2/token)
     check_error "$response"
 
@@ -159,8 +212,10 @@ check_command docker
 check_command curl
 check_command jq
 
+reset_database $DATABASE
 build_docker
-start_server
+OPENVIDU_SECRET=$(start_openvidu $OPENVIDU_PORT)
+start_slurk $DATABASE $OPENVIDU_URL $OPENVIDU_PORT $OPENVIDU_SECRET
 ADMIN_TOKEN=$(wait_for_admin_token)
 LAYOUT_ID=$(create_layout $ADMIN_TOKEN)
 ROOM=$(create_room $ADMIN_TOKEN $LAYOUT_ID)
@@ -169,7 +224,7 @@ errcho "$TOKEN_1"
 TOKEN_2=$(create_token $ADMIN_TOKEN $ROOM)
 errcho "$TOKEN_2"
 
-#brave "http://localhost/login/?next=%2F&name=TOKEN1&token=$TOKEN_1"
-#firefox "http://localhost/login/?next=%2F&name=TOKEN2&token=$TOKEN_2"
+# brave "http://localhost/login/?next=%2F&name=TOKEN1&token=$TOKEN_1"
+# firefox "http://localhost/login/?next=%2F&name=TOKEN2&token=$TOKEN_2"
 
 docker container attach slurky

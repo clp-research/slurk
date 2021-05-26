@@ -15,6 +15,10 @@ class Permissions(Common):
     message_image = Column(Boolean, nullable=False, default=False)
     message_command = Column(Boolean, nullable=False, default=False)
     message_broadcast = Column(Boolean, nullable=False, default=False)
+    audio_publish = Column(Boolean, nullable=False, default=False)
+    audio_join = Column(Boolean, nullable=False, default=False)
+    video_publish = Column(Boolean, nullable=False, default=False)
+    video_join = Column(Boolean, nullable=False, default=False)
     room_query = Column(Boolean, nullable=False, default=False)
     room_log_query = Column(Boolean, nullable=False, default=False)
     room_create = Column(Boolean, nullable=False, default=False)
@@ -49,6 +53,14 @@ class Permissions(Common):
                 'image': self.message_image,
                 'command': self.message_command,
                 'broadcast': self.message_broadcast,
+            },
+            'audio': {
+                'join': self.audio_join,
+                'publish': self.audio_publish,
+            },
+            'video': {
+                'join': self.video_join,
+                'publish': self.video_publish,
             },
             'room': {
                 'query': self.room_query,

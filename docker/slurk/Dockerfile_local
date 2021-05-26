@@ -7,4 +7,4 @@ COPY requirements.txt /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
-ENTRYPOINT ["gunicorn", "-w", "1", "-b", ":5000", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "run:app"]
+ENTRYPOINT ["gunicorn", "-w", "1", "-b", ":80", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "run:app"]

@@ -1,3 +1,4 @@
+from app.models.openvidu import OpenViduSession
 import sys
 import logging
 from logging import getLogger
@@ -10,6 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 
 from .models import Model
+from . import openvidu
 
 logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
 socketio = SocketIO(ping_interval=5, ping_timeout=120, async_mode="gevent")
@@ -47,6 +49,25 @@ def create_app(test_config=None, engine=None):
         login_manager.login_view = 'login.index'
 
         socketio.init_app(app)
+
+        if 'OPENVIDU_URL' in app.config:
+            openvidu_url = app.config['OPENVIDU_URL']
+            openvidu_port = app.config['OPENVIDU_PORT']
+            openvidu_secret = app.config.get('OPENVIDU_SECRET')
+            openvidu_verify = app.config.get('OPENVIDU_VERIFY', True)
+            if not openvidu_secret:
+                raise ValueError(
+                    "OpenVidu Secret key not provided. Pass `OPENVIDU_SECRET_KEY` as environment variable or define it in `config.py`.")
+
+            getLogger('slurk').info(f"Initializing OpenVidu connection to \"{openvidu_url}:{openvidu_port}\"")
+            if not openvidu_verify:
+                getLogger('slurk').warning(
+                    "OpenVidu connection may be unsecure. Set `OPENVIDU_VERIFY` to true or don't pass this variable")
+            app.openvidu = openvidu.Server(f'{openvidu_url}:{openvidu_port}', openvidu_secret, verify=openvidu_verify)
+
+            with model.create_session() as db:
+                for openvidu_session in db.query(OpenViduSession).all():
+                    getLogger('slurk').warning(openvidu_session.as_dict())
 
     @app.before_request
     def before_request():
