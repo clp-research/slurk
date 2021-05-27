@@ -12,7 +12,6 @@ from .room import Room
 from .task import Task
 from .token import Token
 from .user import User
-from .openvidu import OpenViduSession
 
 
 class Model:

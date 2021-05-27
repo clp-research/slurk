@@ -1,4 +1,3 @@
-from app.models.openvidu import OpenViduSession
 import sys
 import logging
 from logging import getLogger
@@ -10,7 +9,7 @@ from flask_socketio import SocketIO
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 
-from .models import Model
+from .models import Model, Room
 from . import openvidu
 
 logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
@@ -66,8 +65,11 @@ def create_app(test_config=None, engine=None):
             app.openvidu = openvidu.Server(f'{openvidu_url}:{openvidu_port}', openvidu_secret, verify=openvidu_verify)
 
             with model.create_session() as db:
-                for openvidu_session in db.query(OpenViduSession).all():
-                    getLogger('slurk').warning(openvidu_session.as_dict())
+                for room in db.query(Room).all():
+                    room.openvidu_session = app.openvidu.initialize_session(custom_session_id=room.openvidu_session).id
+                    db.commit()
+        else:
+            app.openvidu = None
 
     @app.before_request
     def before_request():

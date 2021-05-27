@@ -52,6 +52,7 @@ function build_docker {
 function start_openvidu {
     local OPENVIDU_PORT=$1
     local OPENVIDU_SECRET=$RANDOM
+    local OPENVIDU_SECRET=123
 
     errcho -n 'Starting openvidu...'
     docker kill openvidu 2> /dev/null | true
@@ -61,7 +62,7 @@ function start_openvidu {
         --name=openvidu \
         -p $OPENVIDU_PORT:4443 \
         -e OPENVIDU_SECRET=$OPENVIDU_SECRET \
-        openvidu/openvidu-server-kms:2.13.0 > /dev/null
+        openvidu/openvidu-server-kms:2.17.0 > /dev/null
 
     for i in {1..600}; do
         local logs=$(docker logs openvidu 2>&1)
@@ -212,13 +213,15 @@ check_command docker
 check_command curl
 check_command jq
 
-reset_database $DATABASE
+# reset_database $DATABASE
 build_docker
-OPENVIDU_SECRET=$(start_openvidu $OPENVIDU_PORT)
+OPENVIDU_SECRET=123 #$(start_openvidu $OPENVIDU_PORT)
 start_slurk $DATABASE $OPENVIDU_URL $OPENVIDU_PORT $OPENVIDU_SECRET
 ADMIN_TOKEN=$(wait_for_admin_token)
-LAYOUT_ID=$(create_layout $ADMIN_TOKEN)
-ROOM=$(create_room $ADMIN_TOKEN $LAYOUT_ID)
+LAYOUT_ID=1
+# LAYOUT_ID=$(create_layout $ADMIN_TOKEN)
+# ROOM=$(create_room $ADMIN_TOKEN $LAYOUT_ID)
+ROOM=video_room
 TOKEN_1=$(create_token $ADMIN_TOKEN $ROOM)
 errcho "$TOKEN_1"
 TOKEN_2=$(create_token $ADMIN_TOKEN $ROOM)

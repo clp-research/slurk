@@ -1,4 +1,4 @@
-from app.models.openvidu import OpenViduSession
+from app.openvidu import Session
 from flask import g, make_response, jsonify, Blueprint, request, current_app
 from flask_httpauth import HTTPTokenAuth
 from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, NotFound
@@ -423,13 +423,6 @@ def post_room():
     else:
         layout = db.query(Layout).filter(Layout.name == "default").first()
 
-    audio = data.get('audio', False)
-    video = data.get('video', False)
-
-    ovidu = None
-    if audio or video:
-        ovidu = OpenViduSession(audio=audio, video=video)
-
     try:
         room = Room(
             name=name,
@@ -439,7 +432,7 @@ def post_room():
             show_users=data.get('show_users'),
             show_latency=data.get('show_latency'),
             static=data.get('static'),
-            openvidu=ovidu
+            openvidu_session=current_app.openvidu.initialize_session().id if current_app.openvidu else None
         )
         db.add(room)
         db.commit()
@@ -479,10 +472,6 @@ def put_rooms(name):
             room.show_users = data['show_latency']
         if 'static' in data:
             room.static = data['static']
-        if 'audio' in data:
-            room.audio = data['audio']
-        if 'video' in data:
-            room.video = data['video']
 
         db.commit()
         return jsonify(room.as_dict())
@@ -501,6 +490,8 @@ def delete_rooms(name):
     if not room:
         return make_response(jsonify({'error': 'room not found'}), 404)
 
+    if current_app.openvidu:
+        Session(current_app.openvidu, room.openvidu_session).close()
     try:
         for user in room.current_users:
             if user.session_id:
