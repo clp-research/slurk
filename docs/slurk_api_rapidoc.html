@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+    <script type="text/javascript" src="openapi.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const rapidoc = document.getElementById('rapidoc');
+            rapidoc.loadSpec(JSON.parse(openapi))
+        })
+    </script>
+</head>
+
+<body>
+    <rapi-doc id="rapidoc" theme="dark" render-style="view" schema-style="table"
+        info-description-headings-in-navbar="true" schema-expand-level="1" allow-spec-url-load="false"
+        allow-spec-file-load="false" allow-server-selection="false" allow-try="false" allow-authentication="false">
+        <slot>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;You can try this documentation when starting slurk and heading to
+                <i>/rapidoc</i></p>
+        </slot>
+    </rapi-doc>
+</body>
+
+</html>

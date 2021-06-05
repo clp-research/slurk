@@ -36,7 +36,7 @@ OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 OPENAPI_RAPIDOC_PATH = "/rapidoc"
 OPENAPI_RAPIDOC_URL = "https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js"
 OPENAPI_RAPIDOC_CONFIG = {
-    'render-style': 'read',
+    'render-style': 'view',
     # 'api-key-location': 'query',
     # 'use-path-in-nav-bar': 'true',
     # 'sort-endpoints-by': 'method',
