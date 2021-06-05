@@ -43,7 +43,7 @@ jobs:
     script:
       - mkdir -p docs/_build/html
       - cp docs/slurk_api_rapidoc.html docs/_build/html/rapidoc.html
-      - DATABASE='sqlite:///' FLASK_APP=slurk flask openapi write openapi.json
+      - DATABASE='sqlite:///' FLASK_APP=app flask openapi write openapi.json
       - echo -n "openapi = '" > docs/_build/html/openapi.js
       - cat openapi.json | tr '\n' ' ' | sed "s/'/\\\'/g" >> docs/_build/html/openapi.js
       - echo "'" >> docs/_build/html/openapi.js
