@@ -111,8 +111,7 @@ def text(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    print(user)
-    print(payload)
+
     socketio.emit('text_message', {
         'msg': payload['msg'],
         'user': user,

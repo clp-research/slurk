@@ -43,7 +43,6 @@ def unauthorized():
 
 @auth.verify_token
 def verify_token(token):
-    print(f'verify_token({token})')
     db = current_app.session
     try:
         token = db.query(Token).get(token)

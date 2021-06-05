@@ -37,16 +37,7 @@ OPENAPI_RAPIDOC_PATH = "/rapidoc"
 OPENAPI_RAPIDOC_URL = "https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js"
 OPENAPI_RAPIDOC_CONFIG = {
     'render-style': 'view',
-    # 'api-key-location': 'query',
-    # 'use-path-in-nav-bar': 'true',
-    # 'sort-endpoints-by': 'method',
     'schema-style': 'table',
-    'info-description-headings-in-navbar': 'true',
-    'show-header': 'true',
-    # 'show-components': 'true',
-    'api-key-name': 'Bearer',
-    'api-key-location': 'header',
-    'api-key-value': '00000000-0000-0000-0000-000000000000' if DEBUG else '',
 }
 
 SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
