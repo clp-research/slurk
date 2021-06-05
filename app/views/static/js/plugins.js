@@ -5,13 +5,19 @@ function _append(text) {
 }
 
 function _getTime(timestamp) {
-    if (typeof timestamp === "undefined")
-        return new Date().getHours() + ':' + new Date().getMinutes();
-    let currentDate = new Date((timestamp + new Date().getTimezoneOffset() * 60) * 1000);
+    let currentDate = undefined
+    if (typeof timestamp === 'string') {
+        currentDate = new Date(timestamp)
+        currentDate.setTime(currentDate.getTime() - new Date().getTimezoneOffset() * 60000)
+    } else if (typeof timestamp === "undefined") {
+        currentDate = new Date()
+    } else {
+        currentDate = new Date((timestamp + new Date().getTimezoneOffset() * 60) * 1000);
+    }
     return currentDate.getHours() + ":" + (currentDate.getMinutes() < 10 ? "0" + currentDate.getMinutes() : "" + currentDate.getMinutes());
 }
 
-function display_message(user, time, message, privateMessage, html=false) {
+function display_message(user, time, message, privateMessage, html = false) {
     if (self_user === undefined) {
         return;
     }

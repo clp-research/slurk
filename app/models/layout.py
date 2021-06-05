@@ -5,24 +5,21 @@ import urllib.error
 
 from logging import getLogger
 
+from flask.globals import current_app
+
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import Boolean
 
 from .common import Common
 
 
 def _title(data):
-    if "title" not in data:
-        return ""
-
-    return data['title']
+    return data.get('title')
 
 
 def _subtitle(data):
-    if "subtitle" not in data:
-        return ""
-
-    return data['subtitle']
+    return data.get('subtitle')
 
 
 def _node(node, indent=0):
@@ -80,14 +77,14 @@ def _tag(name, attributes=None, close=True, content=None, indent=0):
 
 def _html(data, indent=0):
     if "html" not in data:
-        return ""
+        return None
 
     return _node(data['html'], indent=indent)
 
 
 def _css(data, indent=0):
     if "css" not in data:
-        return ""
+        return None
 
     css = ""
     for name, properties in data["css"].items():
@@ -111,11 +108,7 @@ def _submit(content: str):
 
 
 def _history(content: str):
-    return "print_history = function(history) {\n" \
-           "    history.forEach(function(element) {\n" \
-           + content + '\n' \
-                       "    })\n" \
-                       "}\n"
+    return "print_history = function(element) {\n" + content + '\n}\n'
 
 
 def _typing_users(content: str):
@@ -132,7 +125,7 @@ def _verify(content: str):
 
 def _create_script(trigger: str, content: str):
     if not _verify(content):
-        getLogger("slurk").error("invalid script for %s", trigger)
+        current_app.logger.error("invalid script for %s", trigger)
         return ""
     if trigger == "incoming-text":
         return _incoming_text(content)
@@ -148,7 +141,7 @@ def _create_script(trigger: str, content: str):
         return _typing_users(content)
     if trigger == "plain":
         return content
-    getLogger("slurk").error("unknown trigger: %s", trigger)
+    current_app.logger.error("unknown trigger: %s", trigger)
     return ""
 
 
@@ -162,19 +155,19 @@ def _parse_trigger(trigger, script_file):
 
     plugin_path = \
         os.path.dirname(os.path.realpath(__file__)) + \
-        "/../static/plugins/" + script_file + ".js"
+        "/../views/static/plugins/" + script_file + ".js"
 
     try:
         with open(plugin_path) as script_content:
             script += _create_script(trigger, script_content.read()) + "\n\n\n"
     except FileNotFoundError:
-        getLogger("slurk").error("Could not find script: %s", script_file)
+        current_app.logger.error("Could not find script: %s", script_file)
     return script
 
 
 def _script(data):
     if "scripts" not in data:
-        return ""
+        return None
 
     script = ""
     for trigger, script_file in data['scripts'].items():
@@ -184,40 +177,31 @@ def _script(data):
             for file in iter(script_file):
                 script += _parse_trigger(trigger, file)
 
-    return script
+    return script if script != '' else None
 
 
 class Layout(Common):
     __tablename__ = 'Layout'
 
-    name = Column(String, nullable=False, unique=True)
     rooms = relationship("Room", backref="layout")
     tasks = relationship("Task", backref="layout")
-    title = Column(String)
+    title = Column(String, nullable=False)
     subtitle = Column(String)
     html = Column(String)
     css = Column(String)
     script = Column(String)
-
-    def as_dict(self):
-        return dict({
-            'name': self.name,
-            'title': self.title,
-            'subtitle': self.subtitle,
-            'html': self.html,
-            'css': self.css,
-            'script': self.script,
-        }, **super(Layout, self).as_dict())
+    show_users = Column(Boolean, nullable=False)
+    show_latency = Column(Boolean, nullable=False)
+    read_only = Column(Boolean, nullable=False)
 
     @classmethod
-    def from_json(cls, name, json_data):
+    def from_json(cls, json_data):
         """
         Create a layout from the give JSON string
-        :param name: the name of the layout
         :param json_data: the json_data to create the layout from
         :return: the Layout
         """
-        return cls.from_json_data(name, json.loads(json_data))
+        return cls.from_json_data(json.loads(json_data))
 
     @classmethod
     def from_json_file(cls, name: str):
@@ -238,32 +222,46 @@ class Layout(Common):
 
         try:
             with urllib.request.urlopen(name) as url:
-                getLogger("slurk").info("loading layout from %s", url)
-                return cls.from_json_data(name, json.loads(url.read().decode()))
+                current_app.logger.info("loading layout from %s", url)
+                return cls.from_json_data(json.loads(url.read().decode()))
         except BaseException:
             pass
 
         layout_path = \
-            os.path.dirname(os.path.realpath(__file__)) + "/../static/layouts/"
+            os.path.dirname(os.path.realpath(__file__)) + "/../views/static/layouts/"
 
         try:
             with open(layout_path + name + ".json") as json_data:
-                getLogger("slurk").info("loading layout from %s%s.json", layout_path, name)
-                return cls.from_json_data(name, json.load(json_data))
+                current_app.logger.info("loading layout from %s%s.json", layout_path, name)
+                return cls.from_json_data(json.load(json_data))
         except FileNotFoundError:
             try:
                 with open(layout_path + "default.json") as json_data:
-                    getLogger("slurk").warn(
+                    current_app.logger.warn(
                         'could not find layout "%s". loaded default layout instead', name)
-                    return cls.from_json_data(name, json.load(json_data))
+                    return cls.from_json_data(json.load(json_data))
             except FileNotFoundError:
                 return None
 
     @classmethod
-    def from_json_data(cls, name, data):
+    def from_json_data(cls, data):
         title = _title(data)
         subtitle = _subtitle(data)
         html = _html(data)
         css = _css(data)
         script = _script(data)
-        return cls(name=name, title=title, subtitle=subtitle, html=html, css=css, script=script)
+        return cls(
+            title=title,
+            subtitle=subtitle,
+            html=html,
+            css=css,
+            script=script,
+            show_users=data.get(
+                'show_users',
+                True),
+            show_latency=data.get(
+                'show_latency',
+                True),
+            read_only=data.get(
+                'read_only',
+                True))

@@ -24,6 +24,31 @@ if DEBUG:
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger("slurk").setLevel(logging.DEBUG)
 
+API_TITLE = "slurk"
+API_VERSION = "v3"
+OPENAPI_VERSION = "3.0.2"
+OPENAPI_JSON_PATH = "api-spec.json"
+OPENAPI_URL_PREFIX = "/"
+OPENAPI_REDOC_PATH = "/redoc"
+OPENAPI_REDOC_URL = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
+OPENAPI_SWAGGER_UI_PATH = "/swagger-ui"
+OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+OPENAPI_RAPIDOC_PATH = "/rapidoc"
+OPENAPI_RAPIDOC_URL = "https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js"
+OPENAPI_RAPIDOC_CONFIG = {
+    'render-style': 'read',
+    # 'api-key-location': 'query',
+    # 'use-path-in-nav-bar': 'true',
+    # 'sort-endpoints-by': 'method',
+    'schema-style': 'table',
+    'info-description-headings-in-navbar': 'true',
+    'show-header': 'true',
+    # 'show-components': 'true',
+    'api-key-name': 'Bearer',
+    'api-key-location': 'header',
+    'api-key-value': '00000000-0000-0000-0000-000000000000' if DEBUG else '',
+}
+
 SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
 if 'DATABASE' in os.environ:
     DATABASE = os.environ['DATABASE']

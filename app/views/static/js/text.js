@@ -28,7 +28,7 @@ $(document).ready(() => {
         if (self_user === undefined) {
             return;
         }
-        if (data.user.id === self_user.id) {
+        if (data.user === self_user.id) {
             return
         }
         typing[data.user.id] = data.user.name;
@@ -41,7 +41,7 @@ $(document).ready(() => {
         if (self_user === undefined) {
             return;
         }
-        if (data.user.id === self_user.id) {
+        if (data.user === self_user.id) {
             return
         }
         delete typing[data.user.id];
@@ -57,7 +57,7 @@ $(document).ready(() => {
             socket.emit("keypress", { "typing": false });
     }, 1000);
 
-    $('#text').keypress(function(e) {
+    $('#text').keypress(function (e) {
         if (keypress === undefined || $('#text').is('[readonly]')) {
             return;
         }

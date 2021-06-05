@@ -3,7 +3,8 @@ from gevent import monkey
 
 monkey.patch_all(subprocess=True)  # NOQA
 
-from app import create_app, socketio
+from app import create_app
+from app.extensions.events import socketio
 
 os.environ["SECRET_KEY"] = "TEST"
 os.environ["DEBUG"] = "True"
@@ -20,7 +21,7 @@ if __name__ == '__main__':
         host,
         port,
         extra_files=[
-            "app/templates",
-            "app/static/js",
-            "app/static/css",
-            "app/static/layouts"])
+            "slurk/views/templates",
+            "slurk/views/static/js/connection.js",
+            "slurk/views/static/css",
+            "slurk/views/static/layouts"])
