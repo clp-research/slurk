@@ -31,9 +31,8 @@ DATA_DESC = (
     'Data stored inside this log entry',
 )
 
+
 # Only two schemas are needed but four are used to prettify OpenAPI Documentation
-
-
 class LogSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Log

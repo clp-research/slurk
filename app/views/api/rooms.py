@@ -23,9 +23,8 @@ LAYOUT_ID_DESC = (
     'Filter for layout used in the rooms'
 )
 
+
 # Only two schemas are needed but four are used to prettify OpenAPI Documentation
-
-
 class RoomSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Room
@@ -154,7 +153,6 @@ class UserRoom(MethodView):
         user.join_room(room)
         return user
 
-
     @blp.etag
     @blp.query('user', UserSchema)
     @blp.query('room', RoomSchema, check_etag=False)
@@ -175,7 +173,7 @@ class LogsByUserByRoomById(MethodView):
         """List logs by room and user"""
         return current_app.session.query(Log) \
             .filter_by(room_id=room.id) \
-            .filter(or_(Log.receiver_id == None, Log.user_id == user.id, Log.receiver_id == user.id)) \
+            .filter(or_(Log.receiver_id is None, Log.user_id == user.id, Log.receiver_id == user.id)) \
             .order_by(Log.date_created.asc()) \
             .all()
 
@@ -184,11 +182,15 @@ class AttributeSchema(ma.Schema):
     attribute = ma.fields.Str(required=True, metadata={'description': 'The attribute to be updated'})
     value = ma.fields.Str(required=True, metadata={'description': 'The value to be set for the given attribute'})
 
+
 class TextSchema(ma.Schema):
     text = ma.fields.Str(required=True, metadata={'description': 'The text to be set for the given ID'})
 
+
 class ClassSchema(ma.Schema):
-    cls = ma.fields.Str(required=True, attribute='class', data_key='class', metadata={'description': 'The class to be modified'})
+    cls = ma.fields.Str(required=True, attribute='class', data_key='class',
+                        metadata={'description': 'The class to be modified'})
+
 
 @blp.route('/<int:room_id>/attribute/id/<string:id>')
 class AttributeId(MethodView):
@@ -202,6 +204,7 @@ class AttributeId(MethodView):
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
         return kwargs
+
 
 @user_blp.route('/<int:user_id>/attribute/id/<string:id>')
 class AttributeId(MethodView):
@@ -220,6 +223,7 @@ class AttributeId(MethodView):
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
+
 @blp.route('/<int:room_id>/attribute/class/<string:cls>')
 class AttributeClass(MethodView):
     @blp.query('room', RoomSchema, check_etag=False)
@@ -232,6 +236,7 @@ class AttributeClass(MethodView):
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
         return kwargs
+
 
 @user_blp.route('/<int:user_id>/attribute/class/<string:cls>')
 class AttributeClass(MethodView):
@@ -250,6 +255,7 @@ class AttributeClass(MethodView):
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
+
 @blp.route('/<int:room_id>/attribute/element/<string:element>')
 class AttributeElement(MethodView):
     @blp.query('room', RoomSchema, check_etag=False)
@@ -262,6 +268,7 @@ class AttributeElement(MethodView):
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
         return kwargs
+
 
 @user_blp.route('/<int:user_id>/attribute/element/<string:element>')
 class AttributeElement(MethodView):
@@ -280,6 +287,7 @@ class AttributeElement(MethodView):
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
+
 @blp.route('/<int:room_id>/text/<string:id>')
 class Text(MethodView):
     @blp.query('room', RoomSchema, check_etag=False)
@@ -292,6 +300,7 @@ class Text(MethodView):
         Log.add("set_text", room=room, data=kwargs)
         socketio.emit('text_update', kwargs, room=str(room.id))
         return kwargs
+
 
 @user_blp.route('/<int:user_id>/text/<string:id>')
 class Text(MethodView):
@@ -309,6 +318,7 @@ class Text(MethodView):
             }))
         socketio.emit('text_update', kwargs, room=str(user.session_id))
         return kwargs
+
 
 @blp.route('/<int:room_id>/class/<string:id>')
 class Class(MethodView):
@@ -333,6 +343,7 @@ class Class(MethodView):
         Log.add("class_remove", room=room, data=kwargs)
         socketio.emit('class_remove', kwargs, room=str(room.id))
         return kwargs
+
 
 @user_blp.route('/<int:user_id>/class/<string:id>')
 class Class(MethodView):

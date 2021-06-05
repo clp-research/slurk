@@ -46,9 +46,8 @@ def uuid():
     from uuid import uuid4
     return str(uuid4())
 
+
 # Only two schemas are needed but four are used to prettify OpenAPI Documentation
-
-
 class TokenSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Token

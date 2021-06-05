@@ -23,7 +23,6 @@ def load_user(id):
     return current_app.session.query(User).get(int(id))
 
 
-
 @login_manager.request_loader
 def load_user_from_request(request):
     token_id = request.headers.get('Authorization') or request.args.get('token')

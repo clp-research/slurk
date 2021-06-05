@@ -27,9 +27,8 @@ SEND_COMMAND_DESC = (
     'Filter for command sending permissions'
 )
 
+
 # Only two schemas are needed but four are used to prettify OpenAPI Documentation
-
-
 class PermissionsSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = models.Permissions
