@@ -71,13 +71,14 @@ def test_patch(client):
     posted = response.json
     id = posted['id']
 
-    import time
     response = client.patch(f'/slurk/api/permissions/{id}',
                             headers={'If-Match': response.headers['ETag']},
                             json=dict(api=True))
     assert response.status_code == HTTPStatus.OK, parse_error(response)
     assert posted['api'] is False
     assert response.json['api'] is True
+    assert posted['date_modified'] is None
+    assert response.json['date_modified'] is not None
 
 
 @pytest.mark.depends(on="test_post")
@@ -86,13 +87,14 @@ def test_put(client):
     posted = response.json
     id = posted['id']
 
-    import time
     response = client.put(f'/slurk/api/permissions/{id}',
                           headers={'If-Match': response.headers['ETag']},
                           json=dict(api=True))
     assert response.status_code == HTTPStatus.OK, parse_error(response)
     assert posted['api'] is False
     assert response.json['api'] is True
+    assert posted['date_modified'] is None
+    assert response.json['date_modified'] is not None
 
 
 @pytest.mark.depends(on="test_post")
@@ -100,7 +102,6 @@ def test_delete(client):
     response = client.post('/slurk/api/permissions')
     id = response.json['id']
 
-    import time
     response = client.delete(f'/slurk/api/permissions/{id}',
                              headers={'If-Match': response.headers['ETag']})
     assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
