@@ -8,7 +8,6 @@ from app.models import Log
 @socketio.on('connect')
 @login_required
 def connect():
-    current_app.logger.error(f"LOADING USER FROM REQUEST: {[r.id for r in current_user.rooms]}")
     current_user.session_id = request.sid
     current_app.session.commit()
     for room in current_user.rooms:
