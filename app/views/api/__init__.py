@@ -7,12 +7,12 @@ def register_blueprints(api):
     from . import layouts, logs, permissions, tokens, users, tasks, rooms
 
     MODULES = (
+        layouts,
+        rooms,
         permissions,
         tokens,
         users,
-        layouts,
         tasks,
-        rooms,
         logs,
     )
 
