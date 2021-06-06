@@ -173,9 +173,9 @@ class LogsByUserByRoomById(MethodView):
         """List logs by room and user"""
         return current_app.session.query(Log) \
             .filter_by(room_id=room.id) \
-            .filter(or_(Log.receiver_id is None, Log.user_id == user.id, Log.receiver_id == user.id)) \
+            .filter(or_(Log.receiver_id == None, Log.user_id == user.id, Log.receiver_id == user.id)) \
             .order_by(Log.date_created.asc()) \
-            .all()
+            .all()  # NOQA
 
 
 class AttributeSchema(ma.Schema):
