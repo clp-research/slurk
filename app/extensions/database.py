@@ -6,8 +6,6 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-
-
 class Database:
     _engine = None
     _session = sessionmaker()
@@ -31,6 +29,7 @@ class Database:
         if 'sqlite' in engine.url:
             from logging import getLogger
             getLogger('slurk').warning('SQLite should not be used in production')
+
             @event.listens_for(Engine, "connect")
             def set_sqlite_pragma(dbapi_connection, connection_record):
                 cursor = dbapi_connection.cursor()
