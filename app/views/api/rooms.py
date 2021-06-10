@@ -24,7 +24,7 @@ LAYOUT_ID_DESC = (
 )
 
 
-# Only two schemas are needed but four are used to prettify OpenAPI Documentation
+# Base schema used for creating a `Log`.
 class RoomSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Room
@@ -32,15 +32,18 @@ class RoomSchema(CommonSchema, SQLAlchemySchema):
     layout_id = Id(table=Layout, required=True, metadata={'description': LAYOUT_ID_DESC[0]})
 
 
+# Same as `RoomSchema` but Base schema but `required` set to false to prettify OpenAPI.
 class RoomResponseSchema(RoomSchema):
     layout_id = Id(table=Layout, metadata={'description': LAYOUT_ID_DESC[0]})
 
 
-class RoomUpdateSchema(RoomResponseSchema):
+# Used for `PATCH`, which does not requires fields to be set
+class RoomUpdateSchema(RoomSchema):
     layout_id = Id(table=Layout, allow_none=True, metadata={'description': LAYOUT_ID_DESC[0]})
 
 
-class RoomQuerySchema(RoomSchema):
+# Same as `RoomUpdateSchema` but with other descriptions to prettify OpenAPI.
+class RoomQuerySchema(RoomUpdateSchema):
     layout_id = Id(table=Layout, allow_none=True, metadata={'description': LAYOUT_ID_DESC[1]})
 
 
@@ -49,18 +52,9 @@ class Rooms(MethodView):
     @blp.etag
     @blp.arguments(RoomQuerySchema, location='query')
     @blp.response(200, RoomResponseSchema(many=True))
-    @blp.paginate()
-    def get(self, args, pagination_parameters):
+    def get(self, args):
         """List rooms"""
-        db = current_app.session
-        query = db.query(Room) \
-            .filter_by(**args) \
-            .order_by(Room.date_created.desc())
-        pagination_parameters.item_count = query.count()
-        return query \
-            .limit(pagination_parameters.page_size) \
-            .offset(pagination_parameters.first_item) \
-            .all()
+        return RoomQuerySchema().list(args)
 
     @blp.etag
     @blp.arguments(RoomSchema)
@@ -68,11 +62,7 @@ class Rooms(MethodView):
     @blp.login_required
     def post(self, item):
         """Add a new room"""
-        room = Room(**item)
-        db = current_app.session
-        db.add(room)
-        db.commit()
-        return room
+        return RoomSchema().post(item)
 
 
 @blp.route('/<int:room_id>')
@@ -80,7 +70,7 @@ class RoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.response(200, RoomResponseSchema)
-    def get(self, room):
+    def get(self, *, room):
         """Get a room by ID"""
         return room
 
@@ -89,36 +79,26 @@ class RoomById(MethodView):
     @blp.arguments(RoomSchema)
     @blp.response(200, RoomResponseSchema)
     @blp.login_required
-    def put(self, new_room, room):
+    def put(self, new_room, *, room):
         """Replace a room identified by ID"""
-        room = RoomSchema().put(room, Room(**new_room))
-        db = current_app.session
-        db.add(room)
-        db.commit()
-        return room
+        return RoomSchema().put(room, new_room)
 
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.arguments(RoomUpdateSchema)
     @blp.response(200, RoomResponseSchema)
     @blp.login_required
-    def patch(self, new_room, room):
+    def patch(self, new_room, *, room):
         """Update a room identified by ID"""
-        room = RoomSchema().patch(room, Room(**new_room))
-        db = current_app.session
-        db.add(room)
-        db.commit()
-        return room
+        return RoomUpdateSchema().patch(room, new_room)
 
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.response(204)
     @blp.login_required
-    def delete(self, room):
+    def delete(self, *, room):
         """Delete a room identified by ID"""
-        db = current_app.session
-        db.delete(room)
-        db.commit()
+        RoomSchema().delete(room)
 
 
 @blp.route('/<int:room_id>/users')
@@ -126,21 +106,23 @@ class UsersByRoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.response(200, UserResponseSchema(many=True))
-    def get(self, room):
+    def get(self, *, room):
         """List active users by rooms"""
         return filter(lambda u: u.session_id is not None, room.users)
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/rooms')
 class RoomsByUserById(MethodView):
     @blp.etag
     @blp.query('user', UserSchema)
     @blp.response(200, RoomResponseSchema(many=True))
-    def get(self, user):
+    def get(self, *, user):
         """List rooms by users"""
         return user.rooms
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/rooms/<int:room_id>')
 class UserRoom(MethodView):
     @blp.etag
@@ -148,7 +130,7 @@ class UserRoom(MethodView):
     @blp.query('room', RoomSchema)
     @blp.response(201, UserResponseSchema)
     @blp.login_required
-    def post(self, user, room):
+    def post(self, *, user, room):
         """Add a user to a room"""
         user.join_room(room)
         return user
@@ -158,7 +140,7 @@ class UserRoom(MethodView):
     @blp.query('room', RoomSchema, check_etag=False)
     @blp.response(204)
     @blp.login_required
-    def delete(self, user, room):
+    def delete(self, *, user, room):
         """Remove a user from a room"""
         user.leave_room(room)
 
@@ -169,7 +151,7 @@ class LogsByUserByRoomById(MethodView):
     @blp.query('room', RoomSchema)
     @blp.query('user', UserSchema)
     @blp.response(200, LogResponseSchema(many=True))
-    def get(self, room, user):
+    def get(self, *, room, user):
         """List logs by room and user"""
         return current_app.session.query(Log) \
             .filter_by(room_id=room.id) \
@@ -198,7 +180,7 @@ class AttributeId(MethodView):
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, room, id, **kwargs):
+    def patch(self, *, room, id, **kwargs):
         """ Update an element identified by it's ID """
         kwargs['id'] = id
         Log.add("set_attribute", room=room, data=kwargs)
@@ -206,13 +188,14 @@ class AttributeId(MethodView):
         return kwargs
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/id/<string:id>')
 class AttributeId(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, user, id, **kwargs):
+    def patch(self, *, user, id, **kwargs):
         """ Update an element identified by it's ID """
         kwargs['id'] = id
         Log.add("set_attribute", user=user, data=kwargs)
@@ -230,7 +213,7 @@ class AttributeClass(MethodView):
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, room, cls, **kwargs):
+    def patch(self, *, room, cls, **kwargs):
         """ Update an element identified by it's class """
         kwargs['cls'] = cls
         Log.add("set_attribute", room=room, data=kwargs)
@@ -238,13 +221,14 @@ class AttributeClass(MethodView):
         return kwargs
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/class/<string:cls>')
 class AttributeClass(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, user, cls, **kwargs):
+    def patch(self, *, user, cls, **kwargs):
         """ Update an element identified by it's class """
         kwargs['cls'] = cls
         Log.add("set_attribute", user=user, data=kwargs)
@@ -262,7 +246,7 @@ class AttributeElement(MethodView):
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, room, element, **kwargs):
+    def patch(self, *, room, element, **kwargs):
         """ Update an element identified by it's type """
         kwargs['element'] = element
         Log.add("set_attribute", room=room, data=kwargs)
@@ -270,13 +254,14 @@ class AttributeElement(MethodView):
         return kwargs
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/element/<string:element>')
 class AttributeElement(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, user, element, **kwargs):
+    def patch(self, *, user, element, **kwargs):
         """ Update an element identified by it's type """
         kwargs['element'] = element
         Log.add("set_attribute", user=user, data=kwargs)
@@ -294,7 +279,7 @@ class Text(MethodView):
     @blp.arguments(TextSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, room, id, **kwargs):
+    def patch(self, *, room, id, **kwargs):
         """ Update the text of an element identified by it's ID """
         kwargs['id'] = id
         Log.add("set_text", room=room, data=kwargs)
@@ -302,13 +287,14 @@ class Text(MethodView):
         return kwargs
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/text/<string:id>')
 class Text(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(TextSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def patch(self, user, id, **kwargs):
+    def patch(self, *, user, id, **kwargs):
         """ Update the text of an element identified by it's ID """
         kwargs['id'] = id
         Log.add("set_text", user=user, data=kwargs)
@@ -326,7 +312,7 @@ class Class(MethodView):
     @blp.arguments(ClassSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def post(self, room, id, **kwargs):
+    def post(self, *, room, id, **kwargs):
         """ Add a class to an element identified by it's ID """
         kwargs['id'] = id
         Log.add("class_add", room=room, data=kwargs)
@@ -337,7 +323,7 @@ class Class(MethodView):
     @blp.arguments(ClassSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def delete(self, room, id, **kwargs):
+    def delete(self, *, room, id, **kwargs):
         """ Remove a class from an element identified by it's ID """
         kwargs['id'] = id
         Log.add("class_remove", room=room, data=kwargs)
@@ -345,13 +331,14 @@ class Class(MethodView):
         return kwargs
 
 
+# Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/class/<string:id>')
 class Class(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(ClassSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def post(self, user, id, **kwargs):
+    def post(self, *, user, id, **kwargs):
         """ Add a class to an element identified by it's ID """
         kwargs['id'] = id
         Log.add("class_add", user=user, data=kwargs)
@@ -366,7 +353,7 @@ class Class(MethodView):
     @blp.arguments(ClassSchema, as_kwargs=True)
     @blp.response(204)
     @blp.login_required
-    def delete(self, user, id, **kwargs):
+    def delete(self, *, user, id, **kwargs):
         """ Remove a class from an element identified by it's ID """
         kwargs['id'] = id
         Log.add("class_remove", user=user, data=kwargs)

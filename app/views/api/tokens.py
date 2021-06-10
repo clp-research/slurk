@@ -47,7 +47,7 @@ def uuid():
     return str(uuid4())
 
 
-# Only two schemas are needed but four are used to prettify OpenAPI Documentation
+# Base schema used for creating a `Log`.
 class TokenSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Token
@@ -59,18 +59,21 @@ class TokenSchema(CommonSchema, SQLAlchemySchema):
     room_id = Id(table=Room, allow_none=True, metadata={'description': ROOM_ID_DESC[0]})
 
 
+# Same as `TokenSchema` but Base schema but `required` set to false to prettify OpenAPI.
 class TokenResponseSchema(TokenSchema):
     permissions_id = Id(table=Permissions, required=False, metadata={'description': PERMISSIONS_ID_DESC[0]})
     logins_left = auto_field(metadata={'description': LOGINS_LEFT_DESC[0]})
 
 
+# Used for `PATCH`, which does not requires fields to be set
 class TokenUpdateSchema(TokenSchema):
     permissions_id = Id(table=Permissions, required=False, allow_none=True,
                         metadata={'description': PERMISSIONS_ID_DESC[0]})
     logins_left = auto_field(allow_none=True, metadata={'description': LOGINS_LEFT_DESC[0]})
 
 
-class TokenQuerySchema(TokenSchema):
+# Same as `TokenUpdateSchema` but with other descriptions to prettify OpenAPI.
+class TokenQuerySchema(TokenUpdateSchema):
     permissions_id = Id(table=Permissions, allow_none=True, metadata={'description': PERMISSIONS_ID_DESC[1]})
     logins_left = auto_field(allow_none=True, metadata={'description': LOGINS_LEFT_DESC[1]})
     task_id = Id(table=Task, allow_none=True, metadata={'description': TASK_ID_DESC[1]})
@@ -82,19 +85,10 @@ class Tokens(MethodView):
     @blp.etag
     @blp.arguments(TokenQuerySchema, location='query')
     @blp.response(200, TokenResponseSchema(many=True))
-    @blp.paginate()
     @blp.login_required
-    def get(self, args, pagination_parameters):
+    def get(self, args):
         """List tokens"""
-        db = current_app.session
-        query = db.query(Token) \
-            .filter_by(**args) \
-            .order_by(Token.date_created.desc())
-        pagination_parameters.item_count = query.count()
-        return query \
-            .limit(pagination_parameters.page_size) \
-            .offset(pagination_parameters.first_item) \
-            .all()
+        return TokenQuerySchema().list(args)
 
     @blp.etag
     @blp.arguments(TokenSchema)
@@ -102,19 +96,14 @@ class Tokens(MethodView):
     @blp.login_required
     def post(self, item):
         """Add a new token"""
-        token = Token(**item)
-        db = current_app.session
-        db.add(token)
-        db.commit()
-        return token
+        return TokenSchema().post(item)
 
 
 @blp.route('/<uuid:token_id>')
 class TokensById(MethodView):
-    @blp.etag
     @blp.query('token', TokenSchema)
     @blp.response(200, TokenResponseSchema)
-    def get(self, token):
+    def get(self, *, token):
         """Get a token by ID"""
         return token
 
@@ -123,33 +112,23 @@ class TokensById(MethodView):
     @blp.arguments(TokenSchema)
     @blp.response(200, TokenResponseSchema)
     @blp.login_required
-    def put(self, new_token, token):
+    def put(self, new_token, *, token):
         """Replace a token identified by ID"""
-        TokenSchema().put(token, Token(**new_token))
-        db = current_app.session
-        db.add(token)
-        db.commit()
-        return token
+        return TokenSchema().put(token, new_token)
 
     @blp.etag
     @blp.query('token', TokenSchema)
     @blp.arguments(TokenUpdateSchema)
     @blp.response(200, TokenResponseSchema)
     @blp.login_required
-    def patch(self, new_token, token):
+    def patch(self, new_token, *, token):
         """Update a token identified by ID"""
-        TokenSchema().patch(token, Token(**new_token))
-        db = current_app.session
-        db.add(token)
-        db.commit()
-        return token
+        return TokenUpdateSchema().patch(token, new_token)
 
     @blp.etag
     @blp.query('token', TokenSchema)
     @blp.response(204)
     @blp.login_required
-    def delete(self, token):
+    def delete(self, *, token):
         """Delete a token identified by ID"""
-        db = current_app.session
-        db.delete(token)
-        db.commit()
+        TokenSchema().delete(token)

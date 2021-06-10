@@ -1,5 +1,4 @@
 from flask.views import MethodView
-from flask.globals import current_app
 from marshmallow import fields
 from marshmallow_sqlalchemy.schema import SQLAlchemySchema, auto_field
 import marshmallow as ma
@@ -58,7 +57,7 @@ EXAMPLE = dict(
 )
 
 
-# Only two schemas are needed but four are used to prettify OpenAPI Documentation
+# Base schema, not used by marshmallow
 class LayoutSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Layout
@@ -68,6 +67,13 @@ class LayoutSchema(CommonSchema, SQLAlchemySchema):
     show_users = auto_field(missing=True, required=False, metadata={'description': SHOW_USERS_DESC[0]})
     show_latency = auto_field(missing=True, required=False, metadata={'description': SHOW_LATENCY_DESC[0]})
     read_only = auto_field(missing=False, required=False, metadata={'description': READ_ONLY_DESC[0]})
+
+    def patch(self, old, new):
+        # `scripts` is not stored in the database directly
+        if 'scripts' in new:
+            new['script'] = Layout.from_json_data(new).script
+            del new['scripts']
+        return super().patch(old, new)
 
 
 script_dict = ma.Schema.from_dict({
@@ -81,12 +87,15 @@ script_dict = ma.Schema.from_dict({
 }, name="Scripts")
 
 
+# Used for `POST` and `GET`
 class LayoutCreationSchema(LayoutSchema):
     html = ma.fields.Dict(allow_none=True, metadata={'description': HTML_DESC[0]})
     css = ma.fields.Dict(allow_none=True, metadata={'description': CSS_DESC[0]})
-    scripts = ma.fields.Nested(script_dict, name='Scripts', missing={}, metadata={'description': SCRIPTS_DESC[0]})
+    scripts = ma.fields.Nested(script_dict, name='Scripts', allow_none=True, metadata={'description': SCRIPTS_DESC[0]})
 
 
+# Used in responses. Differs from `LayoutCreationSchema` as `script` is generated from `scripts`, which is not stored
+# in the database directly
 class LayoutResponseSchema(LayoutSchema):
     title = auto_field(required=False, metadata={'description': TITLE_DESC[0]})
     html = auto_field(allow_none=True, metadata={'description': HTML_DESC[0]})
@@ -97,6 +106,7 @@ class LayoutResponseSchema(LayoutSchema):
     read_only = auto_field(required=False, metadata={'description': READ_ONLY_DESC[0]})
 
 
+# Used for `PATCH`, `PATCH` does not require fields to be set
 class LayoutUpdateSchema(LayoutCreationSchema):
     title = auto_field(allow_none=True, required=False, metadata={'description': TITLE_DESC[0]})
     html = ma.fields.Dict(allow_none=True, metadata={'description': HTML_DESC[0]})
@@ -106,6 +116,7 @@ class LayoutUpdateSchema(LayoutCreationSchema):
     read_only = auto_field(allow_none=True, required=False, metadata={'description': READ_ONLY_DESC[0]})
 
 
+# Used for querying in `GET`, so other descriptions are used
 class LayoutQuerySchema(LayoutSchema):
     title = auto_field(allow_none=True, required=False, metadata={'description': TITLE_DESC[1]})
     subtitle = auto_field(metadata={'description': SUBTITLE_DESC[1]})
@@ -119,18 +130,9 @@ class Layouts(MethodView):
     @blp.etag
     @blp.arguments(LayoutQuerySchema, location='query')
     @blp.response(200, LayoutResponseSchema(many=True))
-    @blp.paginate()
-    def get(self, args, pagination_parameters):
+    def get(self, args):
         """List layouts"""
-        db = current_app.session
-        query = db.query(Layout) \
-            .filter_by(**args) \
-            .order_by(Layout.date_created.desc())
-        pagination_parameters.item_count = query.count()
-        return query \
-            .limit(pagination_parameters.page_size) \
-            .offset(pagination_parameters.first_item) \
-            .all()
+        return LayoutQuerySchema().list(args)
 
     @blp.etag
     @blp.arguments(LayoutCreationSchema, example=EXAMPLE)
@@ -138,11 +140,7 @@ class Layouts(MethodView):
     @blp.login_required
     def post(self, item):
         """Add a new layout"""
-        layout = Layout.from_json_data(item)
-        db = current_app.session
-        db.add(layout)
-        db.commit()
-        return layout
+        return LayoutCreationSchema().post(Layout.from_json_data(item))
 
 
 @blp.route('/<int:layout_id>')
@@ -150,7 +148,7 @@ class LayoutById(MethodView):
     @blp.etag
     @blp.query('layout', LayoutResponseSchema)
     @blp.response(200, LayoutResponseSchema)
-    def get(self, layout):
+    def get(self, *, layout):
         """Get a layout by ID"""
         return layout
 
@@ -159,32 +157,23 @@ class LayoutById(MethodView):
     @blp.arguments(LayoutCreationSchema)
     @blp.response(200, LayoutResponseSchema)
     @blp.login_required
-    def put(self, new_layout, layout):
+    def put(self, new_layout, *, layout):
         """Replace a layout identified by ID"""
-        LayoutResponseSchema().put(layout, Layout.from_json_data(new_layout))
-        db = current_app.session
-        db.commit()
-        return layout
+        return LayoutCreationSchema().put(layout, Layout.from_json_data(new_layout))
 
     @blp.etag
     @blp.query('layout', LayoutResponseSchema)
     @blp.arguments(LayoutUpdateSchema)
     @blp.response(200, LayoutResponseSchema)
     @blp.login_required
-    def patch(self, new_layout, layout):
+    def patch(self, new_layout, *, layout):
         """Update a layout identified by ID"""
-        layout = LayoutResponseSchema().patch(layout, Layout.from_json_data(new_layout))
-        db = current_app.session
-        db.add(layout)
-        db.commit()
-        return layout
+        return LayoutResponseSchema().patch(layout, new_layout)
 
     @blp.etag
     @blp.query('layout', LayoutResponseSchema)
     @blp.response(204)
     @blp.login_required
-    def delete(self, layout):
+    def delete(self, *, layout):
         """Delete a layout identified by ID"""
-        db = current_app.session
-        db.delete(layout)
-        db.commit()
+        LayoutResponseSchema().delete(layout)

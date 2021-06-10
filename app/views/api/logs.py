@@ -1,5 +1,4 @@
 from flask.views import MethodView
-from flask.globals import current_app
 import marshmallow as ma
 from marshmallow_sqlalchemy.schema import SQLAlchemySchema, auto_field
 
@@ -32,7 +31,7 @@ DATA_DESC = (
 )
 
 
-# Only two schemas are needed but four are used to prettify OpenAPI Documentation
+# Base schema used for creating a `Log`.
 class LogSchema(CommonSchema, SQLAlchemySchema):
     class Meta:
         model = Log
@@ -41,15 +40,17 @@ class LogSchema(CommonSchema, SQLAlchemySchema):
     user_id = Id(table=User, allow_none=True, metadata={'description': USER_ID_DESC[0]})
     room_id = Id(table=Room, allow_none=True, metadata={'description': ROOM_ID_DESC[0]})
     receiver = Id(table=User, allow_none=True, metadata={'description': RECEIVER_DESC[0]})
-    data = ma.fields.Dict(required=True, metadata={'description': DATA_DESC[0]})
+    data = ma.fields.Dict(missing={}, metadata={'description': DATA_DESC[0]})
 
 
+# Same as `LogSchema` but Base schema but `required` set to false to prettify OpenAPI.
 class LogResponseSchema(LogSchema):
     event = auto_field(required=False, metadata={'description': EVENT_DESC[0]})
     data = ma.fields.Dict(metadata={'description': DATA_DESC[0]})
 
 
-class LogUpdateSchema(LogResponseSchema):
+# Used for `PATCH`, which does not requires fields to be set
+class LogUpdateSchema(LogSchema):
     event = auto_field(required=False, allow_none=True, metadata={'description': EVENT_DESC[0]})
     user_id = Id(table=User, allow_none=True, metadata={'description': USER_ID_DESC[0]})
     room_id = Id(table=Room, allow_none=True, metadata={'description': ROOM_ID_DESC[0]})
@@ -57,7 +58,8 @@ class LogUpdateSchema(LogResponseSchema):
     data = ma.fields.Dict(required=False, allow_none=True, metadata={'description': DATA_DESC[0]})
 
 
-class LogQuerySchema(LogSchema):
+# Same as `LogUpdateSchema` but with other descriptions to prettify OpenAPI.
+class LogQuerySchema(LogUpdateSchema):
     event = auto_field(required=False, allow_none=True, metadata={'description': EVENT_DESC[1]})
     user_id = Id(table=User, allow_none=True, metadata={'description': USER_ID_DESC[1]})
     room_id = Id(table=Room, allow_none=True, metadata={'description': ROOM_ID_DESC[1]})
@@ -70,18 +72,10 @@ class Logs(MethodView):
     @blp.etag
     @blp.arguments(LogQuerySchema, location='query')
     @blp.response(200, LogResponseSchema(many=True))
-    @blp.paginate()
-    def get(self, args, pagination_parameters):
+    @blp.login_required
+    def get(self, args):
         """List logs"""
-        db = current_app.session
-        query = db.query(Log) \
-            .filter_by(**args) \
-            .order_by(Log.date_created.desc())
-        pagination_parameters.item_count = query.count()
-        return query \
-            .limit(pagination_parameters.page_size) \
-            .offset(pagination_parameters.first_item) \
-            .all()
+        return LogQuerySchema().list(args)
 
     @blp.etag
     @blp.arguments(LogSchema)
@@ -89,11 +83,7 @@ class Logs(MethodView):
     @blp.login_required
     def post(self, item):
         """Add a new log"""
-        log = Log(**item)
-        db = current_app.session
-        db.add(log)
-        db.commit()
-        return log
+        return LogSchema().post(item)
 
 
 @blp.route('/<int:log_id>')
@@ -101,7 +91,8 @@ class LogById(MethodView):
     @blp.etag
     @blp.query('log', LogSchema)
     @blp.response(200, LogResponseSchema)
-    def get(self, log):
+    @blp.login_required
+    def get(self, *, log):
         """Get a log by ID"""
         return log
 
@@ -110,33 +101,23 @@ class LogById(MethodView):
     @blp.arguments(LogSchema)
     @blp.response(200, LogResponseSchema)
     @blp.login_required
-    def put(self, new_log, log):
+    def put(self, new_log, *, log):
         """Replace a log identified by ID"""
-        log = LogSchema().put(log, Log(**new_log))
-        db = current_app.session
-        db.add(log)
-        db.commit()
-        return log
+        return LogSchema().put(log, new_log)
 
     @blp.etag
     @blp.query('log', LogSchema)
     @blp.arguments(LogUpdateSchema)
     @blp.response(200, LogResponseSchema)
     @blp.login_required
-    def patch(self, new_log, log):
+    def patch(self, new_log, *, log):
         """Update a log identified by ID"""
-        log = LogSchema().patch(log, Log(**new_log))
-        db = current_app.session
-        db.add(log)
-        db.commit()
-        return log
+        return LogUpdateSchema().patch(log, new_log)
 
     @blp.etag
     @blp.query('log', LogSchema)
     @blp.response(204)
     @blp.login_required
-    def delete(self, log):
+    def delete(self, *, log):
         """Delete a log identified by ID"""
-        db = current_app.session
-        db.delete(log)
-        db.commit()
+        LogSchema().delete(log)

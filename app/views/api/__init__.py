@@ -1,4 +1,6 @@
 import marshmallow as ma
+from flask.globals import current_app
+from marshmallow.exceptions import ValidationError
 
 from marshmallow_sqlalchemy import SQLAlchemySchemaOpts, auto_field
 
@@ -28,11 +30,9 @@ class Id(ma.fields.Integer):
 
     def _validated(self, value):
         from flask.globals import current_app
-        # id = super()._validated(value)
-        id = value
-        self.error_messages['foreign_key'] = f'{self._table.__tablename__} `{id}` does not exist'
+        id = super()._validated(value)
         if current_app.session.query(self._table).get(id) is None:
-            raise self.make_error('foreign_key')
+            raise ValidationError(f'{self._table.__tablename__} `{id}` does not exist')
         return id
 
 
@@ -52,16 +52,41 @@ class CommonSchema(ma.Schema):
         dump_only=True, metadata={
             'description': 'Server time when this entity was last modified'})
 
+    def list(self, args):
+        return current_app.session.query(self.Meta.model) \
+            .filter_by(**args) \
+            .order_by(self.Meta.model.date_created.desc()) \
+            .all()
+
+    def post(self, item):
+        if isinstance(item, self.Meta.model):
+            entity = item
+        else:
+            entity = self.Meta.model(**item)
+        db = current_app.session
+        db.add(entity)
+        db.commit()
+        return entity
+
     def put(self, old, new):
+        if isinstance(new, self.Meta.model):
+            entity = new
+        else:
+            entity = self.Meta.model(**new)
         loadable_fields = [k for k, v in self.fields.items() if not v.dump_only]
         for name in loadable_fields:
-            setattr(old, name, getattr(new, name, None))
+            setattr(old, name, getattr(entity, name, None))
+        current_app.session.commit()
         return old
 
     def patch(self, old, new):
-        loadable_fields = [
-            k for k, v in self.fields.items() if getattr(new, k, None) and not v.dump_only
-        ]
+        loadable_fields = [k for k, v in self.fields.items() if k in new and not v.dump_only]
         for name in loadable_fields:
-            setattr(old, name, getattr(new, name))
+            setattr(old, name, new[name])
+        current_app.session.commit()
         return old
+
+    def delete(self, entity):
+        db = current_app.session
+        db.delete(entity)
+        db.commit()

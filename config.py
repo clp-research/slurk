@@ -39,8 +39,9 @@ OPENAPI_RAPIDOC_CONFIG = {
     'render-style': 'view',
     'schema-style': 'table',
 }
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
-SECRET_KEY = os.environ.get("SECRET_KEY", default=None)
 if 'DATABASE' in os.environ:
     DATABASE = os.environ['DATABASE']
 

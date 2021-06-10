@@ -16,22 +16,22 @@ class User(Common):
     session_id = Column(String, unique=True)
     rooms = relationship("Room", secondary=user_room, back_populates="users", lazy='dynamic')
 
+    # Required by flask_login
     @property
     def is_active(self):
-        return True
+        return self.session_id is not None
 
+    # Required by flask_login
     @property
     def is_authenticated(self):
         return True
 
+    # Required by flask_login
     @property
     def is_anonymous(self):
         return False
 
-    @property
-    def room_names(self):
-        return [str(room.name) for room in self.rooms]
-
+    # Required by flask_login
     def get_id(self):
         return self.id
 
@@ -64,13 +64,13 @@ class User(Common):
 
             Log.add("join", self, room)
 
-    def leave_room(self, room):
+    def leave_room(self, room, event_only=False):
         from flask.globals import current_app
         from flask_socketio import leave_room
 
         from app.extensions.events import socketio
 
-        if self in room.users:
+        if self in room.users and not event_only:
             room.users.remove(self)
             current_app.session.commit()
 

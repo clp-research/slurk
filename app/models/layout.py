@@ -166,7 +166,7 @@ def _parse_trigger(trigger, script_file):
 
 
 def _script(data):
-    if "scripts" not in data:
+    if "scripts" not in data or data["scripts"] is None:
         return None
 
     script = ""

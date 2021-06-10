@@ -1,7 +1,7 @@
+import logging
 import os
-import tempfile
-
 import pytest
+import tempfile
 
 from app import create_app
 
@@ -9,6 +9,12 @@ from app import create_app
 @pytest.fixture(scope='session')
 def engine():
     from sqlalchemy import create_engine
+
+    class NoSQLiteInProduction(logging.Filter):
+        def filter(self, record):
+            return 'SQLite should not be used in production' not in record.getMessage()
+
+    logging.getLogger('slurk').addFilter(NoSQLiteInProduction())
 
     with tempfile.NamedTemporaryFile() as f:
         yield create_engine(f'sqlite:///{f.name}')

@@ -19,7 +19,7 @@ def connect():
 @login_required
 def disconnect():
     for room in current_user.rooms:
-        current_user.leave_room(room)
+        current_user.leave_room(room, event_only=True)
     current_user.session_id = None
     current_app.session.commit()
     Log.add("disconnect", current_user)

@@ -1,6 +1,7 @@
 from copy import deepcopy
 from functools import wraps
 from flask.globals import current_app, request
+from uuid import UUID
 
 import flask_smorest
 import http
@@ -24,9 +25,9 @@ class ResponseReferencesPlugin(flask_smorest.spec.plugins.ResponseReferencesPlug
 
 
 class Blueprint(flask_smorest.Blueprint):
-    def register_blueprint(self, blueprint, **options) -> None:
+    def register_blueprint(self, blueprint, **options):
         url_prefix = self.url_prefix + blueprint.url_prefix + options.get('url_prefix', '')
-        return super().register_blueprint(blueprint, **options, url_prefix=url_prefix)
+        super().register_blueprint(blueprint, **options, url_prefix=url_prefix)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -93,6 +94,12 @@ class Blueprint(flask_smorest.Blueprint):
         return super().route(rule, parameters=parameters, **options)
 
     def query(self, parameter, schema, check_etag=True):
+        """
+        Used as decorator for getting an entity by id.
+
+        Searches for "`parameter`_id" and passes the entity as "`parameter`" to the
+        decorated function.
+        """
         cls = schema.Meta.model
 
         def decorator(func):
@@ -100,7 +107,7 @@ class Blueprint(flask_smorest.Blueprint):
             def wrapper(*args, **kwargs):
                 parameter_id = f'{parameter}_id'
                 id = kwargs.pop(parameter_id)
-                if not isinstance(id, int):
+                if isinstance(id, UUID):
                     id = str(id)
                 entry = current_app.session.query(cls).get(id)
                 if not entry:
