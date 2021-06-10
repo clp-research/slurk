@@ -59,7 +59,7 @@ class TokenSchema(CommonSchema, SQLAlchemySchema):
     room_id = Id(table=Room, allow_none=True, metadata={'description': ROOM_ID_DESC[0]})
 
 
-# Same as `TokenSchema` but Base schema but `required` set to false to prettify OpenAPI.
+# Same as `TokenSchema` but `required` set to false to prettify OpenAPI.
 class TokenResponseSchema(TokenSchema):
     permissions_id = Id(table=Permissions, required=False, metadata={'description': PERMISSIONS_ID_DESC[0]})
     logins_left = auto_field(metadata={'description': LOGINS_LEFT_DESC[0]})
