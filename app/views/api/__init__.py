@@ -26,7 +26,7 @@ def register_blueprints(api):
 class Id(ma.fields.Integer):
     def __init__(self, *, table, **kwargs):
         self._table = table
-        super().__init__(strict=True, **kwargs)
+        super().__init__(strict=False, **kwargs)
 
     def _validated(self, value):
         from flask.globals import current_app
