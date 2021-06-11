@@ -19,7 +19,7 @@ class User(Common):
     # Required by flask_login
     @property
     def is_active(self):
-        return self.session_id is not None
+        return True
 
     # Required by flask_login
     @property
