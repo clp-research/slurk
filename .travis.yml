@@ -37,16 +37,16 @@ jobs:
     name: Documentation
     language: python
     python: 3.9
+    env:
+      - DATABASE='sqlite:///'
+      - FLASK_APP=app
     install:
       - pip install -r requirements.txt
       - pip install sphinx sphinxcontrib-openapi sphinx_rtd_theme
     script:
       - mkdir -p docs/_build/html
       - cp docs/slurk_api_rapidoc.html docs/_build/html/rapidoc.html
-      - DATABASE='sqlite:///' FLASK_APP=app flask openapi write docs/openapi.json
-      - echo -n "openapi = '" > docs/_build/html/openapi.js
-      - cat docs/openapi.json | tr '\n' ' ' | sed "s/'/\\\'/g" >> docs/_build/html/openapi.js
-      - echo "'" >> docs/_build/html/openapi.js
+      - flask openapi write docs/_build/html/openapi.json
       - (cd docs && make html)
     after_success: touch docs/_build/html/.nojekyll
     deploy:

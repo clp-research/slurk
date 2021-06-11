@@ -6,7 +6,7 @@
 REST API for slurk
 =================================================
 
-`Link to RapiDoc <rapidoc.html>`_
+`View in RapiDoc <rapidoc.html>`_
 
 .. openapi:: openapi.json
    :examples:
