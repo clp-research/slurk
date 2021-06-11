@@ -19,6 +19,7 @@ model = Model()
 
 def create_app(test_config=None, engine=None):
     app = Flask(__name__)
+    app.logger.name = 'slurk'
 
     if not test_config:
         app.config.from_object('config')
