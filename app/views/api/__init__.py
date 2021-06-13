@@ -120,4 +120,4 @@ class BaseSchema(ma.Schema):
 class CommonSchema(BaseSchema):
     id = ma.fields.Integer(dump_only=True, description='Unique ID that identifies this entity')
     date_created = ma.fields.DateTime(dump_only=True, description='Server time at which this entity was created')
-    date_modified = ma.fields.DateTime(dump_only=True, description='Server time when this entity was last modified')
+    date_modified = ma.fields.DateTime(dump_only=True, allow_none=True, description='Server time when this entity was last modified')
