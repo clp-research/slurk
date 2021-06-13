@@ -2,7 +2,6 @@ from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest import abort
 from http import HTTPStatus
-from marshmallow_sqlalchemy.schema import SQLAlchemySchema
 from sqlalchemy.sql.elements import or_
 import marshmallow as ma
 
@@ -24,27 +23,18 @@ LAYOUT_ID_DESC = (
 )
 
 
-# Base schema used for creating a `Log`.
-class RoomSchema(CommonSchema, SQLAlchemySchema):
+class RoomSchema(CommonSchema):
     class Meta:
         model = Room
 
-    layout_id = Id(table=Layout, required=True, metadata={'description': LAYOUT_ID_DESC[0]})
+    layout_id = Id(table=Layout, required=True, description='Layout for this room',
+                   filter_description='Filter for layout used in the rooms')
 
 
-# Same as `RoomSchema` but Base schema but `required` set to false to prettify OpenAPI.
-class RoomResponseSchema(RoomSchema):
-    layout_id = Id(table=Layout, metadata={'description': LAYOUT_ID_DESC[0]})
-
-
-# Used for `PATCH`, which does not requires fields to be set
-class RoomUpdateSchema(RoomSchema):
-    layout_id = Id(table=Layout, allow_none=True, metadata={'description': LAYOUT_ID_DESC[0]})
-
-
-# Same as `RoomUpdateSchema` but with other descriptions to prettify OpenAPI.
-class RoomQuerySchema(RoomUpdateSchema):
-    layout_id = Id(table=Layout, allow_none=True, metadata={'description': LAYOUT_ID_DESC[1]})
+RoomCreationSchema = RoomSchema().creation_schema
+RoomUpdateSchema = RoomSchema().update_schema
+RoomResponseSchema = RoomSchema().response_schema
+RoomQuerySchema = RoomSchema().query_schema
 
 
 @blp.route('/')
@@ -54,10 +44,10 @@ class Rooms(MethodView):
     @blp.response(200, RoomResponseSchema(many=True))
     def get(self, args):
         """List rooms"""
-        return RoomQuerySchema().list(args)
+        return RoomSchema().list(args)
 
     @blp.etag
-    @blp.arguments(RoomSchema)
+    @blp.arguments(RoomCreationSchema)
     @blp.response(201, RoomResponseSchema)
     @blp.login_required
     def post(self, item):
@@ -76,7 +66,7 @@ class RoomById(MethodView):
 
     @blp.etag
     @blp.query('room', RoomSchema)
-    @blp.arguments(RoomSchema)
+    @blp.arguments(RoomCreationSchema)
     @blp.response(200, RoomResponseSchema)
     @blp.login_required
     def put(self, new_room, *, room):

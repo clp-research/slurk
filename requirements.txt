@@ -8,7 +8,6 @@ gevent==21.1
 gevent-websocket
 gunicorn==20.1
 marshmallow==3.12
-marshmallow-sqlalchemy==0.26
 pytest==6.2
 pytest-depends==1.0
 SQLAlchemy==1.4

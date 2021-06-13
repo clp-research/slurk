@@ -34,6 +34,9 @@ class Blueprint(flask_smorest.Blueprint):
         self._prepare_doc_cbks.append(self._prepare_auth_doc)
         self._prepare_doc_cbks.append(self._prepare_404_doc)
 
+    def arguments(self, schema, *, location='json', **kwargs):
+        return super().arguments(schema, location=location, **kwargs)
+
     @staticmethod
     def login_required(func):
         from app.views.api.auth import auth

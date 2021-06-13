@@ -76,6 +76,8 @@ def _tag(name, attributes=None, close=True, content=None, indent=0):
 
 
 def _html(data, indent=0):
+    if "html_obj" in data:
+        data["html"] = data["html_obj"]
     if "html" not in data:
         return None
 
@@ -83,6 +85,8 @@ def _html(data, indent=0):
 
 
 def _css(data, indent=0):
+    if "css_obj" in data:
+        data["css"] = data["css_obj"]
     if "css" not in data:
         return None
 
@@ -173,7 +177,7 @@ def _script(data):
     for trigger, script_file in data['scripts'].items():
         if isinstance(script_file, str):
             script += _parse_trigger(trigger, script_file)
-        else:
+        elif isinstance(script_file, list):
             for file in iter(script_file):
                 script += _parse_trigger(trigger, file)
 

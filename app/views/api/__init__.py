@@ -1,8 +1,7 @@
 import marshmallow as ma
 from flask.globals import current_app
 from marshmallow.exceptions import ValidationError
-
-from marshmallow_sqlalchemy import SQLAlchemySchemaOpts, auto_field
+from marshmallow.utils import missing
 
 
 def register_blueprints(api):
@@ -36,21 +35,48 @@ class Id(ma.fields.Integer):
         return id
 
 
-class BaseOpts(SQLAlchemySchemaOpts):
-    def __init__(self, meta, *args, **kwargs):
-        meta.unknown = ma.RAISE
-        meta.ordered = True
-        super().__init__(meta)
+class BaseSchema(ma.Schema):
+    class Meta:
+        unknown = ma.RAISE
+        ordered = True
 
+    def _create_schema(self, name, fields):
+        base_name = self.__class__.__name__.split('Schema')[0]
+        fields["Meta"] = type("GeneratedMeta", (BaseSchema.Meta, getattr(self, "Meta", object)), {"register": False})
+        return type(f'{base_name}{name}Schema', (BaseSchema,), fields)
 
-class CommonSchema(ma.Schema):
-    OPTIONS_CLASS = BaseOpts
+    @property
+    def creation_schema(self):
+        return self._create_schema("Creation", self.load_fields)
 
-    id = auto_field(dump_only=True, metadata={'description': 'Unique ID that identifies this entity'})
-    date_created = auto_field(dump_only=True, metadata={'description': 'Server time at which this entity was created'})
-    date_modified = auto_field(
-        dump_only=True, metadata={
-            'description': 'Server time when this entity was last modified'})
+    @property
+    def response_schema(self):
+        fields = self.dump_fields
+        for field in fields.values():
+            field.required = False
+            field.missing = missing
+        return self._create_schema("Response", fields)
+
+    @property
+    def query_schema(self):
+        fields = {k: v for k, v in self.load_fields.items() if isinstance(
+            v, (ma.fields.Integer, ma.fields.String, ma.fields.Boolean))}
+        for field in fields.values():
+            field.allow_none = True
+            field.required = False
+            field.missing = missing
+            if 'filter_description' in field.metadata:
+                field.metadata = {'description': field.metadata['filter_description']}
+        return self._create_schema("Query", fields)
+
+    @property
+    def update_schema(self):
+        fields = self.load_fields
+        for field in fields.values():
+            field.allow_none = True
+            field.required = False
+            field.missing = missing
+        return self._create_schema("Update", fields)
 
     def list(self, args):
         return current_app.session.query(self.Meta.model) \
@@ -73,16 +99,15 @@ class CommonSchema(ma.Schema):
             entity = new
         else:
             entity = self.Meta.model(**new)
-        loadable_fields = [k for k, v in self.fields.items() if not v.dump_only]
-        for name in loadable_fields:
-            setattr(old, name, getattr(entity, name, None))
+        for field in self.load_fields.keys():
+            setattr(old, field, getattr(entity, field, None))
         current_app.session.commit()
         return old
 
     def patch(self, old, new):
-        loadable_fields = [k for k, v in self.fields.items() if k in new and not v.dump_only]
-        for name in loadable_fields:
-            setattr(old, name, new[name])
+        for field in self.load_fields.keys():
+            if field in new:
+                setattr(old, field, new[field])
         current_app.session.commit()
         return old
 
@@ -90,3 +115,9 @@ class CommonSchema(ma.Schema):
         db = current_app.session
         db.delete(entity)
         db.commit()
+
+
+class CommonSchema(BaseSchema):
+    id = ma.fields.Integer(dump_only=True, description='Unique ID that identifies this entity')
+    date_created = ma.fields.DateTime(dump_only=True, description='Server time at which this entity was created')
+    date_modified = ma.fields.DateTime(dump_only=True, description='Server time when this entity was last modified')

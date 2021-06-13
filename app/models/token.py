@@ -32,7 +32,12 @@ class Token(Common):
             if not token:
                 token = Token(
                     id=id,
-                    permissions=Permissions(api=True),
+                    permissions=Permissions(
+                        api=True,
+                        send_message=False,
+                        send_image=False,
+                        send_command=False,
+                    ),
                     logins_left=-1,
                 )
                 session.add(token)
