@@ -5,7 +5,6 @@ function _append(text) {
 }
 
 function _getTime(timestamp) {
-    console.log(timestamp)
     let currentDate = undefined
     if (typeof timestamp === "string") {
         currentDate = new Date(timestamp)

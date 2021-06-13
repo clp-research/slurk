@@ -59,7 +59,7 @@ class User(Common):
                     id=self.id,
                     name=self.name),
                 room=str(room.id),
-                timestamp=timegm(datetime.now().utctimetuple())
+                timestamp=str(datetime.utcnow())
             ), room=str(room.id))
 
             Log.add("join", self, room)
@@ -90,5 +90,5 @@ class User(Common):
                 id=self.id,
                 name=self.name),
             room=str(room.id),
-            timestamp=timegm(datetime.now().utctimetuple())
+            timestamp=str(datetime.utcnow())
         ), room=str(room.id))

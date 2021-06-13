@@ -99,7 +99,7 @@ def text(payload):
         'msg': payload['msg'],
         'user': user,
         'room': str(room.id) if room else None,
-        'timestamp': timegm(datetime.now().utctimetuple()),
+        'timestamp': str(datetime.utcnow()),
         'private': private,
         'html': payload.get('html', False)
     }, room=receiver, broadcast=broadcast)
@@ -151,7 +151,7 @@ def message_command(payload):
         'command': payload['command'],
         'user': user,
         'room': str(room.id) if room else None,
-        'timestamp': timegm(datetime.now().utctimetuple()),
+        'timestamp': str(datetime.utcnow()),
         'private': private,
     }, room=receiver, broadcast=broadcast)
     Log.add("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
@@ -208,7 +208,7 @@ def image(payload):
         'width': width,
         'height': height,
         'room': str(room.id) if room else None,
-        'timestamp': timegm(datetime.now().utctimetuple()),
+        'timestamp': str(datetime.utcnow()),
         'private': private,
     }, room=receiver, broadcast=broadcast)
     Log.add("image_message", current_user, room, data={'receiver': payload['receiver_id'] if private else None,
