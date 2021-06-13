@@ -19,8 +19,6 @@ script_dict = ma.Schema.from_dict({
     'plain': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Injected as a script file into the site'}),
 }, name="Scripts")
 
-# Base schema, not used by marshmallow
-
 
 class LayoutSchema(CommonSchema):
     class Meta:
@@ -30,7 +28,7 @@ class LayoutSchema(CommonSchema):
                              filter_description='Filter for a layout title')
     subtitle = ma.fields.String(missing=None, description='Subtitle of the layout',
                                 filter_description='Filter for a layout subtitle')
-    html_obj = ma.fields.Dict(load_only=True, missing={}, data_key='html', description='HTML used in the layout')
+    html_obj = ma.fields.List(ma.fields.Dict, load_only=True, missing={}, data_key='html', description='HTML used in the layout')
     css_obj = ma.fields.Dict(load_only=True, missing={}, data_key='css', description='Stylesheet used in the layout')
     scripts = ma.fields.Nested(script_dict, load_only=True, missing={},
                                description='Scripts to be injected in the layout')

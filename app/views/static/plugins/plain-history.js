@@ -1,8 +1,13 @@
+if (element.date_modified !== null)
+    date = element.date_modified
+else
+    date = element.date_created
+
 switch (element.event) {
     case 'text_message':
         display_message(
             element.user,
-            element.date_modified,
+            date,
             element.data.message,
             element.receiver !== null);
         break;

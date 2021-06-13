@@ -5,11 +5,12 @@ function _append(text) {
 }
 
 function _getTime(timestamp) {
+    console.log(timestamp)
     let currentDate = undefined
-    if (typeof timestamp === 'string') {
+    if (typeof timestamp === "string") {
         currentDate = new Date(timestamp)
         currentDate.setTime(currentDate.getTime() - new Date().getTimezoneOffset() * 60000)
-    } else if (typeof timestamp === "undefined") {
+    } else if (timestamp === null) {
         currentDate = new Date()
     } else {
         currentDate = new Date((timestamp + new Date().getTimezoneOffset() * 60) * 1000);
