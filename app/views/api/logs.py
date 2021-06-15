@@ -17,34 +17,37 @@ class LogSchema(CommonSchema):
         required=True,
         description='The event associated with this log entry',
         filter_description='Filter by event')
-    user_id = Id(table=User, missing=None, description='Source user for this log entry',
-                 filter_description='Filter for user associated with this log entry')
-    room_id = Id(table=Room, missing=None, description='Source room for this log entry',
-                 filter_description='Filter for room associated with this log entry')
-    receiver = Id(table=User, missing=None, description='Receiver associated  with this log entry',
-                  filter_description='Filter for receiver associated with this log entry')
+    user_id = Id(
+        User,
+        missing=None,
+        description='Source user for this log entry',
+        filter_description='Filter for user associated with this log entry')
+    room_id = Id(
+        Room,
+        missing=None,
+        description='Source room for this log entry',
+        filter_description='Filter for room associated with this log entry')
+    receiver = Id(
+        User,
+        missing=None,
+        description='Receiver associated  with this log entry',
+        filter_description='Filter for receiver associated with this log entry')
     data = ma.fields.Dict(missing={}, description='Data stored inside this log entry')
-
-
-LogCreationSchema = LogSchema().creation_schema
-LogUpdateSchema = LogSchema().update_schema
-LogResponseSchema = LogSchema().response_schema
-LogQuerySchema = LogSchema().query_schema
 
 
 @blp.route('/')
 class Logs(MethodView):
     @blp.etag
-    @blp.arguments(LogQuerySchema, location='query')
-    @blp.response(200, LogResponseSchema(many=True))
+    @blp.arguments(LogSchema.Filter, location='query')
+    @blp.response(200, LogSchema.Response(many=True))
     @blp.login_required
     def get(self, args):
         """List logs"""
         return LogSchema().list(args)
 
     @blp.etag
-    @blp.arguments(LogCreationSchema)
-    @blp.response(201, LogResponseSchema)
+    @blp.arguments(LogSchema.Creation)
+    @blp.response(201, LogSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new log"""
@@ -55,7 +58,7 @@ class Logs(MethodView):
 class LogById(MethodView):
     @blp.etag
     @blp.query('log', LogSchema)
-    @blp.response(200, LogResponseSchema)
+    @blp.response(200, LogSchema.Response)
     @blp.login_required
     def get(self, *, log):
         """Get a log by ID"""
@@ -63,8 +66,8 @@ class LogById(MethodView):
 
     @blp.etag
     @blp.query('log', LogSchema)
-    @blp.arguments(LogCreationSchema)
-    @blp.response(200, LogResponseSchema)
+    @blp.arguments(LogSchema.Creation)
+    @blp.response(200, LogSchema.Response)
     @blp.login_required
     def put(self, new_log, *, log):
         """Replace a log identified by ID"""
@@ -72,8 +75,8 @@ class LogById(MethodView):
 
     @blp.etag
     @blp.query('log', LogSchema)
-    @blp.arguments(LogUpdateSchema)
-    @blp.response(200, LogResponseSchema)
+    @blp.arguments(LogSchema.Update)
+    @blp.response(200, LogSchema.Response)
     @blp.login_required
     def patch(self, new_log, *, log):
         """Update a log identified by ID"""

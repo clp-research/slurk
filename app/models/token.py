@@ -15,7 +15,7 @@ class Token(Common):
 
     id = Column(String(length=36), primary_key=True, default=uuid)
     permissions_id = Column(Integer, ForeignKey('Permissions.id'), nullable=False)
-    logins_left = Column(Integer, default=1, nullable=False)
+    logins_left = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('Task.id'))
     room_id = Column(Integer, ForeignKey('Room.id'))
 

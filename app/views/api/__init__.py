@@ -23,7 +23,7 @@ def register_blueprints(api):
 
 
 class Id(ma.fields.Integer):
-    def __init__(self, *, table, **kwargs):
+    def __init__(self, table, **kwargs):
         self._table = table
         super().__init__(strict=False, **kwargs)
 
@@ -36,47 +36,99 @@ class Id(ma.fields.Integer):
 
 
 class BaseSchema(ma.Schema):
+    known_schemas = {}
+
     class Meta:
         unknown = ma.RAISE
         ordered = True
 
-    def _create_schema(self, name, fields):
-        base_name = self.__class__.__name__.split('Schema')[0]
-        fields["Meta"] = type("GeneratedMeta", (BaseSchema.Meta, getattr(self, "Meta", object)), {"register": False})
-        return type(f'{base_name}{name}Schema', (BaseSchema,), fields)
+    def _create_schema(self, name, fields, inner=None):
+        name = f'{self.__class__.__name__.split("Schema")[0]}{name}Schema'
+        if name in BaseSchema.known_schemas:
+            return BaseSchema.known_schemas[name]
 
-    @property
-    def creation_schema(self):
-        return self._create_schema("Creation", self.load_fields)
+        if BaseSchema.Meta == getattr(self, "Meta"):
+            fields["Meta"] = type("GeneratedMeta", (BaseSchema.Meta,), {"register": False})
+        else:
+            fields["Meta"] = type("GeneratedMeta", (BaseSchema.Meta, getattr(self, "Meta")), {"register": False})
+        BaseSchema.known_schemas[name] = type(name, (BaseSchema,), fields)
+        return BaseSchema.known_schemas[name]
 
+    @classmethod
     @property
-    def response_schema(self):
-        fields = self.dump_fields
-        for field in fields.values():
-            field.required = False
-            field.missing = missing
-        return self._create_schema("Response", fields)
+    def Creation(cls):
+        """Returns the class only with load fields"""
+        def create_schema(schema):
+            fields = schema.load_fields
+            for field in fields.values():
+                if isinstance(field, ma.fields.Nested) and issubclass(field.nested, BaseSchema):
+                    field.nested = create_schema(field.nested())
+            return schema._create_schema("Creation", fields)
+        return create_schema(cls())
 
+    @classmethod
     @property
-    def query_schema(self):
-        fields = {k: v for k, v in self.load_fields.items() if isinstance(
-            v, (ma.fields.Integer, ma.fields.String, ma.fields.Boolean))}
-        for field in fields.values():
-            field.allow_none = True
-            field.required = False
-            field.missing = missing
-            if 'filter_description' in field.metadata:
-                field.metadata = {'description': field.metadata['filter_description']}
-        return self._create_schema("Query", fields)
+    def Response(cls):
+        """Returns the class only with dump fields
 
+        For all fields the required property is set to False and the missing property is reset"""
+        def create_schema(schema):
+            fields = schema.dump_fields
+            for field in fields.values():
+                field.required = False
+                field.missing = missing
+                if isinstance(field, ma.fields.Nested) and issubclass(field.nested, BaseSchema):
+                    field.nested = create_schema(field.nested())
+            return schema._create_schema("Response", fields)
+        return create_schema(cls())
+
+    @classmethod
     @property
-    def update_schema(self):
-        fields = self.load_fields
-        for field in fields.values():
-            field.allow_none = True
-            field.required = False
-            field.missing = missing
-        return self._create_schema("Update", fields)
+    def Filter(cls):
+        """Returns the class only with load fields, which are either Integer, String, or Boolean
+
+        For all fields the required property is set to False, None is allowed, the missing property is reset,
+        and the metadatafield "filter_description" is used as description"""
+        def create_schema(schema):
+            fields = {k: v for k, v in schema.load_fields.items() if isinstance(
+                v, (ma.fields.Integer, ma.fields.String, ma.fields.Boolean))}
+            for field in fields.values():
+                field.allow_none = True
+                field.required = False
+                field.missing = missing
+                if isinstance(field, ma.fields.Nested) and issubclass(field.nested, BaseSchema):
+                    field.nested = create_schema(field.nested())
+                if 'filter_description' in field.metadata:
+                    field.metadata = {'description': field.metadata['filter_description']}
+            return schema._create_schema("Filter", fields)
+        return create_schema(cls())
+
+    @classmethod
+    @property
+    def Update(cls):
+        """Returns the class only with load fields
+
+        For all fields the required property is set to False, None is allowed, and the missing property is reset"""
+        def create_schema(schema):
+            fields = schema.load_fields
+            for field in fields.values():
+                field.allow_none = True
+                field.required = False
+                field.missing = missing
+                if isinstance(field, ma.fields.Nested) and issubclass(field.nested, BaseSchema):
+                    field.nested = create_schema(field.nested())
+            return schema._create_schema("Update", fields)
+        return create_schema(cls())
+
+
+class CommonSchema(BaseSchema):
+    """Common fields and operations for database access"""
+    id = ma.fields.Integer(dump_only=True, description='Unique ID that identifies this entity')
+    date_created = ma.fields.DateTime(dump_only=True, description='Server time at which this entity was created')
+    date_modified = ma.fields.DateTime(
+        dump_only=True,
+        allow_none=True,
+        description='Server time when this entity was last modified')
 
     def list(self, args):
         return current_app.session.query(self.Meta.model) \
@@ -115,9 +167,3 @@ class BaseSchema(ma.Schema):
         db = current_app.session
         db.delete(entity)
         db.commit()
-
-
-class CommonSchema(BaseSchema):
-    id = ma.fields.Integer(dump_only=True, description='Unique ID that identifies this entity')
-    date_created = ma.fields.DateTime(dump_only=True, description='Server time at which this entity was created')
-    date_modified = ma.fields.DateTime(dump_only=True, allow_none=True, description='Server time when this entity was last modified')

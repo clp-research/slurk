@@ -13,32 +13,33 @@ class TaskSchema(CommonSchema):
     class Meta:
         model = Task
 
-    name = ma.fields.String(required=True, description='Name of the task', filter_description='Filter for a task name')
-    num_users = ma.fields.Integer(required=True,
-                                  description='Number of users needed for this task',
-                                  filter_description='Filter for number of users needed for this task')
-    layout_id = Id(table=Layout, required=True, description='Layout for this task',
-                   filter_description='Filter for layout used in the tasks')
-
-
-TaskCreationSchema = TaskSchema().creation_schema
-TaskUpdateSchema = TaskSchema().update_schema
-TaskResponseSchema = TaskSchema().response_schema
-TaskQuerySchema = TaskSchema().query_schema
+    name = ma.fields.String(
+        required=True,
+        description='Name of the task',
+        filter_description='Filter for a task name')
+    num_users = ma.fields.Integer(
+        required=True,
+        description='Number of users needed for this task',
+        filter_description='Filter for number of users needed for this task')
+    layout_id = Id(
+        Layout,
+        required=True,
+        description='Layout for this task',
+        filter_description='Filter for layout used in the tasks')
 
 
 @blp.route('/')
 class Tasks(MethodView):
     @blp.etag
-    @blp.arguments(TaskQuerySchema, location='query')
-    @blp.response(200, TaskResponseSchema(many=True))
+    @blp.arguments(TaskSchema.Filter, location='query')
+    @blp.response(200, TaskSchema.Response(many=True))
     def get(self, args):
         """List tasks"""
         return TaskSchema().list(args)
 
     @blp.etag
-    @blp.arguments(TaskCreationSchema)
-    @blp.response(201, TaskResponseSchema)
+    @blp.arguments(TaskSchema.Creation)
+    @blp.response(201, TaskSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new task"""
@@ -49,15 +50,15 @@ class Tasks(MethodView):
 class TaskById(MethodView):
     @blp.etag
     @blp.query('task', TaskSchema)
-    @blp.response(200, TaskResponseSchema)
+    @blp.response(200, TaskSchema.Response)
     def get(self, *, task):
         """Get a task by ID"""
         return task
 
     @blp.etag
     @blp.query('task', TaskSchema)
-    @blp.arguments(TaskCreationSchema)
-    @blp.response(200, TaskResponseSchema)
+    @blp.arguments(TaskSchema.Creation)
+    @blp.response(200, TaskSchema.Response)
     @blp.login_required
     def put(self, new_task, *, task):
         """Replace a task identified by ID"""
@@ -65,12 +66,12 @@ class TaskById(MethodView):
 
     @blp.etag
     @blp.query('task', TaskSchema)
-    @blp.arguments(TaskUpdateSchema)
-    @blp.response(200, TaskResponseSchema)
+    @blp.arguments(TaskSchema.Update)
+    @blp.response(200, TaskSchema.Response)
     @blp.login_required
     def patch(self, new_task, *, task):
         """Update a task identified by ID"""
-        return TaskUpdateSchema().patch(task, new_task)
+        return TaskSchema.Update().patch(task, new_task)
 
     @blp.etag
     @blp.query('task', TaskSchema)

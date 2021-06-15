@@ -1,4 +1,3 @@
-from uuid import uuid4
 from flask.views import MethodView
 from flask.globals import current_app
 import marshmallow as ma
@@ -14,9 +13,8 @@ blp = Blueprint(Token.__tablename__ + 's', __name__)
 class TokenId(ma.fields.UUID):
     def _validated(self, value):
         id = str(super()._validated(value))
-        self.error_messages['foreign_key'] = f'Token `{id}` does not exist'
         if current_app.session.query(Token).get(id) is None:
-            raise self.make_error('foreign_key')
+            raise ma.ValidationError(f'Token `{id}` does not exist')
         return id
 
 
@@ -24,46 +22,43 @@ class TokenSchema(CommonSchema):
     class Meta:
         model = Token
 
-    id = TokenId(missing=lambda: str(uuid4()), dump_only=True, description='Unique ID that identifies this entity')
+    id = TokenId(
+        dump_only=True,
+        description='Unique ID that identifies this entity')
     permissions_id = Id(
-        table=Permissions,
+        Permissions,
         required=True,
         description='Permissions for this token',
         filter_description='Filter for permissions')
-    logins_left = ma.fields.Integer(missing=1,
-                                    description='Logins left for this token',
-                                    filter_description='Filter for left logins')
+    logins_left = ma.fields.Integer(
+        missing=1,
+        description='Logins left for this token',
+        filter_description='Filter for left logins')
     task_id = Id(
-        table=Task,
+        Task,
         missing=None,
         description='Task assigned to this token',
         filter_description='Filter for tasks')
     room_id = Id(
-        table=Room,
+        Room,
         missing=None,
         description='Room assigned to this token',
         filter_description='Filter for rooms')
 
 
-TokenCreationSchema = TokenSchema().creation_schema
-TokenUpdateSchema = TokenSchema().update_schema
-TokenResponseSchema = TokenSchema().response_schema
-TokenQuerySchema = TokenSchema().query_schema
-
-
 @blp.route('/')
 class Tokens(MethodView):
     @blp.etag
-    @blp.arguments(TokenQuerySchema, location='query')
-    @blp.response(200, TokenResponseSchema(many=True))
+    @blp.arguments(TokenSchema.Filter, location='query')
+    @blp.response(200, TokenSchema.Response(many=True))
     @blp.login_required
     def get(self, args):
         """List tokens"""
         return TokenSchema().list(args)
 
     @blp.etag
-    @blp.arguments(TokenCreationSchema)
-    @blp.response(201, TokenResponseSchema)
+    @blp.arguments(TokenSchema.Creation)
+    @blp.response(201, TokenSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new token"""
@@ -73,15 +68,15 @@ class Tokens(MethodView):
 @blp.route('/<uuid:token_id>')
 class TokensById(MethodView):
     @blp.query('token', TokenSchema)
-    @blp.response(200, TokenResponseSchema)
+    @blp.response(200, TokenSchema.Response)
     def get(self, *, token):
         """Get a token by ID"""
         return token
 
     @blp.etag
     @blp.query('token', TokenSchema)
-    @blp.arguments(TokenCreationSchema)
-    @blp.response(200, TokenResponseSchema)
+    @blp.arguments(TokenSchema.Creation)
+    @blp.response(200, TokenSchema.Response)
     @blp.login_required
     def put(self, new_token, *, token):
         """Replace a token identified by ID"""
@@ -89,12 +84,12 @@ class TokensById(MethodView):
 
     @blp.etag
     @blp.query('token', TokenSchema)
-    @blp.arguments(TokenUpdateSchema)
-    @blp.response(200, TokenResponseSchema)
+    @blp.arguments(TokenSchema.Update)
+    @blp.response(200, TokenSchema.Response)
     @blp.login_required
     def patch(self, new_token, *, token):
         """Update a token identified by ID"""
-        return TokenUpdateSchema().patch(token, new_token)
+        return TokenSchema.Update().patch(token, new_token)
 
     @blp.etag
     @blp.query('token', TokenSchema)

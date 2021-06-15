@@ -15,35 +15,33 @@ class UserSchema(CommonSchema):
     class Meta:
         model = User
 
-    name = ma.fields.String(required=True, description='Name of the user', filter_description='Filter for a user name')
-    token_id = TokenId(
+    name = ma.fields.String(
         required=True,
+        description='Name of the user',
+        filter_description='Filter for a user name')
+    token_id = TokenId(
         load_only=True,
+        required=True,
         description='Token associated with this user',
         filter_description='Filter for users using this token')
-    session_id = ma.fields.String(dump_only=True,
-                                  description='SocketIO session ID for this user',
-                                  filter_description='Filter for a SocketIO session ID')
-
-
-UserCreationSchema = UserSchema().creation_schema
-UserUpdateSchema = UserSchema().update_schema
-UserResponseSchema = UserSchema().response_schema
-UserQuerySchema = UserSchema().query_schema
+    session_id = ma.fields.String(
+        dump_only=True,
+        description='SocketIO session ID for this user',
+        filter_description='Filter for a SocketIO session ID')
 
 
 @blp.route('/')
 class Users(MethodView):
     @blp.etag
-    @blp.arguments(UserQuerySchema, location='query')
-    @blp.response(200, UserResponseSchema(many=True))
+    @blp.arguments(UserSchema.Filter, location='query')
+    @blp.response(200, UserSchema.Response(many=True))
     def get(self, args):
         """List users"""
         return UserSchema().list(args)
 
     @blp.etag
-    @blp.arguments(UserCreationSchema)
-    @blp.response(201, UserResponseSchema)
+    @blp.arguments(UserSchema.Creation)
+    @blp.response(201, UserSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new user"""
@@ -54,15 +52,15 @@ class Users(MethodView):
 class UserById(MethodView):
     @blp.etag
     @blp.query('user', UserSchema)
-    @blp.response(200, UserResponseSchema)
+    @blp.response(200, UserSchema.Response)
     def get(self, *, user):
         """Get a user by ID"""
         return user
 
     @blp.etag
     @blp.query('user', UserSchema)
-    @blp.arguments(UserCreationSchema)
-    @blp.response(200, UserResponseSchema)
+    @blp.arguments(UserSchema.Creation)
+    @blp.response(200, UserSchema.Response)
     @blp.login_required
     def put(self, new_user, *, user):
         """Replace a user identified by ID"""
@@ -70,12 +68,12 @@ class UserById(MethodView):
 
     @blp.etag
     @blp.query('user', UserSchema)
-    @blp.arguments(UserUpdateSchema)
-    @blp.response(200, UserResponseSchema)
+    @blp.arguments(UserSchema.Update)
+    @blp.response(200, UserSchema.Response)
     @blp.login_required
     def patch(self, new_user, *, user):
         """Update a user identified by ID"""
-        return UserUpdateSchema().patch(user, new_user)
+        return UserSchema.Update().patch(user, new_user)
 
     @blp.etag
     @blp.query('user', UserSchema)

@@ -1,9 +1,17 @@
 {
     "title": "Default Room",
     "scripts": {
-        "incoming-text": "display-text",
-        "incoming-image": "display-image",
-        "submit-message": "send-message",
-        "print-history": "plain-history"
+        "incoming-text": [
+            "display-text"
+        ],
+        "incoming-image": [
+            "display-image"
+        ],
+        "submit-message": [
+            "send-message"
+        ],
+        "print-history": [
+            "plain-history"
+        ]
     }
 }

@@ -44,7 +44,7 @@ def create_app(test_config=None, engine=None):
         api_ext.init_app(app)
         database_ext.init_app(app, engine)
 
-        app.logger.debug(app.url_map)
+        # app.logger.debug(app.url_map)
 
         if app.config['DEBUG']:
             admin_token = '00000000-0000-0000-0000-000000000000'

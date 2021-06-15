@@ -9,46 +9,37 @@ from app.extensions.api import Blueprint
 from app.extensions.events import socketio
 from app.models import Room, Layout, Log
 
-from .users import UserSchema, UserResponseSchema, blp as user_blp
-from .logs import LogResponseSchema
+from .users import UserSchema, blp as user_blp
+from .logs import LogSchema
 from . import CommonSchema, Id
 
 
 blp = Blueprint(Room.__tablename__ + 's', __name__)
 
 
-LAYOUT_ID_DESC = (
-    'Layout for this room',
-    'Filter for layout used in the rooms'
-)
-
-
 class RoomSchema(CommonSchema):
     class Meta:
         model = Room
 
-    layout_id = Id(table=Layout, required=True, description='Layout for this room',
-                   filter_description='Filter for layout used in the rooms')
-
-
-RoomCreationSchema = RoomSchema().creation_schema
-RoomUpdateSchema = RoomSchema().update_schema
-RoomResponseSchema = RoomSchema().response_schema
-RoomQuerySchema = RoomSchema().query_schema
+    layout_id = Id(
+        Layout,
+        description='Layout for this room',
+        required=True,
+        filter_description='Filter for layout used in the rooms')
 
 
 @blp.route('/')
 class Rooms(MethodView):
     @blp.etag
-    @blp.arguments(RoomQuerySchema, location='query')
-    @blp.response(200, RoomResponseSchema(many=True))
+    @blp.arguments(RoomSchema.Filter, location='query')
+    @blp.response(200, RoomSchema.Response(many=True))
     def get(self, args):
         """List rooms"""
         return RoomSchema().list(args)
 
     @blp.etag
-    @blp.arguments(RoomCreationSchema)
-    @blp.response(201, RoomResponseSchema)
+    @blp.arguments(RoomSchema.Creation)
+    @blp.response(201, RoomSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new room"""
@@ -59,15 +50,15 @@ class Rooms(MethodView):
 class RoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
-    @blp.response(200, RoomResponseSchema)
+    @blp.response(200, RoomSchema.Response)
     def get(self, *, room):
         """Get a room by ID"""
         return room
 
     @blp.etag
     @blp.query('room', RoomSchema)
-    @blp.arguments(RoomCreationSchema)
-    @blp.response(200, RoomResponseSchema)
+    @blp.arguments(RoomSchema.Creation)
+    @blp.response(200, RoomSchema.Response)
     @blp.login_required
     def put(self, new_room, *, room):
         """Replace a room identified by ID"""
@@ -75,12 +66,12 @@ class RoomById(MethodView):
 
     @blp.etag
     @blp.query('room', RoomSchema)
-    @blp.arguments(RoomUpdateSchema)
-    @blp.response(200, RoomResponseSchema)
+    @blp.arguments(RoomSchema.Update)
+    @blp.response(200, RoomSchema.Response)
     @blp.login_required
     def patch(self, new_room, *, room):
         """Update a room identified by ID"""
-        return RoomUpdateSchema().patch(room, new_room)
+        return RoomSchema.Update().patch(room, new_room)
 
     @blp.etag
     @blp.query('room', RoomSchema)
@@ -95,7 +86,7 @@ class RoomById(MethodView):
 class UsersByRoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
-    @blp.response(200, UserResponseSchema(many=True))
+    @blp.response(200, UserSchema.Response(many=True))
     def get(self, *, room):
         """List active users by rooms"""
         return filter(lambda u: u.session_id is not None, room.users)
@@ -106,7 +97,7 @@ class UsersByRoomById(MethodView):
 class RoomsByUserById(MethodView):
     @blp.etag
     @blp.query('user', UserSchema)
-    @blp.response(200, RoomResponseSchema(many=True))
+    @blp.response(200, RoomSchema.Response(many=True))
     def get(self, *, user):
         """List rooms by users"""
         return user.rooms
@@ -118,7 +109,7 @@ class UserRoom(MethodView):
     @blp.etag
     @blp.query('user', UserSchema)
     @blp.query('room', RoomSchema)
-    @blp.response(201, UserResponseSchema)
+    @blp.response(201, UserSchema.Response)
     @blp.login_required
     def post(self, *, user, room):
         """Add a user to a room"""
@@ -140,7 +131,7 @@ class LogsByUserByRoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.query('user', UserSchema)
-    @blp.response(200, LogResponseSchema(many=True))
+    @blp.response(200, LogSchema.Response(many=True))
     def get(self, *, room, user):
         """List logs by room and user"""
         return current_app.session.query(Log) \

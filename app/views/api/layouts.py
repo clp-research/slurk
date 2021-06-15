@@ -24,25 +24,50 @@ class LayoutSchema(CommonSchema):
     class Meta:
         model = Layout
 
-    title = ma.fields.String(required=True, description='Title of the layout',
-                             filter_description='Filter for a layout title')
-    subtitle = ma.fields.String(missing=None, description='Subtitle of the layout',
-                                filter_description='Filter for a layout subtitle')
-    html_obj = ma.fields.List(ma.fields.Dict, load_only=True, missing={}, data_key='html', description='HTML used in the layout')
-    css_obj = ma.fields.Dict(load_only=True, missing={}, data_key='css', description='Stylesheet used in the layout')
-    scripts = ma.fields.Nested(script_dict, load_only=True, missing={},
-                               description='Scripts to be injected in the layout')
-    html = ma.fields.String(dump_only=True, data_key='html', description=html_obj.metadata['description'])
-    css = ma.fields.String(dump_only=True, data_key='css', description=css_obj.metadata['description'])
-    script = ma.fields.String(dump_only=True, description='Script injected in the layout')
-    show_users = ma.fields.Boolean(missing=True,
-                                   description='Show a user list in the layout',
-                                   filter_description='Filter for a user list being shown')
-    show_latency = ma.fields.Boolean(missing=True,
-                                     description='Show the current latency in the layout',
-                                     filter_description='Filter for latency being shown')
-    read_only = ma.fields.Boolean(missing=False, description='Make the room read-only',
-                                  filter_description='Filter for the layout being read-only')
+    title = ma.fields.String(
+        required=True,
+        description='Title of the layout',
+        filter_description='Filter for a layout title')
+    subtitle = ma.fields.String(
+        missing=None,
+        description='Subtitle of the layout',
+        filter_description='Filter for a layout subtitle')
+    html_obj = ma.fields.List(
+        ma.fields.Dict,
+        data_key='html',
+        load_only=True,
+        missing=[],
+        description='HTML used in the layout')
+    css_obj = ma.fields.Dict(
+        data_key='css',
+        load_only=True,
+        missing={},
+        description='Stylesheet used in the layout')
+    scripts = ma.fields.Nested(
+        script_dict,
+        load_only=True,
+        missing={},
+        description='Scripts to be injected in the layout')
+    html = ma.fields.String(
+        dump_only=True,
+        description=html_obj.metadata['description'])
+    css = ma.fields.String(
+        dump_only=True,
+        description=css_obj.metadata['description'])
+    script = ma.fields.String(
+        dump_only=True,
+        description='Script injected in the layout')
+    show_users = ma.fields.Boolean(
+        missing=True,
+        description='Show a user list in the layout',
+        filter_description='Filter for a user list being shown')
+    show_latency = ma.fields.Boolean(
+        missing=True,
+        description='Show the current latency in the layout',
+        filter_description='Filter for latency being shown')
+    read_only = ma.fields.Boolean(
+        missing=False, description='Make the room read-only',
+        filter_description='Filter for the layout being read-only')
 
     def patch(self, old, new):
         layout = Layout.from_json_data(new)
@@ -56,12 +81,6 @@ class LayoutSchema(CommonSchema):
             new['script'] = layout.script
             del new['scripts']
         return super().patch(old, new)
-
-
-LayoutCreationSchema = LayoutSchema().creation_schema
-LayoutUpdateSchema = LayoutSchema().update_schema
-LayoutResponseSchema = LayoutSchema().response_schema
-LayoutQuerySchema = LayoutSchema().query_schema
 
 
 EXAMPLE = dict(
@@ -79,15 +98,15 @@ EXAMPLE = dict(
 @blp.route('/')
 class Layouts(MethodView):
     @blp.etag
-    @blp.arguments(LayoutQuerySchema, location='query')
-    @blp.response(200, LayoutResponseSchema(many=True))
+    @blp.arguments(LayoutSchema.Filter, location='query')
+    @blp.response(200, LayoutSchema.Response(many=True))
     def get(self, args):
         """List layouts"""
         return LayoutSchema().list(args)
 
     @blp.etag
-    @blp.arguments(LayoutCreationSchema, location='json', example=EXAMPLE)
-    @blp.response(201, LayoutResponseSchema)
+    @blp.arguments(LayoutSchema.Creation, location='json', example=EXAMPLE)
+    @blp.response(201, LayoutSchema.Response)
     @blp.login_required
     def post(self, item):
         """Add a new layout"""
@@ -98,15 +117,15 @@ class Layouts(MethodView):
 class LayoutById(MethodView):
     @blp.etag
     @blp.query('layout', LayoutSchema)
-    @blp.response(200, LayoutResponseSchema)
+    @blp.response(200, LayoutSchema.Response)
     def get(self, *, layout):
         """Get a layout by ID"""
         return layout
 
     @blp.etag
     @blp.query('layout', LayoutSchema)
-    @blp.arguments(LayoutCreationSchema, location='json')
-    @blp.response(200, LayoutResponseSchema)
+    @blp.arguments(LayoutSchema.Creation, location='json')
+    @blp.response(200, LayoutSchema.Response)
     @blp.login_required
     def put(self, new_layout, *, layout):
         """Replace a layout identified by ID"""
@@ -114,8 +133,8 @@ class LayoutById(MethodView):
 
     @blp.etag
     @blp.query('layout', LayoutSchema)
-    @blp.arguments(LayoutUpdateSchema, location='json')
-    @blp.response(200, LayoutResponseSchema)
+    @blp.arguments(LayoutSchema.Update, location='json')
+    @blp.response(200, LayoutSchema.Response)
     @blp.login_required
     def patch(self, new_layout, *, layout):
         """Update a layout identified by ID"""

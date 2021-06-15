@@ -1,7 +1,7 @@
 from functools import wraps
 from flask.globals import current_app, g
 from flask_httpauth import HTTPTokenAuth as _FlaskHTTPTokenAuth
-from werkzeug.exceptions import BadRequest, Unauthorized
+from werkzeug.exceptions import Unauthorized
 from sqlalchemy.exc import StatementError
 
 from app.extensions.api import abort

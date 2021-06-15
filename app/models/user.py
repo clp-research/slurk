@@ -1,7 +1,6 @@
-from calendar import timegm
 from datetime import datetime
 
-from sqlalchemy import Column, String, asc, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from .common import Common, user_room
