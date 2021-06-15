@@ -20,6 +20,7 @@ def create_app(test_config=None, engine=None):
         static_folder=os.path.join('views', 'static'),
         template_folder=os.path.join('views', 'templates'),
     )
+    app.logger.name = 'slurk'
 
     if not test_config:
         app.config.from_object('config')
