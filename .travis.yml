@@ -37,8 +37,17 @@ jobs:
     name: Documentation
     language: python
     python: 3.9
-    install: pip install sphinx sphinx_rtd_theme
-    script: (cd docs && make html)
+    env:
+      - DATABASE='sqlite:///'
+      - FLASK_APP=app
+    install:
+      - pip install -r requirements.txt
+      - pip install sphinx sphinxcontrib-openapi sphinx_rtd_theme
+    script:
+      - mkdir -p docs/_build/html
+      - cp docs/slurk_api_rapidoc.html docs/_build/html/rapidoc.html
+      - flask openapi write docs/_build/html/openapi.json
+      - (cd docs && make html)
     after_success: touch docs/_build/html/.nojekyll
     deploy:
       provider: pages

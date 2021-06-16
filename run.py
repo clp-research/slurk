@@ -12,7 +12,8 @@ port = int(os.environ.get('PORT', 5000))
 app = create_app()
 
 if __name__ == '__main__':
-    from app import socketio
+    from app.extensions.events import socketio
+
     socketio.run(
         app,
         host,
