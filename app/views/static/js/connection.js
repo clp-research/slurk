@@ -126,6 +126,7 @@ $(document).ready(() => {
     }
 
     async function openvidu(data) {
+        console.log("Starting openvidu:", data)
         OV = new OpenVidu()
         session = OV.initSession()
 
@@ -137,15 +138,15 @@ $(document).ready(() => {
             console.warn(exception);
         });
 
-        session.connect(data.token).then(() => {
+        session.connect(data.connection.token).then(() => {
             let publisher = OV.initPublisher(document.querySelector('header nav'),
                 {
-                    audioSource: undefined, // The source of audio. If undefined default microphone
-                    videoSource: undefined, // The source of video. If undefined default webcam
-                    publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-                    publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-                    resolution: '320x240',  // Th;e resolution of your video
-                    frameRate: 60,			// The frame rate of your video
+                    audioSource: undefined,                 // The source of audio. If undefined default microphone
+                    videoSource: undefined,                 // The source of video. If undefined default webcam
+                    publishAudio: data.start_with_audio,  	// Whether you want to start publishing with your audio unmuted or not
+                    publishVideo: data.start_with_video,  	// Whether you want to start publishing with your video enabled or not
+                    resolution: data.video_resolution,      // The resolution of your video
+                    frameRate: data.video_framerate,		// The frame rate of your video
                 })
             // publisher.addVideoElement(document.querySelector('header video'))
 

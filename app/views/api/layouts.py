@@ -67,8 +67,25 @@ class LayoutSchema(CommonSchema):
         description='Show the current latency in the layout',
         filter_description='Filter for latency being shown')
     read_only = ma.fields.Boolean(
-        missing=False, description='Make the room read-only',
+        missing=False,
+        description='Make the room read-only',
         filter_description='Filter for the layout being read-only')
+    start_with_audio = ma.fields.Boolean(
+        missing=True,
+        description='Start audio on joining the room if available',
+        filter_description='Filter for starting audio on joining')
+    start_with_video = ma.fields.Boolean(
+        missing=True,
+        description='Start video on joining the room if available',
+        filter_description='Filter for starting video on joining')
+    video_resolution = ma.fields.String(
+        missing="640x480",
+        description='Video resolution if available',
+        filter_description='Filter for video resolution')
+    video_framerate = ma.fields.Integer(
+        missing=30,
+        description='Framerate for video if available',
+        filter_description='Filter for video framerate')
 
     def patch(self, old, new):
         layout = Layout.from_json_data(new)

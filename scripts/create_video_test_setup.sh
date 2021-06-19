@@ -159,7 +159,10 @@ function create_layout {
             "incoming-image": ["display-image"],
             "submit-message": ["send-message"],
             "print-history": ["plain-history"]
-        }
+        },
+        "video_resolution": "320x240",
+        "video_framerate": 60,
+        "start_with_audio": false
     }'
 
     local response=$(curl -sX POST \

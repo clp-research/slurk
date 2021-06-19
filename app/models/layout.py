@@ -9,7 +9,7 @@ from flask.globals import current_app
 
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import Boolean
+from sqlalchemy.sql.sqltypes import Boolean, Integer
 
 from .common import Common
 
@@ -197,6 +197,10 @@ class Layout(Common):
     show_users = Column(Boolean, nullable=False)
     show_latency = Column(Boolean, nullable=False)
     read_only = Column(Boolean, nullable=False)
+    start_with_audio = Column(Boolean, nullable=False)
+    start_with_video = Column(Boolean, nullable=False)
+    video_resolution = Column(String, nullable=False)
+    video_framerate = Column(Integer, nullable=False)
 
     @classmethod
     def from_json(cls, json_data):
@@ -260,12 +264,11 @@ class Layout(Common):
             html=html,
             css=css,
             script=script,
-            show_users=data.get(
-                'show_users',
-                True),
-            show_latency=data.get(
-                'show_latency',
-                True),
-            read_only=data.get(
-                'read_only',
-                True))
+            show_users=data.get('show_users', True),
+            show_latency=data.get('show_latency', True),
+            read_only=data.get('read_only', True),
+            start_with_audio=data.get('start_with_audio', True),
+            start_with_video=data.get('start_with_video', True),
+            video_resolution=data.get('video_resolution', "640x480"),
+            video_framerate=data.get('video_framerate', 30),
+        )

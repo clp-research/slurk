@@ -74,9 +74,13 @@ class User(Common):
                         'role': self.token.permissions.openvidu_role
                     })
                     if response.status_code == 200:
-                        socketio.emit(
-                            'openvidu', WebRtcConnectionSchema.Response().dump(
-                                response.json()), room=self.session_id)
+                        socketio.emit('openvidu', dict(
+                            connection=WebRtcConnectionSchema.Response().dump(response.json()),
+                            start_with_audio=room.layout.start_with_audio,
+                            start_with_video=room.layout.start_with_video,
+                            video_resolution=room.layout.video_resolution,
+                            video_framerate=room.layout.video_framerate,
+                        ), room=self.session_id)
                     elif response.status_code == 404:
                         json = room.session.parameters
                         json['customSessionId'] = room.session.id
