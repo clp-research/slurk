@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import PickleType, Integer, String
 
 from .common import Common
 from .permissions import Permissions
@@ -18,6 +19,7 @@ class Token(Common):
     logins_left = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('Task.id'))
     room_id = Column(Integer, ForeignKey('Room.id'))
+    openvidu_connection_settings = Column(PickleType, nullable=False)
 
     task = relationship('Task')
     room = relationship('Room')
@@ -39,6 +41,7 @@ class Token(Common):
                         send_command=False,
                     ),
                     logins_left=-1,
+                    openvidu_connection_settings={}
                 )
                 session.add(token)
                 session.commit()

@@ -73,13 +73,20 @@ class User(Common):
                     response = current_app.openvidu.post_connection(room.openvidu_session_id, json={
                         'role': self.token.permissions.openvidu_role
                     })
+
+                    def ov_property(name):
+                        setting = self.token.openvidu_connection_settings.get(name)
+                        if setting is None:
+                            setting = room.layout.openvidu_connection_settings.get(name)
+                        return setting
+
                     if response.status_code == 200:
                         socketio.emit('openvidu', dict(
                             connection=WebRtcConnectionSchema.Response().dump(response.json()),
-                            start_with_audio=room.layout.start_with_audio,
-                            start_with_video=room.layout.start_with_video,
-                            video_resolution=room.layout.video_resolution,
-                            video_framerate=room.layout.video_framerate,
+                            start_with_audio=ov_property('start_with_audio'),
+                            start_with_video=ov_property('start_with_video'),
+                            video_resolution=ov_property('video_resolution'),
+                            video_framerate=ov_property('video_framerate'),
                         ), room=self.session_id)
                     elif response.status_code == 404:
                         json = room.session.parameters

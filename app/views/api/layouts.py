@@ -4,7 +4,7 @@ import marshmallow as ma
 
 from app.extensions.api import Blueprint
 from app.models import Layout
-from app.views.api import CommonSchema
+from app.views.api import BaseSchema, CommonSchema
 
 
 blp = Blueprint(Layout.__tablename__ + 's', __name__)
@@ -19,6 +19,21 @@ script_dict = ma.Schema.from_dict({
     'document-ready': ma.fields.List(ma.fields.String, missing=None, description='Called when site is fully loaded'),
     'plain': ma.fields.List(ma.fields.String, missing=None, description='Injected as a script file into the site'),
 }, name='Scripts')
+
+
+class OpenViduConnectionSettingsSchema(BaseSchema):
+    start_with_audio = ma.fields.Boolean(
+        missing=True,
+        description='Start audio on joining the room')
+    start_with_video = ma.fields.Boolean(
+        missing=True,
+        description='Start video on joining the room')
+    video_resolution = ma.fields.String(
+        missing="640x480",
+        description='Video resolution')
+    video_framerate = ma.fields.Integer(
+        missing=30,
+        description='Framerate for video')
 
 
 class LayoutSchema(CommonSchema):
@@ -70,22 +85,11 @@ class LayoutSchema(CommonSchema):
         missing=False,
         description='Make the room read-only',
         filter_description='Filter for the layout being read-only')
-    start_with_audio = ma.fields.Boolean(
-        missing=True,
-        description='Start audio on joining the room if available',
-        filter_description='Filter for starting audio on joining')
-    start_with_video = ma.fields.Boolean(
-        missing=True,
-        description='Start video on joining the room if available',
-        filter_description='Filter for starting video on joining')
-    video_resolution = ma.fields.String(
-        missing="640x480",
-        description='Video resolution if available',
-        filter_description='Filter for video resolution')
-    video_framerate = ma.fields.Integer(
-        missing=30,
-        description='Framerate for video if available',
-        filter_description='Filter for video framerate')
+    openvidu_connection_settings = ma.fields.Nested(
+        OpenViduConnectionSettingsSchema,
+        missing=OpenViduConnectionSettingsSchema().load({}),
+        description='Settings for connections used for this layout'
+    )
 
     def patch(self, old, new):
         layout = Layout.from_json_data(new)

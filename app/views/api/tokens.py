@@ -5,7 +5,7 @@ import marshmallow as ma
 
 from app.extensions.api import Blueprint
 from app.models import Token, Permissions, Room, Task
-from app.views.api import CommonSchema, Id
+from app.views.api import BaseSchema, CommonSchema, Id
 
 
 blp = Blueprint(Token.__tablename__ + 's', __name__)
@@ -17,6 +17,21 @@ class TokenId(ma.fields.UUID):
         if current_app.session.query(Token).get(id) is None:
             raise ma.ValidationError(f'Token `{id}` does not exist')
         return id
+
+
+class OpenViduUserConnectionSettingsSchema(BaseSchema):
+    start_with_audio = ma.fields.Boolean(
+        missing=None,
+        description='Start audio on joining the room')
+    start_with_video = ma.fields.Boolean(
+        missing=None,
+        description='Start video on joining the room')
+    video_resolution = ma.fields.String(
+        missing=None,
+        description='Video resolution')
+    video_framerate = ma.fields.Integer(
+        missing=None,
+        description='Framerate for video')
 
 
 class TokenSchema(CommonSchema):
@@ -45,6 +60,11 @@ class TokenSchema(CommonSchema):
         missing=None,
         description='Room assigned to this token',
         filter_description='Filter for rooms')
+    openvidu_connection_settings = ma.fields.Nested(
+        OpenViduUserConnectionSettingsSchema,
+        missing=OpenViduUserConnectionSettingsSchema().load({}),
+        description='Settings for connections used for this token. If a setting is missing, the room default is used'
+    )
 
 
 @blp.route('/')
