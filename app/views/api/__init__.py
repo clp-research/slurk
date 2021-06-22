@@ -112,7 +112,6 @@ class BaseSchema(ma.Schema):
         def create_schema(schema):
             fields = schema.load_fields
             for field in fields.values():
-                field.allow_none = True
                 field.required = False
                 field.missing = missing
                 if isinstance(field, ma.fields.Nested) and issubclass(field.nested, BaseSchema):
