@@ -162,7 +162,11 @@ function create_layout {
         },
         "openvidu_connection_settings": {
             "video_resolution": "320x240",
-            "video_framerate": 60
+            "video_framerate": 60,
+            "video_max_recv_bandwidth": 0,
+            "video_max_send_bandwidth": 0,
+            "video_min_recv_bandwidth": 0,
+            "video_min_send_bandwidth": 0
         }
     }'
 
