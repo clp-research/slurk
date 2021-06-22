@@ -1,8 +1,8 @@
 import marshmallow as ma
-from marshmallow.validate import OneOf
+from marshmallow.validate import OneOf, Range
 
 from app.views.api import BaseSchema
-from app.views.api.openvidu.fields import String, List, Timestamp, SessionId
+from app.views.api.openvidu.fields import String, List, Timestamp, SessionId, Resolution, IntegerOrNone
 
 
 class StreamsConfigSchema(BaseSchema):
@@ -81,8 +81,8 @@ class ConfigSchema(BaseSchema):
         description='Configuration for webhooks')
 
 
-class RecordingPropertiesSchema(BaseSchema):
-    name = ma.fields.String(
+class DefaultRecordingPropertiesSchema(BaseSchema):
+    name = String(
         missing=None,
         description='Name of the Recording')
     outputMode = ma.fields.String(
@@ -103,16 +103,58 @@ class RecordingPropertiesSchema(BaseSchema):
         validate=OneOf(['BEST_FIT', 'CUSTOM']),
         missing='BEST_FIT',
         description='The recording layout that is being used')
-    resolution = ma.fields.String(
+    resolution = Resolution(
         missing="1280x720",
         description='Resolution of the video file')
     frameRate = ma.fields.Integer(
         data_key='frame_rate',
-        missing=25,
+        missing=30,
+        validate=Range(min=1, max=120),
         description='Frame rate of the video file')
     shmSize = ma.fields.Integer(
         missing=536870912,
+        load_only=True,
         description='The amount of memory dedicated to the recording module in charge of this specific recording, in bytes')
+
+
+# Extra class to keep ordering
+class RecordingPropertiesSchema(BaseSchema):
+    id = ma.fields.String(
+        dump_only=True,
+        description='Identifier of the Recording')
+
+
+class RecordingSchema(RecordingPropertiesSchema, DefaultRecordingPropertiesSchema):
+    ignoreFailedStreams = ma.fields.Boolean(
+        data_key='ignore_failed_streams',
+        missing=False,
+        description='Whether to ignore failed streams or not when starting the recording')
+    sessionId = SessionId(
+        data_key='session_id',
+        dump_only=True,
+        description='Session associated to the Recording')
+    customLayout = ma.fields.String(
+        data_key='custom_layout',
+        missing=None,
+        description='The custom layout that is being used')
+    createdAt = Timestamp(
+        data_key='created_at',
+        dump_only=True,
+        description='Time when the recording started')
+    size = IntegerOrNone(
+        dump_only=True,
+        description='Size in bytes of the video file. Only guaranteed to be greater than 0 if status is `ready`')
+    duration = IntegerOrNone(
+        dump_only=True,
+        description='Duration of the video file in seconds. Only guaranteed to be greater than 0 if status is `ready`')
+    url = String(
+        dump_only=True,
+        allow_none=True,
+        description='URL where the Recording file is available. Only guaranteed to be set if status is `ready`')
+    status = ma.fields.String(
+        dump_only=True,
+        validate=OneOf(['starting', 'started', 'stopped', 'ready', 'failed']),
+        description='Status of the Recording')
 
 
 class VideoDimensionsSchema(BaseSchema):
@@ -281,7 +323,7 @@ class SessionSchema(BaseSchema):
         missing='MANUAL',
         description='Recording mode configured for the session')
     defaultRecordingProperties = ma.fields.Nested(
-        RecordingPropertiesSchema,
+        DefaultRecordingPropertiesSchema,
         missing=None,
         data_key='default_recording_properties',
         description='The recording properties to apply by default to any recording started for this Session')

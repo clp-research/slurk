@@ -8,6 +8,7 @@ DEBUG=true
 OPENVIDU_URL=${OPENVIDU_URL:-'https://localhost'}
 OPENVIDU_PORT=${OPENVIDU_PORT:-4443}
 OPENVIDU_SECRET=${OPENVIDU_SECRET:-MY_SECRET}
+OPENVIDU_RECORDING=${OPENVIDU_RECORDING_PATH:-$(pwd)/recordings}
 
 function errcho {
     echo "$@" 1>&2
@@ -56,6 +57,8 @@ function start_openvidu {
         return 0
     fi
 
+    mkdir -p $OPENVIDU_RECORDING
+
     errcho -n 'Starting openvidu...'
 
     docker rm openvidu 2> /dev/null | true
@@ -63,6 +66,10 @@ function start_openvidu {
         --name=openvidu \
         -p $OPENVIDU_PORT:4443 \
         -e OPENVIDU_SECRET=$OPENVIDU_SECRET \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -v "$OPENVIDU_RECORDING:$OPENVIDU_RECORDING" \
+        -e OPENVIDU_RECORDING=true \
+        -e OPENVIDU_RECORDING_PATH=$OPENVIDU_RECORDING \
         openvidu/openvidu-server-kms:2.18.0 > /dev/null
 
     for i in {1..600}; do
