@@ -68,39 +68,6 @@ class Blueprint(flask_smorest.Blueprint):
             doc.setdefault("responses", {})["404"] = http.HTTPStatus(404).name
         return doc
 
-    def _prepare_etag_doc(self, doc, doc_info, *, app, method, **kwargs):
-        doc = super()._prepare_etag_doc(doc, doc_info, app=app, method=method, **kwargs)
-        if (
-                doc_info.get('etag', False) and
-                not app.config.get('ETAG_DISABLED', False)
-        ):
-            # Extend OpenAPI Docs to include `If-Match` header
-            if method.upper() in self.METHODS_NEEDING_CHECK_ETAG:
-                doc.setdefault("parameters", []).append({
-                    'name': 'If-Match',
-                    'in': 'header',
-                    'required': True,
-                    'description': 'Tag to check against',
-                    'schema': {'type': 'string'},
-                })
-            # Extend OpenAPI Docs to include `If-None-Match` header
-            if method.upper() in self.METHODS_CHECKING_NOT_MODIFIED:
-                doc.setdefault("parameters", []).append({
-                    'name': 'If-None-Match',
-                    'in': 'header',
-                    'description': 'Tag to check against',
-                    'schema': {'type': 'string'},
-                })
-            # Extend OpenAPI Docs to include `ETag` header
-            if method.upper() in self.METHODS_ALLOWING_SET_ETAG:
-                success_status_code = doc_info.get('success_status_code')
-                if success_status_code is not None:
-                    doc['responses'][success_status_code].setdefault('headers', {})['ETag'] = {
-                        'description': 'Tag for the returned entry',
-                        'schema': {'type': 'string'}
-                    }
-        return doc
-
     def route(self, rule, *, parameters=None, **options):
         # Trim trailing `/`
         if rule.endswith('/'):
