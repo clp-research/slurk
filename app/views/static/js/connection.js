@@ -131,7 +131,10 @@ $(document).ready(() => {
         session = OV.initSession()
 
         session.on("streamCreated", event => {
-            let subscriber = session.subscribe(event.stream, document.querySelector('#sidebar #video'));
+            let subscriber = session.subscribe(event.stream, data.video_subscribers_location,
+                {
+                    insertMode: 'APPEND',
+                });
         })
 
         session.on('exception', exception => {
@@ -139,7 +142,7 @@ $(document).ready(() => {
         });
 
         session.connect(data.connection.token).then(() => {
-            let publisher = OV.initPublisher(document.querySelector('header nav'),
+            let publisher = OV.initPublisher(document.querySelector(data.video_publisher_location),
                 {
                     audioSource: undefined,                 // The source of audio. If undefined default microphone
                     videoSource: undefined,                 // The source of video. If undefined default webcam
@@ -147,6 +150,7 @@ $(document).ready(() => {
                     publishVideo: data.start_with_video,  	// Whether you want to start publishing with your video enabled or not
                     resolution: data.video_resolution,      // The resolution of your video
                     frameRate: data.video_framerate,		// The frame rate of your video
+                    insertMode: 'APPEND',
                 })
             // publisher.addVideoElement(document.querySelector('header video'))
 

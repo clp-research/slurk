@@ -1,3 +1,4 @@
+from app.models import token
 from datetime import datetime
 
 from sqlalchemy import Column, String, ForeignKey
@@ -68,10 +69,10 @@ class User(Common):
             # Create an OpenVidu connection if apropiate
             if hasattr(current_app, 'openvidu') and room.openvidu_session_id and self.token.permissions.openvidu_role:
                 def ov_property(name):
-                    setting = self.token.openvidu_settings.get(name)
-                    if setting is None or hasattr(setting, '__len__') and len(setting) == 0:
-                        setting = room.layout.openvidu_settings[name]
-                    return setting
+                    if name in self.token.openvidu_settings:
+                        return self.token.openvidu_settings[name]
+                    else:
+                        return room.layout.openvidu_settings[name]
 
                 # OpenVidu destroys a session when everyone left.
                 # This ensures, that the session is persistant by recreating the session
@@ -94,6 +95,8 @@ class User(Common):
                             start_with_video=ov_property('start_with_video'),
                             video_resolution=ov_property('video_resolution'),
                             video_framerate=ov_property('video_framerate'),
+                            video_publisher_location=ov_property('video_publisher_location'),
+                            video_subscribers_location=ov_property('video_subscribers_location'),
                         ), room=self.session_id)
                     elif response.status_code == 404:
                         json = room.session.parameters

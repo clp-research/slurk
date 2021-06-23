@@ -46,6 +46,14 @@ class OpenViduSettingsFallbackSchema(BaseSchema):
     video_max_send_bandwidth = ma.fields.Integer(
         missing=1000,
         description='Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    video_publisher_location = ma.fields.String(
+        missing='header',
+        allow_none=True,
+        description='Corresponding id in html where publisher video is shown')
+    video_subscribers_location = ma.fields.String(
+        missing='sidebar',
+        allow_none=True,
+        description='Corresponding id in html where subscribed videos are shown')
     allowed_filters = ma.fields.List(
         ma.fields.String,
         missing=[],
