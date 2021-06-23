@@ -13,6 +13,8 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/3rd_party/jquery-3.6.0.min.js') }}"></script>
     <script type="text/javascript"
         src="{{ url_for('static', filename='js/3rd_party/socket.io-4.0.0.min.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='js/3rd_party/openvidu-browser-2.18.0.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/connection.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/plugins.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
@@ -32,7 +34,10 @@
             <span id="user-list" class="users" style="display: none;">Users: <span id="current-users"></span></span>
         </nav>
     </header>
-    <div id="sidebar" class="fade"></div>
+    <div id="sidebar" class="fade">
+        <div id="video"></div>
+        <div id="custom"></div>
+    </div>
     <div id="content">
         <div id="chat-area" class="fade"></div>
     </div>

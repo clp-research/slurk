@@ -2,6 +2,8 @@ from copy import deepcopy
 from functools import wraps
 from flask.globals import current_app, request
 from uuid import UUID
+from requests import Response
+from json import JSONDecodeError
 from werkzeug.exceptions import UnsupportedMediaType
 
 import flask_smorest
@@ -141,15 +143,29 @@ def init_app(app):
     register_views(api)
 
 
-def abort(ex, errors={}):
+def abort(ex, *, json={}, query={}):
     from flask import abort, make_response
     from werkzeug.http import HTTP_STATUS_CODES
+    from werkzeug.exceptions import default_exceptions
+
+    if isinstance(ex, Response):
+        try:
+            if 'message' in ex.json() \
+                    and len(json) == 0 \
+                    and ex.json()['message'] is not None \
+                    and ex.json()['message'] != '':
+                json = ex.json()['messsage']
+        except JSONDecodeError:
+            pass
+        ex = default_exceptions[ex.status_code]
 
     payload = dict(
         code=ex.code,
         message=ex.description,
         status=HTTP_STATUS_CODES.get(ex.code, "Unknown Error"))
-    if len(errors) > 0:
-        payload['errors'] = dict(json=errors)
+    if len(json) > 0:
+        payload.setdefault('errors', {})['json'] = json
+    if len(query) > 0:
+        payload.setdefault('errors', {})['query'] = query
 
     abort(make_response(payload, ex.code))

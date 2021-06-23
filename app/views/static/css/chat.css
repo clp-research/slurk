@@ -54,6 +54,13 @@ header .users {
     color: darkgrey;
 }
 
+header video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-height: 80px;
+}
+
 #sidebar {
     position: absolute;
     top: 80px;
@@ -96,6 +103,12 @@ header .users {
     padding: 0.5rem;
     overflow: hidden;
     display: flex;
+}
+#ov-subscribers {
+    align-content: left;
+}
+#ov-publisher {
+    text-align: right;
 }
 
 .other .msg {

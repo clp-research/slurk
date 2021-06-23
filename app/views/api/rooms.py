@@ -8,6 +8,7 @@ import marshmallow as ma
 from app.extensions.api import Blueprint
 from app.extensions.events import socketio
 from app.models import Room, Layout, Log
+from app.views.api.openvidu.fields import SessionId as OpenViduSessionId
 
 from .users import UserSchema, blp as user_blp
 from .logs import LogSchema
@@ -23,9 +24,12 @@ class RoomSchema(CommonSchema):
 
     layout_id = Id(
         Layout,
-        description='Layout for this room',
         required=True,
+        description='Layout for this room',
         filter_description='Filter for layout used in the rooms')
+    openvidu_session_id = OpenViduSessionId(
+        description='Session for OpenVidu',
+        filter_description='Filter for an OpenVidu session')
 
 
 @blp.route('/')

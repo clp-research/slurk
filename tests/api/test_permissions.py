@@ -1,5 +1,8 @@
+import pytest
+
 from http import HTTPStatus
-from .. import *
+
+from tests import parse_error
 
 
 def test_options(client):
