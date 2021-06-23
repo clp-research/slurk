@@ -2,6 +2,7 @@ from copy import deepcopy
 from functools import wraps
 from flask.globals import current_app, request
 from uuid import UUID
+from werkzeug.exceptions import UnsupportedMediaType
 
 import flask_smorest
 import http
@@ -35,7 +36,17 @@ class Blueprint(flask_smorest.Blueprint):
         self._prepare_doc_cbks.append(self._prepare_404_doc)
 
     def arguments(self, schema, *, location='json', **kwargs):
-        return super().arguments(schema, location=location, **kwargs)
+        super_arguments = super().arguments(schema, location=location, **kwargs)
+        def decorator(func):
+            func = super_arguments(func)
+            @wraps(func)
+            def wrapper(*f_args, **f_kwargs):
+                if location == 'json' and request.content_type != "application/json":
+                    abort(UnsupportedMediaType)
+                return func(*f_args, **f_kwargs)
+            wrapper._apidoc['arguments']['responses'][415] = http.HTTPStatus(415).name
+            return wrapper
+        return decorator
 
     @staticmethod
     def login_required(func):
