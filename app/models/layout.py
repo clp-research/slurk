@@ -197,7 +197,7 @@ class Layout(Common):
     show_users = Column(Boolean, nullable=False)
     show_latency = Column(Boolean, nullable=False)
     read_only = Column(Boolean, nullable=False)
-    openvidu_connection_settings = Column(PickleType, nullable=False)
+    openvidu_settings = Column(PickleType, nullable=False)
 
     @classmethod
     def from_json(cls, json_data):
@@ -264,5 +264,5 @@ class Layout(Common):
             show_users=data.get('show_users', True),
             show_latency=data.get('show_latency', True),
             read_only=data.get('read_only', True),
-            openvidu_connection_settings = data.get('openvidu_connection_settings')
+            openvidu_settings = data.get('openvidu_settings')
         )

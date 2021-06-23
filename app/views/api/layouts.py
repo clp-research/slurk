@@ -21,7 +21,7 @@ script_dict = ma.Schema.from_dict({
 }, name='Scripts')
 
 
-class OpenViduConnectionSettingsFallbackSchema(BaseSchema):
+class OpenViduSettingsFallbackSchema(BaseSchema):
     start_with_audio = ma.fields.Boolean(
         missing=True,
         description='Start audio on joining the room')
@@ -101,9 +101,9 @@ class LayoutSchema(CommonSchema):
         missing=False,
         description='Make the room read-only',
         filter_description='Filter for the layout being read-only')
-    openvidu_connection_settings = ma.fields.Nested(
-        OpenViduConnectionSettingsFallbackSchema,
-        missing=OpenViduConnectionSettingsFallbackSchema().load({}),
+    openvidu_settings = ma.fields.Nested(
+        OpenViduSettingsFallbackSchema,
+        missing=OpenViduSettingsFallbackSchema().load({}),
         description='Settings for connections used for this layout'
     )
 

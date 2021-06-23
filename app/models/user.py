@@ -68,9 +68,9 @@ class User(Common):
             # Create an OpenVidu connection if apropiate
             if hasattr(current_app, 'openvidu') and room.openvidu_session_id and self.token.permissions.openvidu_role:
                 def ov_property(name):
-                    setting = self.token.openvidu_connection_settings.get(name)
+                    setting = self.token.openvidu_settings.get(name)
                     if setting is None or hasattr(setting, '__len__') and len(setting) == 0:
-                        setting = room.layout.openvidu_connection_settings[name]
+                        setting = room.layout.openvidu_settings[name]
                     return setting
 
                 # OpenVidu destroys a session when everyone left.

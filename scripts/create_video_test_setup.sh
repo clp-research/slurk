@@ -167,7 +167,7 @@ function create_layout {
             "submit-message": ["send-message"],
             "print-history": ["plain-history"]
         },
-        "openvidu_connection_settings": {
+        "openvidu_settings": {
             "video_resolution": "320x240",
             "video_framerate": 60,
             "video_max_recv_bandwidth": 0,
@@ -256,7 +256,7 @@ function create_token {
     local json="{
         \"room_id\": $ROOM,
         \"permissions_id\": $PERMISSIONS,
-        \"openvidu_connection_settings\": {
+        \"openvidu_settings\": {
             \"start_with_audio\": false
         }
     }"

@@ -19,7 +19,7 @@ class TokenId(ma.fields.UUID):
         return id
 
 
-class OpenViduConnectionSettingsSchema(BaseSchema):
+class OpenViduSettingsSchema(BaseSchema):
     start_with_audio = ma.fields.Boolean(
         missing=None,
         description='Start audio on joining the room')
@@ -76,9 +76,9 @@ class TokenSchema(CommonSchema):
         missing=None,
         description='Room assigned to this token',
         filter_description='Filter for rooms')
-    openvidu_connection_settings = ma.fields.Nested(
-        OpenViduConnectionSettingsSchema,
-        missing=OpenViduConnectionSettingsSchema().load({}),
+    openvidu_settings = ma.fields.Nested(
+        OpenViduSettingsSchema,
+        missing=OpenViduSettingsSchema().load({}),
         description='Settings for connections used for this token. If a setting is missing, the room default is used'
     )
 
