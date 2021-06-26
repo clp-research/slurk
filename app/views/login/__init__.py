@@ -37,15 +37,17 @@ def load_user_from_request(request):
     if not token:
         return None
 
-    if not token.user:
-        name = request.headers.get('name')
-        if not name:
-            name = request.args.get('name')
-        if not name:
-            name = "<unnamed>"
-        token.user = User(name=name, rooms=[token.room])
+    name = request.headers.get('name') or request.args.get('name')
+    if not name:
+        name = '<unnamed>'
+
+    user = token.users.filter_by(name=name, session_id=None).one_or_none()
+
+    if not user:
+        user = User(name=name, token=token, rooms=[token.room])
+        db.add(user)
         db.commit()
-    return token.user
+    return user
 
 
 @login.route('/', methods=['GET', 'POST'])

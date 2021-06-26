@@ -21,7 +21,7 @@ class Token(Common):
 
     task = relationship('Task')
     room = relationship('Room')
-    users = relationship('User', backref='token')
+    users = relationship('User', backref='token', lazy="dynamic")
 
     @staticmethod
     def get_admin_token(db, id=None):
