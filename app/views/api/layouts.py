@@ -10,14 +10,14 @@ blp = Blueprint(Layout.__tablename__ + 's', __name__)
 
 
 script_dict = ma.Schema.from_dict({
-    'incoming-text': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Called when a text message is received'}),
-    'incoming-image': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Called when an image is received'}),
-    'submit-message': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Called when a message is sent'}),
-    'print-history': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Used for printing the chat history'}),
-    'document-ready': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Called when site is fully loaded'}),
-    'typing-users': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Called when state of currently typing users is changed'}),
-    'plain': ma.fields.List(ma.fields.String, missing=None, metadata={'description': 'Injected as a script file into the site'}),
-}, name="Scripts")
+    'incoming-text': ma.fields.String(missing=None, description='Called when a text message is received'),
+    'incoming-image': ma.fields.String(missing=None, description='Called when an image is received'),
+    'submit-message': ma.fields.String(missing=None, description='Called when a message is sent'),
+    'print-history': ma.fields.String(missing=None, description='Used for printing the chat history'),
+    'typing-users': ma.fields.String(missing=None, description='Called when state of currently typing users is changed'),
+    'document-ready': ma.fields.List(ma.fields.String, missing=None, description='Called when site is fully loaded'),
+    'plain': ma.fields.List(ma.fields.String, missing=None, description='Injected as a script file into the site'),
+}, name='Scripts')
 
 
 class LayoutSchema(CommonSchema):
@@ -87,10 +87,10 @@ EXAMPLE = dict(
     title='Test Room',
     subtitle='Room for testing purposes',
     scripts={
-        'incoming-text': ['display-text'],
-        'incoming-image': ['display-image'],
-        'submit-message': ['send-message'],
-        'print-history': ['plain-history'],
+        'incoming-text': 'display-text',
+        'incoming-image': 'display-image',
+        'submit-message': 'send-message',
+        'print-history': 'plain-history',
     }
 )
 
