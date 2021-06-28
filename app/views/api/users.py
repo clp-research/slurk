@@ -73,7 +73,7 @@ class UserById(MethodView):
     @blp.login_required
     def patch(self, new_user, *, user):
         """Update a user identified by ID"""
-        return UserSchema.Update().patch(user, new_user)
+        return UserSchema().patch(user, new_user)
 
     @blp.etag
     @blp.query('user', UserSchema)

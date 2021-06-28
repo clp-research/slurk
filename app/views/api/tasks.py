@@ -71,7 +71,7 @@ class TaskById(MethodView):
     @blp.login_required
     def patch(self, new_task, *, task):
         """Update a task identified by ID"""
-        return TaskSchema.Update().patch(task, new_task)
+        return TaskSchema().patch(task, new_task)
 
     @blp.etag
     @blp.query('task', TaskSchema)
