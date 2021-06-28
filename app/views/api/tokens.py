@@ -89,7 +89,7 @@ class TokensById(MethodView):
     @blp.login_required
     def patch(self, new_token, *, token):
         """Update a token identified by ID"""
-        return TokenSchema.Update().patch(token, new_token)
+        return TokenSchema().patch(token, new_token)
 
     @blp.etag
     @blp.query('token', TokenSchema)

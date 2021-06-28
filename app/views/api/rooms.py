@@ -71,7 +71,7 @@ class RoomById(MethodView):
     @blp.login_required
     def patch(self, new_room, *, room):
         """Update a room identified by ID"""
-        return RoomSchema.Update().patch(room, new_room)
+        return RoomSchema().patch(room, new_room)
 
     @blp.etag
     @blp.query('room', RoomSchema)
