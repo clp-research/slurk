@@ -2,6 +2,10 @@ import marshmallow as ma
 from flask.globals import current_app
 from marshmallow.exceptions import ValidationError
 from marshmallow.utils import missing
+from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import UnprocessableEntity
+
+from app.extensions.api import abort
 
 
 def register_blueprints(api):
@@ -165,4 +169,8 @@ class CommonSchema(BaseSchema):
     def delete(self, entity):
         db = current_app.session
         db.delete(entity)
-        db.commit()
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            abort(UnprocessableEntity, errors=f"{self.Meta.model.__tablename__} `{entity.id}` is still in use")

@@ -1,6 +1,7 @@
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest import abort
+from flask_smorest.error_handler import ErrorSchema
 from http import HTTPStatus
 from sqlalchemy.sql.elements import or_
 import marshmallow as ma
@@ -76,6 +77,7 @@ class RoomById(MethodView):
     @blp.etag
     @blp.query('room', RoomSchema)
     @blp.response(204)
+    @blp.alt_response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, room):
         """Delete a room identified by ID"""
