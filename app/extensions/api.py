@@ -37,11 +37,15 @@ class Blueprint(flask_smorest.Blueprint):
 
     def arguments(self, schema, *, location='json', **kwargs):
         super_arguments = super().arguments(schema, location=location, **kwargs)
+
         def decorator(func):
             func = super_arguments(func)
+
             @wraps(func)
             def wrapper(*f_args, **f_kwargs):
-                if location == 'json' and len(request.data) > 0 and request.content_type != "application/json":
+                if location == 'json' \
+                        and (len(request.data) > 0 or len(request.form) > 0 or len(request.files) > 0) \
+                        and request.content_type != "application/json":
                     abort(UnsupportedMediaType)
                 return func(*f_args, **f_kwargs)
             wrapper._apidoc['arguments']['responses'][415] = http.HTTPStatus(415).name
