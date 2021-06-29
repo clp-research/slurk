@@ -1,4 +1,5 @@
 from flask.views import MethodView
+from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 
 from app.extensions.api import Blueprint
@@ -76,6 +77,7 @@ class TaskById(MethodView):
     @blp.etag
     @blp.query('task', TaskSchema)
     @blp.response(204)
+    @blp.response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, task):
         """Delete a task identified by ID"""
