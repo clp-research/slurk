@@ -1,4 +1,5 @@
 from flask.views import MethodView
+from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 from marshmallow.validate import OneOf
 
@@ -85,6 +86,7 @@ class PermissionsById(MethodView):
     @blp.etag
     @blp.query('permissions', PermissionsSchema)
     @blp.response(204)
+    @blp.alt_response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, permissions):
         """Delete a permissions identified by ID"""

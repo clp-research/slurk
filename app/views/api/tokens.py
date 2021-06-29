@@ -1,5 +1,6 @@
 from flask.views import MethodView
 from flask.globals import current_app
+from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 
 from app.extensions.api import Blueprint
@@ -94,6 +95,7 @@ class TokensById(MethodView):
     @blp.etag
     @blp.query('token', TokenSchema)
     @blp.response(204)
+    @blp.alt_response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, token):
         """Delete a token identified by ID"""

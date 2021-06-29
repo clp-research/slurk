@@ -1,4 +1,5 @@
 from flask.views import MethodView
+from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 
 from app.extensions.api import Blueprint
@@ -78,6 +79,7 @@ class UserById(MethodView):
     @blp.etag
     @blp.query('user', UserSchema)
     @blp.response(204)
+    @blp.alt_response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, user):
         """Delete a user identified by ID"""
