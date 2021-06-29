@@ -65,9 +65,9 @@ def index():
         if token:
             if token.room is None:
                 flash("The token is an API token, which can not be used for logging in.", "error")
-            elif token.logins_left != 0:
-                if token.logins_left > 0:
-                    token.logins_left -= 1
+            elif token.registrations_left != 0:
+                if token.registrations_left > 0:
+                    token.registrations_left -= 1
                 user = User(name=name, token=token, rooms=[token.room])
                 db.add(user)
                 db.commit()

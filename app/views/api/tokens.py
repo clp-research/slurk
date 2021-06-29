@@ -59,7 +59,7 @@ class TokenSchema(CommonSchema):
         required=True,
         description='Permissions for this token',
         filter_description='Filter for permissions')
-    logins_left = ma.fields.Integer(
+    registrations_left = ma.fields.Integer(
         missing=1,
         description='Logins left for this token',
         filter_description='Filter for left logins')
