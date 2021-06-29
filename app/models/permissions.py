@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Boolean
+from sqlalchemy import Column, Boolean, String
 from sqlalchemy.orm import relationship
 
 from .common import Common
@@ -12,3 +12,4 @@ class Permissions(Common):
     send_message = Column(Boolean, nullable=False)
     send_image = Column(Boolean, nullable=False)
     send_command = Column(Boolean, nullable=False)
+    openvidu_role = Column(String)

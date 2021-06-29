@@ -5,10 +5,11 @@ from marshmallow.utils import missing
 
 
 def register_blueprints(api):
-    from . import layouts, logs, permissions, tokens, users, tasks, rooms
+    from . import layouts, logs, permissions, tokens, users, tasks, rooms, openvidu
 
     MODULES = (
         layouts,
+        openvidu if hasattr(current_app, 'openvidu') else None,
         rooms,
         permissions,
         tokens,
@@ -18,8 +19,9 @@ def register_blueprints(api):
     )
 
     for module in MODULES:
-        name = module.__name__.split('.')[-1]
-        api.register_blueprint(module.blp, url_prefix=f'/slurk/api/{name}')
+        if module is not None:
+            name = module.__name__.split('.')[-1]
+            api.register_blueprint(module.blp, url_prefix=f'/slurk/api/{name}')
 
 
 class Id(ma.fields.Integer):

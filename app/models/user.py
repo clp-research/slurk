@@ -38,7 +38,9 @@ class User(Common):
         from flask.globals import current_app
         from flask_socketio import join_room
 
+        from app.views.api.openvidu.schemas import WebRtcConnectionSchema
         from app.extensions.events import socketio
+        from app.models.room import Session
 
         if self not in room.users:
             room.users.append(self)
@@ -62,6 +64,31 @@ class User(Common):
             ), room=str(room.id))
 
             Log.add("join", self, room)
+
+            # Create an OpenVidu connection if apropiate
+            if hasattr(current_app, 'openvidu') and room.openvidu_session_id and self.token.permissions.openvidu_role:
+                # OpenVidu destroys a session when everyone left.
+                # This ensures, that the session is persistant by recreating the session
+                def post_connection(retry=True):
+                    response = current_app.openvidu.post_connection(room.openvidu_session_id, json={
+                        'role': self.token.permissions.openvidu_role
+                    })
+                    if response.status_code == 200:
+                        socketio.emit(
+                            'openvidu', WebRtcConnectionSchema.Response().dump(
+                                response.json()), room=self.session_id)
+                    elif response.status_code == 404:
+                        json = room.session.parameters
+                        json['customSessionId'] = room.session.id
+                        response = current_app.openvidu.post_session(json)
+                        if response.status_code == 200:
+                            post_connection(retry=False)
+                        else:
+                            current_app.logger.error(response.json().get('message'))
+                    else:
+                        current_app.logger.error(response.json().get('message'))
+
+                post_connection()
 
     def leave_room(self, room, event_only=False):
         from flask.globals import current_app

@@ -7,6 +7,7 @@ from app.extensions import api as api_ext
 from app.extensions import database as database_ext
 from app.extensions import login as login_ext
 from app.extensions import events as event_ext
+from app.extensions import openvidu as openvidu_ext
 from app.models import Token
 
 logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
@@ -42,6 +43,7 @@ def create_app(test_config=None, engine=None):
     with app.app_context():
         event_ext.init_app(app)
         login_ext.init_app(app)
+        openvidu_ext.init_app(app)  # NOQA
         api_ext.init_app(app)
         database_ext.init_app(app, engine)
 

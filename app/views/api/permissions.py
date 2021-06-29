@@ -1,5 +1,6 @@
 from flask.views import MethodView
 import marshmallow as ma
+from marshmallow.validate import OneOf
 
 from app.extensions.api import Blueprint
 from app.models import Permissions
@@ -29,6 +30,11 @@ class PermissionsSchema(CommonSchema):
         missing=False,
         description='Permit sending commands',
         filter_description='Filter for command sending permissions')
+    openvidu_role = ma.fields.String(
+        validate=OneOf(['SUBSCRIBER', 'PUBLISHER', 'MODERATOR']),
+        missing=None,
+        description='Role for OpenVidu',
+        filter_description='Filter for OpenVidu role')
 
 
 @blp.route('/')

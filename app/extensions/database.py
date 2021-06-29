@@ -28,7 +28,9 @@ class Database:
         self._engine = engine
         if 'sqlite' in engine.url:
             from logging import getLogger
-            getLogger('slurk').warning('SQLite should not be used in production')
+            from flask.globals import current_app
+            if not current_app.config['DEBUG']:
+                getLogger('slurk').warning('SQLite should not be used in production')
 
             @event.listens_for(Engine, "connect")
             def set_sqlite_pragma(dbapi_connection, connection_record):

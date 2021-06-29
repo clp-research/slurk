@@ -2,6 +2,8 @@ let socket;
 
 let self_user = undefined;
 let self_room = undefined;
+var session;
+var OV;
 let user_map = {}
 
 function apply_user_permissions(permissions) {
@@ -33,9 +35,9 @@ $(document).ready(() => {
         if (!layout)
             return;
         if (layout.html !== "") {
-            $("#sidebar").html(layout.html);
+            $("#sidebar #custom").html(layout.html);
         } else {
-            $("#sidebar").empty();
+            $("#sidebar #custom").empty();
         }
         if (layout.css !== "") {
             $("#custom-styles").html(layout.css);
@@ -123,8 +125,37 @@ $(document).ready(() => {
         $('#latency').fadeTo(null, false);
     }
 
+    async function openvidu(data) {
+        OV = new OpenVidu()
+        session = OV.initSession()
+
+        session.on("streamCreated", event => {
+            let subscriber = session.subscribe(event.stream, document.querySelector('#sidebar #video'));
+        })
+
+        session.on('exception', exception => {
+            console.warn(exception);
+        });
+
+        session.connect(data.token).then(() => {
+            let publisher = OV.initPublisher(document.querySelector('header nav'),
+                {
+                    audioSource: undefined, // The source of audio. If undefined default microphone
+                    videoSource: undefined, // The source of video. If undefined default webcam
+                    publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+                    publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+                    resolution: '320x240',  // Th;e resolution of your video
+                    frameRate: 60,			// The frame rate of your video
+                })
+            // publisher.addVideoElement(document.querySelector('header video'))
+
+            session.publish(publisher)
+        })
+    }
+
     socket.on('joined_room', joined_room);
     socket.on('left_room', left_room);
+    socket.on('openvidu', openvidu);
 
     socket.on('status', function (data) {
         if (typeof self_user === "undefined")
@@ -138,4 +169,8 @@ $(document).ready(() => {
                 break;
         }
     });
+
+    window.onbeforeunload = function () {
+        if (session) session.disconnect();
+    };
 });

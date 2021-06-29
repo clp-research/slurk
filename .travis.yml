@@ -17,6 +17,8 @@ jobs:
     name: Test
     language: python
     python: 3.9
+    services: docker
+    before_install: docker pull openvidu/openvidu-server-kms:2.18.0
     install: pip install -r requirements.txt
     script: pytest
   - stage: deploy
@@ -40,6 +42,8 @@ jobs:
     env:
       - DATABASE='sqlite:///'
       - FLASK_APP=app
+      - OPENVIDU_URL=localhost
+      - OPENVIDU_SECRET=CI
     install:
       - pip install -r requirements.txt
       - pip install sphinx sphinxcontrib-openapi sphinx_rtd_theme

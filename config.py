@@ -38,9 +38,16 @@ OPENAPI_RAPIDOC_URL = "https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js"
 OPENAPI_RAPIDOC_CONFIG = {
     'render-style': 'view',
     'schema-style': 'table',
+    'schema-description-expanded': 'true'
 }
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
+
+if "OPENVIDU_URL" in os.environ:
+    OPENVIDU_URL = os.environ["OPENVIDU_URL"]
+    OPENVIDU_SECRET = os.environ.get("OPENVIDU_SECRET")
+    OPENVIDU_PORT = int(os.environ.get("OPENVIDU_PORT", default='443'))
+    OPENVIDU_VERIFY = environ_as_boolean("OPENVIDU_VERIFY", default=True)
 
 if 'DATABASE' in os.environ:
     DATABASE = os.environ['DATABASE']
