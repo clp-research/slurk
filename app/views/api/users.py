@@ -49,16 +49,22 @@ class Users(MethodView):
     def post(self, item):
         """Add a new user
 
-        The token is required to has registrations left"""
+        The token is required to has registrations left and a room associated"""
 
-        token = current_app.session.query(Token).get(item['token_id'])
+        db = current_app.session
+        token = db.query(Token).get(item['token_id'])
 
         if token.registrations_left == 0:
             abort(UnprocessableEntity, errors=dict(token_id='No registrations left for given token'))
         if token.registrations_left > 0:
             token.registrations_left -= 1
+        if token.room is None:
+            abort(UnprocessableEntity, errors=dict(token_id='Token does not have a room associated'))
 
-        return UserSchema().post(item)
+        user = UserSchema().post(item)
+        user.rooms = [token.room]
+        db.commit()
+        return user
 
 
 @blp.route('/<int:user_id>')
