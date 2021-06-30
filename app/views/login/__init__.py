@@ -28,10 +28,9 @@ def load_user_from_request(request):
     token_id = request.headers.get('Authorization') or request.args.get('token')
     user_id = request.args.get('user') or request.headers.get('user')
     if token_id is None or user_id is None:
-        current_app.logger.warning(f"Loading user from request failed. user: `{user_id}`, token: `{token_id}`")
         return None
 
-    current_app.logger.info(f"loading user `{user_id}` from token `{token_id}`")
+    current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
     return current_app.session.query(User).filter_by(token_id=token_id).one_or_none()
 
