@@ -146,10 +146,13 @@ def init_app(app):
     register_views(api)
 
 
-def abort(ex, *, json={}, query={}):
+def abort(ex, *, json=None, query=None):
     from flask import abort, make_response
     from werkzeug.http import HTTP_STATUS_CODES
     from werkzeug.exceptions import default_exceptions
+
+    json = json or {}
+    query = query or {}
 
     if isinstance(ex, Response):
         try:
