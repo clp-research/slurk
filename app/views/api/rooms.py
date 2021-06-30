@@ -187,9 +187,9 @@ class AttributeId(MethodView):
         kwargs['id'] = id
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -220,9 +220,9 @@ class AttributeClass(MethodView):
         kwargs['cls'] = cls
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -253,9 +253,9 @@ class AttributeElement(MethodView):
         kwargs['element'] = element
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -286,9 +286,9 @@ class Text(MethodView):
         kwargs['id'] = id
         Log.add("set_text", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('text_update', kwargs, room=str(user.session_id))
         return kwargs
 
@@ -330,9 +330,9 @@ class Class(MethodView):
         kwargs['id'] = id
         Log.add("class_add", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('class_add', kwargs, room=str(user.session_id))
         return kwargs
 
@@ -345,8 +345,8 @@ class Class(MethodView):
         kwargs['id'] = id
         Log.add("class_remove", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, errors=dict(query={
+            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
                 'user_id': f'User `{user.id} does not have a session id associated'
-            }))
+            })
         socketio.emit('class_remove', kwargs, room=str(user.session_id))
         return kwargs

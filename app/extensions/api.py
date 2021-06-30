@@ -4,7 +4,7 @@ from flask.globals import current_app, request
 from uuid import UUID
 from requests import Response
 from json import JSONDecodeError
-from werkzeug.exceptions import UnsupportedMediaType
+from werkzeug.exceptions import UnsupportedMediaType, NotFound
 
 import flask_smorest
 import http
@@ -98,10 +98,9 @@ class Blueprint(flask_smorest.Blueprint):
                     id = str(id)
                 entry = current_app.session.query(cls).get(id)
                 if not entry:
-                    flask_smorest.abort(http.HTTPStatus.NOT_FOUND, errors=dict(query={
+                    abort(NotFound, query={
                         parameter_id: f'{cls.__tablename__} `{id}` does not exist'
-                    }
-                    ))
+                    })
                 if check_etag and request.method in self.METHODS_NEEDING_CHECK_ETAG:
                     self.check_etag(entry, schema)
 

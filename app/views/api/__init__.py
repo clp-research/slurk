@@ -175,4 +175,4 @@ class CommonSchema(BaseSchema):
             db.commit()
         except IntegrityError:
             db.rollback()
-            abort(UnprocessableEntity, errors=f"{self.Meta.model.__tablename__} `{entity.id}` is still in use")
+            abort(UnprocessableEntity, query=f"{self.Meta.model.__tablename__} `{entity.id}` is still in use")
