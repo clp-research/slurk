@@ -30,6 +30,8 @@ def load_user_from_request(request):
     if token_id is None or user_id is None:
         return None
 
+    token_id = token_id.upper().lstrip('BEARER').strip()
+
     current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
     return current_app.session.query(User).filter_by(token_id=token_id).one_or_none()
