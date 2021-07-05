@@ -22,6 +22,35 @@ class String(ma.fields.String):
         return super()._serialize(value if value != '' else None, attr, obj, **kwargs)
 
 
+class IntegerOrNone(ma.fields.Integer):
+    def __init__(self, *, strict=False, **kwargs):
+        kwargs['allow_none'] = True
+        super().__init__(strict=strict, **kwargs)
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        return super()._serialize(value if value != 0 else None, attr, obj, **kwargs)
+
+
+class Resolution(ma.fields.String):
+    def _validate(self, value):
+        super()._validate(value)
+        res = value.split('x')
+        if len(res) != 2:
+            raise ValidationError('Invalid resolution string. Must be `WIDTHxHEIGHT`')
+        try:
+            w = int(res[0])
+        except ValueError as e:
+            raise ValidationError(f'Invalid width: {e}')
+        try:
+            h = int(res[1])
+        except ValueError as e:
+            raise ValidationError(f'Invalid height: {e}')
+        if w < 100 or w > 1999:
+            raise ValidationError(f'Invalid width: Must be >= 100 and <= 1999')
+        if h < 100 or h > 1999:
+            raise ValidationError(f'Invalid height: Must be >= 100 and <= 1999')
+
+
 class Timestamp(ma.fields.DateTime):
     def _serialize(self, value, attr, obj, **kwargs):
         from datetime import datetime

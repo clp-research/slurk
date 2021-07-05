@@ -57,7 +57,9 @@ class Blueprint(flask_smorest.Blueprint):
     @staticmethod
     def login_required(func):
         from app.views.api.auth import auth
-        func = auth.login_required(func)
+        from flask.globals import current_app
+        if not current_app.config['DEBUG']:
+            func = auth.login_required(func)
         getattr(func, "_apidoc", {})["auth"] = True
         return func
 

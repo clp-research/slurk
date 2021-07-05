@@ -3,6 +3,7 @@ log/
 .DS_Store
 _build
 openapi.json
+/recordings
 
 *.db
 /.idea/

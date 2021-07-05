@@ -2,11 +2,11 @@ from app.models.room import Session
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
-from werkzeug.exceptions import NotAcceptable, NotFound, UnprocessableEntity
+from werkzeug.exceptions import Conflict, NotAcceptable, NotFound, UnprocessableEntity, NotImplemented
 
 from app.models import Room
 from app.extensions.api import Blueprint, abort
-from app.views.api.openvidu.schemas import ConfigSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
+from app.views.api.openvidu.schemas import ConfigSchema, RecordingSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
 
 
 blp = Blueprint('OpenVidu', __name__)
@@ -74,7 +74,7 @@ class Sessions(MethodView):
 
     @blp.arguments(SessionSchema.Creation, example={})
     @blp.alt_response(409, None)
-    @blp.response(200, SessionSchema.Response)
+    @blp.response(201, SessionSchema.Response)
     @blp.login_required
     def post(self, args):
         """Initialize a Session in OpenVidu Server
@@ -189,7 +189,7 @@ class Connection(MethodView):
         abort(response)
 
     @blp.arguments(WebRtcConnectionSchema.Creation, example={})
-    @blp.response(200, WebRtcConnectionSchema.Response)
+    @blp.response(201, WebRtcConnectionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
     @blp.login_required
     def post(self, args, *, session_id):
@@ -249,4 +249,131 @@ class ConnectionById(MethodView):
             abort(NotFound, query=f'Session `{session_id}` does not exist')
         elif response.status_code == 404:
             abort(NotFound, query=f'Connection `{connection_id}` does not exist')
+        abort(response)
+
+
+@blp.route('recordings')
+class Recordings(MethodView):
+    @blp.response(200, RecordingSchema.Response(many=True))
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def get(self):
+        """Retrieve all Recordings from OpenVidu Server
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.list_recordings()
+
+        if response.status_code == 200:
+            return response.json()['items']
+        elif response.status_code == 501:
+            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+        abort(response)
+
+
+@blp.route('recordings/<string:recording_id>')
+class RecordingsById(MethodView):
+    @blp.response(200, RecordingSchema.Response)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def get(self, *, recording_id):
+        """Retrieve a Recording from OpenVidu Server
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.get_recording(recording_id)
+
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+        elif response.status_code == 501:
+            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+        abort(response)
+
+    @blp.response(204)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(409, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def delete(self, *, recording_id):
+        """Delete a Recording
+
+        This will delete all of the recording files from disk
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.delete_recording(recording_id)
+
+        if response.status_code == 204:
+            return
+        elif response.status_code == 404:
+            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+        elif response.status_code == 409:
+            abort(Conflict, query='The recording has started status. Stop it before deletion')
+        elif response.status_code == 501:
+            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+        abort(response)
+
+
+@blp.route('recordings/start/<string:session_id>')
+class RecordingsStart(MethodView):
+    @blp.arguments(RecordingSchema.Creation, example={})
+    @blp.response(201, RecordingSchema.Response)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(406, ErrorSchema)
+    @blp.alt_response(409, ErrorSchema)
+    @blp.alt_response(422, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def post(self, args, *, session_id):
+        """Retrieve all Recordings from OpenVidu Server
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.start_recording(session_id, json=args)
+
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 400:
+            abort(UnprocessableEntity, json=response.json().get('message'))
+        elif response.status_code == 422:
+            if not args['hasAudio'] and not args['hasVideo']:
+                err = 'Either `has_audio` or `has_video` must not be false'
+                abort(UnprocessableEntity, json=dict(has_video=err, has_audio=err))
+            abort(response)
+        elif response.status_code == 404:
+            abort(NotFound, query=f'Session `{session_id}` does not exist')
+        elif response.status_code == 406:
+            abort(NotAcceptable, query='The session has no connected participants')
+        elif response.status_code == 409:
+            abort(Conflict, query='The session is not configured for using MediaMode ROUTED or it is already being recorded')
+        elif response.status_code == 501:
+            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+        abort(response)
+
+
+@blp.route('recordings/stop/<string:recording_id>')
+class RecordingsStop(MethodView):
+    @blp.response(200, RecordingSchema.Response)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(406, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def post(self, *, recording_id):
+        """Stop the recording of a Session
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.stop_recording(recording_id)
+
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+        elif response.status_code == 406:
+            abort(NotAcceptable, query='Recording has starting status. Wait until started status before stopping the recording')
+        elif response.status_code == 501:
+            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
         abort(response)

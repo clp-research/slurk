@@ -65,6 +65,23 @@ class OpenVidu:
     def delete_connection(self, session_id, connection_id):
         return self._request.delete(f'sessions/{session_id}/connection/{connection_id}')
 
+    def start_recording(self, session_id, json):
+        json['session'] = session_id
+        return self._request.post('recordings/start', json=json)
+
+    def stop_recording(self, recording_id):
+        return self._request.post(f'recordings/stop/{recording_id}')
+
+    def get_recording(self, recording_id):
+        return self._request.get(f'recordings/{recording_id}')
+
+    def list_recordings(self):
+        return self._request.get(f'recordings')
+
+    def delete_recording(self, recording_id):
+        return self._request.delete(f'recordings/{recording_id}')
+
+
 
 def init_app(app):
     if 'OPENVIDU_URL' in app.config:
