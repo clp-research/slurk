@@ -104,12 +104,6 @@ header video {
     overflow: hidden;
     display: flex;
 }
-#ov-subscribers {
-    align-content: left;
-}
-#ov-publisher {
-    text-align: right;
-}
 
 .other .msg {
     border-top-left-radius: 0;

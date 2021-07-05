@@ -19,7 +19,7 @@ class Token(Common):
     logins_left = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('Task.id'))
     room_id = Column(Integer, ForeignKey('Room.id'))
-    openvidu_connection_settings = Column(PickleType, nullable=False)
+    openvidu_settings = Column(PickleType, nullable=False)
 
     task = relationship('Task')
     room = relationship('Room')
@@ -41,7 +41,7 @@ class Token(Common):
                         send_command=False,
                     ),
                     logins_left=-1,
-                    openvidu_connection_settings={}
+                    openvidu_settings={}
                 )
                 session.add(token)
                 session.commit()

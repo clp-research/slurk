@@ -21,7 +21,7 @@ script_dict = ma.Schema.from_dict({
 }, name='Scripts')
 
 
-class OpenViduConnectionSettingsFallbackSchema(BaseSchema):
+class OpenViduSettingsFallbackSchema(BaseSchema):
     start_with_audio = ma.fields.Boolean(
         missing=True,
         description='Start audio on joining the room')
@@ -46,6 +46,14 @@ class OpenViduConnectionSettingsFallbackSchema(BaseSchema):
     video_max_send_bandwidth = ma.fields.Integer(
         missing=1000,
         description='Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    video_publisher_location = ma.fields.String(
+        missing='header',
+        allow_none=True,
+        description='Corresponding id in html where publisher video is shown')
+    video_subscribers_location = ma.fields.String(
+        missing='sidebar',
+        allow_none=True,
+        description='Corresponding id in html where subscribed videos are shown')
     allowed_filters = ma.fields.List(
         ma.fields.String,
         missing=[],
@@ -101,9 +109,9 @@ class LayoutSchema(CommonSchema):
         missing=False,
         description='Make the room read-only',
         filter_description='Filter for the layout being read-only')
-    openvidu_connection_settings = ma.fields.Nested(
-        OpenViduConnectionSettingsFallbackSchema,
-        missing=OpenViduConnectionSettingsFallbackSchema().load({}),
+    openvidu_settings = ma.fields.Nested(
+        OpenViduSettingsFallbackSchema,
+        missing=OpenViduSettingsFallbackSchema().load({}),
         description='Settings for connections used for this layout'
     )
 
