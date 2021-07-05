@@ -67,16 +67,34 @@ class User(Common):
 
             # Create an OpenVidu connection if apropiate
             if hasattr(current_app, 'openvidu') and room.openvidu_session_id and self.token.permissions.openvidu_role:
+                def ov_property(name):
+                    setting = self.token.openvidu_connection_settings.get(name)
+                    if setting is None or hasattr(setting, '__len__') and len(setting) == 0:
+                        setting = room.layout.openvidu_connection_settings[name]
+                    return setting
+
                 # OpenVidu destroys a session when everyone left.
                 # This ensures, that the session is persistant by recreating the session
                 def post_connection(retry=True):
-                    response = current_app.openvidu.post_connection(room.openvidu_session_id, json={
-                        'role': self.token.permissions.openvidu_role
-                    })
+                    response = current_app.openvidu.post_connection(room.openvidu_session_id, json=dict(
+                        role=self.token.permissions.openvidu_role,
+                        kurentoOptions=dict(
+                            videoMaxRecvBandwidth=ov_property('video_max_recv_bandwidth'),
+                            videoMinRecvBandwidth=ov_property('video_min_recv_bandwidth'),
+                            videoMaxSendBandwidth=ov_property('video_max_send_bandwidth'),
+                            videoMinSendBandwidth=ov_property('video_min_send_bandwidth'),
+                            allowedFilters=ov_property('allowed_filters')
+                        )
+                    ))
+
                     if response.status_code == 200:
-                        socketio.emit(
-                            'openvidu', WebRtcConnectionSchema.Response().dump(
-                                response.json()), room=self.session_id)
+                        socketio.emit('openvidu', dict(
+                            connection=WebRtcConnectionSchema.Response().dump(response.json()),
+                            start_with_audio=ov_property('start_with_audio'),
+                            start_with_video=ov_property('start_with_video'),
+                            video_resolution=ov_property('video_resolution'),
+                            video_framerate=ov_property('video_framerate'),
+                        ), room=self.session_id)
                     elif response.status_code == 404:
                         json = room.session.parameters
                         json['customSessionId'] = room.session.id

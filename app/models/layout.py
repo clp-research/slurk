@@ -9,7 +9,7 @@ from flask.globals import current_app
 
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import Boolean
+from sqlalchemy.sql.sqltypes import Boolean, PickleType
 
 from .common import Common
 
@@ -197,6 +197,7 @@ class Layout(Common):
     show_users = Column(Boolean, nullable=False)
     show_latency = Column(Boolean, nullable=False)
     read_only = Column(Boolean, nullable=False)
+    openvidu_connection_settings = Column(PickleType, nullable=False)
 
     @classmethod
     def from_json(cls, json_data):
@@ -260,12 +261,8 @@ class Layout(Common):
             html=html,
             css=css,
             script=script,
-            show_users=data.get(
-                'show_users',
-                True),
-            show_latency=data.get(
-                'show_latency',
-                True),
-            read_only=data.get(
-                'read_only',
-                True))
+            show_users=data.get('show_users', True),
+            show_latency=data.get('show_latency', True),
+            read_only=data.get('read_only', True),
+            openvidu_connection_settings = data.get('openvidu_connection_settings')
+        )

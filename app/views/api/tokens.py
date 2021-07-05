@@ -5,7 +5,7 @@ import marshmallow as ma
 
 from app.extensions.api import Blueprint
 from app.models import Token, Permissions, Room, Task
-from app.views.api import CommonSchema, Id
+from app.views.api import BaseSchema, CommonSchema, Id
 
 
 blp = Blueprint(Token.__tablename__ + 's', __name__)
@@ -17,6 +17,37 @@ class TokenId(ma.fields.UUID):
         if current_app.session.query(Token).get(id) is None:
             raise ma.ValidationError(f'Token `{id}` does not exist')
         return id
+
+
+class OpenViduConnectionSettingsSchema(BaseSchema):
+    start_with_audio = ma.fields.Boolean(
+        missing=None,
+        description='Start audio on joining the room')
+    start_with_video = ma.fields.Boolean(
+        missing=None,
+        description='Start video on joining the room')
+    video_resolution = ma.fields.String(
+        missing=None,
+        description='Video resolution')
+    video_framerate = ma.fields.Integer(
+        missing=None,
+        description='Framerate for video')
+    video_min_recv_bandwidth = ma.fields.Integer(
+        missing=None,
+        description='Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained')
+    video_max_recv_bandwidth = ma.fields.Integer(
+        missing=None,
+        description='Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained')
+    video_min_send_bandwidth = ma.fields.Integer(
+        missing=None,
+        description='Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    video_max_send_bandwidth = ma.fields.Integer(
+        missing=None,
+        description='Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    allowed_filters = ma.fields.List(
+        ma.fields.String,
+        missing=[],
+        description='Names of the filters the Connection will be able to apply to its published streams')
 
 
 class TokenSchema(CommonSchema):
@@ -45,6 +76,11 @@ class TokenSchema(CommonSchema):
         missing=None,
         description='Room assigned to this token',
         filter_description='Filter for rooms')
+    openvidu_connection_settings = ma.fields.Nested(
+        OpenViduConnectionSettingsSchema,
+        missing=OpenViduConnectionSettingsSchema().load({}),
+        description='Settings for connections used for this token. If a setting is missing, the room default is used'
+    )
 
 
 @blp.route('/')

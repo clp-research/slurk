@@ -166,6 +166,14 @@ function create_layout {
             "incoming-image": ["display-image"],
             "submit-message": ["send-message"],
             "print-history": ["plain-history"]
+        },
+        "openvidu_connection_settings": {
+            "video_resolution": "320x240",
+            "video_framerate": 60,
+            "video_max_recv_bandwidth": 0,
+            "video_max_send_bandwidth": 0,
+            "video_min_recv_bandwidth": 0,
+            "video_min_send_bandwidth": 0
         }
     }'
 
@@ -245,11 +253,19 @@ function create_token {
     local ROOM=$3
     errcho -n "Creating token for room $ROOM... "
 
+    local json="{
+        \"room_id\": $ROOM,
+        \"permissions_id\": $PERMISSIONS,
+        \"openvidu_connection_settings\": {
+            \"start_with_audio\": false
+        }
+    }"
+
     local response=$(curl -sX POST \
          -H "Authorization: Bearer $TOKEN" \
          -H "Content-Type: application/json" \
          -H "Accept: application/json" \
-         -d "{\"room_id\": $ROOM, \"permissions_id\": $PERMISSIONS}" \
+         -d "$(jq . <<< "$json")" \
          localhost:$PORT/slurk/api/tokens)
     check_error "$response"
 

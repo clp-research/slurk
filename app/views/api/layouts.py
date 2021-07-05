@@ -4,7 +4,7 @@ import marshmallow as ma
 
 from app.extensions.api import Blueprint
 from app.models import Layout
-from app.views.api import CommonSchema
+from app.views.api import BaseSchema, CommonSchema
 
 
 blp = Blueprint(Layout.__tablename__ + 's', __name__)
@@ -19,6 +19,37 @@ script_dict = ma.Schema.from_dict({
     'document-ready': ma.fields.List(ma.fields.String, missing=None, description='Called when site is fully loaded'),
     'plain': ma.fields.List(ma.fields.String, missing=None, description='Injected as a script file into the site'),
 }, name='Scripts')
+
+
+class OpenViduConnectionSettingsFallbackSchema(BaseSchema):
+    start_with_audio = ma.fields.Boolean(
+        missing=True,
+        description='Start audio on joining the room')
+    start_with_video = ma.fields.Boolean(
+        missing=True,
+        description='Start video on joining the room')
+    video_resolution = ma.fields.String(
+        missing="640x480",
+        description='Video resolution')
+    video_framerate = ma.fields.Integer(
+        missing=30,
+        description='Framerate for video')
+    video_min_recv_bandwidth = ma.fields.Integer(
+        missing=300,
+        description='Minimum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained')
+    video_max_recv_bandwidth = ma.fields.Integer(
+        missing=1000,
+        description='Maximum video bandwidth sent from clients to OpenVidu Server, in kbps. 0 means unconstrained')
+    video_min_send_bandwidth = ma.fields.Integer(
+        missing=300,
+        description='Minimum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    video_max_send_bandwidth = ma.fields.Integer(
+        missing=1000,
+        description='Maximum video bandwidth sent from OpenVidu Server to clients, in kbps. 0 means unconstrained')
+    allowed_filters = ma.fields.List(
+        ma.fields.String,
+        missing=[],
+        description='Names of the filters the Connection will be able to apply to its published streams')
 
 
 class LayoutSchema(CommonSchema):
@@ -67,8 +98,14 @@ class LayoutSchema(CommonSchema):
         description='Show the current latency in the layout',
         filter_description='Filter for latency being shown')
     read_only = ma.fields.Boolean(
-        missing=False, description='Make the room read-only',
+        missing=False,
+        description='Make the room read-only',
         filter_description='Filter for the layout being read-only')
+    openvidu_connection_settings = ma.fields.Nested(
+        OpenViduConnectionSettingsFallbackSchema,
+        missing=OpenViduConnectionSettingsFallbackSchema().load({}),
+        description='Settings for connections used for this layout'
+    )
 
     def patch(self, old, new):
         layout = Layout.from_json_data(new)
