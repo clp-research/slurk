@@ -1,9 +1,11 @@
 from flask.views import MethodView
+from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
+from werkzeug.exceptions import UnprocessableEntity
 import marshmallow as ma
 
-from app.extensions.api import Blueprint
-from app.models import User
+from app.extensions.api import Blueprint, abort
+from app.models import User, Token
 
 from . import CommonSchema
 from .tokens import TokenId
@@ -45,8 +47,24 @@ class Users(MethodView):
     @blp.response(201, UserSchema.Response)
     @blp.login_required
     def post(self, item):
-        """Add a new user"""
-        return UserSchema().post(item)
+        """Add a new user
+
+        The token is required to have registrations left and a room associated"""
+
+        db = current_app.session
+        token = db.query(Token).get(item['token_id'])
+
+        if token.registrations_left == 0:
+            abort(UnprocessableEntity, json=dict(token_id='No registrations left for given token'))
+        if token.registrations_left > 0:
+            token.registrations_left -= 1
+        if token.room is None:
+            abort(UnprocessableEntity, json=dict(token_id='Token does not have a room associated'))
+
+        user = UserSchema().post(item)
+        user.rooms = [token.room]
+        db.commit()
+        return user
 
 
 @blp.route('/<int:user_id>')

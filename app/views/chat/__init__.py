@@ -17,7 +17,7 @@ def index():
     db = current_app.session
 
     if current_user.rooms.count() == 0:
-        if current_user.token.logins_left == 0:
+        if current_user.token.registrations_left == 0:
             return login_manager.unauthorized()
         else:
             current_user.rooms.append(current_user.token.room)

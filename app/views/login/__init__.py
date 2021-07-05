@@ -26,26 +26,15 @@ def load_user(id):
 @login_manager.request_loader
 def load_user_from_request(request):
     token_id = request.headers.get('Authorization') or request.args.get('token')
-    if not token_id:
+    user_id = request.args.get('user') or request.headers.get('user')
+    if token_id is None or user_id is None:
         return None
 
-    current_app.logger.debug(f"loading user from token {token_id}")
+    token_id = token_id.upper().lstrip('BEARER').strip()
 
-    db = current_app.session
-    token = db.query(Token).filter_by(id=token_id).filter(Token.room).one_or_none()
+    current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
-    if not token:
-        return None
-
-    if not token.user:
-        name = request.headers.get('name')
-        if not name:
-            name = request.args.get('name')
-        if not name:
-            name = "<unnamed>"
-        token.user = User(name=name, rooms=[token.room])
-        db.commit()
-    return token.user
+    return current_app.session.query(User).filter_by(token_id=token_id).one_or_none()
 
 
 @login.route('/', methods=['GET', 'POST'])
@@ -65,9 +54,9 @@ def index():
         if token:
             if token.room is None:
                 flash("The token is an API token, which can not be used for logging in.", "error")
-            elif token.logins_left != 0:
-                if token.logins_left > 0:
-                    token.logins_left -= 1
+            elif token.registrations_left != 0:
+                if token.registrations_left > 0:
+                    token.registrations_left -= 1
                 user = User(name=name, token=token, rooms=[token.room])
                 db.add(user)
                 db.commit()
