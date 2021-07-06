@@ -28,7 +28,7 @@ class SessionsConfigSchema(BaseSchema):
 
 
 class RecordingConfigSchema(BaseSchema):
-    version = ma.fields.Integer(
+    version = ma.fields.String(
         description='Version of the recording')
     path = ma.fields.String(
         description='System path where to store the video files of recorded sessions')
