@@ -1,5 +1,9 @@
-import pytest
+"""Test fixtures."""
+
+from http import HTTPStatus
 import logging
+
+import pytest
 
 from app import create_app
 from app.extensions.openvidu import OpenVidu
@@ -20,7 +24,7 @@ def engine():
         yield create_engine(f'sqlite:///{f.name}')
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def database(engine):
     from app.extensions.database import Database
 
@@ -30,7 +34,7 @@ def database(engine):
     database.clear()
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def admin_token(database):
     from app.models import Token
 
@@ -78,14 +82,14 @@ def openvidu_impl(secret, request):
         yield f"Could not start OpenVidu Server: {e}"
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def openvidu(openvidu_impl):
     if isinstance(openvidu_impl, str):
         pytest.xfail(openvidu_impl)
     return openvidu_impl
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app(database, openvidu_impl, secret):
     test_config = dict(
         TESTING=True,
@@ -106,7 +110,7 @@ def app(database, openvidu_impl, secret):
     return create_app(test_config=test_config, engine=database.engine)
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def client(app, admin_token):
     from flask import testing
     from werkzeug.datastructures import Headers
@@ -117,9 +121,98 @@ def client(app, admin_token):
             if isinstance(headers, dict):
                 headers = Headers(headers)
             if 'Authorization' not in headers:
-                headers.add('Authorization', f'bearer {admin_token}')
+                headers.add('Authorization', f'Bearer {admin_token}')
             kwargs['headers'] = headers
             return super().open(*args, **kwargs)
 
     app.test_client_class = Client
     return app.test_client()
+
+
+@pytest.fixture
+def layouts(client):
+    # do not use default values everywhere in order to be useful in get tests
+    response = client.post(
+        '/slurk/api/layouts',
+        json={'title': 'Test Room', 'subtitle': 'Testing...', 'show_latency': False}
+    )
+    if response.status_code == HTTPStatus.CREATED:
+        return response
+
+
+@pytest.fixture
+def rooms(client, layouts):
+    if layouts is not None:
+        response = client.post(
+            '/slurk/api/rooms',
+            json={
+                'layout_id': layouts.json['id']
+            }
+        )
+        if response.status_code == HTTPStatus.CREATED:
+            return response
+
+
+@pytest.fixture
+def permissions(client):
+    response = client.post('/slurk/api/permissions', json={'send_message': True})
+    if response.status_code == HTTPStatus.CREATED:
+        return response
+
+
+@pytest.fixture
+def tokens(client, permissions, rooms):
+    if permissions is not None and rooms is not None:
+        response = client.post(
+            '/slurk/api/tokens',
+            json={
+                'permissions_id': permissions.json['id'],
+                'room_id': rooms.json['id']
+            }
+        )
+        if response.status_code == HTTPStatus.CREATED:
+            return response
+
+
+@pytest.fixture
+def users(client, tokens):
+    if tokens is not None:
+        response = client.post(
+            '/slurk/api/users',
+            json={
+                'name': 'Test User',
+                'token_id': tokens.json['id']
+            }
+        )
+        if response.status_code == HTTPStatus.CREATED:
+            return response
+
+
+@pytest.fixture
+def tasks(client, layouts):
+    if layouts is not None:
+        response = client.post(
+            '/slurk/api/tasks',
+            json={
+                'name': 'Test Task',
+                'layout_id': layouts.json['id'],
+                'num_users': 3
+            }
+        )
+        if response.status_code == HTTPStatus.CREATED:
+            return response
+
+
+@pytest.fixture
+def logs(client, users, rooms):
+    if users is not None and rooms is not None:
+        response = client.post(
+            '/slurk/api/logs',
+            json={
+                'event': 'Test Event',
+                'user_id': users.json['id'],
+                'room_id': rooms.json['id']
+            }
+        )
+        if response.status_code == HTTPStatus.CREATED:
+            return response
