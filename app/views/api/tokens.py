@@ -101,6 +101,7 @@ class Tokens(MethodView):
 
 @blp.route('/<uuid:token_id>')
 class TokensById(MethodView):
+    @blp.etag
     @blp.query('token', TokenSchema)
     @blp.response(200, TokenSchema.Response)
     def get(self, *, token):
