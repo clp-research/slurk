@@ -27,7 +27,7 @@ class LogSchema(CommonSchema):
         missing=None,
         description='Source room for this log entry',
         filter_description='Filter for room associated with this log entry')
-    receiver = Id(
+    receiver_id = Id(
         User,
         missing=None,
         description='Receiver associated  with this log entry',
