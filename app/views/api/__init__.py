@@ -162,7 +162,7 @@ class CommonSchema(BaseSchema):
         return old
 
     def patch(self, old, new):
-        for field in self.fields.keys():
+        for field in self.load_fields.keys():
             if field in new:
                 setattr(old, field, new[field])
         current_app.session.commit()

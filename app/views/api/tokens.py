@@ -60,6 +60,7 @@ class TokenSchema(CommonSchema):
         description='Permissions for this token',
         filter_description='Filter for permissions')
     registrations_left = ma.fields.Integer(
+        validate=ma.validate.Range(min=-1, max=2**63-1),
         missing=1,
         description='Logins left for this token',
         filter_description='Filter for left logins')
@@ -101,6 +102,7 @@ class Tokens(MethodView):
 
 @blp.route('/<uuid:token_id>')
 class TokensById(MethodView):
+    @blp.etag
     @blp.query('token', TokenSchema)
     @blp.response(200, TokenSchema.Response)
     def get(self, *, token):
