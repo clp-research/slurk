@@ -115,16 +115,26 @@ class LayoutSchema(CommonSchema):
         description='Settings for connections used for this layout'
     )
 
+    def put(self, old, new):
+        layout = Layout.from_json_data(new)
+        old.html = layout.html
+        del new['html_obj']
+        old.css = layout.css
+        del new['css_obj']
+        old.script = layout.script
+        del new['scripts']
+        return super().put(old, new)
+
     def patch(self, old, new):
         layout = Layout.from_json_data(new)
         if 'html_obj' in new:
-            new['html'] = layout.html
+            old.html = layout.html
             del new['html_obj']
         if 'css_obj' in new:
-            new['css'] = layout.css
+            old.css = layout.css
             del new['css_obj']
         if 'scripts' in new:
-            new['script'] = layout.script
+            old.script = layout.script
             del new['scripts']
         return super().patch(old, new)
 
@@ -175,7 +185,7 @@ class LayoutById(MethodView):
     @blp.login_required
     def put(self, new_layout, *, layout):
         """Replace a layout identified by ID"""
-        return LayoutSchema().put(layout, Layout.from_json_data(new_layout))
+        return LayoutSchema().put(layout, new_layout)
 
     @blp.etag
     @blp.query('layout', LayoutSchema)

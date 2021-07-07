@@ -19,6 +19,7 @@ class TaskSchema(CommonSchema):
         description='Name of the task',
         filter_description='Filter for a task name')
     num_users = ma.fields.Integer(
+        validate=ma.validate.Range(min=0, max=2**63-1),
         required=True,
         description='Number of users needed for this task',
         filter_description='Filter for number of users needed for this task')
@@ -77,7 +78,7 @@ class TaskById(MethodView):
     @blp.etag
     @blp.query('task', TaskSchema)
     @blp.response(204)
-    @blp.response(422, ErrorSchema)
+    @blp.alt_response(422, ErrorSchema)
     @blp.login_required
     def delete(self, *, task):
         """Delete a task identified by ID"""
