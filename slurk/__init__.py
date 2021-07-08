@@ -10,11 +10,9 @@ from slurk.extensions import events as event_ext
 from slurk.extensions import openvidu as openvidu_ext
 from slurk.models import Token
 
-logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
-
 
 def create_app(test_config=None, engine=None):
-    from config import API_TITLE, API_VERSION, OPENAPI_VERSION
+    from .config import API_TITLE, API_VERSION, OPENAPI_VERSION
 
     app = Flask(
         __name__,
@@ -24,7 +22,7 @@ def create_app(test_config=None, engine=None):
     app.logger.name = 'slurk'
 
     if not test_config:
-        app.config.from_object('config')
+        app.config.from_object('app.config')
     else:
         app.config.from_mapping(test_config)
 

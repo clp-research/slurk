@@ -31,4 +31,4 @@ Happy slurking!
 [Installation]: https://clp-research.github.io/slurk/slurk_installation.html#slurk-installation
 [flask]: http://flask.pocoo.org/
 [flask-socketio]: https://flask-socketio.readthedocs.io/en/latest
-[architecture]: img/slurk_architecture.png
+[architecture]: docs/slurk_architecture.png
