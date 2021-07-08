@@ -11,7 +11,7 @@ class Room(Common):
 
     layout_id = Column(Integer, ForeignKey("Layout.id"), nullable=False)
     users = relationship("User", secondary=user_room, back_populates="rooms")
-    logs = relationship("Log", backref="room", order_by=asc("date_modified"))
+    logs = relationship("Log", backref="room", order_by=asc("date_modified"), passive_deletes=True)
     openvidu_session_id = Column(String, ForeignKey("Session.id"))
 
 

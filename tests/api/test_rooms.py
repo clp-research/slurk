@@ -303,7 +303,6 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
         #TODO 'tests/api/test_logs.py::TestPostValid',
         #TODO 'tests/api/test_logs.py::TestDeleteValid'
     ])
-    @pytest.mark.xfail
     def test_deletion_of_room_in_logs(self, client, rooms):
         # create logs that use the room
         log = client.post(
@@ -315,19 +314,11 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
             f'/slurk/api/rooms/{rooms.json["id"]}',
             headers={'If-Match': rooms.headers['ETag']}
         )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
-
-        # free the rooms entry by deleting the logs
-        client.delete(
-            f'/slurk/api/logs/{log.json["id"]}',
-            headers={'If-Match': log.headers['ETag']}
-        )
-        # now one should be able to delete the rooms
-        response = client.delete(
-            f'/slurk/api/rooms/{rooms.json["id"]}',
-            headers={'If-Match': rooms.headers['ETag']}
-        )
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
+
+        # Check if the log entry is deleted
+        response = client.get(f'/slurk/api/logs/{log.json["id"]}')
+        assert response.status_code == HTTPStatus.NOT_FOUND
 
 
 @pytest.mark.depends(on=[
