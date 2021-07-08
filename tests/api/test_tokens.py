@@ -277,7 +277,6 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
         #TODO 'tests/api/test_users.py::TestPostValid',
         #TODO 'tests/api/test_users.py::TestDeleteValid'
     ])
-    @pytest.mark.xfail
     def test_deletion_of_token_in_user(self, client, tokens):
         # create user that uses the token
         user = client.post(
@@ -285,10 +284,12 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
             json={'name': 'Test User', 'token_id': tokens.json['id']}
         )
 
+        token_uri = f'/slurk/api/tokens/{tokens.json["id"]}'
+
         # the deletion of a tokens entry that is in use should fail
         response = client.delete(
-            f'/slurk/api/tokens/{tokens.json["id"]}',
-            headers={'If-Match': tokens.headers['ETag']}
+            token_uri,
+            headers={'If-Match': client.head(token_uri).headers['ETag']}
         )
         assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
 
@@ -297,10 +298,11 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
             f'/slurk/api/users/{user.json["id"]}',
             headers={'If-Match': user.headers['ETag']}
         )
+
         # now one should be able to delete the token
         response = client.delete(
-            f'/slurk/api/tokens/{tokens.json["id"]}',
-            headers={'If-Match': tokens.headers['ETag']}
+            token_uri,
+            headers={'If-Match': client.head(token_uri).headers['ETag']}
         )
 
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
