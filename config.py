@@ -10,7 +10,7 @@ def environ_as_boolean(env, default):
 
 
 # Server config
-DEBUG = environ_as_boolean("DEBUG", default=False)
+DEBUG = environ_as_boolean("SLURK_DEBUG", default=False)
 if DEBUG:
     class NoPing(logging.Filter):
         def filter(self, record):
@@ -40,18 +40,18 @@ OPENAPI_RAPIDOC_CONFIG = {
     'schema-style': 'table',
     'schema-description-expanded': 'true'
 }
-if 'SECRET_KEY' in os.environ:
-    SECRET_KEY = os.environ["SECRET_KEY"]
+if 'SLURK_SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ["SLURK_SECRET_KEY"]
 
-if "OPENVIDU_URL" in os.environ:
-    OPENVIDU_URL = os.environ["OPENVIDU_URL"]
-    OPENVIDU_SECRET = os.environ.get("OPENVIDU_SECRET")
-    OPENVIDU_PORT = int(os.environ.get("OPENVIDU_PORT", default='443'))
-    OPENVIDU_VERIFY = environ_as_boolean("OPENVIDU_VERIFY", default=True)
+if "SLURK_OPENVIDU_URL" in os.environ:
+    OPENVIDU_URL = os.environ["SLURK_OPENVIDU_URL"]
+    OPENVIDU_SECRET = os.environ.get("SLURK_OPENVIDU_SECRET")
+    OPENVIDU_PORT = int(os.environ.get("SLURK_OPENVIDU_PORT", default='443'))
+    OPENVIDU_VERIFY = environ_as_boolean("SLURK_OPENVIDU_VERIFY", default=True)
 
-if 'DATABASE' in os.environ:
-    DATABASE = os.environ['DATABASE']
+if 'SLURK_DATABASE_URI' in os.environ:
+    DATABASE = os.environ['SLURK_DATABASE_URI']
 
     if DATABASE == 'sqlite:///' or DATABASE == 'sqlite:///:memory:':
         logging.getLogger("slurk").error(
-            "Using the memory as database is not supported. Pass an URI with `DATABASE` as environment variable or define it in `config.py`.")
+            "Using the memory as database is not supported. Pass an URI with `SLURK_DATABASE_URI` as environment variable or define it in `config.py`.")
