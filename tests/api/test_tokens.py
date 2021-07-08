@@ -34,7 +34,7 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        retr_by_id = lambda inst: inst['id'] == tokens.json['id']
+        def retr_by_id(inst): return inst['id'] == tokens.json['id']
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == tokens.json
 
@@ -227,8 +227,8 @@ class TestPutInvalid(TokensTable, InvalidWithEtagTemplate):
             HTTPStatus.UNPROCESSABLE_ENTITY
         ),
         (
-           {'json': {'permissions_id': -1, 'registrations_left': 2**63}},
-           HTTPStatus.UNPROCESSABLE_ENTITY
+            {'json': {'permissions_id': -1, 'registrations_left': 2**63}},
+            HTTPStatus.UNPROCESSABLE_ENTITY
         ),
         (
             {'json': {'permissions_id': -1, 'task_id': -42}},
@@ -274,8 +274,8 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
 
     @pytest.mark.depends(on=[
         f'{PREFIX}::TestGetIdValid',
-        #TODO 'tests/api/test_users.py::TestPostValid',
-        #TODO 'tests/api/test_users.py::TestDeleteValid'
+        # TODO 'tests/api/test_users.py::TestPostValid',
+        # TODO 'tests/api/test_users.py::TestDeleteValid'
     ])
     def test_deletion_of_token_in_user(self, client, tokens):
         # create user that uses the token
@@ -316,7 +316,7 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
 class TestPatchValid:
     REQUEST_CONTENT = [
         {'json': {'registrations_left': 0}},
-        {'json': {'registrations_left': 2**63-1}},
+        {'json': {'registrations_left': 2**63 - 1}},
         {'json': {'room_id': None}},
         {'json': {'task_id': -1, 'room_id': None}}
     ]

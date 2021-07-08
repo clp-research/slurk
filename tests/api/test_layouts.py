@@ -35,7 +35,7 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        retr_by_id = lambda inst: inst['id'] == layouts.json['id']
+        def retr_by_id(inst): return inst['id'] == layouts.json['id']
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == layouts.json
 
@@ -95,9 +95,9 @@ class TestPostValid:
         # several attributes
         (
             {
-              'layout-type': 'img',
-              'src': 'some.gif',
-              'alt': 'Some Gif'
+                'layout-type': 'img',
+                'src': 'some.gif',
+                'alt': 'Some Gif'
             },
             ("<img src='some.gif' alt='Some Gif' />\n",
              "<img alt='Some Gif' src='some.gif' />\n")
@@ -105,15 +105,15 @@ class TestPostValid:
         # nested structure with attributes
         (
             {
-              'layout-type': 'div',
-              'layout-content': [
-                {
-                  'layout-type': 'h1',
-                  'layout-content': 'Headline',
-                  'style': 'color: #287fd6;'
-                }
-              ],
-              'style': 'color: #abb2b9;'
+                'layout-type': 'div',
+                'layout-content': [
+                    {
+                        'layout-type': 'h1',
+                        'layout-content': 'Headline',
+                        'style': 'color: #287fd6;'
+                    }
+                ],
+                'style': 'color: #abb2b9;'
             },
             "<div style='color: #abb2b9;'>\n    <h1 style='color: #287fd6;'>" \
             "\n        Headline\n    </h1>\n</div>\n"

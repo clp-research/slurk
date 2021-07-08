@@ -264,5 +264,5 @@ class Layout(Common):
             show_users=data.get('show_users', True),
             show_latency=data.get('show_latency', True),
             read_only=data.get('read_only', True),
-            openvidu_settings = data.get('openvidu_settings')
+            openvidu_settings=data.get('openvidu_settings')
         )

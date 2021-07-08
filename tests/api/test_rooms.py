@@ -55,7 +55,7 @@ class TestRequestOptions(RoomsTable, RequestOptionsTemplate):
 
     @pytest.mark.depends(on=[
         f'{PREFIX}::TestPostValid',
-        #TODO 'tests/api/test_users.py::TestPostValid'
+        # TODO 'tests/api/test_users.py::TestPostValid'
     ])
     @pytest.mark.parametrize('option', ['GET'])
     def test_request_option_with_id_user_logs(self, client, option, rooms, users):
@@ -76,7 +76,7 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        retr_by_id = lambda inst: inst['id'] == rooms.json['id']
+        def retr_by_id(inst): return inst['id'] == rooms.json['id']
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == rooms.json
 
@@ -298,10 +298,9 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
         )
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
-
     @pytest.mark.depends(on=[
-        #TODO 'tests/api/test_logs.py::TestPostValid',
-        #TODO 'tests/api/test_logs.py::TestDeleteValid'
+        # TODO 'tests/api/test_logs.py::TestPostValid',
+        # TODO 'tests/api/test_logs.py::TestDeleteValid'
     ])
     def test_deletion_of_room_in_logs(self, client, rooms):
         # create logs that use the room
@@ -689,8 +688,8 @@ class TestGetUsersByRoomByIdValid:
 @pytest.mark.depends(on=[
     f'{PREFIX}::TestRequestOptions::test_request_option_with_id_user_logs[GET]',
     f'{PREFIX}::TestPostValid',
-    #TODO 'tests/api/test_users.py::TestPostValid',
-    #TODO 'tests/api/test_logs.py::TestPostValid'
+    # TODO 'tests/api/test_users.py::TestPostValid',
+    # TODO 'tests/api/test_logs.py::TestPostValid'
 ])
 class TestGetLogsByUserByRoomByIdValid:
     def test_valid_request(self, client, rooms, users, logs):
@@ -698,7 +697,7 @@ class TestGetLogsByUserByRoomByIdValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # atleast the logs fixture entry should be included
-        retr_by_id = lambda inst: inst['id'] == logs.json['id']
+        def retr_by_id(inst): return inst['id'] == logs.json['id']
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == logs.json
 

@@ -34,7 +34,7 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        retr_by_id = lambda inst: inst['id'] == tasks.json['id']
+        def retr_by_id(inst): return inst['id'] == tasks.json['id']
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == tasks.json
 
@@ -100,8 +100,8 @@ class TestPostInvalid:
             HTTPStatus.UNPROCESSABLE_ENTITY
         ),
         (
-           {'json': {'num_users': 2**63, 'name': 'Test Task', 'layout_id': -1}},
-           HTTPStatus.UNPROCESSABLE_ENTITY
+            {'json': {'num_users': 2**63, 'name': 'Test Task', 'layout_id': -1}},
+            HTTPStatus.UNPROCESSABLE_ENTITY
         ),
         (
             {'data': {'num_users': 3, 'name': 'Test Task', 'layout_id': -1}},
@@ -111,7 +111,7 @@ class TestPostInvalid:
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, content, status, layouts):
-         # set valid layout id
+        # set valid layout id
         for key in content:
             if content[key].get('layout_id') == -1:
                 content[key]['layout_id'] = layouts.json['id']
@@ -243,14 +243,14 @@ class TestPutInvalid(TasksTable, InvalidWithEtagTemplate):
             HTTPStatus.UNPROCESSABLE_ENTITY
         ),
         (
-           {'json': {'num_users': -2, 'name': 'Test Task', 'layout_id': -1}},
-           HTTPStatus.UNPROCESSABLE_ENTITY
+            {'json': {'num_users': -2, 'name': 'Test Task', 'layout_id': -1}},
+            HTTPStatus.UNPROCESSABLE_ENTITY
         )
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, tasks, content, status, layouts):
-         # set valid layout id
+        # set valid layout id
         for key in content:
             if content[key].get('layout_id') == -1:
                 content[key]['layout_id'] = layouts.json['id']
@@ -298,7 +298,7 @@ class TestDeleteInvalid(TasksTable, InvalidWithEtagTemplate):
             f'/slurk/api/tasks/{tasks.json["id"]}',
             headers={'If-Match': tasks.headers['ETag']}
         )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY#, parse_error(response)
+        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY  # , parse_error(response)
 
         # free the task entry by deleting the token
         response = client.delete(
@@ -329,7 +329,7 @@ class TestPatchValid:
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
     def test_valid_request(self, client, tasks, content, layouts):
-         # set valid layout id
+        # set valid layout id
         for key in content:
             if content[key].get('layout_id') == -1:
                 content[key]['layout_id'] = layouts.json['id']
@@ -376,12 +376,12 @@ class TestPatchInvalid(TasksTable, InvalidWithEtagTemplate):
         ({'json': {'layout_id': -42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'json': {'num_users': -1}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'data': {'name': 'Another Test Room', 'layout_id': -1}}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
-        ({'data': '{"name": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE) 
+        ({'data': '{"name": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, tasks, content, status, layouts):
-         # set valid layout id
+        # set valid layout id
         for key in content:
             if isinstance(content[key], dict) and content[key].get('layout_id') == -1:
                 content[key]['layout_id'] = layouts.json['id']
