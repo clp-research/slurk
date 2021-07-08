@@ -12,7 +12,7 @@ set -eu
 
 export SLURK_SECRET_KEY=${SLURK_SECRET_KEY:-$RANDOM}
 export SLURK_DATABASE_URI=${SLURK_DATABASE_URI:-sqlite:///slurk.db}
-export FLASK_APP=${SLURK_ENV:-development}
+export FLASK_ENV=${SLURK_ENV:-development}
 export FLASK_APP=app
 PORT=${SLURK_PORT:-5000}
 
@@ -38,6 +38,7 @@ else
 
     if $(echo "$SLURK_DATABASE_URI" | grep -q '^sqlite:///'); then
         path=$(echo "$SLURK_DATABASE_URI" | sed 's#sqlite:///##')
+        touch $path
         param="-e SLURK_DATABASE_URI=sqlite:///slurk.db -v $(realpath $path):/slurk.db"
     else
         param="-e SLURK_DATABASE_URI=$SLURK_DATABASE_URI"
