@@ -158,9 +158,9 @@ class RecordingSchema(RecordingPropertiesSchema, DefaultRecordingPropertiesSchem
 
 
 class VideoDimensionsSchema(BaseSchema):
-    width: ma.fields.Integer(
+    width = ma.fields.Integer(
         description='Width of the video')
-    height: ma.fields.Integer(
+    height = ma.fields.Integer(
         description='Height of the video')
 
     def _serialize(self, obj, many=None, **kwargs):
