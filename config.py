@@ -10,19 +10,20 @@ def environ_as_boolean(env, default):
 
 
 # Server config
-DEBUG = environ_as_boolean("SLURK_DEBUG", default=False)
+DEBUG = environ_as_boolean("SLURK_DEBUG", default=os.environ.get('FLASK_ENV') == 'development')
 if DEBUG:
     class NoPing(logging.Filter):
         def filter(self, record):
             message = record.getMessage().lower()
             return 'ping' not in message and 'pong' not in message
 
-    eio_logger = logging.getLogger("engineio.server")
-    eio_logger.setLevel(logging.DEBUG)
-    eio_logger.addFilter(NoPing())
-    logging.getLogger("socketio.server").addFilter(NoPing())
-    logging.getLogger().setLevel(logging.INFO)
-    logging.getLogger("slurk").setLevel(logging.DEBUG)
+    # eio_logger = logging.getLogger("engineio.server")
+    # eio_logger.setLevel(logging.DEBUG)
+    # eio_logger.addFilter(NoPing())
+    # logging.getLogger("socketio.server").addFilter(NoPing())
+    # logging.getLogger().setLevel(logging.INFO)
+    # logging.getLogger("slurk").setLevel(logging.DEBUG)
+    # logging.getLogger("werkzeug").setLevel(logging.DEBUG)
 
 API_TITLE = "slurk"
 API_VERSION = "v3"
@@ -53,5 +54,5 @@ if 'SLURK_DATABASE_URI' in os.environ:
     DATABASE = os.environ['SLURK_DATABASE_URI']
 
     if DATABASE == 'sqlite:///' or DATABASE == 'sqlite:///:memory:':
-        logging.getLogger("slurk").error(
-            "Using the memory as database is not supported. Pass an URI with `SLURK_DATABASE_URI` as environment variable or define it in `config.py`.")
+        logging.getLogger("slurk").warning(
+            "Using the memory as database is not supported. Pass an URI with `SLURK_DATABASE_URI` as environment.")
