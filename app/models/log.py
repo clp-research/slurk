@@ -8,9 +8,9 @@ class Log(Common):
     __tablename__ = 'Log'
 
     event = Column(String, nullable=False)
-    user_id = Column(Integer, ForeignKey("User.id"))
-    room_id = Column(Integer, ForeignKey("Room.id"))
-    receiver_id = Column(Integer, ForeignKey("User.id"))
+    user_id = Column(Integer, ForeignKey("User.id", ondelete='CASCADE'))
+    room_id = Column(Integer, ForeignKey("Room.id", ondelete='CASCADE'))
+    receiver_id = Column(Integer, ForeignKey("User.id", ondelete='CASCADE'))
     data = Column(JSON, nullable=False)
     user = relationship("User", foreign_keys=[user_id])
     receiver = relationship("User", foreign_keys=[receiver_id])

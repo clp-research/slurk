@@ -82,7 +82,6 @@ class OpenVidu:
         return self._request.delete(f'recordings/{recording_id}')
 
 
-
 def init_app(app):
     if 'OPENVIDU_URL' in app.config:
         openvidu_url = app.config['OPENVIDU_URL']
