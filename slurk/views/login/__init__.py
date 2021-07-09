@@ -3,8 +3,8 @@ import uuid
 from flask import render_template, redirect, url_for, flash, current_app, Blueprint
 from flask_login import login_user
 
-from app.extensions.login import login_manager
-from app.models import User, Token
+from slurk.extensions.login import login_manager
+from slurk.models import User, Token
 
 from .forms import LoginForm
 from .events import *

@@ -1,4 +1,4 @@
-from app.extensions.database import Base
+from slurk.extensions.database import Base
 from sqlalchemy import Column, ForeignKey, Integer, String, asc
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import JSON, String

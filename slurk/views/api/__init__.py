@@ -5,7 +5,7 @@ from marshmallow.utils import missing
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import UnprocessableEntity
 
-from app.extensions.api import abort
+from slurk.extensions.api import abort
 
 
 def register_blueprints(api):

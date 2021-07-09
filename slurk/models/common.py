@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, DateTime, func, Table, ForeignKey
 
-from app.extensions.database import Base
+from slurk.extensions.database import Base
 
 
 class Common(Base):

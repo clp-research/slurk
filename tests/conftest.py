@@ -5,8 +5,8 @@ import logging
 
 import pytest
 
-from app import create_app
-from app.extensions.openvidu import OpenVidu
+from slurk import create_app
+from slurk.extensions.openvidu import OpenVidu
 
 
 @pytest.fixture(scope='session')
@@ -26,7 +26,7 @@ def engine():
 
 @pytest.fixture(scope='session')
 def database(engine):
-    from app.extensions.database import Database
+    from slurk.extensions.database import Database
 
     database = Database(engine=engine)
     yield database
@@ -36,7 +36,7 @@ def database(engine):
 
 @pytest.fixture(scope='session')
 def admin_token(database):
-    from app.models import Token
+    from slurk.models import Token
 
     return str(Token.get_admin_token(database))
 

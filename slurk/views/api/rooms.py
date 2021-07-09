@@ -6,10 +6,10 @@ from http import HTTPStatus
 from sqlalchemy.sql.elements import or_
 import marshmallow as ma
 
-from app.extensions.api import Blueprint
-from app.extensions.events import socketio
-from app.models import Room, Layout, Log
-from app.views.api.openvidu.fields import SessionId as OpenViduSessionId
+from slurk.extensions.api import Blueprint
+from slurk.extensions.events import socketio
+from slurk.models import Room, Layout, Log
+from slurk.views.api.openvidu.fields import SessionId as OpenViduSessionId
 
 from .users import UserSchema, blp as user_blp
 from .logs import LogSchema

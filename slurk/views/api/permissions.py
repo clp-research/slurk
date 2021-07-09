@@ -3,9 +3,9 @@ from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 from marshmallow.validate import OneOf
 
-from app.extensions.api import Blueprint
-from app.models import Permissions
-from app.views.api import CommonSchema
+from slurk.extensions.api import Blueprint
+from slurk.models import Permissions
+from slurk.views.api import CommonSchema
 
 
 blp = Blueprint(Permissions.__tablename__, __name__)

@@ -3,8 +3,8 @@ from gevent import monkey
 
 monkey.patch_all(subprocess=True)  # NOQA
 
-from app import create_app
-from app.extensions.events import socketio
+from slurk import create_app
+from slurk.extensions.events import socketio
 
 os.environ["SECRET_KEY"] = "TEST"
 os.environ["DEBUG"] = "True"
