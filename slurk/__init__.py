@@ -19,10 +19,9 @@ def create_app(test_config=None, engine=None):
         static_folder=os.path.join('views', 'static'),
         template_folder=os.path.join('views', 'templates'),
     )
-    app.logger.name = 'slurk'
 
     if not test_config:
-        app.config.from_object('app.config')
+        app.config.from_object('slurk.config')
     else:
         app.config.from_mapping(test_config)
 

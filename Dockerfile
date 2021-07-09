@@ -10,4 +10,4 @@ RUN pip install gunicorn gevent-websocket
 COPY app /usr/src/slurk/app
 
 EXPOSE 5000
-ENTRYPOINT ["gunicorn", "-b", ":5000", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "app:create_app()"]
+ENTRYPOINT ["gunicorn", "-b", ":5000", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "slurk:create_app()"]

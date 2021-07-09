@@ -13,7 +13,7 @@ set -eu
 export SLURK_SECRET_KEY=${SLURK_SECRET_KEY:-$RANDOM}
 export SLURK_DATABASE_URI=${SLURK_DATABASE_URI:-sqlite:///slurk.db}
 export FLASK_ENV=${SLURK_ENV:-development}
-export FLASK_APP=app
+export FLASK_APP=slurk
 PORT=${SLURK_PORT:-5000}
 
 if [ -z ${SLURK_DOCKER+x} ]; then
