@@ -10,21 +10,18 @@ from slurk.extensions import events as event_ext
 from slurk.extensions import openvidu as openvidu_ext
 from slurk.models import Token
 
-logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
-
 
 def create_app(test_config=None, engine=None):
-    from config import API_TITLE, API_VERSION, OPENAPI_VERSION
+    from .config import API_TITLE, API_VERSION, OPENAPI_VERSION
 
     app = Flask(
         __name__,
         static_folder=os.path.join('views', 'static'),
         template_folder=os.path.join('views', 'templates'),
     )
-    app.logger.name = 'slurk'
 
     if not test_config:
-        app.config.from_object('config')
+        app.config.from_object('slurk.config')
     else:
         app.config.from_mapping(test_config)
 
@@ -36,9 +33,11 @@ def create_app(test_config=None, engine=None):
             app.config['OPENAPI_VERSION'] = OPENAPI_VERSION
 
     if not engine and 'DATABASE' not in app.config:
-        raise ValueError("Database URI not provided. Pass `DATABASE` as environment variable or define it in `config.py`.")
+        raise ValueError(
+            "Database URI not provided. Pass `SLURK_DATABASE_URI` as environment variable or define it in `config.py`.")
     if 'SECRET_KEY' not in app.config:
-        raise ValueError("Secret key not provided. Pass `SECRET_KEY` as environment variable or define it in `config.py`.")
+        raise ValueError(
+            "Secret key not provided. Pass `SLURK_SECRET_KEY` as environment variable or define it in `config.py`.")
 
     with app.app_context():
         event_ext.init_app(app)
