@@ -27,10 +27,12 @@ class RoomSchema(CommonSchema):
         Layout,
         required=True,
         description='Layout for this room',
-        filter_description='Filter for layout used in the rooms')
+        filter_description='Filter for layout used in the rooms',
+    )
     openvidu_session_id = OpenViduSessionId(
         description='Session for OpenVidu',
-        filter_description='Filter for an OpenVidu session')
+        filter_description='Filter for an OpenVidu session',
+    )
 
 
 @blp.route('/')
@@ -140,25 +142,44 @@ class LogsByUserByRoomById(MethodView):
     @blp.response(200, LogSchema.Response(many=True))
     def get(self, *, room, user):
         """List logs by room and user"""
-        return current_app.session.query(Log) \
-            .filter_by(room_id=room.id) \
-            .filter(or_(Log.receiver_id == None, Log.user_id == user.id, Log.receiver_id == user.id)) \
-            .order_by(Log.date_created.asc()) \
-            .all()  # NOQA
+        return (
+            current_app.session.query(Log)
+            .filter_by(room_id=room.id)
+            .filter(
+                or_(
+                    Log.receiver_id == None,
+                    Log.user_id == user.id,
+                    Log.receiver_id == user.id,
+                )
+            )
+            .order_by(Log.date_created.asc())
+            .all()
+        )  # NOQA
 
 
 class AttributeSchema(ma.Schema):
-    attribute = ma.fields.Str(required=True, metadata={'description': 'The attribute to be updated'})
-    value = ma.fields.Str(required=True, metadata={'description': 'The value to be set for the given attribute'})
+    attribute = ma.fields.Str(
+        required=True, metadata={'description': 'The attribute to be updated'}
+    )
+    value = ma.fields.Str(
+        required=True,
+        metadata={'description': 'The value to be set for the given attribute'},
+    )
 
 
 class TextSchema(ma.Schema):
-    text = ma.fields.Str(required=True, metadata={'description': 'The text to be set for the given ID'})
+    text = ma.fields.Str(
+        required=True, metadata={'description': 'The text to be set for the given ID'}
+    )
 
 
 class ClassSchema(ma.Schema):
-    cls = ma.fields.Str(required=True, attribute='class', data_key='class',
-                        metadata={'description': 'The class to be modified'})
+    cls = ma.fields.Str(
+        required=True,
+        attribute='class',
+        data_key='class',
+        metadata={'description': 'The class to be modified'},
+    )
 
 
 @blp.route('/<int:room_id>/attribute/id/<string:id>')
@@ -168,7 +189,7 @@ class AttributeId(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, room, id, **kwargs):
-        """ Update an element identified by it's ID """
+        """Update an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
@@ -183,13 +204,16 @@ class UserAttributeId(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, user, id, **kwargs):
-        """ Update an element identified by it's ID """
+        """Update an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -201,7 +225,7 @@ class AttributeClass(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, room, cls, **kwargs):
-        """ Update an element identified by it's class """
+        """Update an element identified by it's class"""
         kwargs['cls'] = cls
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
@@ -216,13 +240,16 @@ class UserAttributeClass(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, user, cls, **kwargs):
-        """ Update an element identified by it's class """
+        """Update an element identified by it's class"""
         kwargs['cls'] = cls
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -234,7 +261,7 @@ class AttributeElement(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, room, element, **kwargs):
-        """ Update an element identified by it's type """
+        """Update an element identified by it's type"""
         kwargs['element'] = element
         Log.add("set_attribute", room=room, data=kwargs)
         socketio.emit('attribute_update', kwargs, room=str(room.id))
@@ -249,13 +276,16 @@ class UserAttributeElement(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, user, element, **kwargs):
-        """ Update an element identified by it's type """
+        """Update an element identified by it's type"""
         kwargs['element'] = element
         Log.add("set_attribute", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('attribute_update', kwargs, room=user.session_id)
         return kwargs
 
@@ -267,7 +297,7 @@ class Text(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, room, id, **kwargs):
-        """ Update the text of an element identified by it's ID """
+        """Update the text of an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("set_text", room=room, data=kwargs)
         socketio.emit('text_update', kwargs, room=str(room.id))
@@ -282,13 +312,16 @@ class UserText(MethodView):
     @blp.response(204)
     @blp.login_required
     def patch(self, *, user, id, **kwargs):
-        """ Update the text of an element identified by it's ID """
+        """Update the text of an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("set_text", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('text_update', kwargs, room=str(user.session_id))
         return kwargs
 
@@ -300,7 +333,7 @@ class Class(MethodView):
     @blp.response(204)
     @blp.login_required
     def post(self, *, room, id, **kwargs):
-        """ Add a class to an element identified by it's ID """
+        """Add a class to an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("class_add", room=room, data=kwargs)
         socketio.emit('class_add', kwargs, room=str(room.id))
@@ -311,7 +344,7 @@ class Class(MethodView):
     @blp.response(204)
     @blp.login_required
     def delete(self, *, room, id, **kwargs):
-        """ Remove a class from an element identified by it's ID """
+        """Remove a class from an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("class_remove", room=room, data=kwargs)
         socketio.emit('class_remove', kwargs, room=str(room.id))
@@ -326,13 +359,16 @@ class UserClass(MethodView):
     @blp.response(204)
     @blp.login_required
     def post(self, *, user, id, **kwargs):
-        """ Add a class to an element identified by it's ID """
+        """Add a class to an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("class_add", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('class_add', kwargs, room=str(user.session_id))
         return kwargs
 
@@ -341,12 +377,15 @@ class UserClass(MethodView):
     @blp.response(204)
     @blp.login_required
     def delete(self, *, user, id, **kwargs):
-        """ Remove a class from an element identified by it's ID """
+        """Remove a class from an element identified by it's ID"""
         kwargs['id'] = id
         Log.add("class_remove", user=user, data=kwargs)
         if user.session_id is None:
-            abort(HTTPStatus.UNPROCESSABLE_ENTITY, query={
-                'user_id': f'User `{user.id} does not have a session id associated'
-            })
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    'user_id': f'User `{user.id} does not have a session id associated'
+                },
+            )
         socketio.emit('class_remove', kwargs, room=str(user.session_id))
         return kwargs

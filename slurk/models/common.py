@@ -11,6 +11,13 @@ class Common(Base):
     date_modified = Column(DateTime, onupdate=func.current_timestamp())
 
 
-user_room = Table('User_Room', Base.metadata,
-                  Column('user_id', Integer, ForeignKey('User.id', ondelete="CASCADE"), primary_key=True),
-                  Column('room_id', Integer, ForeignKey('Room.id', ondelete="CASCADE"), primary_key=True))
+user_room = Table(
+    'User_Room',
+    Base.metadata,
+    Column(
+        'user_id', Integer, ForeignKey('User.id', ondelete="CASCADE"), primary_key=True
+    ),
+    Column(
+        'room_id', Integer, ForeignKey('Room.id', ondelete="CASCADE"), primary_key=True
+    ),
+)

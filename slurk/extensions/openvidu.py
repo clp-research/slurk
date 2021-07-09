@@ -19,7 +19,10 @@ class OpenVidu:
         class RequestSession(requests.Session):
             def __init__(self, url, secret, timeout, verify):
                 self._url = url
-                self._headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+                self._headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
                 self._auth = HTTPBasicAuth('OPENVIDUAPP', secret)
                 self._verify = verify
                 self._timeout = timeout
@@ -33,9 +36,15 @@ class OpenVidu:
                     auth=self._auth,
                     verify=self._verify,
                     timeout=self._timeout,
-                    **kwargs)
+                    **kwargs,
+                )
 
-        return RequestSession(self._request_url, self._request_secret, self._request_timeout, self._request_verify)
+        return RequestSession(
+            self._request_url,
+            self._request_secret,
+            self._request_timeout,
+            self._request_verify,
+        )
 
     def list_sessions(self):
         return self._request.get('sessions')
@@ -90,7 +99,8 @@ def init_app(app):
         openvidu_verify = app.config.get('OPENVIDU_VERIFY', True)
         if not openvidu_secret:
             raise ValueError(
-                "OpenVidu Secret key not provided. Pass `OPENVIDU_SECRET` as environment variable or define it in `config.py`.")
+                "OpenVidu Secret key not provided. Pass `OPENVIDU_SECRET` as environment variable or define it in `config.py`."
+            )
 
         if openvidu_port != 443:
             openvidu_url = f'{openvidu_url}:{openvidu_port}'
@@ -98,12 +108,15 @@ def init_app(app):
         response = OV._request.get('config')
         if response.status_code != 200:
             error = HTTP_STATUS_CODES.get(response.status_code, "Unknown Error")
-            app.logger.error(f'Could not connection to OpenVidu Server "{openvidu_url}: {error})')
+            app.logger.error(
+                f'Could not connection to OpenVidu Server "{openvidu_url}: {error})'
+            )
             return
 
         OV.config = response.json()
         app.logger.info(f'Initializing OpenVidu connection to "{openvidu_url}"')
         if not openvidu_verify:
             app.logger.warning(
-                "OpenVidu connection may be unsecure. Set `OPENVIDU_VERIFY` to true or don't pass this variable")
+                "OpenVidu connection may be unsecure. Set `OPENVIDU_VERIFY` to true or don't pass this variable"
+            )
         app.openvidu = OV

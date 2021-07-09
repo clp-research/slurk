@@ -18,24 +18,29 @@ class PermissionsSchema(CommonSchema):
     api = ma.fields.Boolean(
         missing=False,
         description='Permit API calls',
-        filter_description='Filter for API call permissions')
+        filter_description='Filter for API call permissions',
+    )
     send_message = ma.fields.Boolean(
         missing=False,
         description='Permit sending messages',
-        filter_description='Filter for message sending permissions')
+        filter_description='Filter for message sending permissions',
+    )
     send_image = ma.fields.Boolean(
         missing=False,
         description='Permit sending images',
-        filter_description='Filter for image sending permissions')
+        filter_description='Filter for image sending permissions',
+    )
     send_command = ma.fields.Boolean(
         missing=False,
         description='Permit sending commands',
-        filter_description='Filter for command sending permissions')
+        filter_description='Filter for command sending permissions',
+    )
     openvidu_role = ma.fields.String(
         validate=OneOf(['SUBSCRIBER', 'PUBLISHER', 'MODERATOR']),
         missing=None,
         description='Role for OpenVidu',
-        filter_description='Filter for OpenVidu role')
+        filter_description='Filter for OpenVidu role',
+    )
 
 
 @blp.route('/')

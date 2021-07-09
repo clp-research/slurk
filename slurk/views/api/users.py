@@ -21,16 +21,19 @@ class UserSchema(CommonSchema):
     name = ma.fields.String(
         required=True,
         description='Name of the user',
-        filter_description='Filter for a user name')
+        filter_description='Filter for a user name',
+    )
     token_id = TokenId(
         load_only=True,
         required=True,
         description='Token associated with this user',
-        filter_description='Filter for users using this token')
+        filter_description='Filter for users using this token',
+    )
     session_id = ma.fields.String(
         dump_only=True,
         description='SocketIO session ID for this user',
-        filter_description='Filter for a SocketIO session ID')
+        filter_description='Filter for a SocketIO session ID',
+    )
 
 
 @blp.route('/')
@@ -55,11 +58,17 @@ class Users(MethodView):
         token = db.query(Token).get(item['token_id'])
 
         if token.registrations_left == 0:
-            abort(UnprocessableEntity, json=dict(token_id='No registrations left for given token'))
+            abort(
+                UnprocessableEntity,
+                json=dict(token_id='No registrations left for given token'),
+            )
         if token.registrations_left > 0:
             token.registrations_left -= 1
         if token.room is None:
-            abort(UnprocessableEntity, json=dict(token_id='Token does not have a room associated'))
+            abort(
+                UnprocessableEntity,
+                json=dict(token_id='Token does not have a room associated'),
+            )
 
         user = UserSchema().post(item)
         user.rooms = [token.room]

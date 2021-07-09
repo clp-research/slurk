@@ -8,6 +8,7 @@ from .permissions import Permissions
 
 def uuid():
     from uuid import uuid4
+
     return str(uuid4())
 
 
@@ -28,9 +29,12 @@ class Token(Common):
     @staticmethod
     def get_admin_token(db, id=None):
         with db.create_session() as session:
-            token = session.query(Token).filter_by(registrations_left=-1).filter(
-                Token.permissions.has(Permissions.api)
-            ).one_or_none()
+            token = (
+                session.query(Token)
+                .filter_by(registrations_left=-1)
+                .filter(Token.permissions.has(Permissions.api))
+                .one_or_none()
+            )
             if not token:
                 token = Token(
                     id=id,
@@ -41,7 +45,7 @@ class Token(Common):
                         send_command=False,
                     ),
                     registrations_left=-1,
-                    openvidu_settings={}
+                    openvidu_settings={},
                 )
                 session.add(token)
                 session.commit()

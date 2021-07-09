@@ -1,4 +1,12 @@
-from flask import render_template, redirect, url_for, flash, current_app, Blueprint, request
+from flask import (
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    current_app,
+    Blueprint,
+    request,
+)
 from flask_login import login_user
 
 from slurk.extensions.login import login_manager
@@ -50,7 +58,10 @@ def index():
         current_app.logger.debug(f"Login with token {token_id}")
         if token:
             if token.room is None:
-                flash("The token is an API token, which can not be used for logging in.", "error")
+                flash(
+                    "The token is an API token, which can not be used for logging in.",
+                    "error",
+                )
             elif token.registrations_left != 0:
                 if token.registrations_left > 0:
                     token.registrations_left -= 1
@@ -60,9 +71,15 @@ def index():
                 login_user(user)
                 return redirect(request.args.get('next') or url_for("chat.index"))
             else:
-                flash("The token is either expired, was already used, or isn't correct at all.", "error")
+                flash(
+                    "The token is either expired, was already used, or isn't correct at all.",
+                    "error",
+                )
         else:
-            flash("The token is either expired, was already used, or isn't correct at all.", "error")
+            flash(
+                "The token is either expired, was already used, or isn't correct at all.",
+                "error",
+            )
 
     form.token.data = token_id
     form.name.data = name

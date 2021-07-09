@@ -46,7 +46,9 @@ def secret():
     import random
     import string
 
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
+    return ''.join(
+        random.choice(string.ascii_uppercase + string.digits) for _ in range(32)
+    )
 
 
 @pytest.fixture(scope='session')
@@ -62,10 +64,12 @@ def openvidu_impl(secret, request):
         return
 
     try:
-        container = client.containers.run('openvidu/openvidu-server-kms:2.18.0',
-                                          detach=True,
-                                          ports={'4443': 4443},
-                                          environment={'OPENVIDU_SECRET': secret})
+        container = client.containers.run(
+            'openvidu/openvidu-server-kms:2.18.0',
+            detach=True,
+            ports={'4443': 4443},
+            environment={'OPENVIDU_SECRET': secret},
+        )
         request.addfinalizer(lambda: container.stop(timeout=10))
 
         yielded = False
@@ -97,9 +101,11 @@ def app(database, openvidu_impl, secret):
     )
 
     if not isinstance(openvidu_impl, str):
+
         class InsecureConnection(logging.Filter):
             def filter(self, record):
                 return 'OPENVIDU_VERIFY' not in record.getMessage()
+
         logging.getLogger('app').addFilter(InsecureConnection())
 
         test_config['OPENVIDU_URL'] = 'https://localhost'
@@ -134,7 +140,7 @@ def layouts(client):
     # do not use default values everywhere in order to be useful in get tests
     response = client.post(
         '/slurk/api/layouts',
-        json={'title': 'Test Room', 'subtitle': 'Testing...', 'show_latency': False}
+        json={'title': 'Test Room', 'subtitle': 'Testing...', 'show_latency': False},
     )
     if response.status_code == HTTPStatus.CREATED:
         return response
@@ -144,10 +150,7 @@ def layouts(client):
 def rooms(client, layouts):
     if layouts is not None:
         response = client.post(
-            '/slurk/api/rooms',
-            json={
-                'layout_id': layouts.json['id']
-            }
+            '/slurk/api/rooms', json={'layout_id': layouts.json['id']}
         )
         if response.status_code == HTTPStatus.CREATED:
             return response
@@ -167,8 +170,8 @@ def tokens(client, permissions, rooms):
             '/slurk/api/tokens',
             json={
                 'permissions_id': permissions.json['id'],
-                'room_id': rooms.json['id']
-            }
+                'room_id': rooms.json['id'],
+            },
         )
         if response.status_code == HTTPStatus.CREATED:
             return response
@@ -179,10 +182,7 @@ def users(client, tokens):
     if tokens is not None:
         response = client.post(
             '/slurk/api/users',
-            json={
-                'name': 'Test User',
-                'token_id': tokens.json['id']
-            }
+            json={'name': 'Test User', 'token_id': tokens.json['id']},
         )
         if response.status_code == HTTPStatus.CREATED:
             return response
@@ -193,11 +193,7 @@ def tasks(client, layouts):
     if layouts is not None:
         response = client.post(
             '/slurk/api/tasks',
-            json={
-                'name': 'Test Task',
-                'layout_id': layouts.json['id'],
-                'num_users': 3
-            }
+            json={'name': 'Test Task', 'layout_id': layouts.json['id'], 'num_users': 3},
         )
         if response.status_code == HTTPStatus.CREATED:
             return response
@@ -211,8 +207,8 @@ def logs(client, users, rooms):
             json={
                 'event': 'Test Event',
                 'user_id': users.json['id'],
-                'room_id': rooms.json['id']
-            }
+                'room_id': rooms.json['id'],
+            },
         )
         if response.status_code == HTTPStatus.CREATED:
             return response

@@ -24,7 +24,7 @@ class HTTPTokenAuth(_FlaskHTTPTokenAuth):
             'name': 'Authorization',
             'in': 'header',
             'description': 'Authorization: Bearer <access_token>',
-            'required': 'true'
+            'required': 'true',
         }
 
         wrapper._apidoc = getattr(func, '_apidoc', {})

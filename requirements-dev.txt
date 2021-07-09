@@ -2,3 +2,5 @@
 docker==5.0
 pytest==6.2
 pytest-depends==1.0
+black
+flake8

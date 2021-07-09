@@ -29,7 +29,9 @@ class ResponseReferencesPlugin(flask_smorest.spec.plugins.ResponseReferencesPlug
 
 class Blueprint(flask_smorest.Blueprint):
     def register_blueprint(self, blueprint, **options):
-        url_prefix = self.url_prefix + blueprint.url_prefix + options.get('url_prefix', '')
+        url_prefix = (
+            self.url_prefix + blueprint.url_prefix + options.get('url_prefix', '')
+        )
         super().register_blueprint(blueprint, **options, url_prefix=url_prefix)
 
     def __init__(self, *args, **kwargs):
@@ -45,19 +47,28 @@ class Blueprint(flask_smorest.Blueprint):
 
             @wraps(func)
             def wrapper(*f_args, **f_kwargs):
-                if location == 'json' \
-                        and (len(request.data) > 0 or len(request.form) > 0 or len(request.files) > 0) \
-                        and request.content_type != "application/json":
+                if (
+                    location == 'json'
+                    and (
+                        len(request.data) > 0
+                        or len(request.form) > 0
+                        or len(request.files) > 0
+                    )
+                    and request.content_type != "application/json"
+                ):
                     abort(UnsupportedMediaType)
                 return func(*f_args, **f_kwargs)
+
             wrapper._apidoc['arguments']['responses'][415] = http.HTTPStatus(415).name
             return wrapper
+
         return decorator
 
     @staticmethod
     def login_required(func):
         from slurk.views.api.auth import auth
         from flask.globals import current_app
+
         if not current_app.config['DEBUG']:
             func = auth.login_required(func)
         getattr(func, "_apidoc", {})["auth"] = True
@@ -100,9 +111,12 @@ class Blueprint(flask_smorest.Blueprint):
                     id = str(id)
                 entry = current_app.session.query(cls).get(id)
                 if not entry:
-                    abort(NotFound, query={
-                        parameter_id: f'{cls.__tablename__} `{id}` does not exist'
-                    })
+                    abort(
+                        NotFound,
+                        query={
+                            parameter_id: f'{cls.__tablename__} `{id}` does not exist'
+                        },
+                    )
                 if check_etag and request.method in self.METHODS_NEEDING_CHECK_ETAG:
                     self.check_etag(entry, schema)
 
@@ -112,6 +126,7 @@ class Blueprint(flask_smorest.Blueprint):
             wrapper._apidoc = deepcopy(getattr(wrapper, '_apidoc', {}))
             wrapper._apidoc['validate'] = True
             return wrapper
+
         return decorator
 
 
@@ -158,10 +173,12 @@ def abort(ex, *, json=None, query=None):
 
     if isinstance(ex, Response):
         try:
-            if 'message' in ex.json() \
-                    and len(json) == 0 \
-                    and ex.json()['message'] is not None \
-                    and ex.json()['message'] != '':
+            if (
+                'message' in ex.json()
+                and len(json) == 0
+                and ex.json()['message'] is not None
+                and ex.json()['message'] != ''
+            ):
                 json = ex.json()['messsage']
         except JSONDecodeError:
             pass
@@ -170,7 +187,8 @@ def abort(ex, *, json=None, query=None):
     payload = dict(
         code=ex.code,
         message=ex.description,
-        status=HTTP_STATUS_CODES.get(ex.code, "Unknown Error"))
+        status=HTTP_STATUS_CODES.get(ex.code, "Unknown Error"),
+    )
     if len(json) > 0:
         payload.setdefault('errors', {})['json'] = json
     if len(query) > 0:

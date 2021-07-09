@@ -25,10 +25,12 @@ class TestRequestOptions(LayoutsTable, RequestOptionsTemplate):
     pass
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[GET]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option[GET]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestGetValid:
     def test_valid_request(self, client, layouts):
         response = client.get('/slurk/api/layouts')
@@ -43,22 +45,27 @@ class TestGetValid:
 
         # check that the `get` request did not alter the database
         response = client.get(
-            '/slurk/api/layouts',
-            headers={'If-None-Match': response.headers['ETag']}
+            '/slurk/api/layouts', headers={'If-None-Match': response.headers['ETag']}
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[POST]'
-])
+@pytest.mark.depends(on=[f'{PREFIX}::TestRequestOptions::test_request_option[POST]'])
 class TestPostValid:
     REQUEST_CONTENT = [
         {'json': {'title': 'Test Room'}},
-        {'json': {'title': 'Test Room', 'read_only': True,
-                  'show_latency': False, 'show_users': False}},
-        {'data': {'title': 'Test Room', 'show_latency': False},
-         'headers': {'Content-Type': 'application/json'}}
+        {
+            'json': {
+                'title': 'Test Room',
+                'read_only': True,
+                'show_latency': False,
+                'show_users': False,
+            }
+        },
+        {
+            'data': {'title': 'Test Room', 'show_latency': False},
+            'headers': {'Content-Type': 'application/json'},
+        },
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -85,24 +92,19 @@ class TestPostValid:
 
     HTML = [
         # special tag
-        (
-            {'layout-type': 'br'},
-            '<br>\n'
-        ),
+        ({'layout-type': 'br'}, '<br>\n'),
         # tag and content without attributes
         (
             {'layout-type': 'div', 'layout-content': 'Sample Text'},
-            '<div>\n    Sample Text\n</div>\n'
+            '<div>\n    Sample Text\n</div>\n',
         ),
         # several attributes
         (
-            {
-                'layout-type': 'img',
-                'src': 'some.gif',
-                'alt': 'Some Gif'
-            },
-            ("<img src='some.gif' alt='Some Gif' />\n",
-             "<img alt='Some Gif' src='some.gif' />\n")
+            {'layout-type': 'img', 'src': 'some.gif', 'alt': 'Some Gif'},
+            (
+                "<img src='some.gif' alt='Some Gif' />\n",
+                "<img alt='Some Gif' src='some.gif' />\n",
+            ),
         ),
         # nested structure with attributes
         (
@@ -112,14 +114,14 @@ class TestPostValid:
                     {
                         'layout-type': 'h1',
                         'layout-content': 'Headline',
-                        'style': 'color: #287fd6;'
+                        'style': 'color: #287fd6;',
                     }
                 ],
-                'style': 'color: #abb2b9;'
+                'style': 'color: #abb2b9;',
             },
-            "<div style='color: #abb2b9;'>\n    <h1 style='color: #287fd6;'>" \
-            "\n        Headline\n    </h1>\n</div>\n"
-        )
+            "<div style='color: #abb2b9;'>\n    <h1 style='color: #287fd6;'>"
+            "\n        Headline\n    </h1>\n</div>\n",
+        ),
     ]
 
     @pytest.mark.parametrize('content, html', HTML)
@@ -139,7 +141,7 @@ class TestPostValid:
         response = client.post(
             '/slurk/api/layouts',
             data=json.dumps(content),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'},
         )
         assert response.status_code == HTTPStatus.CREATED, parse_error(response)
 
@@ -150,14 +152,8 @@ class TestPostValid:
 
     CSS = [
         (
-            {
-                'h1': {
-                    'color': 'blue',
-                    'font-family': 'verdana',
-                    'font-size': '300%'
-                }
-            },
-            'h1 {\n    color: blue;\n    font-family: verdana;\n    font-size: 300%;\n}\n\n'
+            {'h1': {'color': 'blue', 'font-family': 'verdana', 'font-size': '300%'}},
+            'h1 {\n    color: blue;\n    font-family: verdana;\n    font-size: 300%;\n}\n\n',
         )
     ]
 
@@ -174,7 +170,7 @@ class TestPostValid:
         response = client.post(
             '/slurk/api/layouts',
             data=json.dumps(content),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'},
         )
         assert response.status_code == HTTPStatus.CREATED, parse_error(response)
         assert response.json['css'] == css
@@ -186,17 +182,18 @@ class TestPostValid:
                 'incoming-image': 'display-image',
                 'submit-message': 'send-message',
                 'print-history': 'plain-history',
-                'typing-users': 'typing-users'
+                'typing-users': 'typing-users',
             },
             # substring that indicates that a layout was successfully inserted
-            ('incoming_text', 'incoming_image', 'keypress', 'print_history', 'update_typing')
+            (
+                'incoming_text',
+                'incoming_image',
+                'keypress',
+                'print_history',
+                'update_typing',
+            ),
         ),
-        (
-            {
-                'plain': ['ask-reload']
-            },
-            ('window.onbeforeunload', )
-        )
+        ({'plain': ['ask-reload']}, ('window.onbeforeunload',)),
     ]
 
     @pytest.mark.parametrize('content, scripts', SCRIPTS)
@@ -213,37 +210,32 @@ class TestPostValid:
         response = client.post(
             '/slurk/api/layouts',
             data=json.dumps(content),
-            headers={'Content-Type': 'application/json'}
+            headers={'Content-Type': 'application/json'},
         )
         assert response.status_code == HTTPStatus.CREATED, parse_error(response)
         assert all([(s in response.json['script']) for s in scripts])
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[POST]'
-])
+@pytest.mark.depends(on=[f'{PREFIX}::TestRequestOptions::test_request_option[POST]'])
 class TestPostInvalid:
     REQUEST_CONTENT = [
-        (
-            {},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        ),
+        ({}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
             {'json': {'title': 'Test Room', 'show_latency': None}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'title': 'Test Room', 'scripts': {'plain': [42]}}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'title': 'Test Room', 'scripts': []}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'title': 'Test Room', 'html_obj': []}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        )
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
@@ -255,7 +247,10 @@ class TestPostInvalid:
         with caplog.at_level(logging.WARNING):
             client.post(
                 '/slurk/api/layouts',
-                json={'title': 'Test Room', 'scripts': {'incoming-text': 'not-existing'}}
+                json={
+                    'title': 'Test Room',
+                    'scripts': {'incoming-text': 'not-existing'},
+                },
             )
         assert 'Could not find script' in caplog.text
 
@@ -264,7 +259,7 @@ class TestPostInvalid:
         response = client.post(
             '/slurk/api/layouts',
             json={'title': 'Test Room'},
-            headers={'Authorization': f'Bearer {tokens.json["id"]}'}
+            headers={'Authorization': f'Bearer {tokens.json["id"]}'},
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
 
@@ -272,15 +267,17 @@ class TestPostInvalid:
         response = client.post(
             '/slurk/api/layouts',
             json={'title': 'Test Room'},
-            headers={'Authorization': 'Bearer invalid_token'}
+            headers={'Authorization': 'Bearer invalid_token'},
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestGetIdValid:
     def test_valid_request(self, client, layouts):
         response = client.get(f'/slurk/api/layouts/{layouts.json["id"]}')
@@ -290,29 +287,36 @@ class TestGetIdValid:
         # check that the `get` request did not alter the database
         response = client.get(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-None-Match': response.headers['ETag']}
+            headers={'If-None-Match': response.headers['ETag']},
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestGetIdInvalid:
     def test_not_existing(self, client):
         response = client.get('/slurk/api/layouts/invalid_id')
         assert response.status_code == HTTPStatus.NOT_FOUND, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestPutValid:
     REQUEST_CONTENT = [
         {'json': {'title': 'Another Room', 'css': {'h1': {'color': 'blue'}}}},
-        {'data': {'title': 'Another Room'}, 'headers': {'Content-Type': 'application/json'}}
+        {
+            'data': {'title': 'Another Room'},
+            'headers': {'Content-Type': 'application/json'},
+        },
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -349,10 +353,12 @@ class TestPutValid:
         assert 'css' not in data or new_layout['css'] != layouts.json['css']
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestPutInvalid(LayoutsTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
@@ -362,17 +368,14 @@ class TestPutInvalid(LayoutsTable, InvalidWithEtagTemplate):
         return {'json': {'title': 'Test Room'}}
 
     REQUEST_CONTENT = [
-        (
-            {'json': {'subtitle': 'Room for testing'}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        ),
+        ({'json': {'subtitle': 'Room for testing'}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
             {'json': {'title': 'Test Room', 'scripts': {'plain': 'script'}}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'title': 'Test Room', 'css_obj': {'h1': {'color': 'blue'}}}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
     ]
 
@@ -385,85 +388,99 @@ class TestPutInvalid(LayoutsTable, InvalidWithEtagTemplate):
         assert response.status_code == status, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestDeleteValid:
     def test_valid_request(self, client, layouts):
         response = client.delete(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-Match': layouts.headers['ETag']}
+            headers={'If-Match': layouts.headers['ETag']},
         )
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestDeleteInvalid(LayoutsTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
         return 'delete'
 
-    @pytest.mark.depends(on=[
-        'tests/api/test_rooms.py::TestPostValid',
-        'tests/api/test_rooms.py::TestDeleteValid'
-    ])
+    @pytest.mark.depends(
+        on=[
+            'tests/api/test_rooms.py::TestPostValid',
+            'tests/api/test_rooms.py::TestDeleteValid',
+        ]
+    )
     def test_deletion_of_layout_in_room(self, client, layouts):
         # create room that uses the layout
         room = client.post('/slurk/api/rooms', json={'layout_id': layouts.json['id']})
         # the deletion of a layout entry that is in use should fail
         response = client.delete(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-Match': layouts.headers['ETag']}
+            headers={'If-Match': layouts.headers['ETag']},
         )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
+        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+            response
+        )
 
         # free the layout entry by deleting the room
         client.delete(
             f'/slurk/api/rooms/{room.json["id"]}',
-            headers={'If-Match': room.headers['ETag']}
+            headers={'If-Match': room.headers['ETag']},
         )
         # now one should be able to delete the permissions
         response = client.delete(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-Match': layouts.headers['ETag']}
+            headers={'If-Match': layouts.headers['ETag']},
         )
 
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
-    @pytest.mark.depends(on=[
-        'tests/api/test_tasks.py::TestPostValid',
-        'tests/api/test_tasks.py::TestDeleteValid'
-    ])
+    @pytest.mark.depends(
+        on=[
+            'tests/api/test_tasks.py::TestPostValid',
+            'tests/api/test_tasks.py::TestDeleteValid',
+        ]
+    )
     def test_deletion_of_layout_in_task(self, client, layouts):
         task = client.post(
             '/slurk/api/tasks',
-            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']}
+            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']},
         )
         response = client.delete(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-Match': layouts.headers['ETag']}
+            headers={'If-Match': layouts.headers['ETag']},
         )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
+        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+            response
+        )
 
         client.delete(
             f'/slurk/api/tasks/{task.json["id"]}',
-            headers={'If-Match': task.headers['ETag']}
+            headers={'If-Match': task.headers['ETag']},
         )
         response = client.delete(
             f'/slurk/api/layouts/{layouts.json["id"]}',
-            headers={'If-Match': layouts.headers['ETag']}
+            headers={'If-Match': layouts.headers['ETag']},
         )
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestPatchValid:
     REQUEST_CONTENT = [
         {'json': {'title': 'More Tests', 'subtitle': 'Room for testing'}},
@@ -471,7 +488,7 @@ class TestPatchValid:
         {'json': {'scripts': {'incoming-text': 'display-text'}}},
         {'json': {'html': [{'layout-type': 'br'}]}},
         {'json': {'css': {'h1': {'color': 'blue'}}}},
-        {'json': {'subtitle': None}}
+        {'json': {'subtitle': None}},
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -508,10 +525,12 @@ class TestPatchValid:
         assert 'css' not in data or new_layout['css'] != layouts.json['css']
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestPatchInvalid(LayoutsTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
@@ -521,10 +540,13 @@ class TestPatchInvalid(LayoutsTable, InvalidWithEtagTemplate):
         ({'json': {'id': 1}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'json': {'title': None}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'json': {'show_latency': 42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
-        ({'json': {'html_obj': [{'layout-type': 'br'}]}}, HTTPStatus.UNPROCESSABLE_ENTITY),
+        (
+            {'json': {'html_obj': [{'layout-type': 'br'}]}},
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
         ({'json': {'html': '<br>'}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'data': {'title': 'Another Test Room'}}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
-        ({'data': '{"title": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+        ({'data': '{"title": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)

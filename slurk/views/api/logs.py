@@ -16,22 +16,26 @@ class LogSchema(CommonSchema):
     event = ma.fields.String(
         required=True,
         description='The event associated with this log entry',
-        filter_description='Filter by event')
+        filter_description='Filter by event',
+    )
     user_id = Id(
         User,
         missing=None,
         description='Source user for this log entry',
-        filter_description='Filter for user associated with this log entry')
+        filter_description='Filter for user associated with this log entry',
+    )
     room_id = Id(
         Room,
         missing=None,
         description='Source room for this log entry',
-        filter_description='Filter for room associated with this log entry')
+        filter_description='Filter for room associated with this log entry',
+    )
     receiver_id = Id(
         User,
         missing=None,
         description='Receiver associated  with this log entry',
-        filter_description='Filter for receiver associated with this log entry')
+        filter_description='Filter for receiver associated with this log entry',
+    )
     data = ma.fields.Dict(missing={}, description='Data stored inside this log entry')
 
 

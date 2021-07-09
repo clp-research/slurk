@@ -38,6 +38,7 @@ class Database:
                 cursor = dbapi_connection.cursor()
                 cursor.execute("PRAGMA foreign_keys=ON")
                 cursor.close()
+
         self._session.configure(bind=engine)
 
     def init(self):
@@ -54,7 +55,9 @@ class Database:
         if not self.engine:
             self.bind(engine=create_engine(current_app.config['DATABASE']))
 
-        app.session = scoped_session(lambda: self.create_session(), scopefunc=_app_ctx_stack)
+        app.session = scoped_session(
+            lambda: self.create_session(), scopefunc=_app_ctx_stack
+        )
 
         self.init()
 

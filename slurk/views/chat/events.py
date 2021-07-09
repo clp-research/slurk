@@ -44,7 +44,9 @@ def typed_message(payload):
             'id': current_user_id,
             'name': current_user.name,
         }
-        socketio.emit('user_message', {'user': user, 'message': payload['msg']}, room=str(room.id))
+        socketio.emit(
+            'user_message', {'user': user, 'message': payload['msg']}, room=str(room.id)
+        )
 
 
 @socketio.event
@@ -92,16 +94,29 @@ def text(payload):
         'name': current_user.name,
     }
 
-    socketio.emit('text_message', {
-        'msg': payload['msg'],
-        'user': user,
-        'room': str(room.id) if room else None,
-        'timestamp': str(datetime.utcnow()),
-        'private': private,
-        'html': payload.get('html', False)
-    }, room=receiver, broadcast=broadcast)
-    Log.add("text_message", current_user, room, data={'receiver': payload['receiver_id'] if private else None,
-                                                      'message': payload['msg'], 'html': payload.get('html', False)})
+    socketio.emit(
+        'text_message',
+        {
+            'msg': payload['msg'],
+            'user': user,
+            'room': str(room.id) if room else None,
+            'timestamp': str(datetime.utcnow()),
+            'private': private,
+            'html': payload.get('html', False),
+        },
+        room=receiver,
+        broadcast=broadcast,
+    )
+    Log.add(
+        "text_message",
+        current_user,
+        room,
+        data={
+            'receiver': payload['receiver_id'] if private else None,
+            'message': payload['msg'],
+            'html': payload.get('html', False),
+        },
+    )
     for room in current_user.rooms:
         socketio.emit('stop_typing', {'user': user}, room=str(room.id))
     return True
@@ -144,15 +159,27 @@ def message_command(payload):
         'id': current_user_id,
         'name': current_user.name,
     }
-    socketio.emit('command', {
-        'command': payload['command'],
-        'user': user,
-        'room': str(room.id) if room else None,
-        'timestamp': str(datetime.utcnow()),
-        'private': private,
-    }, room=receiver, broadcast=broadcast)
-    Log.add("command", current_user, room, data={'receiver': payload['receiver_id'] if private else None, 'command':
-                                                 payload['command']})
+    socketio.emit(
+        'command',
+        {
+            'command': payload['command'],
+            'user': user,
+            'room': str(room.id) if room else None,
+            'timestamp': str(datetime.utcnow()),
+            'private': private,
+        },
+        room=receiver,
+        broadcast=broadcast,
+    )
+    Log.add(
+        "command",
+        current_user,
+        room,
+        data={
+            'receiver': payload['receiver_id'] if private else None,
+            'command': payload['command'],
+        },
+    )
     for room in current_user.rooms:
         socketio.emit('stop_typing', {'user': user}, room=str(room.id))
     return True
@@ -199,19 +226,31 @@ def image(payload):
     }
     width = payload['width'] if 'width' in payload else None
     height = payload['height'] if 'height' in payload else None
-    socketio.emit('image_message', {
-        'url': payload['url'],
-        'user': user,
-        'width': width,
-        'height': height,
-        'room': str(room.id) if room else None,
-        'timestamp': str(datetime.utcnow()),
-        'private': private,
-    }, room=receiver, broadcast=broadcast)
-    Log.add("image_message", current_user, room, data={'receiver': payload['receiver_id'] if private else None,
-                                                       'url': payload['url'],
-                                                       'width': width,
-                                                       'height': height})
+    socketio.emit(
+        'image_message',
+        {
+            'url': payload['url'],
+            'user': user,
+            'width': width,
+            'height': height,
+            'room': str(room.id) if room else None,
+            'timestamp': str(datetime.utcnow()),
+            'private': private,
+        },
+        room=receiver,
+        broadcast=broadcast,
+    )
+    Log.add(
+        "image_message",
+        current_user,
+        room,
+        data={
+            'receiver': payload['receiver_id'] if private else None,
+            'url': payload['url'],
+            'width': width,
+            'height': height,
+        },
+    )
     for room in current_user.rooms:
         socketio.emit('stop_typing', {'user': user}, room=str(room.id))
     return True

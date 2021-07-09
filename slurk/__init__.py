@@ -1,5 +1,4 @@
 import os
-import logging
 
 from flask import Flask
 
@@ -34,10 +33,12 @@ def create_app(test_config=None, engine=None):
 
     if not engine and 'DATABASE' not in app.config:
         raise ValueError(
-            "Database URI not provided. Pass `SLURK_DATABASE_URI` as environment variable or define it in `config.py`.")
+            "Database URI not provided. Pass `SLURK_DATABASE_URI` as environment variable or define it in `config.py`."
+        )
     if 'SECRET_KEY' not in app.config:
         raise ValueError(
-            "Secret key not provided. Pass `SLURK_SECRET_KEY` as environment variable or define it in `config.py`.")
+            "Secret key not provided. Pass `SLURK_SECRET_KEY` as environment variable or define it in `config.py`."
+        )
 
     with app.app_context():
         event_ext.init_app(app)

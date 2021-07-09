@@ -2,11 +2,23 @@ from slurk.models.room import Session
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
-from werkzeug.exceptions import Conflict, NotAcceptable, NotFound, UnprocessableEntity, NotImplemented
+from werkzeug.exceptions import (
+    Conflict,
+    NotAcceptable,
+    NotFound,
+    UnprocessableEntity,
+    NotImplemented,
+)
 
 from slurk.models import Room
 from slurk.extensions.api import Blueprint, abort
-from slurk.views.api.openvidu.schemas import ConfigSchema, RecordingSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
+from slurk.views.api.openvidu.schemas import (
+    ConfigSchema,
+    RecordingSchema,
+    SignalSchema,
+    SessionSchema,
+    WebRtcConnectionSchema,
+)
 
 
 blp = Blueprint('OpenVidu', __name__)
@@ -17,7 +29,7 @@ class Config(MethodView):
     @blp.response(200, ConfigSchema.Response)
     @blp.login_required
     def get(self):
-        """ Retrieve current OpenVidu configuration
+        """Retrieve current OpenVidu configuration
 
         See the <a href="https://docs.openvidu.io/en/2.18.0/reference-docs/openvidu-config/">
         OpenVidu documentation</a> on how to change these values.
@@ -32,10 +44,18 @@ class Config(MethodView):
             public_url=config['OPENVIDU_PUBLICURL'],
             cdr=config["OPENVIDU_CDR"],
             streams=dict(
-                videoMinSendBandwidth=config['OPENVIDU_STREAMS_VIDEO_MIN_SEND_BANDWIDTH'],
-                videoMaxSendBandwidth=config['OPENVIDU_STREAMS_VIDEO_MAX_SEND_BANDWIDTH'],
-                videoMinRecvBandwidth=config['OPENVIDU_STREAMS_VIDEO_MIN_RECV_BANDWIDTH'],
-                videoMaxRecvBandwidth=config['OPENVIDU_STREAMS_VIDEO_MAX_RECV_BANDWIDTH'],
+                videoMinSendBandwidth=config[
+                    'OPENVIDU_STREAMS_VIDEO_MIN_SEND_BANDWIDTH'
+                ],
+                videoMaxSendBandwidth=config[
+                    'OPENVIDU_STREAMS_VIDEO_MAX_SEND_BANDWIDTH'
+                ],
+                videoMinRecvBandwidth=config[
+                    'OPENVIDU_STREAMS_VIDEO_MIN_RECV_BANDWIDTH'
+                ],
+                videoMaxRecvBandwidth=config[
+                    'OPENVIDU_STREAMS_VIDEO_MAX_RECV_BANDWIDTH'
+                ],
             ),
             sessions=dict(
                 garbage_interval=config['OPENVIDU_SESSIONS_GARBAGE_INTERVAL'],
@@ -48,12 +68,16 @@ class Config(MethodView):
                 notification=config['OPENVIDU_RECORDING_NOTIFICATION'],
                 custom_layout=config['OPENVIDU_RECORDING_CUSTOM_LAYOUT'],
                 autostop_timeout=config['OPENVIDU_RECORDING_AUTOSTOP_TIMEOUT'],
-            ) if config['OPENVIDU_RECORDING'] else None,
+            )
+            if config['OPENVIDU_RECORDING']
+            else None,
             webhook=dict(
                 endpoint=config['OPENVIDU_WEBHOOK_ENDPOINT'],
                 headers=config['OPENVIDU_WEBHOOK_HEADERS'],
                 events=config['OPENVIDU_WEBHOOK_EVENTS'],
-            ) if config['OPENVIDU_WEBHOOK'] else None
+            )
+            if config['OPENVIDU_WEBHOOK']
+            else None,
         )
 
 
@@ -166,7 +190,10 @@ class SessionsSignal(MethodView):
         elif response.status_code == 404:
             abort(NotFound, query=f'Session `{session_id}` does not exist')
         elif response.status_code == 406:
-            abort(NotAcceptable, json='No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)')
+            abort(
+                NotAcceptable,
+                json='No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)',
+            )
         abort(response)
 
 
@@ -311,7 +338,10 @@ class RecordingsById(MethodView):
         elif response.status_code == 404:
             abort(NotFound, query=f'Recording `{recording_id}` does not exist')
         elif response.status_code == 409:
-            abort(Conflict, query='The recording has started status. Stop it before deletion')
+            abort(
+                Conflict,
+                query='The recording has started status. Stop it before deletion',
+            )
         elif response.status_code == 501:
             abort(NotImplemented, query='OpenVidu Server recording module is disabled')
         abort(response)
@@ -348,7 +378,10 @@ class RecordingsStart(MethodView):
         elif response.status_code == 406:
             abort(NotAcceptable, query='The session has no connected participants')
         elif response.status_code == 409:
-            abort(Conflict, query='The session is not configured for using MediaMode ROUTED or it is already being recorded')
+            abort(
+                Conflict,
+                query='The session is not configured for using MediaMode ROUTED or it is already being recorded',
+            )
         elif response.status_code == 501:
             abort(NotImplemented, query='OpenVidu Server recording module is disabled')
         abort(response)
@@ -373,7 +406,10 @@ class RecordingsStop(MethodView):
         elif response.status_code == 404:
             abort(NotFound, query=f'Recording `{recording_id}` does not exist')
         elif response.status_code == 406:
-            abort(NotAcceptable, query='Recording has starting status. Wait until started status before stopping the recording')
+            abort(
+                NotAcceptable,
+                query='Recording has starting status. Wait until started status before stopping the recording',
+            )
         elif response.status_code == 501:
             abort(NotImplemented, query='OpenVidu Server recording module is disabled')
         abort(response)

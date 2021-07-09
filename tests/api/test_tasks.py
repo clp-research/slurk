@@ -24,10 +24,12 @@ class TestRequestOptions(TasksTable, RequestOptionsTemplate):
     pass
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[GET]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option[GET]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestGetValid:
     def test_valid_request(self, client, tasks):
         response = client.get('/slurk/api/tasks')
@@ -42,21 +44,22 @@ class TestGetValid:
 
         # check that the `get` request did not alter the database
         response = client.get(
-            '/slurk/api/tasks',
-            headers={'If-None-Match': response.headers['ETag']}
+            '/slurk/api/tasks', headers={'If-None-Match': response.headers['ETag']}
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[POST]',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option[POST]',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPostValid:
     REQUEST_CONTENT = [
         {'json': {'num_users': 3, 'name': 'Test Task', 'layout_id': -1}},
         {'json': {'num_users': '3', 'name': 'Test Task', 'layout_id': -1}},
-        {'json': {'num_users': 5, 'name': '', 'layout_id': -1}}
+        {'json': {'num_users': 5, 'name': '', 'layout_id': -1}},
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -79,36 +82,35 @@ class TestPostValid:
         assert tasks['layout_id'] == data.get('layout_id')
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option[POST]',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option[POST]',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPostInvalid:
     REQUEST_CONTENT = [
         (
             {'json': {'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
-        (
-            {'json': {'num_users': 3, 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        ),
+        ({'json': {'num_users': 3, 'layout_id': -1}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
             {'json': {'num_users': 3, 'name': 'Test Task', 'layout_id': -42}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'num_users': 'drei', 'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
-            {'json': {'num_users': 2**63, 'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            {'json': {'num_users': 2 ** 63, 'name': 'Test Task', 'layout_id': -1}},
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'data': {'num_users': 3, 'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNSUPPORTED_MEDIA_TYPE
-        )
+            HTTPStatus.UNSUPPORTED_MEDIA_TYPE,
+        ),
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
@@ -126,7 +128,7 @@ class TestPostInvalid:
         response = client.post(
             '/slurk/api/tasks',
             headers={'Authorization': f'Bearer {tokens.json["id"]}'},
-            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']}
+            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']},
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
 
@@ -134,15 +136,17 @@ class TestPostInvalid:
         response = client.post(
             '/slurk/api/tasks',
             headers={'Authorization': 'Bearer invalid_token'},
-            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']}
+            json={'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']},
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestGetIdValid:
     def test_valid_request(self, client, tasks):
         response = client.get(f'/slurk/api/tasks/{tasks.json["id"]}')
@@ -153,31 +157,35 @@ class TestGetIdValid:
         # check that the `get` request did not alter the database
         response = client.get(
             f'/slurk/api/tasks/{tasks.json["id"]}',
-            headers={'If-None-Match': response.headers['ETag']}
+            headers={'If-None-Match': response.headers['ETag']},
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]'
-])
+@pytest.mark.depends(
+    on=[f'{PREFIX}::TestRequestOptions::test_request_option_with_id[GET]']
+)
 class TestGetIdInvalid:
     def test_not_existing(self, client):
         response = client.get('/slurk/api/tasks/invalid_id')
         assert response.status_code == HTTPStatus.NOT_FOUND, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
-    f'{PREFIX}::TestPostValid',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
+        f'{PREFIX}::TestPostValid',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPutValid:
     REQUEST_CONTENT = [
         {'json': {'num_users': 0, 'name': '', 'layout_id': -1}},
         {'json': {'num_users': '5', 'name': 'äöüß', 'layout_id': -1}},
-        {'data': {'num_users': 5, 'name': 'Test Task', 'layout_id': -1},
-         'headers': {'Content-Type': 'application/json'}}
+        {
+            'data': {'num_users': 5, 'name': 'Test Task', 'layout_id': -1},
+            'headers': {'Content-Type': 'application/json'},
+        },
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -213,11 +221,13 @@ class TestPutValid:
         assert new_tasks['layout_id'] == data.get('layout_id')
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
-    f'{PREFIX}::TestPostValid',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PUT]',
+        f'{PREFIX}::TestPostValid',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPutInvalid(TasksTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
@@ -225,29 +235,32 @@ class TestPutInvalid(TasksTable, InvalidWithEtagTemplate):
 
     def json(self, request):
         layouts = request.getfixturevalue('layouts')
-        return {'json': {'num_users': 3, 'name': 'Test Task', 'layout_id': layouts.json['id']}}
+        return {
+            'json': {
+                'num_users': 3,
+                'name': 'Test Task',
+                'layout_id': layouts.json['id'],
+            }
+        }
 
     REQUEST_CONTENT = [
-        (
-            {'json': {}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        ),
+        ({'json': {}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
             {'json': {'num_users': 3, 'name': 'Test Task'}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'num_users': 3, 'name': None, 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'num_users': None, 'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
+            HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
             {'json': {'num_users': -2, 'name': 'Test Task', 'layout_id': -1}},
-            HTTPStatus.UNPROCESSABLE_ENTITY
-        )
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
@@ -263,70 +276,85 @@ class TestPutInvalid(TasksTable, InvalidWithEtagTemplate):
         assert response.status_code == status, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestDeleteValid:
     def test_valid_request(self, client, tasks):
         response = client.delete(
             f'/slurk/api/tasks/{tasks.json["id"]}',
-            headers={'If-Match': tasks.headers['ETag']}
+            headers={'If-Match': tasks.headers['ETag']},
         )
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
-    f'{PREFIX}::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[DELETE]',
+        f'{PREFIX}::TestPostValid',
+    ]
+)
 class TestDeleteInvalid(TasksTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
         return 'delete'
 
-    @pytest.mark.depends(on=[
-        'tests/api/test_tokens.py::TestPostValid',
-        'tests/api/test_tokens.py::TestDeleteValid'
-    ])
+    @pytest.mark.depends(
+        on=[
+            'tests/api/test_tokens.py::TestPostValid',
+            'tests/api/test_tokens.py::TestDeleteValid',
+        ]
+    )
     def test_deletion_of_task_in_token(self, client, permissions, tasks):
         # create token that uses the task
         token = client.post(
             '/slurk/api/tokens',
-            json={'permissions_id': permissions.json['id'], 'task_id': tasks.json['id']}
+            json={
+                'permissions_id': permissions.json['id'],
+                'task_id': tasks.json['id'],
+            },
         )
         # the deletion of a tasks entry that is in use should fail
         response = client.delete(
             f'/slurk/api/tasks/{tasks.json["id"]}',
-            headers={'If-Match': tasks.headers['ETag']}
+            headers={'If-Match': tasks.headers['ETag']},
         )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY  # , parse_error(response)
+        assert (
+            response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+        )  # , parse_error(response)
 
         # free the task entry by deleting the token
         response = client.delete(
             f'/slurk/api/tokens/{token.json["id"]}',
-            headers={'If-Match': token.headers['ETag']}
+            headers={'If-Match': token.headers['ETag']},
         )
         # now one should be able to delete the task
         response = client.delete(
             f'/slurk/api/tasks/{tasks.json["id"]}',
-            headers={'If-Match': tasks.headers['ETag']}
+            headers={'If-Match': tasks.headers['ETag']},
         )
 
         assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
-    f'{PREFIX}::TestPostValid',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
+        f'{PREFIX}::TestPostValid',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPatchValid:
     REQUEST_CONTENT = [
         {'json': {'num_users': 0, 'layout_id': -1}},
         {'json': {'name': 'Another Task', 'layout_id': -1}},
-        {'data': {'num_users': 2, 'layout_id': -1},
-         'headers': {'Content-Type': 'application/json'}}
+        {
+            'data': {'num_users': 2, 'layout_id': -1},
+            'headers': {'Content-Type': 'application/json'},
+        },
     ]
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
@@ -363,11 +391,13 @@ class TestPatchValid:
         assert new_tasks['layout_id'] == expected_layout
 
 
-@pytest.mark.depends(on=[
-    f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
-    f'{PREFIX}::TestPostValid',
-    'tests/api/test_layouts.py::TestPostValid'
-])
+@pytest.mark.depends(
+    on=[
+        f'{PREFIX}::TestRequestOptions::test_request_option_with_id[PATCH]',
+        f'{PREFIX}::TestPostValid',
+        'tests/api/test_layouts.py::TestPostValid',
+    ]
+)
 class TestPatchInvalid(TasksTable, InvalidWithEtagTemplate):
     @property
     def request_method(self):
@@ -377,8 +407,11 @@ class TestPatchInvalid(TasksTable, InvalidWithEtagTemplate):
         ({'json': {'id': 2}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'json': {'layout_id': -42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({'json': {'num_users': -1}}, HTTPStatus.UNPROCESSABLE_ENTITY),
-        ({'data': {'name': 'Another Test Room', 'layout_id': -1}}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
-        ({'data': '{"name": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+        (
+            {'data': {'name': 'Another Test Room', 'layout_id': -1}},
+            HTTPStatus.UNSUPPORTED_MEDIA_TYPE,
+        ),
+        ({'data': '{"name": "Another Test Room"}'}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
     ]
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
