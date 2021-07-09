@@ -147,14 +147,14 @@ class LogsByUserByRoomById(MethodView):
             .filter_by(room_id=room.id)
             .filter(
                 or_(
-                    Log.receiver_id == None,
+                    Log.receiver_id == None,  # NOQA
                     Log.user_id == user.id,
                     Log.receiver_id == user.id,
                 )
             )
             .order_by(Log.date_created.asc())
             .all()
-        )  # NOQA
+        )
 
 
 class AttributeSchema(ma.Schema):
