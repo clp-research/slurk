@@ -1,5 +1,5 @@
 from functools import wraps
-from flask.globals import current_app, g
+from flask.globals import current_app
 from flask_httpauth import HTTPTokenAuth as _FlaskHTTPTokenAuth
 from werkzeug.exceptions import Unauthorized
 from sqlalchemy.exc import StatementError
@@ -21,14 +21,14 @@ class HTTPTokenAuth(_FlaskHTTPTokenAuth):
         # Update the api docs on the wrapped function and return it to be
         # further decorated by other decorators
         parameters = {
-            'name': 'Authorization',
-            'in': 'header',
-            'description': 'Authorization: Bearer <access_token>',
-            'required': 'true'
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization: Bearer <access_token>",
+            "required": "true",
         }
 
-        wrapper._apidoc = getattr(func, '_apidoc', {})
-        wrapper._apidoc.setdefault('parameters', []).append(parameters)
+        wrapper._apidoc = getattr(func, "_apidoc", {})
+        wrapper._apidoc.setdefault("parameters", []).append(parameters)
 
         return wrapper
 

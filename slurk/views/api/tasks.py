@@ -7,7 +7,7 @@ from slurk.models import Task, Layout
 from slurk.views.api import CommonSchema, Id
 
 
-blp = Blueprint(Task.__tablename__ + 's', __name__)
+blp = Blueprint(Task.__tablename__ + "s", __name__)
 
 
 class TaskSchema(CommonSchema):
@@ -16,24 +16,27 @@ class TaskSchema(CommonSchema):
 
     name = ma.fields.String(
         required=True,
-        description='Name of the task',
-        filter_description='Filter for a task name')
+        description="Name of the task",
+        filter_description="Filter for a task name",
+    )
     num_users = ma.fields.Integer(
-        validate=ma.validate.Range(min=0, max=2**63 - 1),
+        validate=ma.validate.Range(min=0, max=2 ** 63 - 1),
         required=True,
-        description='Number of users needed for this task',
-        filter_description='Filter for number of users needed for this task')
+        description="Number of users needed for this task",
+        filter_description="Filter for number of users needed for this task",
+    )
     layout_id = Id(
         Layout,
         required=True,
-        description='Layout for this task',
-        filter_description='Filter for layout used in the tasks')
+        description="Layout for this task",
+        filter_description="Filter for layout used in the tasks",
+    )
 
 
-@blp.route('/')
+@blp.route("/")
 class Tasks(MethodView):
     @blp.etag
-    @blp.arguments(TaskSchema.Filter, location='query')
+    @blp.arguments(TaskSchema.Filter, location="query")
     @blp.response(200, TaskSchema.Response(many=True))
     def get(self, args):
         """List tasks"""
@@ -48,17 +51,17 @@ class Tasks(MethodView):
         return TaskSchema().post(item)
 
 
-@blp.route('/<int:task_id>')
+@blp.route("/<int:task_id>")
 class TaskById(MethodView):
     @blp.etag
-    @blp.query('task', TaskSchema)
+    @blp.query("task", TaskSchema)
     @blp.response(200, TaskSchema.Response)
     def get(self, *, task):
         """Get a task by ID"""
         return task
 
     @blp.etag
-    @blp.query('task', TaskSchema)
+    @blp.query("task", TaskSchema)
     @blp.arguments(TaskSchema.Creation)
     @blp.response(200, TaskSchema.Response)
     @blp.login_required
@@ -67,7 +70,7 @@ class TaskById(MethodView):
         return TaskSchema().put(task, new_task)
 
     @blp.etag
-    @blp.query('task', TaskSchema)
+    @blp.query("task", TaskSchema)
     @blp.arguments(TaskSchema.Update)
     @blp.response(200, TaskSchema.Response)
     @blp.login_required
@@ -76,7 +79,7 @@ class TaskById(MethodView):
         return TaskSchema().patch(task, new_task)
 
     @blp.etag
-    @blp.query('task', TaskSchema)
+    @blp.query("task", TaskSchema)
     @blp.response(204)
     @blp.alt_response(422, ErrorSchema)
     @blp.login_required

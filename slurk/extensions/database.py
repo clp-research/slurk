@@ -26,18 +26,19 @@ class Database:
 
     def bind(self, engine):
         self._engine = engine
-        if 'sqlite' in engine.url:
+        if "sqlite" in engine.url:
             from logging import getLogger
             from flask.globals import current_app
 
-            if current_app and not current_app.config['DEBUG']:
-                getLogger('slurk').warning('SQLite should not be used in production')
+            if current_app and not current_app.config["DEBUG"]:
+                getLogger("slurk").warning("SQLite should not be used in production")
 
             @event.listens_for(Engine, "connect")
             def set_sqlite_pragma(dbapi_connection, connection_record):
                 cursor = dbapi_connection.cursor()
                 cursor.execute("PRAGMA foreign_keys=ON")
                 cursor.close()
+
         self._session.configure(bind=engine)
 
     def init(self):
@@ -52,9 +53,11 @@ class Database:
         from sqlalchemy.orm import scoped_session
 
         if not self.engine:
-            self.bind(engine=create_engine(current_app.config['DATABASE']))
+            self.bind(engine=create_engine(current_app.config["DATABASE"]))
 
-        app.session = scoped_session(lambda: self.create_session(), scopefunc=_app_ctx_stack)
+        app.session = scoped_session(
+            lambda: self.create_session(), scopefunc=_app_ctx_stack
+        )
 
         self.init()
 

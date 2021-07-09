@@ -2,22 +2,34 @@ from slurk.models.room import Session
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
-from werkzeug.exceptions import Conflict, NotAcceptable, NotFound, UnprocessableEntity, NotImplemented
+from werkzeug.exceptions import (
+    Conflict,
+    NotAcceptable,
+    NotFound,
+    UnprocessableEntity,
+    NotImplemented,
+)
 
 from slurk.models import Room
 from slurk.extensions.api import Blueprint, abort
-from slurk.views.api.openvidu.schemas import ConfigSchema, RecordingSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
+from slurk.views.api.openvidu.schemas import (
+    ConfigSchema,
+    RecordingSchema,
+    SignalSchema,
+    SessionSchema,
+    WebRtcConnectionSchema,
+)
 
 
-blp = Blueprint('OpenVidu', __name__)
+blp = Blueprint("OpenVidu", __name__)
 
 
-@blp.route('/config')
+@blp.route("/config")
 class Config(MethodView):
     @blp.response(200, ConfigSchema.Response)
     @blp.login_required
     def get(self):
-        """ Retrieve current OpenVidu configuration
+        """Retrieve current OpenVidu configuration
 
         See the <a href="https://docs.openvidu.io/en/2.18.0/reference-docs/openvidu-config/">
         OpenVidu documentation</a> on how to change these values.
@@ -26,38 +38,50 @@ class Config(MethodView):
 
         config = current_app.openvidu.config
         return dict(
-            version=config['VERSION'],
-            domain_or_public_ip=config['DOMAIN_OR_PUBLIC_IP'],
-            https_port=config['HTTPS_PORT'],
-            public_url=config['OPENVIDU_PUBLICURL'],
+            version=config["VERSION"],
+            domain_or_public_ip=config["DOMAIN_OR_PUBLIC_IP"],
+            https_port=config["HTTPS_PORT"],
+            public_url=config["OPENVIDU_PUBLICURL"],
             cdr=config["OPENVIDU_CDR"],
             streams=dict(
-                videoMinSendBandwidth=config['OPENVIDU_STREAMS_VIDEO_MIN_SEND_BANDWIDTH'],
-                videoMaxSendBandwidth=config['OPENVIDU_STREAMS_VIDEO_MAX_SEND_BANDWIDTH'],
-                videoMinRecvBandwidth=config['OPENVIDU_STREAMS_VIDEO_MIN_RECV_BANDWIDTH'],
-                videoMaxRecvBandwidth=config['OPENVIDU_STREAMS_VIDEO_MAX_RECV_BANDWIDTH'],
+                videoMinSendBandwidth=config[
+                    "OPENVIDU_STREAMS_VIDEO_MIN_SEND_BANDWIDTH"
+                ],
+                videoMaxSendBandwidth=config[
+                    "OPENVIDU_STREAMS_VIDEO_MAX_SEND_BANDWIDTH"
+                ],
+                videoMinRecvBandwidth=config[
+                    "OPENVIDU_STREAMS_VIDEO_MIN_RECV_BANDWIDTH"
+                ],
+                videoMaxRecvBandwidth=config[
+                    "OPENVIDU_STREAMS_VIDEO_MAX_RECV_BANDWIDTH"
+                ],
             ),
             sessions=dict(
-                garbage_interval=config['OPENVIDU_SESSIONS_GARBAGE_INTERVAL'],
-                garbage_threshold=config['OPENVIDU_SESSIONS_GARBAGE_THRESHOLD'],
+                garbage_interval=config["OPENVIDU_SESSIONS_GARBAGE_INTERVAL"],
+                garbage_threshold=config["OPENVIDU_SESSIONS_GARBAGE_THRESHOLD"],
             ),
             recording=dict(
-                version=config['OPENVIDU_RECORDING_VERSION'],
-                path=config['OPENVIDU_RECORDING_PATH'],
-                public_access=config['OPENVIDU_RECORDING_PUBLIC_ACCESS'],
-                notification=config['OPENVIDU_RECORDING_NOTIFICATION'],
-                custom_layout=config['OPENVIDU_RECORDING_CUSTOM_LAYOUT'],
-                autostop_timeout=config['OPENVIDU_RECORDING_AUTOSTOP_TIMEOUT'],
-            ) if config['OPENVIDU_RECORDING'] else None,
+                version=config["OPENVIDU_RECORDING_VERSION"],
+                path=config["OPENVIDU_RECORDING_PATH"],
+                public_access=config["OPENVIDU_RECORDING_PUBLIC_ACCESS"],
+                notification=config["OPENVIDU_RECORDING_NOTIFICATION"],
+                custom_layout=config["OPENVIDU_RECORDING_CUSTOM_LAYOUT"],
+                autostop_timeout=config["OPENVIDU_RECORDING_AUTOSTOP_TIMEOUT"],
+            )
+            if config["OPENVIDU_RECORDING"]
+            else None,
             webhook=dict(
-                endpoint=config['OPENVIDU_WEBHOOK_ENDPOINT'],
-                headers=config['OPENVIDU_WEBHOOK_HEADERS'],
-                events=config['OPENVIDU_WEBHOOK_EVENTS'],
-            ) if config['OPENVIDU_WEBHOOK'] else None
+                endpoint=config["OPENVIDU_WEBHOOK_ENDPOINT"],
+                headers=config["OPENVIDU_WEBHOOK_HEADERS"],
+                events=config["OPENVIDU_WEBHOOK_EVENTS"],
+            )
+            if config["OPENVIDU_WEBHOOK"]
+            else None,
         )
 
 
-@blp.route('sessions')
+@blp.route("sessions")
 class Sessions(MethodView):
     @blp.response(200, SessionSchema.Response(many=True))
     @blp.login_required
@@ -69,7 +93,7 @@ class Sessions(MethodView):
         response = current_app.openvidu.list_sessions()
 
         if response.status_code == 200:
-            return response.json()['content']
+            return response.json()["content"]
         abort(response)
 
     @blp.arguments(SessionSchema.Creation, example={})
@@ -93,15 +117,15 @@ class Sessions(MethodView):
 
             # Store session parameters in database to recreate it if necessary
             db = current_app.session
-            db.add(Session(id=session['id'], parameters=args))
+            db.add(Session(id=session["id"], parameters=args))
             db.commit()
             return session
         elif response.status_code == 400:
-            abort(UnprocessableEntity, json=response.json().get('message'))
+            abort(UnprocessableEntity, json=response.json().get("message"))
         abort(response)
 
 
-@blp.route('sessions/<string:session_id>')
+@blp.route("sessions/<string:session_id>")
 class SessionsById(MethodView):
     @blp.response(200, SessionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
@@ -115,7 +139,7 @@ class SessionsById(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         abort(response)
 
     @blp.response(204)
@@ -131,18 +155,18 @@ class SessionsById(MethodView):
         Only available if OpenVidu is enabled."""
 
         if current_app.session.query(Room).filter_by(session=session_id).count() > 0:
-            abort(NotAcceptable, query=f'Session `{session_id}` is still in use')
+            abort(NotAcceptable, query=f"Session `{session_id}` is still in use")
 
         response = current_app.openvidu.delete_session(session_id)
 
         if response.status_code == 204:
             return
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         abort(response)
 
 
-@blp.route('sessions/<string:session_id>/signal')
+@blp.route("sessions/<string:session_id>/signal")
 class SessionsSignal(MethodView):
     @blp.arguments(SignalSchema.Creation)
     @blp.response(204)
@@ -162,15 +186,18 @@ class SessionsSignal(MethodView):
         if response.status_code == 200:
             return
         elif response.status_code == 400:
-            abort(UnprocessableEntity, json=response.json().get('message'))
+            abort(UnprocessableEntity, json=response.json().get("message"))
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         elif response.status_code == 406:
-            abort(NotAcceptable, json=f'No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)')
+            abort(
+                NotAcceptable,
+                json="No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)",
+            )
         abort(response)
 
 
-@blp.route('sessions/<string:session_id>/connections')
+@blp.route("sessions/<string:session_id>/connections")
 class Connection(MethodView):
     @blp.response(200, WebRtcConnectionSchema.Response(many=True))
     @blp.alt_response(404, ErrorSchema)
@@ -183,9 +210,9 @@ class Connection(MethodView):
         response = current_app.openvidu.list_connections(session_id)
 
         if response.status_code == 200:
-            return response.json()['content']
+            return response.json()["content"]
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         abort(response)
 
     @blp.arguments(WebRtcConnectionSchema.Creation, example={})
@@ -201,13 +228,13 @@ class Connection(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 400:
-            abort(UnprocessableEntity, json=response.json().get('message'))
+            abort(UnprocessableEntity, json=response.json().get("message"))
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         abort(response)
 
 
-@blp.route('sessions/<string:session_id>/connections/<string:connection_id>')
+@blp.route("sessions/<string:session_id>/connections/<string:connection_id>")
 class ConnectionById(MethodView):
     @blp.response(200, WebRtcConnectionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
@@ -222,9 +249,9 @@ class ConnectionById(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 400:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         elif response.status_code == 404:
-            abort(NotFound, query=f'Connection `{connection_id}` does not exist')
+            abort(NotFound, query=f"Connection `{connection_id}` does not exist")
         abort(response)
 
     @blp.response(204)
@@ -246,13 +273,13 @@ class ConnectionById(MethodView):
         if response.status_code == 204:
             return
         elif response.status_code == 400:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         elif response.status_code == 404:
-            abort(NotFound, query=f'Connection `{connection_id}` does not exist')
+            abort(NotFound, query=f"Connection `{connection_id}` does not exist")
         abort(response)
 
 
-@blp.route('recordings')
+@blp.route("recordings")
 class Recordings(MethodView):
     @blp.response(200, RecordingSchema.Response(many=True))
     @blp.alt_response(501, ErrorSchema)
@@ -265,13 +292,13 @@ class Recordings(MethodView):
         response = current_app.openvidu.list_recordings()
 
         if response.status_code == 200:
-            return response.json()['items']
+            return response.json()["items"]
         elif response.status_code == 501:
-            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
 
 
-@blp.route('recordings/<string:recording_id>')
+@blp.route("recordings/<string:recording_id>")
 class RecordingsById(MethodView):
     @blp.response(200, RecordingSchema.Response)
     @blp.alt_response(404, ErrorSchema)
@@ -287,9 +314,9 @@ class RecordingsById(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 404:
-            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+            abort(NotFound, query=f"Recording `{recording_id}` does not exist")
         elif response.status_code == 501:
-            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
 
     @blp.response(204)
@@ -309,15 +336,18 @@ class RecordingsById(MethodView):
         if response.status_code == 204:
             return
         elif response.status_code == 404:
-            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+            abort(NotFound, query=f"Recording `{recording_id}` does not exist")
         elif response.status_code == 409:
-            abort(Conflict, query='The recording has started status. Stop it before deletion')
+            abort(
+                Conflict,
+                query="The recording has started status. Stop it before deletion",
+            )
         elif response.status_code == 501:
-            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
 
 
-@blp.route('recordings/start/<string:session_id>')
+@blp.route("recordings/start/<string:session_id>")
 class RecordingsStart(MethodView):
     @blp.arguments(RecordingSchema.Creation, example={})
     @blp.response(201, RecordingSchema.Response)
@@ -337,24 +367,27 @@ class RecordingsStart(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 400:
-            abort(UnprocessableEntity, json=response.json().get('message'))
+            abort(UnprocessableEntity, json=response.json().get("message"))
         elif response.status_code == 422:
-            if not args['hasAudio'] and not args['hasVideo']:
-                err = 'Either `has_audio` or `has_video` must not be false'
+            if not args["hasAudio"] and not args["hasVideo"]:
+                err = "Either `has_audio` or `has_video` must not be false"
                 abort(UnprocessableEntity, json=dict(has_video=err, has_audio=err))
             abort(response)
         elif response.status_code == 404:
-            abort(NotFound, query=f'Session `{session_id}` does not exist')
+            abort(NotFound, query=f"Session `{session_id}` does not exist")
         elif response.status_code == 406:
-            abort(NotAcceptable, query='The session has no connected participants')
+            abort(NotAcceptable, query="The session has no connected participants")
         elif response.status_code == 409:
-            abort(Conflict, query='The session is not configured for using MediaMode ROUTED or it is already being recorded')
+            abort(
+                Conflict,
+                query="The session is not configured for using MediaMode ROUTED or it is already being recorded",
+            )
         elif response.status_code == 501:
-            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
 
 
-@blp.route('recordings/stop/<string:recording_id>')
+@blp.route("recordings/stop/<string:recording_id>")
 class RecordingsStop(MethodView):
     @blp.response(200, RecordingSchema.Response)
     @blp.alt_response(404, ErrorSchema)
@@ -371,9 +404,12 @@ class RecordingsStop(MethodView):
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 404:
-            abort(NotFound, query=f'Recording `{recording_id}` does not exist')
+            abort(NotFound, query=f"Recording `{recording_id}` does not exist")
         elif response.status_code == 406:
-            abort(NotAcceptable, query='Recording has starting status. Wait until started status before stopping the recording')
+            abort(
+                NotAcceptable,
+                query="Recording has starting status. Wait until started status before stopping the recording",
+            )
         elif response.status_code == 501:
-            abort(NotImplemented, query='OpenVidu Server recording module is disabled')
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
