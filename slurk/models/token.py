@@ -16,15 +16,15 @@ class Token(Common):
     __tablename__ = "Token"
 
     id = Column(String(length=36), primary_key=True, default=uuid)
-    permissions_id = Column(Integer, ForeignKey('Permissions.id'), nullable=False)
+    permissions_id = Column(Integer, ForeignKey("Permissions.id"), nullable=False)
     registrations_left = Column(Integer, nullable=False)
-    task_id = Column(Integer, ForeignKey('Task.id'))
-    room_id = Column(Integer, ForeignKey('Room.id'))
+    task_id = Column(Integer, ForeignKey("Task.id"))
+    room_id = Column(Integer, ForeignKey("Room.id"))
     openvidu_settings = Column(PickleType, nullable=False)
 
-    task = relationship('Task')
-    room = relationship('Room')
-    users = relationship('User', backref='token')
+    task = relationship("Task")
+    room = relationship("Room")
+    users = relationship("User", backref="token")
 
     @staticmethod
     def get_admin_token(db, id=None):

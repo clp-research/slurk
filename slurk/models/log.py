@@ -5,12 +5,12 @@ from .common import Common
 
 
 class Log(Common):
-    __tablename__ = 'Log'
+    __tablename__ = "Log"
 
     event = Column(String, nullable=False)
-    user_id = Column(Integer, ForeignKey("User.id", ondelete='CASCADE'))
-    room_id = Column(Integer, ForeignKey("Room.id", ondelete='CASCADE'))
-    receiver_id = Column(Integer, ForeignKey("User.id", ondelete='CASCADE'))
+    user_id = Column(Integer, ForeignKey("User.id", ondelete="CASCADE"))
+    room_id = Column(Integer, ForeignKey("Room.id", ondelete="CASCADE"))
+    receiver_id = Column(Integer, ForeignKey("User.id", ondelete="CASCADE"))
     data = Column(JSON, nullable=False)
     user = relationship("User", foreign_keys=[user_id])
     receiver = relationship("User", foreign_keys=[receiver_id])
@@ -22,15 +22,15 @@ class Log(Common):
             data = {}
 
         if event == "join":
-            current_app.logger.info(f'{user.name} joined {room.layout.title}')
+            current_app.logger.info(f"{user.name} joined {room.layout.title}")
         if event == "leave":
-            current_app.logger.info(f'{user.name} left {room.layout.title})')
+            current_app.logger.info(f"{user.name} left {room.layout.title})")
         if event == "connect":
-            current_app.logger.info(f'{user.name} connected')
+            current_app.logger.info(f"{user.name} connected")
         if event == "disconnect":
-            current_app.logger.info(f'{user.name} disconnected')
+            current_app.logger.info(f"{user.name} disconnected")
 
-        receiver = data.pop('receiver', None)
+        receiver = data.pop("receiver", None)
         log = Log(event=event, user=user, room=room, data=data, receiver=receiver)
 
         db = current_app.session

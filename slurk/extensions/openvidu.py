@@ -20,10 +20,10 @@ class OpenVidu:
             def __init__(self, url, secret, timeout, verify):
                 self._url = url
                 self._headers = {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
                 }
-                self._auth = HTTPBasicAuth('OPENVIDUAPP', secret)
+                self._auth = HTTPBasicAuth("OPENVIDUAPP", secret)
                 self._verify = verify
                 self._timeout = timeout
                 super().__init__()
@@ -31,7 +31,7 @@ class OpenVidu:
             def request(self, method, endpoint, **kwargs) -> requests.Response:
                 return super().request(
                     method,
-                    f'{self._url}/openvidu/api/{endpoint}',
+                    f"{self._url}/openvidu/api/{endpoint}",
                     headers=self._headers,
                     auth=self._auth,
                     verify=self._verify,
@@ -47,65 +47,65 @@ class OpenVidu:
         )
 
     def list_sessions(self):
-        return self._request.get('sessions')
+        return self._request.get("sessions")
 
     def get_session(self, session_id):
-        return self._request.get(f'sessions/{session_id}')
+        return self._request.get(f"sessions/{session_id}")
 
     def post_session(self, json):
-        return self._request.post('sessions', json=json)
+        return self._request.post("sessions", json=json)
 
     def delete_session(self, session_id):
-        return self._request.delete(f'sessions/{session_id}')
+        return self._request.delete(f"sessions/{session_id}")
 
     def signal(self, session_id, json):
-        json['session'] = session_id
-        return self._request.post('signal', json=json)
+        json["session"] = session_id
+        return self._request.post("signal", json=json)
 
     def list_connections(self, session_id):
-        return self._request.get(f'sessions/{session_id}/connection')
+        return self._request.get(f"sessions/{session_id}/connection")
 
     def get_connection(self, session_id, connection_id):
-        return self._request.get(f'sessions/{session_id}/connection/{connection_id}')
+        return self._request.get(f"sessions/{session_id}/connection/{connection_id}")
 
     def post_connection(self, session_id, json):
-        return self._request.post(f'sessions/{session_id}/connection', json=json)
+        return self._request.post(f"sessions/{session_id}/connection", json=json)
 
     def delete_connection(self, session_id, connection_id):
-        return self._request.delete(f'sessions/{session_id}/connection/{connection_id}')
+        return self._request.delete(f"sessions/{session_id}/connection/{connection_id}")
 
     def start_recording(self, session_id, json):
-        json['session'] = session_id
-        return self._request.post('recordings/start', json=json)
+        json["session"] = session_id
+        return self._request.post("recordings/start", json=json)
 
     def stop_recording(self, recording_id):
-        return self._request.post(f'recordings/stop/{recording_id}')
+        return self._request.post(f"recordings/stop/{recording_id}")
 
     def get_recording(self, recording_id):
-        return self._request.get(f'recordings/{recording_id}')
+        return self._request.get(f"recordings/{recording_id}")
 
     def list_recordings(self):
-        return self._request.get('recordings')
+        return self._request.get("recordings")
 
     def delete_recording(self, recording_id):
-        return self._request.delete(f'recordings/{recording_id}')
+        return self._request.delete(f"recordings/{recording_id}")
 
 
 def init_app(app):
-    if 'OPENVIDU_URL' in app.config:
-        openvidu_url = app.config['OPENVIDU_URL']
-        openvidu_port = app.config['OPENVIDU_PORT']
-        openvidu_secret = app.config.get('OPENVIDU_SECRET')
-        openvidu_verify = app.config.get('OPENVIDU_VERIFY', True)
+    if "OPENVIDU_URL" in app.config:
+        openvidu_url = app.config["OPENVIDU_URL"]
+        openvidu_port = app.config["OPENVIDU_PORT"]
+        openvidu_secret = app.config.get("OPENVIDU_SECRET")
+        openvidu_verify = app.config.get("OPENVIDU_VERIFY", True)
         if not openvidu_secret:
             raise ValueError(
                 "OpenVidu Secret key not provided. Pass `OPENVIDU_SECRET` as environment variable or define it in `config.py`."
             )
 
         if openvidu_port != 443:
-            openvidu_url = f'{openvidu_url}:{openvidu_port}'
+            openvidu_url = f"{openvidu_url}:{openvidu_port}"
         OV = OpenVidu(openvidu_url, openvidu_secret, verify=openvidu_verify)
-        response = OV._request.get('config')
+        response = OV._request.get("config")
         if response.status_code != 200:
             error = HTTP_STATUS_CODES.get(response.status_code, "Unknown Error")
             app.logger.error(

@@ -21,14 +21,14 @@ class HTTPTokenAuth(_FlaskHTTPTokenAuth):
         # Update the api docs on the wrapped function and return it to be
         # further decorated by other decorators
         parameters = {
-            'name': 'Authorization',
-            'in': 'header',
-            'description': 'Authorization: Bearer <access_token>',
-            'required': 'true',
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization: Bearer <access_token>",
+            "required": "true",
         }
 
-        wrapper._apidoc = getattr(func, '_apidoc', {})
-        wrapper._apidoc.setdefault('parameters', []).append(parameters)
+        wrapper._apidoc = getattr(func, "_apidoc", {})
+        wrapper._apidoc.setdefault("parameters", []).append(parameters)
 
         return wrapper
 

@@ -8,13 +8,13 @@ from .log import Log
 
 
 class User(Common):
-    __tablename__ = 'User'
+    __tablename__ = "User"
 
     name = Column(String, nullable=False)
-    token_id = Column(String, ForeignKey('Token.id'), nullable=False)
+    token_id = Column(String, ForeignKey("Token.id"), nullable=False)
     session_id = Column(String, unique=True)
     rooms = relationship(
-        "Room", secondary=user_room, back_populates="users", lazy='dynamic'
+        "Room", secondary=user_room, back_populates="users", lazy="dynamic"
     )
 
     # Required by flask_login
@@ -48,21 +48,21 @@ class User(Common):
             current_app.session.commit()
 
         if self.session_id is not None:
-            join_room(str(room.id), self.session_id, '/')
+            join_room(str(room.id), self.session_id, "/")
 
             socketio.emit(
-                'joined_room',
+                "joined_room",
                 {
-                    'room': str(room.id),
-                    'user': self.id,
+                    "room": str(room.id),
+                    "user": self.id,
                 },
                 room=self.session_id,
             )
 
             socketio.emit(
-                'status',
+                "status",
                 dict(
-                    type='join',
+                    type="join",
                     user=dict(id=self.id, name=self.name),
                     room=str(room.id),
                     timestamp=str(datetime.utcnow()),
@@ -74,7 +74,7 @@ class User(Common):
 
             # Create an OpenVidu connection if apropiate
             if (
-                hasattr(current_app, 'openvidu')
+                hasattr(current_app, "openvidu")
                 and room.openvidu_session_id
                 and self.token.permissions.openvidu_role
             ):
@@ -94,52 +94,52 @@ class User(Common):
                             role=self.token.permissions.openvidu_role,
                             kurentoOptions=dict(
                                 videoMaxRecvBandwidth=ov_property(
-                                    'video_max_recv_bandwidth'
+                                    "video_max_recv_bandwidth"
                                 ),
                                 videoMinRecvBandwidth=ov_property(
-                                    'video_min_recv_bandwidth'
+                                    "video_min_recv_bandwidth"
                                 ),
                                 videoMaxSendBandwidth=ov_property(
-                                    'video_max_send_bandwidth'
+                                    "video_max_send_bandwidth"
                                 ),
                                 videoMinSendBandwidth=ov_property(
-                                    'video_min_send_bandwidth'
+                                    "video_min_send_bandwidth"
                                 ),
-                                allowedFilters=ov_property('allowed_filters'),
+                                allowedFilters=ov_property("allowed_filters"),
                             ),
                         ),
                     )
 
                     if response.status_code == 200:
                         socketio.emit(
-                            'openvidu',
+                            "openvidu",
                             dict(
                                 connection=WebRtcConnectionSchema.Response().dump(
                                     response.json()
                                 ),
-                                start_with_audio=ov_property('start_with_audio'),
-                                start_with_video=ov_property('start_with_video'),
-                                video_resolution=ov_property('video_resolution'),
-                                video_framerate=ov_property('video_framerate'),
+                                start_with_audio=ov_property("start_with_audio"),
+                                start_with_video=ov_property("start_with_video"),
+                                video_resolution=ov_property("video_resolution"),
+                                video_framerate=ov_property("video_framerate"),
                                 video_publisher_location=ov_property(
-                                    'video_publisher_location'
+                                    "video_publisher_location"
                                 ),
                                 video_subscribers_location=ov_property(
-                                    'video_subscribers_location'
+                                    "video_subscribers_location"
                                 ),
                             ),
                             room=self.session_id,
                         )
                     elif response.status_code == 404:
                         json = room.session.parameters
-                        json['customSessionId'] = room.session.id
+                        json["customSessionId"] = room.session.id
                         response = current_app.openvidu.post_session(json)
                         if response.status_code == 200:
                             post_connection(retry=False)
                         else:
-                            current_app.logger.error(response.json().get('message'))
+                            current_app.logger.error(response.json().get("message"))
                     else:
-                        current_app.logger.error(response.json().get('message'))
+                        current_app.logger.error(response.json().get("message"))
 
                 post_connection()
 
@@ -157,20 +157,20 @@ class User(Common):
             Log.add("leave", self, room)
 
             socketio.emit(
-                'left_room',
+                "left_room",
                 {
-                    'room': str(room.id),
-                    'user': self.id,
+                    "room": str(room.id),
+                    "user": self.id,
                 },
                 room=self.session_id,
             )
 
-            leave_room(str(room.id), self.session_id, '/')
+            leave_room(str(room.id), self.session_id, "/")
 
         socketio.emit(
-            'status',
+            "status",
             dict(
-                type='leave',
+                type="leave",
                 user=dict(id=self.id, name=self.name),
                 room=str(room.id),
                 timestamp=str(datetime.utcnow()),

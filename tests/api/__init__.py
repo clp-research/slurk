@@ -18,33 +18,33 @@ class Template(ABC):
 
 
 class RequestOptionsTemplate(Template):
-    @pytest.mark.parametrize('option', ['OPTIONS', 'GET', 'POST'])
+    @pytest.mark.parametrize("option", ["OPTIONS", "GET", "POST"])
     def test_request_option(self, client, option):
-        response = client.options(f'/slurk/api/{self.table_name}')
-        if option == 'OPTIONS':
+        response = client.options(f"/slurk/api/{self.table_name}")
+        if option == "OPTIONS":
             assert response.status_code == HTTPStatus.OK
         # request can only be verified, if the `options` request succeeds
         # if it fails the verification step is left out
         if response.status_code == HTTPStatus.OK:
             assert (
-                option in response.headers['Allow']
+                option in response.headers["Allow"]
             ), HTTPStatus.METHOD_NOT_ALLOWED.description
 
-    @pytest.mark.parametrize('option', ['OPTIONS', 'GET', 'PUT', 'DELETE', 'PATCH'])
+    @pytest.mark.parametrize("option", ["OPTIONS", "GET", "PUT", "DELETE", "PATCH"])
     def test_request_option_with_id(self, client, request, option):
         table_inst = request.getfixturevalue(self.table_name)
         if table_inst is None:
             pytest.skip(
-                f'Depends on tests/api/test_{self.table_name}.py::TestPostValid'
+                f"Depends on tests/api/test_{self.table_name}.py::TestPostValid"
             )
         response = client.options(
             f'/slurk/api/{self.table_name}/{table_inst.json["id"]}'
         )
-        if option == 'OPTIONS':
+        if option == "OPTIONS":
             assert response.status_code == HTTPStatus.OK
         if response.status_code == HTTPStatus.OK:
             assert (
-                option in response.headers['Allow']
+                option in response.headers["Allow"]
             ), HTTPStatus.METHOD_NOT_ALLOWED.description
 
 
@@ -58,7 +58,7 @@ class InvalidTemplate(Template):
     @property
     def url_extension(self):
         """Any suffix appended to `/slurk/api/{table_name}/{id}`"""
-        return ''
+        return ""
 
     def json(self, request):
         """Required arguments if any for the specified method."""
@@ -66,20 +66,20 @@ class InvalidTemplate(Template):
 
     def test_not_existing(self, client, request):
         response = getattr(client, self.request_method)(
-            f'/slurk/api/{self.table_name}/invalid_id{self.url_extension}',
+            f"/slurk/api/{self.table_name}/invalid_id{self.url_extension}",
             **self.json(request),
         )
         assert response.status_code == HTTPStatus.NOT_FOUND, parse_error(response)
 
-    @pytest.mark.depends(on=['tests/api/test_tokens.py::TestPostValid'])
+    @pytest.mark.depends(on=["tests/api/test_tokens.py::TestPostValid"])
     def test_unauthorized_access(self, client, tokens, request):
         table_inst = request.getfixturevalue(self.table_name)
         response = getattr(client, self.request_method)(
             f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension}',
             **self.json(request),
             headers={
-                'Authorization': f'Bearer {tokens.json["id"]}',
-                'If-Match': table_inst.headers['ETag'],
+                "Authorization": f'Bearer {tokens.json["id"]}',
+                "If-Match": table_inst.headers["ETag"],
             },
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
@@ -90,8 +90,8 @@ class InvalidTemplate(Template):
             f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension}',
             **self.json(request),
             headers={
-                'Authorization': 'Bearer invalid_token',
-                'If-Match': table_inst.headers['ETag'],
+                "Authorization": "Bearer invalid_token",
+                "If-Match": table_inst.headers["ETag"],
             },
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
@@ -99,9 +99,9 @@ class InvalidTemplate(Template):
 
 class InvalidWithEtagTemplate(InvalidTemplate):
     @pytest.mark.parametrize(
-        'content, status',
+        "content, status",
         [
-            ({'headers': {'If-Match': 'invalid_etag'}}, HTTPStatus.PRECONDITION_FAILED),
+            ({"headers": {"If-Match": "invalid_etag"}}, HTTPStatus.PRECONDITION_FAILED),
             ({}, HTTPStatus.PRECONDITION_REQUIRED),
         ],
     )

@@ -13,24 +13,24 @@ import http
 class ErrorHandlerMixin(flask_smorest.ErrorHandlerMixin):
     def handle_http_exception(self, error):
         if error:
-            if hasattr(error, 'data'):
-                error.data['message'] = error.description
+            if hasattr(error, "data"):
+                error.data["message"] = error.description
             else:
-                setattr(error, 'data', dict(message=error.description))
+                setattr(error, "data", dict(message=error.description))
         return super().handle_http_exception(error)
 
 
 class ResponseReferencesPlugin(flask_smorest.spec.plugins.ResponseReferencesPlugin):
     def _available_responses(self):
         specs = super()._available_responses()
-        del specs['NOT_MODIFIED']['schema']
+        del specs["NOT_MODIFIED"]["schema"]
         return specs
 
 
 class Blueprint(flask_smorest.Blueprint):
     def register_blueprint(self, blueprint, **options):
         url_prefix = (
-            self.url_prefix + blueprint.url_prefix + options.get('url_prefix', '')
+            self.url_prefix + blueprint.url_prefix + options.get("url_prefix", "")
         )
         super().register_blueprint(blueprint, **options, url_prefix=url_prefix)
 
@@ -39,7 +39,7 @@ class Blueprint(flask_smorest.Blueprint):
         self._prepare_doc_cbks.append(self._prepare_auth_doc)
         self._prepare_doc_cbks.append(self._prepare_404_doc)
 
-    def arguments(self, schema, *, location='json', **kwargs):
+    def arguments(self, schema, *, location="json", **kwargs):
         super_arguments = super().arguments(schema, location=location, **kwargs)
 
         def decorator(func):
@@ -48,7 +48,7 @@ class Blueprint(flask_smorest.Blueprint):
             @wraps(func)
             def wrapper(*f_args, **f_kwargs):
                 if (
-                    location == 'json'
+                    location == "json"
                     and (
                         len(request.data) > 0
                         or len(request.form) > 0
@@ -59,7 +59,7 @@ class Blueprint(flask_smorest.Blueprint):
                     abort(UnsupportedMediaType)
                 return func(*f_args, **f_kwargs)
 
-            wrapper._apidoc['arguments']['responses'][415] = http.HTTPStatus(415).name
+            wrapper._apidoc["arguments"]["responses"][415] = http.HTTPStatus(415).name
             return wrapper
 
         return decorator
@@ -69,7 +69,7 @@ class Blueprint(flask_smorest.Blueprint):
         from slurk.views.api.auth import auth
         from flask.globals import current_app
 
-        if not current_app.config['DEBUG']:
+        if not current_app.config["DEBUG"]:
             func = auth.login_required(func)
         getattr(func, "_apidoc", {})["auth"] = True
         return func
@@ -89,7 +89,7 @@ class Blueprint(flask_smorest.Blueprint):
 
     def route(self, rule, *, parameters=None, **options):
         # Trim trailing `/`
-        if rule.endswith('/'):
+        if rule.endswith("/"):
             rule = rule[:-1]
         return super().route(rule, parameters=parameters, **options)
 
@@ -105,7 +105,7 @@ class Blueprint(flask_smorest.Blueprint):
         def decorator(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                parameter_id = f'{parameter}_id'
+                parameter_id = f"{parameter}_id"
                 id = kwargs.pop(parameter_id)
                 if isinstance(id, UUID):
                     id = str(id)
@@ -114,7 +114,7 @@ class Blueprint(flask_smorest.Blueprint):
                     abort(
                         NotFound,
                         query={
-                            parameter_id: f'{cls.__tablename__} `{id}` does not exist'
+                            parameter_id: f"{cls.__tablename__} `{id}` does not exist"
                         },
                     )
                 if check_etag and request.method in self.METHODS_NEEDING_CHECK_ETAG:
@@ -123,8 +123,8 @@ class Blueprint(flask_smorest.Blueprint):
                 kwargs[parameter] = entry
                 return func(*args, **kwargs)
 
-            wrapper._apidoc = deepcopy(getattr(wrapper, '_apidoc', {}))
-            wrapper._apidoc['validate'] = True
+            wrapper._apidoc = deepcopy(getattr(wrapper, "_apidoc", {}))
+            wrapper._apidoc["validate"] = True
             return wrapper
 
         return decorator
@@ -144,12 +144,12 @@ class Api(flask_smorest.Api, ErrorHandlerMixin):
         self.ERROR_SCHEMA.errors.allow_none = True
 
         spec_kwargs = spec_kwargs or {}
-        spec_kwargs['response_plugin'] = ResponseReferencesPlugin(self.ERROR_SCHEMA)
+        spec_kwargs["response_plugin"] = ResponseReferencesPlugin(self.ERROR_SCHEMA)
         super().init_app(app, spec_kwargs=spec_kwargs)
 
         # Add Token Authentication to OpenAPI
         self.spec.components.security_scheme(
-            "TokenAuthentication", dict(type='http', scheme='bearer')
+            "TokenAuthentication", dict(type="http", scheme="bearer")
         )
 
 
@@ -174,12 +174,12 @@ def abort(ex, *, json=None, query=None):
     if isinstance(ex, Response):
         try:
             if (
-                'message' in ex.json()
+                "message" in ex.json()
                 and len(json) == 0
-                and ex.json()['message'] is not None
-                and ex.json()['message'] != ''
+                and ex.json()["message"] is not None
+                and ex.json()["message"] != ""
             ):
-                json = ex.json()['messsage']
+                json = ex.json()["messsage"]
         except JSONDecodeError:
             pass
         ex = default_exceptions[ex.status_code]
@@ -190,8 +190,8 @@ def abort(ex, *, json=None, query=None):
         status=HTTP_STATUS_CODES.get(ex.code, "Unknown Error"),
     )
     if len(json) > 0:
-        payload.setdefault('errors', {})['json'] = json
+        payload.setdefault("errors", {})["json"] = json
     if len(query) > 0:
-        payload.setdefault('errors', {})['query'] = query
+        payload.setdefault("errors", {})["query"] = query
 
     abort(make_response(payload, ex.code))

@@ -11,7 +11,7 @@ from . import CommonSchema
 from .tokens import TokenId
 
 
-blp = Blueprint(User.__tablename__ + 's', __name__)
+blp = Blueprint(User.__tablename__ + "s", __name__)
 
 
 class UserSchema(CommonSchema):
@@ -20,26 +20,26 @@ class UserSchema(CommonSchema):
 
     name = ma.fields.String(
         required=True,
-        description='Name of the user',
-        filter_description='Filter for a user name',
+        description="Name of the user",
+        filter_description="Filter for a user name",
     )
     token_id = TokenId(
         load_only=True,
         required=True,
-        description='Token associated with this user',
-        filter_description='Filter for users using this token',
+        description="Token associated with this user",
+        filter_description="Filter for users using this token",
     )
     session_id = ma.fields.String(
         dump_only=True,
-        description='SocketIO session ID for this user',
-        filter_description='Filter for a SocketIO session ID',
+        description="SocketIO session ID for this user",
+        filter_description="Filter for a SocketIO session ID",
     )
 
 
-@blp.route('/')
+@blp.route("/")
 class Users(MethodView):
     @blp.etag
-    @blp.arguments(UserSchema.Filter, location='query')
+    @blp.arguments(UserSchema.Filter, location="query")
     @blp.response(200, UserSchema.Response(many=True))
     def get(self, args):
         """List users"""
@@ -55,19 +55,19 @@ class Users(MethodView):
         The token is required to have registrations left and a room associated"""
 
         db = current_app.session
-        token = db.query(Token).get(item['token_id'])
+        token = db.query(Token).get(item["token_id"])
 
         if token.registrations_left == 0:
             abort(
                 UnprocessableEntity,
-                json=dict(token_id='No registrations left for given token'),
+                json=dict(token_id="No registrations left for given token"),
             )
         if token.registrations_left > 0:
             token.registrations_left -= 1
         if token.room is None:
             abort(
                 UnprocessableEntity,
-                json=dict(token_id='Token does not have a room associated'),
+                json=dict(token_id="Token does not have a room associated"),
             )
 
         user = UserSchema().post(item)
@@ -76,17 +76,17 @@ class Users(MethodView):
         return user
 
 
-@blp.route('/<int:user_id>')
+@blp.route("/<int:user_id>")
 class UserById(MethodView):
     @blp.etag
-    @blp.query('user', UserSchema)
+    @blp.query("user", UserSchema)
     @blp.response(200, UserSchema.Response)
     def get(self, *, user):
         """Get a user by ID"""
         return user
 
     @blp.etag
-    @blp.query('user', UserSchema)
+    @blp.query("user", UserSchema)
     @blp.arguments(UserSchema.Creation)
     @blp.response(200, UserSchema.Response)
     @blp.login_required
@@ -95,7 +95,7 @@ class UserById(MethodView):
         return UserSchema().put(user, new_user)
 
     @blp.etag
-    @blp.query('user', UserSchema)
+    @blp.query("user", UserSchema)
     @blp.arguments(UserSchema.Update)
     @blp.response(200, UserSchema.Response)
     @blp.login_required
@@ -104,7 +104,7 @@ class UserById(MethodView):
         return UserSchema().patch(user, new_user)
 
     @blp.etag
-    @blp.query('user', UserSchema)
+    @blp.query("user", UserSchema)
     @blp.response(204)
     @blp.alt_response(422, ErrorSchema)
     @blp.login_required

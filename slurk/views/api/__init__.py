@@ -24,8 +24,8 @@ def register_blueprints(api):
 
     for module in MODULES:
         if module is not None:
-            name = module.__name__.split('.')[-1]
-            api.register_blueprint(module.blp, url_prefix=f'/slurk/api/{name}')
+            name = module.__name__.split(".")[-1]
+            api.register_blueprint(module.blp, url_prefix=f"/slurk/api/{name}")
 
 
 class Id(ma.fields.Integer):
@@ -38,7 +38,7 @@ class Id(ma.fields.Integer):
 
         id = super()._validated(value)
         if current_app.session.query(self._table).get(id) is None:
-            raise ValidationError(f'{self._table.__tablename__} `{id}` does not exist')
+            raise ValidationError(f"{self._table.__tablename__} `{id}` does not exist")
         return id
 
 
@@ -127,9 +127,9 @@ class BaseSchema(ma.Schema):
                     field.nested, BaseSchema
                 ):
                     field.nested = create_schema(field.nested())
-                if 'filter_description' in field.metadata:
+                if "filter_description" in field.metadata:
                     field.metadata = {
-                        'description': field.metadata['filter_description']
+                        "description": field.metadata["filter_description"]
                     }
             return schema._create_schema("Filter", fields)
 
@@ -160,15 +160,15 @@ class CommonSchema(BaseSchema):
     """Common fields and operations for database access"""
 
     id = ma.fields.Integer(
-        dump_only=True, description='Unique ID that identifies this entity'
+        dump_only=True, description="Unique ID that identifies this entity"
     )
     date_created = ma.fields.DateTime(
-        dump_only=True, description='Server time at which this entity was created'
+        dump_only=True, description="Server time at which this entity was created"
     )
     date_modified = ma.fields.DateTime(
         dump_only=True,
         allow_none=True,
-        description='Server time when this entity was last modified',
+        description="Server time when this entity was last modified",
     )
 
     def list(self, args):

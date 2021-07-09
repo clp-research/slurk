@@ -5,9 +5,9 @@ from .common import Common
 
 
 class Permissions(Common):
-    __tablename__ = 'Permissions'
+    __tablename__ = "Permissions"
 
-    tokens = relationship('Token', backref='permissions')
+    tokens = relationship("Token", backref="permissions")
     api = Column(Boolean, nullable=False)
     send_message = Column(Boolean, nullable=False)
     send_image = Column(Boolean, nullable=False)

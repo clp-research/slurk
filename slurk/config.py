@@ -12,19 +12,19 @@ def environ_as_boolean(env, default):
 
 # Server config
 DEBUG = environ_as_boolean(
-    "SLURK_DEBUG", default=os.environ.get('FLASK_ENV') == 'development'
+    "SLURK_DEBUG", default=os.environ.get("FLASK_ENV") == "development"
 )
 
 SECRET_KEY = os.environ.get(
     "SLURK_SECRET_KEY",
-    ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32)),
+    "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32)),
 )
-DATABASE = os.environ.get('SLURK_DATABASE_URI', 'sqlite:///:memory:')
+DATABASE = os.environ.get("SLURK_DATABASE_URI", "sqlite:///:memory:")
 
 if "SLURK_OPENVIDU_URL" in os.environ:
     OPENVIDU_URL = os.environ["SLURK_OPENVIDU_URL"]
     OPENVIDU_SECRET = os.environ.get("SLURK_OPENVIDU_SECRET")
-    OPENVIDU_PORT = int(os.environ.get("SLURK_OPENVIDU_PORT", default='443'))
+    OPENVIDU_PORT = int(os.environ.get("SLURK_OPENVIDU_PORT", default="443"))
     OPENVIDU_VERIFY = environ_as_boolean("SLURK_OPENVIDU_VERIFY", default=True)
 
 API_TITLE = "slurk"
@@ -41,7 +41,7 @@ OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 OPENAPI_RAPIDOC_PATH = "/rapidoc"
 OPENAPI_RAPIDOC_URL = "https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js"
 OPENAPI_RAPIDOC_CONFIG = {
-    'render-style': 'view',
-    'schema-style': 'table',
-    'schema-description-expanded': 'true',
+    "render-style": "view",
+    "schema-style": "table",
+    "schema-description-expanded": "true",
 }

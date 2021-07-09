@@ -7,7 +7,7 @@ from .common import user_room, Common
 
 
 class Room(Common):
-    __tablename__ = 'Room'
+    __tablename__ = "Room"
 
     layout_id = Column(Integer, ForeignKey("Layout.id"), nullable=False)
     users = relationship("User", secondary=user_room, back_populates="rooms")
@@ -18,8 +18,8 @@ class Room(Common):
 
 
 class Session(Base):
-    __tablename__ = 'Session'
+    __tablename__ = "Session"
 
     id = Column(String, primary_key=True)
-    rooms = relationship('Room', backref='session')
+    rooms = relationship("Room", backref="session")
     parameters = Column(JSON)

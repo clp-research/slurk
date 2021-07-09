@@ -12,12 +12,12 @@ class Common(Base):
 
 
 user_room = Table(
-    'User_Room',
+    "User_Room",
     Base.metadata,
     Column(
-        'user_id', Integer, ForeignKey('User.id', ondelete="CASCADE"), primary_key=True
+        "user_id", Integer, ForeignKey("User.id", ondelete="CASCADE"), primary_key=True
     ),
     Column(
-        'room_id', Integer, ForeignKey('Room.id', ondelete="CASCADE"), primary_key=True
+        "room_id", Integer, ForeignKey("Room.id", ondelete="CASCADE"), primary_key=True
     ),
 )

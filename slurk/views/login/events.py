@@ -5,7 +5,7 @@ from slurk.extensions.events import socketio
 from slurk.models import Log
 
 
-@socketio.on('connect')
+@socketio.on("connect")
 @login_required
 def connect():
     current_user.session_id = request.sid
@@ -15,7 +15,7 @@ def connect():
     Log.add("connect", current_user)
 
 
-@socketio.on('disconnect')
+@socketio.on("disconnect")
 @login_required
 def disconnect():
     for room in current_user.rooms:
