@@ -4,6 +4,7 @@ Flask-Login==0.5
 Flask-SocketIO==5.0
 Flask-WTF==0.15.1
 Flask-Smorest==0.31.2
+gevent==21.1
 marshmallow==3.12
 requests==2.25.1
 SQLAlchemy==1.4
