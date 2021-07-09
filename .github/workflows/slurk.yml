@@ -77,7 +77,7 @@ jobs:
       - name: Generate documentation
         env:
           DATABASE: sqlite:///
-          FLASK_APP: app
+          FLASK_APP: slurk
         run: |
           flask openapi write docs/openapi.json
           (cd docs && make html)

@@ -3,12 +3,12 @@ import logging
 
 from flask import Flask, url_for
 
-from app.extensions import api as api_ext
-from app.extensions import database as database_ext
-from app.extensions import login as login_ext
-from app.extensions import events as event_ext
-from app.extensions import openvidu as openvidu_ext
-from app.models import Token
+from slurk.extensions import api as api_ext
+from slurk.extensions import database as database_ext
+from slurk.extensions import login as login_ext
+from slurk.extensions import events as event_ext
+from slurk.extensions import openvidu as openvidu_ext
+from slurk.models import Token
 
 logging.basicConfig(format='%(levelname)s [%(name)s]: %(message)s')
 

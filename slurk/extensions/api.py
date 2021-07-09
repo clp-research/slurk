@@ -56,7 +56,7 @@ class Blueprint(flask_smorest.Blueprint):
 
     @staticmethod
     def login_required(func):
-        from app.views.api.auth import auth
+        from slurk.views.api.auth import auth
         from flask.globals import current_app
         if not current_app.config['DEBUG']:
             func = auth.login_required(func)
@@ -142,7 +142,7 @@ api = Api()
 
 
 def init_app(app):
-    from app.views import register_views
+    from slurk.views import register_views
 
     api.init_app(app)
     register_views(api)

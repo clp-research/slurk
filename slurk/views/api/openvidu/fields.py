@@ -1,7 +1,7 @@
 import marshmallow as ma
 from marshmallow import ValidationError
 
-from app.models.room import Session
+from slurk.models.room import Session
 
 
 class SessionId(ma.fields.String):

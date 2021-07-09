@@ -1,8 +1,8 @@
 from flask import request, current_app
 from flask_login import login_required, logout_user, current_user
 
-from app.extensions.events import socketio
-from app.models import Log
+from slurk.extensions.events import socketio
+from slurk.models import Log
 
 
 @socketio.on('connect')

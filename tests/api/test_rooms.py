@@ -407,7 +407,7 @@ class TestPatchAttributeValid:
 
     @pytest.mark.parametrize('content, attribute_on', REQUEST_CONTENT)
     def test_valid_request(self, client, rooms, content, attribute_on):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get('json', {}) or content.get('data', {})
 
             # test-field could here be a custom class, id or a pseudo element
@@ -462,7 +462,7 @@ class TestPatchAttributeInvalid(RoomsTable, InvalidTemplate):
 
     @pytest.mark.parametrize('content, attribute_on, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, rooms, content, attribute_on, status):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             response = client.patch(
                 f'/slurk/api/rooms/{rooms.json["id"]}/attribute/{attribute_on}/test-field',
                 **content
@@ -484,7 +484,7 @@ class TestPostClassValid:
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
     def test_valid_request(self, client, rooms, content):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get('json', {}) or content.get('data', {})
 
             # convert dictionary to json
@@ -528,7 +528,7 @@ class TestPostClassInvalid(RoomsTable, InvalidTemplate):
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, rooms, content, status):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             response = client.post(
                 f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field',
                 **content
@@ -550,7 +550,7 @@ class TestDeleteClassValid:
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
     def test_valid_request(self, client, rooms, content):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get('json', {}) or content.get('data', {})
 
             # convert dictionary to json
@@ -594,7 +594,7 @@ class TestDeleteClassInvalid(RoomsTable, InvalidTemplate):
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, rooms, content, status):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             response = client.delete(
                 f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field',
                 **content
@@ -615,7 +615,7 @@ class TestPatchTextValid:
 
     @pytest.mark.parametrize('content', REQUEST_CONTENT)
     def test_valid_request(self, client, rooms, content):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get('json', {}) or content.get('data', {})
 
             response = client.patch(
@@ -656,7 +656,7 @@ class TestPatchTextInvalid(RoomsTable, InvalidTemplate):
 
     @pytest.mark.parametrize('content, status', REQUEST_CONTENT)
     def test_invalid_request(self, client, rooms, content, status):
-        with mock.patch("app.views.api.rooms.socketio.emit") as socketio_mock:
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             response = client.patch(
                 f'/slurk/api/rooms/{rooms.json["id"]}/text/test-field',
                 **content

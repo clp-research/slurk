@@ -1,4 +1,4 @@
-from app.models import token
+from slurk.models import token
 from datetime import datetime
 
 from sqlalchemy import Column, String, ForeignKey
@@ -39,9 +39,9 @@ class User(Common):
         from flask.globals import current_app
         from flask_socketio import join_room
 
-        from app.views.api.openvidu.schemas import WebRtcConnectionSchema
-        from app.extensions.events import socketio
-        from app.models.room import Session
+        from slurk.views.api.openvidu.schemas import WebRtcConnectionSchema
+        from slurk.extensions.events import socketio
+        from slurk.models.room import Session
 
         if self not in room.users:
             room.users.append(self)
@@ -115,7 +115,7 @@ class User(Common):
         from flask.globals import current_app
         from flask_socketio import leave_room
 
-        from app.extensions.events import socketio
+        from slurk.extensions.events import socketio
 
         if self in room.users and not event_only:
             room.users.remove(self)

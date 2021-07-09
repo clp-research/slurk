@@ -2,9 +2,9 @@ from flask.views import MethodView
 from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 
-from app.extensions.api import Blueprint
-from app.models import Task, Layout
-from app.views.api import CommonSchema, Id
+from slurk.extensions.api import Blueprint
+from slurk.models import Task, Layout
+from slurk.views.api import CommonSchema, Id
 
 
 blp = Blueprint(Task.__tablename__ + 's', __name__)

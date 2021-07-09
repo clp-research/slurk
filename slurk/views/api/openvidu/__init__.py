@@ -1,12 +1,12 @@
-from app.models.room import Session
+from slurk.models.room import Session
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
 from werkzeug.exceptions import Conflict, NotAcceptable, NotFound, UnprocessableEntity, NotImplemented
 
-from app.models import Room
-from app.extensions.api import Blueprint, abort
-from app.views.api.openvidu.schemas import ConfigSchema, RecordingSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
+from slurk.models import Room
+from slurk.extensions.api import Blueprint, abort
+from slurk.views.api.openvidu.schemas import ConfigSchema, RecordingSchema, SignalSchema, SessionSchema, WebRtcConnectionSchema
 
 
 blp = Blueprint('OpenVidu', __name__)

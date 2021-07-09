@@ -3,9 +3,9 @@ from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
 import marshmallow as ma
 
-from app.extensions.api import Blueprint
-from app.models import Token, Permissions, Room, Task
-from app.views.api import BaseSchema, CommonSchema, Id
+from slurk.extensions.api import Blueprint
+from slurk.models import Token, Permissions, Room, Task
+from slurk.views.api import BaseSchema, CommonSchema, Id
 
 
 blp = Blueprint(Token.__tablename__ + 's', __name__)

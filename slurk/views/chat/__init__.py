@@ -1,8 +1,8 @@
 from flask import render_template, current_app, Blueprint
 from flask_login import login_required, current_user
 
-import app.views.chat.events
-from app.extensions.login import login_manager
+import slurk.views.chat.events
+from slurk.extensions.login import login_manager
 
 chat = Blueprint('chat', __name__)
 

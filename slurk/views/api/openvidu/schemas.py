@@ -1,8 +1,8 @@
 import marshmallow as ma
 from marshmallow.validate import OneOf, Range
 
-from app.views.api import BaseSchema
-from app.views.api.openvidu.fields import String, List, Timestamp, SessionId, Resolution, IntegerOrNone
+from slurk.views.api import BaseSchema
+from slurk.views.api.openvidu.fields import String, List, Timestamp, SessionId, Resolution, IntegerOrNone
 
 
 class StreamsConfigSchema(BaseSchema):

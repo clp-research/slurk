@@ -4,8 +4,8 @@ from flask_httpauth import HTTPTokenAuth as _FlaskHTTPTokenAuth
 from werkzeug.exceptions import Unauthorized
 from sqlalchemy.exc import StatementError
 
-from app.extensions.api import abort
-from app.models import Token
+from slurk.extensions.api import abort
+from slurk.models import Token
 
 
 class HTTPTokenAuth(_FlaskHTTPTokenAuth):

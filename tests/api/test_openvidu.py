@@ -4,7 +4,7 @@ import time
 
 from http import HTTPStatus
 
-from app.extensions.openvidu import OpenVidu
+from slurk.extensions.openvidu import OpenVidu
 
 from tests import parse_error
 

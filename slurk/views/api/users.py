@@ -4,8 +4,8 @@ from flask_smorest.error_handler import ErrorSchema
 from werkzeug.exceptions import UnprocessableEntity
 import marshmallow as ma
 
-from app.extensions.api import Blueprint, abort
-from app.models import User, Token
+from slurk.extensions.api import Blueprint, abort
+from slurk.models import User, Token
 
 from . import CommonSchema
 from .tokens import TokenId

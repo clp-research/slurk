@@ -1,9 +1,9 @@
 from flask.views import MethodView
 import marshmallow as ma
 
-from app.extensions.api import Blueprint
-from app.models import Log, User, Room
-from app.views.api import CommonSchema, Id
+from slurk.extensions.api import Blueprint
+from slurk.models import Log, User, Room
+from slurk.views.api import CommonSchema, Id
 
 
 blp = Blueprint(Log.__tablename__, __name__)
