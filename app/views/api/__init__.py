@@ -13,7 +13,7 @@ def register_blueprints(api):
 
     MODULES = (
         layouts,
-        openvidu if hasattr(current_app, 'openvidu') else None,
+        openvidu,
         rooms,
         permissions,
         tokens,
