@@ -8,7 +8,7 @@ set -eu
 
 TOKEN=${SLURK_TOKEN:=00000000-0000-0000-0000-000000000000}
 HOST=${SLURK_HOST:-http://localhost}
-PORT=${SLURK_PORT:-80}
+PORT=${SLURK_PORT:-5000}
 
 function check_error {
     if [ "$(jq '. | has("code")' <<< "$1")" = true ]; then
