@@ -3,8 +3,6 @@ import os
 import urllib.request
 import urllib.error
 
-from logging import getLogger
-
 from flask.globals import current_app
 
 from sqlalchemy import Column, String

@@ -1,4 +1,3 @@
-from slurk.models import token
 from datetime import datetime
 
 from sqlalchemy import Column, String, ForeignKey
@@ -41,7 +40,6 @@ class User(Common):
 
         from slurk.views.api.openvidu.schemas import WebRtcConnectionSchema
         from slurk.extensions.events import socketio
-        from slurk.models.room import Session
 
         if self not in room.users:
             room.users.append(self)

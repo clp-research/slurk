@@ -30,17 +30,19 @@ class TestRequestOptions(TasksTable, RequestOptionsTemplate):
 ])
 class TestGetValid:
     def test_valid_request(self, client, tasks):
-        response = client.get(f'/slurk/api/tasks')
+        response = client.get('/slurk/api/tasks')
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        def retr_by_id(inst): return inst['id'] == tasks.json['id']
+        def retr_by_id(inst):
+            return inst['id'] == tasks.json['id']
+
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == tasks.json
 
         # check that the `get` request did not alter the database
         response = client.get(
-            f'/slurk/api/tasks',
+            '/slurk/api/tasks',
             headers={'If-None-Match': response.headers['ETag']}
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
@@ -65,7 +67,7 @@ class TestPostValid:
                 content[key]['layout_id'] = layouts.json['id']
         data = content.get('json', {}) or content.get('data', {})
 
-        response = client.post(f'/slurk/api/tasks', **content)
+        response = client.post('/slurk/api/tasks', **content)
         assert response.status_code == HTTPStatus.CREATED, parse_error(response)
 
         tasks = response.json
@@ -290,7 +292,7 @@ class TestDeleteInvalid(TasksTable, InvalidWithEtagTemplate):
     def test_deletion_of_task_in_token(self, client, permissions, tasks):
         # create token that uses the task
         token = client.post(
-            f'/slurk/api/tokens',
+            '/slurk/api/tokens',
             json={'permissions_id': permissions.json['id'], 'task_id': tasks.json['id']}
         )
         # the deletion of a tasks entry that is in use should fail

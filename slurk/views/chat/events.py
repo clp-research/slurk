@@ -1,13 +1,10 @@
-from calendar import timegm
 from datetime import datetime
 
-from flask_socketio import emit
 from flask.globals import current_app
 from flask_login import login_required, current_user
 
 from slurk.extensions.events import socketio
 from slurk.models import User, Room, Log
-from slurk.extensions.events import socketio
 
 
 @socketio.event

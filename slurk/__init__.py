@@ -1,7 +1,7 @@
 import os
 import logging
 
-from flask import Flask, url_for
+from flask import Flask
 
 from slurk.extensions import api as api_ext
 from slurk.extensions import database as database_ext

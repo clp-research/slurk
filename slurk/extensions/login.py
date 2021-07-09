@@ -1,7 +1,4 @@
-from sqlalchemy import event
-from sqlalchemy.engine import Engine
-from flask.globals import request
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 
 login_manager = LoginManager()
 

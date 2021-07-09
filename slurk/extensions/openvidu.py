@@ -76,7 +76,7 @@ class OpenVidu:
         return self._request.get(f'recordings/{recording_id}')
 
     def list_recordings(self):
-        return self._request.get(f'recordings')
+        return self._request.get('recordings')
 
     def delete_recording(self, recording_id):
         return self._request.delete(f'recordings/{recording_id}')

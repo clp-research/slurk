@@ -1,7 +1,7 @@
 from slurk.extensions.database import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, asc
+from sqlalchemy import Column, ForeignKey, asc
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import JSON, String
+from sqlalchemy.sql.sqltypes import JSON, Integer, String
 
 from .common import user_room, Common
 

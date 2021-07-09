@@ -34,7 +34,9 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        def retr_by_id(inst): return inst['id'] == permissions.json['id']
+        def retr_by_id(inst):
+            return inst['id'] == permissions.json['id']
+
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == permissions.json
 

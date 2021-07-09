@@ -177,7 +177,7 @@ class AttributeId(MethodView):
 
 # Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/id/<string:id>')
-class AttributeId(MethodView):
+class UserAttributeId(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
@@ -210,7 +210,7 @@ class AttributeClass(MethodView):
 
 # Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/class/<string:cls>')
-class AttributeClass(MethodView):
+class UserAttributeClass(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
@@ -243,7 +243,7 @@ class AttributeElement(MethodView):
 
 # Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/attribute/element/<string:element>')
-class AttributeElement(MethodView):
+class UserAttributeElement(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(AttributeSchema, as_kwargs=True)
     @blp.response(204)
@@ -276,7 +276,7 @@ class Text(MethodView):
 
 # Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/text/<string:id>')
-class Text(MethodView):
+class UserText(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(TextSchema, as_kwargs=True)
     @blp.response(204)
@@ -320,7 +320,7 @@ class Class(MethodView):
 
 # Note: user_blp. Required here as otherwise we would have circular dependencies
 @user_blp.route('/<int:user_id>/class/<string:id>')
-class Class(MethodView):
+class UserClass(MethodView):
     @blp.query('user', UserSchema, check_etag=False)
     @blp.arguments(ClassSchema, as_kwargs=True)
     @blp.response(204)

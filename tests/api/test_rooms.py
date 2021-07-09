@@ -76,7 +76,9 @@ class TestGetValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # check that the posted table instance is included
-        def retr_by_id(inst): return inst['id'] == rooms.json['id']
+        def retr_by_id(inst):
+            return inst['id'] == rooms.json['id']
+
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == rooms.json
 
@@ -148,7 +150,7 @@ class TestPostInvalid:
         response = client.post(
             '/slurk/api/rooms',
             json={'layout_id': layouts.json['id']},
-            headers={'Authorization': f'Bearer invalid_token'}
+            headers={'Authorization': 'Bearer invalid_token'}
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
 
@@ -385,7 +387,7 @@ class TestPatchInvalid(RoomsTable, InvalidWithEtagTemplate):
         for key in content:
             if content[key].get('layout_id') == -1:
                 # cannot be fixture layouts because this was already used in post
-                layouts = client.post(f'/slurk/api/layouts', json={'title': 'Test Room'})
+                layouts = client.post('/slurk/api/layouts', json={'title': 'Test Room'})
                 content[key]['layout_id'] = layouts.json['id']
         # set the etag
         content.setdefault('headers', {}).update({'If-Match': rooms.headers['ETag']})
@@ -697,7 +699,9 @@ class TestGetLogsByUserByRoomByIdValid:
         assert response.status_code == HTTPStatus.OK, parse_error(response)
 
         # atleast the logs fixture entry should be included
-        def retr_by_id(inst): return inst['id'] == logs.json['id']
+        def retr_by_id(inst):
+            return inst['id'] == logs.json['id']
+
         retr_inst = next(filter(retr_by_id, response.json), None)
         assert retr_inst == logs.json
 

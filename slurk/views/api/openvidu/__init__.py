@@ -166,7 +166,7 @@ class SessionsSignal(MethodView):
         elif response.status_code == 404:
             abort(NotFound, query=f'Session `{session_id}` does not exist')
         elif response.status_code == 406:
-            abort(NotAcceptable, json=f'No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)')
+            abort(NotAcceptable, json='No connection exists for the passed to array. This error may be triggered if the session has no connected participants or if you provide some string value that does not correspond to a valid connectionId of the session (even though others may be correct)')
         abort(response)
 
 

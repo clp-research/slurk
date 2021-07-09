@@ -1,10 +1,6 @@
 import pytest
-import docker
-import time
 
 from http import HTTPStatus
-
-from slurk.extensions.openvidu import OpenVidu
 
 from tests import parse_error
 

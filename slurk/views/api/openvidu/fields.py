@@ -46,9 +46,9 @@ class Resolution(ma.fields.String):
         except ValueError as e:
             raise ValidationError(f'Invalid height: {e}')
         if w < 100 or w > 1999:
-            raise ValidationError(f'Invalid width: Must be >= 100 and <= 1999')
+            raise ValidationError('Invalid width: Must be >= 100 and <= 1999')
         if h < 100 or h > 1999:
-            raise ValidationError(f'Invalid height: Must be >= 100 and <= 1999')
+            raise ValidationError('Invalid height: Must be >= 100 and <= 1999')
 
 
 class Timestamp(ma.fields.DateTime):

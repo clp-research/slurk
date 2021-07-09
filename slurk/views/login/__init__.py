@@ -1,13 +1,10 @@
-import uuid
-
-from flask import render_template, redirect, url_for, flash, current_app, Blueprint
+from flask import render_template, redirect, url_for, flash, current_app, Blueprint, request
 from flask_login import login_user
 
 from slurk.extensions.login import login_manager
 from slurk.models import User, Token
 
 from .forms import LoginForm
-from .events import *
 
 
 login = Blueprint('login', __name__, url_prefix="/login")
