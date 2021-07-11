@@ -1,3 +1,5 @@
+import re
+
 from flask import (
     render_template,
     redirect,
@@ -13,6 +15,7 @@ from slurk.extensions.login import login_manager
 from slurk.models import User, Token
 
 from .forms import LoginForm
+from .events import *  # NOQA
 
 
 login = Blueprint("login", __name__, url_prefix="/login")
@@ -32,10 +35,11 @@ def load_user(id):
 def load_user_from_request(request):
     token_id = request.headers.get("Authorization") or request.args.get("token")
     user_id = request.args.get("user") or request.headers.get("user")
+
     if token_id is None or user_id is None:
         return None
 
-    token_id = token_id.upper().lstrip("BEARER").strip()
+    token_id = re.sub("bearer\s+", '', token_id, flags=re.IGNORECASE)
 
     current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
