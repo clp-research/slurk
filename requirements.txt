@@ -10,3 +10,4 @@ requests==2.25.1
 SQLAlchemy==1.4
 Werkzeug==2.0
 WTForms==2.3
+six
