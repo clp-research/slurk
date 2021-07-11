@@ -1,13 +1,14 @@
 FROM python:3.9
 
 RUN mkdir -p /usr/src/slurk
-WORKDIR /usr/src/slurk
+WORKDIR /usr/src
 
-COPY requirements.txt /usr/src/slurk
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /tmp/
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN pip install gunicorn gevent-websocket
+run rm /tmp/requirements.txt
 
-COPY app /usr/src/slurk/app
+COPY slurk /usr/src/slurk
 
-EXPOSE 5000
-ENTRYPOINT ["gunicorn", "-b", ":5000", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "slurk:create_app()"]
+EXPOSE 80
+ENTRYPOINT ["gunicorn", "-b", ":80", "-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "slurk:create_app()"]

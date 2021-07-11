@@ -46,7 +46,7 @@ else
 
     docker run -d \
         --name=$SLURK_DOCKER \
-        -p $PORT:5000 \
+        -p $PORT:80 \
         -e SLURK_SECRET_KEY=$SLURK_SECRET_KEY \
         $param \
         slurk/server:${SLURK_DOCKER_TAG:-latest}
