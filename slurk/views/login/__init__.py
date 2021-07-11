@@ -15,7 +15,7 @@ from slurk.extensions.login import login_manager
 from slurk.models import User, Token
 
 from .forms import LoginForm
-from .events import *  # NOQA
+import slurk.views.login.events  # NOQA
 
 
 login = Blueprint("login", __name__, url_prefix="/login")
@@ -39,7 +39,7 @@ def load_user_from_request(request):
     if token_id is None or user_id is None:
         return None
 
-    token_id = re.sub("bearer\s+", '', token_id, flags=re.IGNORECASE)
+    token_id = re.sub(r"bearer\s+", "", token_id, flags=re.IGNORECASE)
 
     current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
