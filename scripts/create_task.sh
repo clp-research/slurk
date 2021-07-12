@@ -39,4 +39,4 @@ response=$(curl -sX POST \
     -d "{\"name\": \"$NAME\", \"num_users\": $USERS, \"layout_id\": $LAYOUT}" \
     $HOST:$PORT/slurk/api/tasks)
 check_error "$response"
-echo "$response" | jq -r .id
+echo "$response" | jq

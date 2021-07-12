@@ -37,4 +37,4 @@ response=$(curl -sX POST \
     -d "{\"layout_id\": $LAYOUT}" \
     $HOST:$PORT/slurk/api/rooms)
 check_error "$response"
-echo "$response" | jq -r .id
+echo "$response" | jq

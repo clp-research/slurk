@@ -35,4 +35,4 @@ response=$(curl -sX POST \
     -d "{\"permissions_id\": $permissions}" \
     $HOST:$PORT/slurk/api/tokens)
 check_error "$response"
-echo "$response" | jq -r .id
+echo "$response" | jq

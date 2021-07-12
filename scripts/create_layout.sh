@@ -37,4 +37,4 @@ response=$(curl -sX POST \
     -d @$path \
     $HOST:$PORT/slurk/api/layouts)
 check_error "$response"
-echo "$response" | jq -r .id
+echo "$response" | jq
