@@ -358,7 +358,7 @@ class RecordingsStart(MethodView):
     @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def post(self, args, *, session_id):
-        """Retrieve all Recordings from OpenVidu Server
+        """Start the recording of a session
 
         Only available if OpenVidu is enabled."""
 

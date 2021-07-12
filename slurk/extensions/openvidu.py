@@ -99,7 +99,7 @@ def init_app(app):
         openvidu_verify = app.config.get("OPENVIDU_VERIFY", True)
         if not openvidu_secret:
             raise ValueError(
-                "OpenVidu Secret key not provided. Pass `OPENVIDU_SECRET` as environment variable or define it in `config.py`."
+                "OpenVidu Secret key not provided. Pass `SLURK_OPENVIDU_SECRET` as environment variable."
             )
 
         if openvidu_port != 443:
@@ -117,6 +117,6 @@ def init_app(app):
         app.logger.info(f'Initializing OpenVidu connection to "{openvidu_url}"')
         if not openvidu_verify:
             app.logger.warning(
-                "OpenVidu connection may be unsecure. Set `OPENVIDU_VERIFY` to true or don't pass this variable"
+                "OpenVidu connection may be unsecure. Set `SLURK_OPENVIDU_VERIFY` to true or don't pass this variable"
             )
         app.openvidu = OV
