@@ -1,4 +1,5 @@
-from slurk.models.room import Session
+from flask import Response
+from flask.helpers import stream_with_context
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
@@ -10,7 +11,8 @@ from werkzeug.exceptions import (
     NotImplemented,
 )
 
-from slurk.models import Room
+from slurk.models import Room, Log
+from slurk.models.room import Session
 from slurk.extensions.api import Blueprint, abort
 from slurk.views.api.openvidu.schemas import (
     ConfigSchema,
@@ -347,6 +349,47 @@ class RecordingsById(MethodView):
         abort(response)
 
 
+@blp.route("recordings/download/<string:recording_id>")
+class RecordingsDownload(MethodView):
+    @blp.response(200, RecordingSchema.Response)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(409, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def get(self, *, recording_id):
+        """Download a Recording from OpenVidu Server
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.get_recording(recording_id)
+
+        if response.status_code == 200:
+            recording = response.json()
+        elif response.status_code == 404:
+            abort(NotFound, query=f"Recording `{recording_id}` does not exist")
+        elif response.status_code == 501:
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
+        else:
+            abort(response)
+
+        if recording["url"] is None:
+            abort(
+                Conflict,
+                query="The recording has not finished",
+            )
+        request = current_app.openvidu.request.get(recording["url"], stream=True)
+
+        # Response does not accept `headers=request.headers` so we create them ourself
+        headers = {}
+        for header in request.headers:
+            headers[header] = request.headers[header]
+
+        return Response(
+            stream_with_context(request.iter_content(chunk_size=2048)),
+            headers=headers,
+        )
+
+
 @blp.route("recordings/start/<string:session_id>")
 class RecordingsStart(MethodView):
     @blp.arguments(RecordingSchema.Creation, example={})
@@ -365,7 +408,14 @@ class RecordingsStart(MethodView):
         response = current_app.openvidu.start_recording(session_id, json=args)
 
         if response.status_code == 200:
-            return response.json()
+            data = response.json()
+            room = (
+                current_app.session.query(Room)
+                .filter_by(openvidu_session_id=data["sessionId"])
+                .one_or_none()
+            )
+            Log.add("recording_started", data=data, room=room)
+            return data
         elif response.status_code == 400:
             abort(UnprocessableEntity, json=response.json().get("message"))
         elif response.status_code == 422:
@@ -402,7 +452,14 @@ class RecordingsStop(MethodView):
         response = current_app.openvidu.stop_recording(recording_id)
 
         if response.status_code == 200:
-            return response.json()
+            data = response.json()
+            room = (
+                current_app.session.query(Room)
+                .filter_by(openvidu_session_id=data["sessionId"])
+                .one_or_none()
+            )
+            Log.add("recording_stopped", data=data, room=room)
+            return data
         elif response.status_code == 404:
             abort(NotFound, query=f"Recording `{recording_id}` does not exist")
         elif response.status_code == 406:
