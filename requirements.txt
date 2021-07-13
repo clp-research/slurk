@@ -10,3 +10,5 @@ SQLAlchemy==1.4
 Werkzeug==2.0
 WTForms==2.3
 six
+gevent-websocket
+gunicorn

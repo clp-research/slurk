@@ -5,7 +5,6 @@ WORKDIR /usr/src
 
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
-RUN pip install gunicorn gevent-websocket
 run rm /tmp/requirements.txt
 
 COPY slurk /usr/src/slurk
