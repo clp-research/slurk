@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 
 from slurk.extensions.login import login_manager
 
+import slurk.views.chat.events  # NOQA
+
 chat = Blueprint("chat", __name__)
 
 
