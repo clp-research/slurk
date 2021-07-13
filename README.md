@@ -1,3 +1,5 @@
+[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/slurk/server)](https://hub.docker.com/r/slurk/server)
+
 Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 ==============================================================================
 
