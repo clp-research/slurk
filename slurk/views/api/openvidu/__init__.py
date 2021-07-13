@@ -1,4 +1,5 @@
 from flask import Response
+from flask.helpers import stream_with_context
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
@@ -346,6 +347,47 @@ class RecordingsById(MethodView):
         elif response.status_code == 501:
             abort(NotImplemented, query="OpenVidu Server recording module is disabled")
         abort(response)
+
+
+@blp.route("recordings/download/<string:recording_id>")
+class RecordingsDownload(MethodView):
+    @blp.response(200, RecordingSchema.Response)
+    @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(409, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
+    @blp.login_required
+    def get(self, *, recording_id):
+        """Download a Recording from OpenVidu Server
+
+        Only available if OpenVidu is enabled."""
+
+        response = current_app.openvidu.get_recording(recording_id)
+
+        if response.status_code == 200:
+            recording = response.json()
+        elif response.status_code == 404:
+            abort(NotFound, query=f"Recording `{recording_id}` does not exist")
+        elif response.status_code == 501:
+            abort(NotImplemented, query="OpenVidu Server recording module is disabled")
+        else:
+            abort(response)
+
+        if recording["url"] is None:
+            abort(
+                Conflict,
+                query="The recording has not finished",
+            )
+        request = current_app.openvidu.request.get(recording["url"], stream=True)
+
+        # Response does not accept `headers=request.headers` so we create them ourself
+        headers = {}
+        for header in request.headers:
+            headers[header] = request.headers[header]
+
+        return Response(
+            stream_with_context(request.iter_content(chunk_size=2048)),
+            headers=headers,
+        )
 
 
 @blp.route("recordings/start/<string:session_id>")
