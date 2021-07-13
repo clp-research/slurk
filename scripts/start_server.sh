@@ -17,7 +17,7 @@ export FLASK_APP=slurk
 PORT=${SLURK_PORT:-5000}
 
 if [ -z ${SLURK_DOCKER+x} ]; then
-    flask run -p $PORT
+    gunicorn -b :$PORT -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker 'slurk:create_app()'
 else
     if ! command -v docker &> /dev/null; then
         echo '`docker` could not be found' 1>&2
@@ -48,6 +48,7 @@ else
         --name=$SLURK_DOCKER \
         -p $PORT:80 \
         -e SLURK_SECRET_KEY=$SLURK_SECRET_KEY \
+        -e FLASK_ENV=$FLASK_ENV \
         $param \
         slurk/server:${SLURK_DOCKER_TAG:-latest}
 fi
