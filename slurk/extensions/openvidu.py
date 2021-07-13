@@ -4,6 +4,42 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 
+class OVRequestSession(requests.Session):
+    def __init__(self, url, secret, timeout, verify):
+        self._url = url
+        self._auth = HTTPBasicAuth("OPENVIDUAPP", secret)
+        self._verify = verify
+        self._timeout = timeout
+        super().__init__()
+
+    def request(self, method, url, **kwargs) -> requests.Response:
+        return super().request(
+            method,
+            url,
+            auth=self._auth,
+            verify=self._verify,
+            timeout=self._timeout,
+            **kwargs,
+        )
+
+
+class ApiRequestSession(OVRequestSession):
+    def __init__(self, url, secret, timeout, verify):
+        self._headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        super().__init__(url, secret, timeout, verify)
+
+    def request(self, method, endpoint, **kwargs) -> requests.Response:
+        return super().request(
+            method,
+            f"{self._url}/openvidu/api/{endpoint}",
+            headers=self._headers,
+            **kwargs,
+        )
+
+
 class OpenVidu:
     def __init__(self, url, secret, timeout=None, verify=True):
         self._request_url = url
@@ -15,31 +51,17 @@ class OpenVidu:
         return f'<OpenVidu "{self._request_url}">'
 
     @property
+    def request(self) -> requests.Session:
+        return OVRequestSession(
+            self._request_url,
+            self._request_secret,
+            self._request_timeout,
+            self._request_verify,
+        )
+
+    @property
     def _request(self) -> requests.Session:
-        class RequestSession(requests.Session):
-            def __init__(self, url, secret, timeout, verify):
-                self._url = url
-                self._headers = {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                }
-                self._auth = HTTPBasicAuth("OPENVIDUAPP", secret)
-                self._verify = verify
-                self._timeout = timeout
-                super().__init__()
-
-            def request(self, method, endpoint, **kwargs) -> requests.Response:
-                return super().request(
-                    method,
-                    f"{self._url}/openvidu/api/{endpoint}",
-                    headers=self._headers,
-                    auth=self._auth,
-                    verify=self._verify,
-                    timeout=self._timeout,
-                    **kwargs,
-                )
-
-        return RequestSession(
+        return ApiRequestSession(
             self._request_url,
             self._request_secret,
             self._request_timeout,
