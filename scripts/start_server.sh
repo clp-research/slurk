@@ -48,7 +48,7 @@ else
         --name=$SLURK_DOCKER \
         -p $PORT:80 \
         -e SLURK_SECRET_KEY=$SLURK_SECRET_KEY \
-        -e FLASK_ENV=$FLASK_ENV
+        -e FLASK_ENV=$FLASK_ENV \
         $param \
         slurk/server:${SLURK_DOCKER_TAG:-latest}
 fi
