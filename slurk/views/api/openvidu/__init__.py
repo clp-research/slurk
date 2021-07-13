@@ -1,4 +1,4 @@
-from slurk.models.room import Session
+from flask import Response
 from flask.views import MethodView
 from flask.globals import current_app
 from flask_smorest.error_handler import ErrorSchema
@@ -10,7 +10,8 @@ from werkzeug.exceptions import (
     NotImplemented,
 )
 
-from slurk.models import Room
+from slurk.models import Room, Log
+from slurk.models.room import Session
 from slurk.extensions.api import Blueprint, abort
 from slurk.views.api.openvidu.schemas import (
     ConfigSchema,
@@ -365,7 +366,14 @@ class RecordingsStart(MethodView):
         response = current_app.openvidu.start_recording(session_id, json=args)
 
         if response.status_code == 200:
-            return response.json()
+            data = response.json()
+            room = (
+                current_app.session.query(Room)
+                .filter_by(openvidu_session_id=data["sessionId"])
+                .one_or_none()
+            )
+            Log.add("recording_started", data=data, room=room)
+            return data
         elif response.status_code == 400:
             abort(UnprocessableEntity, json=response.json().get("message"))
         elif response.status_code == 422:
@@ -402,7 +410,14 @@ class RecordingsStop(MethodView):
         response = current_app.openvidu.stop_recording(recording_id)
 
         if response.status_code == 200:
-            return response.json()
+            data = response.json()
+            room = (
+                current_app.session.query(Room)
+                .filter_by(openvidu_session_id=data["sessionId"])
+                .one_or_none()
+            )
+            Log.add("recording_stopped", data=data, room=room)
+            return data
         elif response.status_code == 404:
             abort(NotFound, query=f"Recording `{recording_id}` does not exist")
         elif response.status_code == 406:
