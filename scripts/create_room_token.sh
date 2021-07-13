@@ -36,7 +36,7 @@ response=$(curl -sX POST $HOST:$PORT/slurk/api/permissions \
     -H "Accept: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
-    -d '{"send_message": true, "send_image": true, "send_command": true, "openvidu_role": "SUBSCRIBER"}')
+    -d '{"send_message": true, "send_image": true, "send_command": true, "openvidu_role": "PUBLISHER"}')
 check_error "$response"
 permissions=$(echo "$response" | jq .id)
 
@@ -47,4 +47,4 @@ response=$(curl -sX POST \
     -d "{\"permissions_id\": $permissions, \"room_id\": $ROOM, \"registrations_left\": $REGISTRATIONS, \"task_id\": $TASK}" \
     $HOST:$PORT/slurk/api/tokens)
 check_error "$response"
-echo "$response" | jq -r .id
+echo "$response" | jq

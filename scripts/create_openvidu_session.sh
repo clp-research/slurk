@@ -2,7 +2,7 @@
 set -eu
 
 # Parameters:
-#   scripts/create_layout.sh layout_path
+#   scripts/create_openvidu_session.sh
 # Environment variables:
 #   SLURK_TOKEN: Token to pass as authorization, defaults to `00000000-0000-0000-0000-000000000000`
 #   SLURK_HOST: Host name to use for the request, defaults to `http://localhost`
@@ -11,14 +11,6 @@ set -eu
 TOKEN=${SLURK_TOKEN:=00000000-0000-0000-0000-000000000000}
 HOST=${SLURK_HOST:-http://localhost}
 PORT=${SLURK_PORT:-5000}
-
-if [ "$#" -lt 1 ]; then
-  echo "Usage: $0 layout_path" 1>&2
-  echo "For more info see $HOST:$PORT/rapidoc#post-/slurk/api/layouts"
-  exit 1
-fi
-
-path=$1
 
 function check_error {
     if [ "$(jq '. | has("code")' <<< "$1")" = true ]; then
@@ -34,7 +26,6 @@ response=$(curl -sX POST \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d @$path \
-    $HOST:$PORT/slurk/api/layouts)
+    $HOST:$PORT/slurk/api/openvidu/sessions)
 check_error "$response"
 echo "$response" | jq
