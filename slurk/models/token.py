@@ -26,14 +26,14 @@ class Token(Common):
     room = relationship("Room")
     users = relationship("User", backref="token")
 
-    def add_user(self, db):
+    def add_user(self, db_session):
         if self.room is None:
             raise ValueError("Token does not have a room associated")
         if self.registrations_left == 0:
             raise ValueError("No registrations left for given token")
         if self.registrations_left > 0:
             self.registrations_left -= 1
-        db.commit()
+        db_session.commit()
 
     @staticmethod
     def get_admin_token(db, id=None):
