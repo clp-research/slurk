@@ -55,8 +55,7 @@ class InvalidTemplate(Template):
         """Name of request method as lowercase string."""
         pass
 
-    @property
-    def url_extension(self):
+    def url_extension(self, request):
         """Any suffix appended to `/slurk/api/{table_name}/{id}`"""
         return ""
 
@@ -66,7 +65,7 @@ class InvalidTemplate(Template):
 
     def test_not_existing(self, client, request):
         response = getattr(client, self.request_method)(
-            f"/slurk/api/{self.table_name}/invalid_id{self.url_extension}",
+            f"/slurk/api/{self.table_name}/invalid_id{self.url_extension(request)}",
             **self.json(request),
         )
         assert response.status_code == HTTPStatus.NOT_FOUND, parse_error(response)
@@ -75,7 +74,7 @@ class InvalidTemplate(Template):
     def test_unauthorized_access(self, client, tokens, request):
         table_inst = request.getfixturevalue(self.table_name)
         response = getattr(client, self.request_method)(
-            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension}',
+            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension(request)}',
             **self.json(request),
             headers={
                 "Authorization": f'Bearer {tokens.json["id"]}',
@@ -87,7 +86,7 @@ class InvalidTemplate(Template):
     def test_unauthenticated_access(self, client, request):
         table_inst = request.getfixturevalue(self.table_name)
         response = getattr(client, self.request_method)(
-            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension}',
+            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension(request)}',
             **self.json(request),
             headers={
                 "Authorization": "Bearer invalid_token",
@@ -110,7 +109,7 @@ class InvalidWithEtagTemplate(InvalidTemplate):
         table_inst = request.getfixturevalue(self.table_name)
 
         response = getattr(client, self.request_method)(
-            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension}',
+            f'/slurk/api/{self.table_name}/{table_inst.json["id"]}{self.url_extension(request)}',
             **self.json(request),
             **content,
         )

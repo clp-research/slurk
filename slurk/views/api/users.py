@@ -57,17 +57,12 @@ class Users(MethodView):
         db = current_app.session
         token = db.query(Token).get(item["token_id"])
 
-        if token.registrations_left == 0:
+        try:
+            token.add_user(db)
+        except ValueError as e:
             abort(
                 UnprocessableEntity,
-                json=dict(token_id="No registrations left for given token"),
-            )
-        if token.registrations_left > 0:
-            token.registrations_left -= 1
-        if token.room is None:
-            abort(
-                UnprocessableEntity,
-                json=dict(token_id="Token does not have a room associated"),
+                json=dict(token_id=str(e)),
             )
 
         user = UserSchema().post(item)
@@ -92,6 +87,16 @@ class UserById(MethodView):
     @blp.login_required
     def put(self, new_user, *, user):
         """Replace a user identified by ID"""
+        db = current_app.session
+        token = db.query(Token).get(new_user["token_id"])
+
+        try:
+            token.add_user(db)
+        except ValueError as e:
+            abort(
+                UnprocessableEntity,
+                json=dict(token_id=str(e)),
+            )
         return UserSchema().put(user, new_user)
 
     @blp.etag
@@ -101,6 +106,19 @@ class UserById(MethodView):
     @blp.login_required
     def patch(self, new_user, *, user):
         """Update a user identified by ID"""
+        token_id = new_user.get("token_id")
+
+        if token_id is not None:
+            db = current_app.session
+            token = db.query(Token).get(token_id)
+
+            try:
+                token.add_user(db)
+            except ValueError as e:
+                abort(
+                    UnprocessableEntity,
+                    json=dict(token_id=str(e)),
+                )
         return UserSchema().patch(user, new_user)
 
     @blp.etag

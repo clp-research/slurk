@@ -347,7 +347,6 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
         log = client.post(
             "/slurk/api/logs", json={"event": "Test Event", "room_id": rooms.json["id"]}
         )
-        # the deletion of a room entry that is in use should fail
         response = client.delete(
             f'/slurk/api/rooms/{rooms.json["id"]}',
             headers={"If-Match": rooms.headers["ETag"]},
@@ -483,8 +482,7 @@ class TestPatchAttributeInvalid(RoomsTable, InvalidTemplate):
     def request_method(self):
         return "patch"
 
-    @property
-    def url_extension(self):
+    def url_extension(self, request):
         # test for only one of the three objects one can alter features on
         return "/attribute/id/test-field"
 
@@ -564,8 +562,7 @@ class TestPostClassInvalid(RoomsTable, InvalidTemplate):
     def request_method(self):
         return "post"
 
-    @property
-    def url_extension(self):
+    def url_extension(self, request):
         return "/class/test-field"
 
     def json(self, request):
@@ -630,8 +627,7 @@ class TestDeleteClassInvalid(RoomsTable, InvalidTemplate):
     def request_method(self):
         return "delete"
 
-    @property
-    def url_extension(self):
+    def url_extension(self, request):
         return "/class/test-field"
 
     def json(self, request):
@@ -689,8 +685,7 @@ class TestPatchTextInvalid(RoomsTable, InvalidTemplate):
     def request_method(self):
         return "patch"
 
-    @property
-    def url_extension(self):
+    def url_extension(self, request):
         return "/text/test-field"
 
     def json(self, request):
