@@ -24,11 +24,11 @@ $(document).ready(() => {
         }
     });
 
-    socket.on('start_typing', function (data) {
+    socket.on("start_typing", function (data) {
         if (self_user === undefined) {
             return;
         }
-        if (data.user === self_user.id) {
+        if (data.user.id === self_user.id) {
             return
         }
         typing[data.user.id] = data.user.name;
@@ -37,11 +37,11 @@ $(document).ready(() => {
         }
     });
 
-    socket.on('stop_typing', function (data) {
+    socket.on("stop_typing", function (data) {
         if (self_user === undefined) {
             return;
         }
-        if (data.user === self_user.id) {
+        if (data.user.id === self_user.id) {
             return
         }
         delete typing[data.user.id];
@@ -53,12 +53,14 @@ $(document).ready(() => {
     window.setInterval(function () {
         if (is_typing !== -1)
             is_typing += 1;
-        if (is_typing === 3)
+        if (is_typing === 3) {
             socket.emit("keypress", { "typing": false });
+            is_typing = -1;
+	}
     }, 1000);
 
-    $('#text').keypress(function (e) {
-        if (keypress === undefined || $('#text').is('[readonly]')) {
+    $("#text").keypress(function (e) {
+        if (keypress === undefined || $("#text").is("[readonly]")) {
             return;
         }
         if (is_typing === -1) {
@@ -69,8 +71,8 @@ $(document).ready(() => {
         // 13: RETURN key
         if (code === 13) {
             let text = $(e.target).val();
-            $(e.target).val('');
-            if (text === '') {
+            $(e.target).val("");
+            if (text === "") {
                 return
             }
             is_typing = -1;

@@ -9,8 +9,8 @@ from slurk.models import User, Room, Log
 
 @socketio.event
 def keypress(message):
-    last_typing = message.get("last_keypress", None)
-    if not last_typing:
+    typing = message.get("typing", None)
+    if typing is None:
         return
 
     current_user_id = current_user.get_id()
@@ -22,9 +22,9 @@ def keypress(message):
             "id": current_user_id,
             "name": current_user.name,
         }
-        if last_typing == 0:
+        if typing:
             socketio.emit("start_typing", {"user": user}, room=str(room.id))
-        elif last_typing == 3:
+        else:
             socketio.emit("stop_typing", {"user": user}, room=str(room.id))
 
 
