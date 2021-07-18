@@ -883,6 +883,60 @@ class TestDeleteRoomInvalid(UsersTable, InvalidWithEtagTemplate):
 
 @pytest.mark.depends(
     on=[
+        f"{PREFIX}::TestPostValid",
+        "tests/api/test_tokens.py::TestPostValid",
+        "tests/api/test_permissions.py::TestPostValid",
+        "tests/api/test_tasks.py::TestPostValid",
+        "tests/api/test_rooms.py::TestPostValid",
+    ]
+)
+class TestGetTaskById:
+    def test_user_without_task(self, client, users):
+        response = client.get(f'/slurk/api/users/{users.json["id"]}/task')
+        assert response.status_code == HTTPStatus.OK, parse_error(response)
+
+        task = response.json
+        assert task == {}
+
+        # check that the `get` request did not alter the database
+        response = client.get(
+            f'/slurk/api/users/{users.json["id"]}/task',
+            headers={"If-None-Match": response.headers["ETag"]},
+        )
+        assert response.status_code == HTTPStatus.NOT_MODIFIED
+
+    def test_user_with_task(self, client, permissions, rooms, tasks):
+        tokens = client.post(
+            "/slurk/api/tokens",
+            json={
+                "permissions_id": permissions.json["id"],
+                "room_id": rooms.json["id"],
+                "task_id": tasks.json["id"],
+            },
+        )
+        assert tokens.status_code == HTTPStatus.CREATED, parse_error(tokens)
+        users = client.post(
+            "/slurk/api/users",
+            json={"name": "Test User", "token_id": tokens.json["id"]},
+        )
+        assert users.status_code == HTTPStatus.CREATED, parse_error(users)
+
+        response = client.get(f'/slurk/api/users/{users.json["id"]}/task')
+        assert response.status_code == HTTPStatus.OK, parse_error(response)
+
+        retr_task = response.json
+        assert retr_task == tasks.json
+
+        # check that the `get` request did not alter the database
+        response = client.get(
+            f'/slurk/api/users/{users.json["id"]}/task',
+            headers={"If-None-Match": response.headers["ETag"]},
+        )
+        assert response.status_code == HTTPStatus.NOT_MODIFIED
+
+
+@pytest.mark.depends(
+    on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_text[PATCH]",
         f"{PREFIX}::TestPostValid",
     ]
