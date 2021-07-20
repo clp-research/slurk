@@ -5,15 +5,12 @@ else
 
 if (element.event === 'text_message') {
     if (element.data.html) {
-        $.getScript('https://cdn.jsdelivr.net/npm/showdown@1.9.0/dist/showdown.min.js', () => {
-            const converter = new showdown.Converter();
-            display_message(
-                element.user,
-                date,
-                converter.makeHtml(element.data.message),
-                element.receiver !== null,
-                true);
-        });
+        display_message(
+            element.user,
+            date,
+            markdown.makeHtml(element.data.message),
+            element.receiver !== null,
+            true);
     } else {
         display_message(
             element.user,
