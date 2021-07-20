@@ -5,9 +5,10 @@ from werkzeug.exceptions import UnprocessableEntity
 import marshmallow as ma
 
 from slurk.extensions.api import Blueprint, abort
-from slurk.models import User, Token
+from slurk.models import User, Task, Token
 
 from . import CommonSchema
+from .tasks import TaskSchema
 from .tokens import TokenId
 
 
@@ -129,3 +130,15 @@ class UserById(MethodView):
     def delete(self, *, user):
         """Delete a user identified by ID"""
         UserSchema().delete(user)
+
+
+@blp.route("/<int:user_id>/task")
+class TaskByUserById(MethodView):
+    @blp.etag
+    @blp.query("user", UserSchema)
+    @blp.response(200, TaskSchema.Response)
+    def get(self, *, user):
+        task_id = user.token.task_id
+        if task_id is not None:
+            task = current_app.session.query(Task).get(task_id)
+            return task
