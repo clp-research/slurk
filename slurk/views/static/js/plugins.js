@@ -39,14 +39,14 @@ function display_message(user, time, message, privateMessage, html = false) {
         "      <span class='user'></span>" +
         "      <time></time>" +
         "    </div>" +
-        "    <span class='msg'></span>" +
+        "    <span class='message'></span>" +
         "  </div>" +
         "</li>");
     text.find(".user").text(self_user.id === user.id ? "You" : user.name);
     if (html) {
-        text.find(".msg").html(message);
+        text.find(".message").html(message);
     } else {
-        text.find(".msg").text(message);
+        text.find(".message").text(message);
     }
     text.find("time").text(_getTime(time));
     _append(text);
@@ -97,10 +97,10 @@ function display_image(user, time, url, width, height, privateMessage) {
 function display_info(time, message) {
     let text = $(
         "<li class='notification'>" +
-        "  <p class='msg'></p>" +
+        "  <p class='message'></p>" +
         "  <time></time>" +
         "</li>");
-    text.find(".msg").text(message);
+    text.find(".message").text(message);
     text.find("time").text(_getTime(time));
     _append(text);
 }
@@ -108,16 +108,16 @@ function display_info(time, message) {
 function unknown_error(time) {
     let text = $(
         "<li class='notification'>" +
-        "  <p class='msg'></p>" +
+        "  <p class='message'></p>" +
         "  <time></time>" +
         "</li>");
-    text.find(".msg").html('An unknown error occurred.<br \>Please feel free to <a href="https://github.com/clp-research/slurk/issues/new">file the bug<\a>');
+    text.find(".message").html('An unknown error occurred.<br \>Please feel free to <a href="https://github.com/clp-research/slurk/issues/new">file the bug<\a>');
     text.find("time").text(_getTime(time));
     _append(text);
 }
 
 function submit_text(text, resolve, reject) {
-    socket.emit('text', { room: self_room, msg: text }, (success, error) => {
+    socket.emit('text', { room: self_room, message: text }, (success, error) => {
         if (verify_query(success, error)) {
             if (resolve !== undefined)
                 resolve();
@@ -130,7 +130,7 @@ function submit_text(text, resolve, reject) {
 }
 
 function submit_private_text(receiver, text, resolve, reject) {
-    socket.emit('text', { room: self_room, receiver_id: receiver, msg: text }, (success, error) => {
+    socket.emit('text', { room: self_room, receiver_id: receiver, message: text }, (success, error) => {
         if (verify_query(success, error)) {
             if (resolve !== undefined)
                 resolve();

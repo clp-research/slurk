@@ -22,13 +22,13 @@ class PermissionsSchema(CommonSchema):
     )
     send_message = ma.fields.Boolean(
         missing=False,
-        description="Permit sending messages",
-        filter_description="Filter for message sending permissions",
+        description="Permit sending plain messages",
+        filter_description="Filter for plain message sending permissions",
     )
-    private_message = ma.fields.Boolean(
+    send_html_message = ma.fields.Boolean(
         missing=False,
-        description="Permit sending private messages",
-        filter_description="Filter for private message sending permissions",
+        description="Permit sending html messages. Be careful with this permission as it allows to send any html content!",
+        filter_description="Filter for html message sending permissions",
     )
     send_image = ma.fields.Boolean(
         missing=False,
@@ -39,6 +39,16 @@ class PermissionsSchema(CommonSchema):
         missing=False,
         description="Permit sending commands",
         filter_description="Filter for command sending permissions",
+    )
+    send_privately = ma.fields.Boolean(
+        missing=False,
+        description='Permit sending privately. This has to be combined with any other `"send_*"` permission',
+        filter_description="Filter for private sending permissions",
+    )
+    broadcast = ma.fields.Boolean(
+        missing=False,
+        description="Permit broadcasting messages",
+        filter_description="Filter for broadcasting permissions",
     )
     openvidu_role = ma.fields.String(
         validate=OneOf(["SUBSCRIBER", "PUBLISHER", "MODERATOR"]),
