@@ -5,6 +5,7 @@ let self_room = undefined;
 var session;
 var OV;
 let user_map = {}
+let markdown = new showdown.Converter();
 
 function apply_user_permissions(permissions) {
     $('#type-area').fadeTo(null, permissions.send_message || permissions.private_message || permissions.send_image || permissions.send_command);
