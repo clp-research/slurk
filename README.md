@@ -1,3 +1,8 @@
+[![Lint Status](https://github.com/clp-research/slurk/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/lint.yml)
+[![Test Status](https://github.com/clp-research/slurk/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/test.yml)
+[![Documentation Status](https://github.com/clp-research/slurk/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/docs.yml)
+[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/slurk/server)](https://hub.docker.com/r/slurk/server)
+
 Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 ==============================================================================
 
@@ -64,4 +69,4 @@ Happy slurking!
 [Installation]: https://clp-research.github.io/slurk/slurk_installation.html#slurk-installation
 [flask]: http://flask.pocoo.org/
 [flask-socketio]: https://flask-socketio.readthedocs.io/en/latest
-[architecture]: img/slurk_architecture.png
+[architecture]: docs/slurk_architecture.png

@@ -2,6 +2,8 @@
 Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 ##############################################################################
 
+**Warning, the documentation is for version 2.0 and will be changed soon. For the version 2.0 please checkout the corresponding branch.**
+
 
 .. toctree::
    :hidden:

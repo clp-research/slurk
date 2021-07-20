@@ -2,9 +2,12 @@ log/
 *__pycache__*
 .DS_Store
 _build
+openapi.json
+/recordings
 
 *.db
 /.idea/
 
 env/
 venv/
+/.ipynb_checkpoints/
