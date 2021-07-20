@@ -45,7 +45,9 @@ def typed_message(payload):
             "name": current_user.name,
         }
         socketio.emit(
-            "user_message", {"user": user, "message": payload["msg"]}, room=str(room.id)
+            "user_message",
+            {"user": user, "message": payload["message"]},
+            room=str(room.id),
         )
 
 
@@ -127,13 +129,13 @@ def text(payload):
         html or not current_user.token.permissions.send_message
     ):
         return False, "insufficient rights"
-    if "msg" not in payload:
-        return False, 'missing argument: "msg"'
+    if "message" not in payload:
+        return False, 'missing argument: "message"'
 
     return emit_message(
         "text_message",
         payload,
-        data=dict(message=payload["msg"], html=html),
+        data=dict(message=payload["message"], html=html),
     )
 
 

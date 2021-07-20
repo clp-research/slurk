@@ -105,7 +105,7 @@ header video {
     display: flex;
 }
 
-.other .msg {
+.other .message {
     border-top-left-radius: 0;
     box-shadow: -1px 2px 0 #c2c2c2;
 }
@@ -132,10 +132,10 @@ header video {
     justify-content: flex-end;
     align-items: flex-end;
 }
-.private .msg, .command .msg {
+.private .message, .command .message {
     font-style: italic;
 }
-.self .msg, .command .msg {
+.self .message, .command .message {
     border-bottom-right-radius: 0;
     box-shadow: 1px 2px 0 #90979f;
 }
