@@ -21,6 +21,8 @@ SECRET_KEY = os.environ.get(
 )
 DATABASE = os.environ.get("SLURK_DATABASE_URI", "sqlite:///:memory:")
 
+ETAG_DISABLED = environ_as_boolean("SLURK_DISABLE_ETAG", False)
+
 if "SLURK_OPENVIDU_URL" in os.environ:
     OPENVIDU_URL = os.environ["SLURK_OPENVIDU_URL"]
     OPENVIDU_SECRET = os.environ.get("SLURK_OPENVIDU_SECRET")
