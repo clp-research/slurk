@@ -25,6 +25,11 @@ class PermissionsSchema(CommonSchema):
         description="Permit sending messages",
         filter_description="Filter for message sending permissions",
     )
+    private_message = ma.fields.Boolean(
+        missing=False,
+        description="Permit sending private messages",
+        filter_description="Filter for private message sending permissions",
+    )
     send_image = ma.fields.Boolean(
         missing=False,
         description="Permit sending images",

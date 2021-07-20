@@ -10,6 +10,7 @@ class Permissions(Common):
     tokens = relationship("Token", backref="permissions")
     api = Column(Boolean, nullable=False)
     send_message = Column(Boolean, nullable=False)
+    private_message = Column(Boolean, nullable=False)
     send_image = Column(Boolean, nullable=False)
     send_command = Column(Boolean, nullable=False)
     openvidu_role = Column(String)

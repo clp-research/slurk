@@ -50,6 +50,7 @@ class Token(Common):
                     permissions=Permissions(
                         api=True,
                         send_message=False,
+                        private_message=False,
                         send_image=False,
                         send_command=False,
                     ),
