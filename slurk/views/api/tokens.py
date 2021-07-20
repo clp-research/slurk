@@ -67,17 +67,17 @@ class TokenSchema(CommonSchema):
         description="Logins left for this token",
         filter_description="Filter for left logins",
     )
-    task_id = Id(
-        Task,
-        missing=None,
-        description="Task assigned to this token",
-        filter_description="Filter for tasks",
-    )
     room_id = Id(
         Room,
         missing=None,
         description="Room assigned to this token",
         filter_description="Filter for rooms",
+    )
+    task_id = Id(
+        Task,
+        missing=None,
+        description="Task assigned to this token",
+        filter_description="Filter for tasks",
     )
     openvidu_settings = ma.fields.Nested(
         OpenViduSettingsSchema,
