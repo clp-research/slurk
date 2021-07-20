@@ -109,6 +109,9 @@ class LayoutSchema(CommonSchema):
         description="HTML used in the layout",
     )
     css_obj = ma.fields.Dict(
+        values=ma.fields.Dict(
+            description="Dictionary of CSS declarations mapping a CSS value to a CSS property",
+        ),
         data_key="css",
         load_only=True,
         missing={},
