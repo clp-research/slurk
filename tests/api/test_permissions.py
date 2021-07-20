@@ -63,6 +63,17 @@ class TestPostValid:
                 "send_command": True,
             }
         },
+        {
+            "json": {
+                "api": False,
+                "send_message": True,
+                "send_html_message": True,
+                "send_image": True,
+                "send_command": True,
+                "send_privately": True,
+                "broadcast": True,
+            }
+        },
         {"data": {"api": True}, "headers": {"Content-Type": "application/json"}},
     ]
 

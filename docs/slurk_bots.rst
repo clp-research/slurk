@@ -86,7 +86,7 @@ The bot has to be notified when a user joins or leaves the room:
             del self.tasks[task_id]
         else:
             # If we don't have enough users for a task, send the new user a message
-            self.emit('text', {'msg': f'Hello, {user_name}! I am looking for a partner for you, it might take some '
+            self.emit('text', {'message': f'Hello, {user_name}! I am looking for a partner for you, it might take some '
                                'time, so be patient, please...',
                                'receiver_id': user_id,
                                'room': room}, message_response)
@@ -198,7 +198,7 @@ Bots can listen to messages with ``on_text_message`` and ``on_image_message``:
 
 ``data`` in ``on_text_message`` has this structure:
 
-- ``msg``: the text, which was sent
+- ``message``: the text, which was sent
 - ``user``: dictionary of ``id`` and ``name`` of the user, who submitted the command
 - ``room``: the id of the room, where the command was entered, or ``None``
 - ``private``: ``True`` if this is a private message like direct messages. ``False`` otherwise

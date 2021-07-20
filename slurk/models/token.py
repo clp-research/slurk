@@ -50,9 +50,11 @@ class Token(Common):
                     permissions=Permissions(
                         api=True,
                         send_message=False,
-                        private_message=False,
+                        send_html_message=False,
                         send_image=False,
                         send_command=False,
+                        send_privately=False,
+                        broadcast=False,
                     ),
                     registrations_left=-1,
                     openvidu_settings={},
