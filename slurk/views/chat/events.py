@@ -80,13 +80,12 @@ def text(payload):
         if not current_user.token.permissions.private_message:
             return False, "You are not allowed to send private text messages"
         receiver_id = payload["receiver_id"]
-        user = db.query(User).get(receiver_id)
-        if not user or not user.session_id:
+        receiver = db.query(User).get(receiver_id)
+        if not receiver or not receiver.session_id:
             return False, 'User "%s" does not exist' % receiver_id
-        receiver = user.session_id
         private = True
     else:
-        receiver = str(room.id)
+        receiver = None
         private = False
 
     user = {
@@ -104,15 +103,15 @@ def text(payload):
             "private": private,
             "html": payload.get("html", False),
         },
-        room=receiver,
+        room=receiver.session_id if private else str(room.id),
         broadcast=broadcast,
     )
     Log.add(
         "text_message",
         current_user,
         room,
+        receiver,
         data={
-            "receiver": payload["receiver_id"] if private else None,
             "message": payload["msg"],
             "html": payload.get("html", False),
         },
@@ -146,13 +145,12 @@ def message_command(payload):
 
     if "receiver_id" in payload:
         receiver_id = payload["receiver_id"]
-        user = db.query(User).get(receiver_id)
-        if not user or not user.session_id:
+        receiver = db.query(User).get(receiver_id)
+        if not receiver or not receiver.session_id:
             return False, 'User "%s" does not exist' % receiver_id
-        receiver = user.session_id
         private = True
     else:
-        receiver = str(room.id)
+        receiver = None
         private = False
 
     user = {
@@ -168,15 +166,15 @@ def message_command(payload):
             "timestamp": str(datetime.utcnow()),
             "private": private,
         },
-        room=receiver,
+        room=receiver.session_id if private else str(room.id),
         broadcast=broadcast,
     )
     Log.add(
         "command",
         current_user,
         room,
+        receiver,
         data={
-            "receiver": payload["receiver_id"] if private else None,
             "command": payload["command"],
         },
     )
@@ -211,13 +209,12 @@ def image(payload):
         if not current_user.token.permissions.private_message:
             return False, "You are not allowed to send private image messages"
         receiver_id = payload["receiver_id"]
-        user = db.query(User).get(receiver_id)
-        if not user or not user.session_id:
+        receiver = db.query(User).get(receiver_id)
+        if not receiver or not receiver.session_id:
             return False, 'User "%s" does not exist' % receiver_id
-        receiver = user.session_id
         private = True
     else:
-        receiver = str(room.id)
+        receiver = None
         private = False
 
     user = {
@@ -237,15 +234,15 @@ def image(payload):
             "timestamp": str(datetime.utcnow()),
             "private": private,
         },
-        room=receiver,
+        room=receiver.session_id if private else str(room.id),
         broadcast=broadcast,
     )
     Log.add(
         "image_message",
         current_user,
         room,
+        receiver,
         data={
-            "receiver": payload["receiver_id"] if private else None,
             "url": payload["url"],
             "width": width,
             "height": height,
