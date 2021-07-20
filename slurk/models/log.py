@@ -15,7 +15,7 @@ class Log(Common):
     user = relationship("User", foreign_keys=[user_id])
     receiver = relationship("User", foreign_keys=[receiver_id])
 
-    def add(event, user=None, room=None, data=None):
+    def add(event, user=None, room=None, receiver=None, data=None):
         from flask.globals import current_app
 
         if not data:
@@ -30,7 +30,6 @@ class Log(Common):
         if event == "disconnect":
             current_app.logger.info(f"{user.name} disconnected")
 
-        receiver = data.pop("receiver", None)
         log = Log(event=event, user=user, room=room, data=data, receiver=receiver)
 
         db = current_app.session
