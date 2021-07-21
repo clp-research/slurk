@@ -32,3 +32,5 @@ jobs:
         with:
           black: true
           flake8: true
+          flake8_args: "--ignore=E501,W503"
+          
