@@ -110,7 +110,7 @@ header video {
 
 .other .message {
     border-top-left-radius: 0;
-    box-shadow: -1px 2px 0 #C2C2C2;
+    box-shadow: -1px 2px 0 #CECDCD;
 }
 .other:before {
     content: "";
@@ -120,14 +120,14 @@ header video {
     left: 0;
     width: 0;
     height: 0;
-    border: 5px solid #C2C2C2;
+    border: 5px solid #CECDCD;
     border-left-color: transparent;
     border-bottom-color: transparent;
     margin-right: -2px;
 }
 
 .other .message-box {
-    background: #C2C2C2;
+    background: #CECDCD;
     color: #000;
 }
 
