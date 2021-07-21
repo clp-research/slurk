@@ -20,7 +20,7 @@ def create_app(test_config=None, engine=None):
     )
 
     if not test_config:
-        app.config.from_object("slurk.config")
+        app.config.from_object('slurk.config')
     else:
         app.config.from_mapping(test_config)
 
@@ -32,9 +32,9 @@ def create_app(test_config=None, engine=None):
             app.config["OPENAPI_VERSION"] = OPENAPI_VERSION
 
     if not engine and "DATABASE" not in app.config:
-        raise ValueError(
-            "Database URI not provided. Pass `SLURK_DATABASE_URI` as environment variable or define it in `config.py`."
-        )
+            raise ValueError(
+                "Database URI not provided. Pass `SLURK_DATABASE_URI` as environment variable or define it in `config.py`."
+            )
     if "SECRET_KEY" not in app.config:
         raise ValueError(
             "Secret key not provided. Pass `SLURK_SECRET_KEY` as environment variable or define it in `config.py`."
