@@ -29,7 +29,7 @@ def room_created(payload):
     socketio.emit(
         "new_task_room",
         {"room": payload["room"], "task": payload["task"], "users": users},
-        broadcast=True
+        broadcast=True,
     )
     return True
 
