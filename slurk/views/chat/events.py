@@ -4,7 +4,34 @@ from flask.globals import current_app
 from flask_login import login_required, current_user
 
 from slurk.extensions.events import socketio
-from slurk.models import User, Room, Log
+from slurk.models import User, Room, Log, Task
+
+
+@socketio.event
+def room_created(payload):
+    db = current_app.session
+    room = db.query(Room).get(payload["room"]) if "room" in payload else None
+    task = db.query(Task).get(payload["task"]) if "task" in payload else None
+
+    if "room" not in payload:
+        False, 'Missing argument "room"'
+    if not room:
+        return False, f'User "{room}" does not exist'
+    if "task" in payload and task is None:
+        return False, f'Task "{task}" does not exist'
+
+    socketio.emit("new_room", {"room": payload["room"]}, broadcast=True)
+
+    users = []
+    for user in room.users:
+        users.append({"id": user.id, "name": user.name})
+
+    socketio.emit(
+        "new_task_room",
+        {"room": payload["room"], "task": payload["task"], "users": users},
+        broadcast=True
+    )
+    return True
 
 
 @socketio.event
