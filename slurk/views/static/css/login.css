@@ -1,10 +1,10 @@
 body, html {
-    background: #B9BABB;
+    background: #E5E7E9;
 }
 
 .login-page {
-    background: #dbdbdb;
-	border: 1px solid #ebebeb;
+    background: #F8F9FA;
+	border: 1px solid #EBEBEB;
 	box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
     width: 320px;
     padding: 8%;
@@ -86,7 +86,7 @@ input {
   text-transform: uppercase;
   font-size: medium;
   outline: 0;
-  background: #007656;
+  background: #00305E;
   width: 100%;
   color: #FFFFFF;
   padding: 15px;
@@ -95,5 +95,5 @@ input {
 .login-page .login-form form input[type=submit]:hover,
 .login-page .login-form form input[type=submit]:active,
 .login-page .login-form form input[type=submit]:focus {
-  background: #008a68;
+  background: #818BAC;
 }
