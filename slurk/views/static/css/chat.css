@@ -4,7 +4,7 @@
 }
 
 html, body {
-    background: #B9BABB;
+    background: #E5E7E9;
     height: 100%;
     position: relative;
 }
@@ -14,17 +14,18 @@ html, body {
 }
 
 header, footer {
+    padding: 7px;
     min-width: 600px;
     width: 100%;
-    background: #007656;
+    background: #00305E;
     box-sizing: border-box;
 }
 
 header{
     position: fixed;
     height: 80px;
-    border-bottom: #007656 solid 1px;
-    box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
+    border-bottom: #E5E7E9;
+    box-shadow: rgba(0,0,0,0.10) 0 1px 1px 0,rgba(0,0,0,0.30) 0 4px 4px 0;
     z-index: 1;
 }
 
@@ -45,13 +46,13 @@ header .latency {
     position: absolute;
     top: 2px;
     right: 2px;
-    color: darkgrey;
+    color: #818BAC;
 }
 header .users {
     position: absolute;
     top: calc(2px + 1.2em);
     right: 2px;
-    color: darkgrey;
+    color: #818BAC;
 }
 
 header video {
@@ -74,14 +75,16 @@ header video {
 
 #sidebar:after {
     content: " ";
-    background-color: darkgray;
+    background-color: #818BAC;
     position: absolute;
     left: 0;
-    width: 7px;
+    width: 3px;
     top: 0;
     height: 100%;
     cursor: col-resize;
     z-index: 1;
+    border-left: 1px #818BAC;
+    box-shadow: 1px 0px 2px #818BAC;
 }
 
 #content {
@@ -107,7 +110,7 @@ header video {
 
 .other .message {
     border-top-left-radius: 0;
-    box-shadow: -1px 2px 0 #c2c2c2;
+    box-shadow: -1px 2px 0 #C2C2C2;
 }
 .other:before {
     content: "";
@@ -117,16 +120,16 @@ header video {
     left: 0;
     width: 0;
     height: 0;
-    border: 5px solid #c2c2c2;
+    border: 5px solid #C2C2C2;
     border-left-color: transparent;
     border-bottom-color: transparent;
+    margin-right: -2px;
 }
 
 .other .message-box {
-    background: #c2c2c2;
+    background: #C2C2C2;
     color: #000;
 }
-
 
 .self, .command {
     justify-content: flex-end;
@@ -137,7 +140,7 @@ header video {
 }
 .self .message, .command .message {
     border-bottom-right-radius: 0;
-    box-shadow: 1px 2px 0 #90979f;
+    box-shadow: 1px 2px 0 #AbACAF;
 }
 .self:after, .command:after {
     content: "";
@@ -147,12 +150,13 @@ header video {
     right: 0;
     width: 0;
     height: 0;
-    border: 5px solid #90979f;
+    border: 5px solid #AbACAF;
     border-right-color: transparent;
     border-top-color: transparent;
+    margin-left: -2px;
 }
 .self .message-box, .command .message-box {
-    background: #90979f;
+    background: #AbACAF;
 }
 
 .message-box {
@@ -222,7 +226,7 @@ time:before{
     padding: 0 55px;
     width: 100%;
     height: 60px;
-    box-shadow: rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0;
+    box-shadow: rgba(0,0,0,0.15) 0 10px 10px 0,rgba(0,0,0,0.10) 0 10px 20px 0;
 
     border: none;
     outline: none;
