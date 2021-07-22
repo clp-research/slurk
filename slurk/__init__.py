@@ -16,7 +16,7 @@ def create_app(test_config=None, engine=None):
     app = Flask(
         __name__,
         static_folder=os.path.join("views", "static"),
-        template_folder=os.path.join("views", "templates")
+        template_folder=os.path.join("views", "templates"),
     )
 
     if not test_config:
