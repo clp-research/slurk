@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>1. Slurk: What’s this? &mdash; slurk 2.0.0 documentation</title>
+  <title>1. Slurk: What’s this? &mdash; slurk 38471e3ab226ccb9010e26d8ef2a2e492b583b88 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                2.0.0
+                38471e3ab226ccb9010e26d8ef2a2e492b583b88
               </div>
             
           
@@ -94,6 +94,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">1. Slurk: What’s this?</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#some-basic-concepts">1.1. Some basic concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-experiment">1.2. A simple experiment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
@@ -204,6 +205,15 @@ public server here), access is regulated via tokens. Tokens need to be created i
 logging in with the token) to a specific task / room type.</p>
 </dd>
 </dl>
+</div>
+<div class="section" id="a-simple-experiment">
+<h2><span class="section-number">1.2. </span>A simple experiment<a class="headerlink" href="#a-simple-experiment" title="Permalink to this headline">¶</a></h2>
+<p>For experiments, we want to invite users to task-specific rooms. Users can participate via tokens which serve as the
+password during the login. When users open the slurk URL, then they will see a login screen initially. Here users
+are allowed to give themselves a name and they must insert the token. The user will then be newly created in the database.</p>
+<p>The user will be automatically transferred to the room for which the token was generated. Therefore, we have to create
+an experiment room before we can generate tokens for an experiment. The sequence is: <code class="docutils literal notranslate"><span class="pre">rooms</span> <span class="pre">-&gt;</span> <span class="pre">tokens</span> <span class="pre">-&gt;</span> <span class="pre">users</span></code>.
+Bots also can also be represented as users. For this purpose, they can sent a <code class="docutils literal notranslate"><span class="pre">Name</span></code> header.</p>
 </div>
 </div>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>7. Writing your own bots &mdash; slurk 2.0.0 documentation</title>
+  <title>7. Writing your own bots &mdash; slurk 38471e3ab226ccb9010e26d8ef2a2e492b583b88 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                2.0.0
+                38471e3ab226ccb9010e26d8ef2a2e492b583b88
               </div>
             
           
@@ -250,7 +250,7 @@ emitted by the server. Listening on events is straight forward with adding new m
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># If we don&#39;t have enough users for a task, send the new user a message</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">! I am looking for a partner for you, it might take some &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">! I am looking for a partner for you, it might take some &#39;</span>
                            <span class="s1">&#39;time, so be patient, please...&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;receiver_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span>
                            <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">room</span><span class="p">},</span> <span class="n">message_response</span><span class="p">)</span>
@@ -368,7 +368,7 @@ the room.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">on_text_message</span></code> has this structure:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">msg</span></code>: the text, which was sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">message</span></code>: the text, which was sent</li>
 <li><code class="docutils literal notranslate"><span class="pre">user</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> of the user, who submitted the command</li>
 <li><code class="docutils literal notranslate"><span class="pre">room</span></code>: the id of the room, where the command was entered, or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">private</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is a private message like direct messages. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>

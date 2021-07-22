@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>HTTP Routing Table &mdash; slurk 38471e3ab226ccb9010e26d8ef2a2e492b583b88 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                38471e3ab226ccb9010e26d8ef2a2e492b583b88
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>HTTP Routing Table</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+
+   <h1>HTTP Routing Table</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-/slurk"><strong>/slurk</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/slurk"><td></td><td>
+       <strong>/slurk</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-layouts"><code class="xref">GET /slurk/api/layouts</code></a></td><td>
+       <em>List layouts</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-layouts-layout_id"><code class="xref">GET /slurk/api/layouts/{layout_id}</code></a></td><td>
+       <em>Get a layout by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-logs"><code class="xref">GET /slurk/api/logs</code></a></td><td>
+       <em>List logs</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-logs-log_id"><code class="xref">GET /slurk/api/logs/{log_id}</code></a></td><td>
+       <em>Get a log by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-config"><code class="xref">GET /slurk/api/openvidu/config</code></a></td><td>
+       <em>Retrieve current OpenVidu configuration</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-recordings"><code class="xref">GET /slurk/api/openvidu/recordings</code></a></td><td>
+       <em>Retrieve all Recordings from OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-recordings-download-recording_id"><code class="xref">GET /slurk/api/openvidu/recordings/download/{recording_id}</code></a></td><td>
+       <em>Download a Recording from OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-recordings-recording_id"><code class="xref">GET /slurk/api/openvidu/recordings/{recording_id}</code></a></td><td>
+       <em>Retrieve a Recording from OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-sessions"><code class="xref">GET /slurk/api/openvidu/sessions</code></a></td><td>
+       <em>Retrieve all Session from OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-sessions-session_id"><code class="xref">GET /slurk/api/openvidu/sessions/{session_id}</code></a></td><td>
+       <em>Retrieve a Session from OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-sessions-session_id-connections"><code class="xref">GET /slurk/api/openvidu/sessions/{session_id}/connections</code></a></td><td>
+       <em>List all Connections from a Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-openvidu-sessions-session_id-connections-connection_id"><code class="xref">GET /slurk/api/openvidu/sessions/{session_id}/connections/{connection_id}</code></a></td><td>
+       <em>Get a Connection from a Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-permissions"><code class="xref">GET /slurk/api/permissions</code></a></td><td>
+       <em>List permissions</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-permissions-permissions_id"><code class="xref">GET /slurk/api/permissions/{permissions_id}</code></a></td><td>
+       <em>Get a permissions by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-rooms"><code class="xref">GET /slurk/api/rooms</code></a></td><td>
+       <em>List rooms</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-rooms-room_id"><code class="xref">GET /slurk/api/rooms/{room_id}</code></a></td><td>
+       <em>Get a room by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-rooms-room_id-users"><code class="xref">GET /slurk/api/rooms/{room_id}/users</code></a></td><td>
+       <em>List active users by rooms</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-rooms-room_id-users-user_id-logs"><code class="xref">GET /slurk/api/rooms/{room_id}/users/{user_id}/logs</code></a></td><td>
+       <em>List logs by room and user</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-tasks"><code class="xref">GET /slurk/api/tasks</code></a></td><td>
+       <em>List tasks</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-tasks-task_id"><code class="xref">GET /slurk/api/tasks/{task_id}</code></a></td><td>
+       <em>Get a task by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-tokens"><code class="xref">GET /slurk/api/tokens</code></a></td><td>
+       <em>List tokens</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-tokens-token_id"><code class="xref">GET /slurk/api/tokens/{token_id}</code></a></td><td>
+       <em>Get a token by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-users"><code class="xref">GET /slurk/api/users</code></a></td><td>
+       <em>List users</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-users-user_id"><code class="xref">GET /slurk/api/users/{user_id}</code></a></td><td>
+       <em>Get a user by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-users-user_id-rooms"><code class="xref">GET /slurk/api/users/{user_id}/rooms</code></a></td><td>
+       <em>List rooms by users</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#get--slurk-api-users-user_id-task"><code class="xref">GET /slurk/api/users/{user_id}/task</code></a></td><td>
+       <em>null</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-layouts"><code class="xref">POST /slurk/api/layouts</code></a></td><td>
+       <em>Add a new layout</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-logs"><code class="xref">POST /slurk/api/logs</code></a></td><td>
+       <em>Add a new log</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-openvidu-recordings-start-session_id"><code class="xref">POST /slurk/api/openvidu/recordings/start/{session_id}</code></a></td><td>
+       <em>Start the recording of a session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-openvidu-recordings-stop-recording_id"><code class="xref">POST /slurk/api/openvidu/recordings/stop/{recording_id}</code></a></td><td>
+       <em>Stop the recording of a Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-openvidu-sessions"><code class="xref">POST /slurk/api/openvidu/sessions</code></a></td><td>
+       <em>Initialize a Session in OpenVidu Server</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-openvidu-sessions-session_id-connections"><code class="xref">POST /slurk/api/openvidu/sessions/{session_id}/connections</code></a></td><td>
+       <em>Create a new Connection in the Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-openvidu-sessions-session_id-signal"><code class="xref">POST /slurk/api/openvidu/sessions/{session_id}/signal</code></a></td><td>
+       <em>Send a signal to a Session, to specific Connections or as a broadcast message to all Connections.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-permissions"><code class="xref">POST /slurk/api/permissions</code></a></td><td>
+       <em>Add a new permissions</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-rooms"><code class="xref">POST /slurk/api/rooms</code></a></td><td>
+       <em>Add a new room</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-rooms-room_id-class-id"><code class="xref">POST /slurk/api/rooms/{room_id}/class/{id}</code></a></td><td>
+       <em>Add a class to an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-tasks"><code class="xref">POST /slurk/api/tasks</code></a></td><td>
+       <em>Add a new task</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-tokens"><code class="xref">POST /slurk/api/tokens</code></a></td><td>
+       <em>Add a new token</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-users"><code class="xref">POST /slurk/api/users</code></a></td><td>
+       <em>Add a new user</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-users-user_id-class-id"><code class="xref">POST /slurk/api/users/{user_id}/class/{id}</code></a></td><td>
+       <em>Add a class to an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#post--slurk-api-users-user_id-rooms-room_id"><code class="xref">POST /slurk/api/users/{user_id}/rooms/{room_id}</code></a></td><td>
+       <em>Add a user to a room</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-layouts-layout_id"><code class="xref">PUT /slurk/api/layouts/{layout_id}</code></a></td><td>
+       <em>Replace a layout identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-logs-log_id"><code class="xref">PUT /slurk/api/logs/{log_id}</code></a></td><td>
+       <em>Replace a log identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-permissions-permissions_id"><code class="xref">PUT /slurk/api/permissions/{permissions_id}</code></a></td><td>
+       <em>Replace a permissions identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-rooms-room_id"><code class="xref">PUT /slurk/api/rooms/{room_id}</code></a></td><td>
+       <em>Replace a room identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-tasks-task_id"><code class="xref">PUT /slurk/api/tasks/{task_id}</code></a></td><td>
+       <em>Replace a task identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-tokens-token_id"><code class="xref">PUT /slurk/api/tokens/{token_id}</code></a></td><td>
+       <em>Replace a token identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#put--slurk-api-users-user_id"><code class="xref">PUT /slurk/api/users/{user_id}</code></a></td><td>
+       <em>Replace a user identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-layouts-layout_id"><code class="xref">DELETE /slurk/api/layouts/{layout_id}</code></a></td><td>
+       <em>Delete a layout identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-logs-log_id"><code class="xref">DELETE /slurk/api/logs/{log_id}</code></a></td><td>
+       <em>Delete a log identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-openvidu-recordings-recording_id"><code class="xref">DELETE /slurk/api/openvidu/recordings/{recording_id}</code></a></td><td>
+       <em>Delete a Recording</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-openvidu-sessions-session_id"><code class="xref">DELETE /slurk/api/openvidu/sessions/{session_id}</code></a></td><td>
+       <em>Close a Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-openvidu-sessions-session_id-connections-connection_id"><code class="xref">DELETE /slurk/api/openvidu/sessions/{session_id}/connections/{connection_id}</code></a></td><td>
+       <em>Force the disconnection of a user from a Session</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-permissions-permissions_id"><code class="xref">DELETE /slurk/api/permissions/{permissions_id}</code></a></td><td>
+       <em>Delete a permissions identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-rooms-room_id"><code class="xref">DELETE /slurk/api/rooms/{room_id}</code></a></td><td>
+       <em>Delete a room identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-rooms-room_id-class-id"><code class="xref">DELETE /slurk/api/rooms/{room_id}/class/{id}</code></a></td><td>
+       <em>Remove a class from an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-tasks-task_id"><code class="xref">DELETE /slurk/api/tasks/{task_id}</code></a></td><td>
+       <em>Delete a task identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-tokens-token_id"><code class="xref">DELETE /slurk/api/tokens/{token_id}</code></a></td><td>
+       <em>Delete a token identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-users-user_id"><code class="xref">DELETE /slurk/api/users/{user_id}</code></a></td><td>
+       <em>Delete a user identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-users-user_id-class-id"><code class="xref">DELETE /slurk/api/users/{user_id}/class/{id}</code></a></td><td>
+       <em>Remove a class from an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#delete--slurk-api-users-user_id-rooms-room_id"><code class="xref">DELETE /slurk/api/users/{user_id}/rooms/{room_id}</code></a></td><td>
+       <em>Remove a user from a room</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-layouts-layout_id"><code class="xref">PATCH /slurk/api/layouts/{layout_id}</code></a></td><td>
+       <em>Update a layout identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-logs-log_id"><code class="xref">PATCH /slurk/api/logs/{log_id}</code></a></td><td>
+       <em>Update a log identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-permissions-permissions_id"><code class="xref">PATCH /slurk/api/permissions/{permissions_id}</code></a></td><td>
+       <em>Update a permissions identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-rooms-room_id"><code class="xref">PATCH /slurk/api/rooms/{room_id}</code></a></td><td>
+       <em>Update a room identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-rooms-room_id-attribute-class-cls"><code class="xref">PATCH /slurk/api/rooms/{room_id}/attribute/class/{cls}</code></a></td><td>
+       <em>Update an element identified by it&#39;s class</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-rooms-room_id-attribute-element-element"><code class="xref">PATCH /slurk/api/rooms/{room_id}/attribute/element/{element}</code></a></td><td>
+       <em>Update an element identified by it&#39;s type</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-rooms-room_id-attribute-id-id"><code class="xref">PATCH /slurk/api/rooms/{room_id}/attribute/id/{id}</code></a></td><td>
+       <em>Update an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-rooms-room_id-text-id"><code class="xref">PATCH /slurk/api/rooms/{room_id}/text/{id}</code></a></td><td>
+       <em>Update the text of an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-tasks-task_id"><code class="xref">PATCH /slurk/api/tasks/{task_id}</code></a></td><td>
+       <em>Update a task identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-tokens-token_id"><code class="xref">PATCH /slurk/api/tokens/{token_id}</code></a></td><td>
+       <em>Update a token identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-users-user_id"><code class="xref">PATCH /slurk/api/users/{user_id}</code></a></td><td>
+       <em>Update a user identified by ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-users-user_id-attribute-class-cls"><code class="xref">PATCH /slurk/api/users/{user_id}/attribute/class/{cls}</code></a></td><td>
+       <em>Update an element identified by it&#39;s class</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-users-user_id-attribute-element-element"><code class="xref">PATCH /slurk/api/users/{user_id}/attribute/element/{element}</code></a></td><td>
+       <em>Update an element identified by it&#39;s type</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-users-user_id-attribute-id-id"><code class="xref">PATCH /slurk/api/users/{user_id}/attribute/id/{id}</code></a></td><td>
+       <em>Update an element identified by it&#39;s ID</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="slurk_api.html#patch--slurk-api-users-user_id-text-id"><code class="xref">PATCH /slurk/api/users/{user_id}/text/{id}</code></a></td><td>
+       <em>Update the text of an element identified by it&#39;s ID</em></td></tr>
+   </table>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017-2018 DSG Bielefeld, 2019 CL Potsdam.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

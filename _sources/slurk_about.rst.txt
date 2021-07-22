@@ -50,3 +50,15 @@ Technical concepts
   **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a
   public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is
   logging in with the token) to a specific task / room type.
+
+A simple experiment
+~~~~~~~~~~~~~~~~~~~
+
+For experiments, we want to invite users to task-specific rooms. Users can participate via tokens which serve as the
+password during the login. When users open the slurk URL, then they will see a login screen initially. Here users
+are allowed to give themselves a name and they must insert the token. The user will then be newly created in the database.
+
+The user will be automatically transferred to the room for which the token was generated. Therefore, we have to create
+an experiment room before we can generate tokens for an experiment. The sequence is: ``rooms -> tokens -> users``.
+Bots also can also be represented as users. For this purpose, they can sent a ``Name`` header.
+

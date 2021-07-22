@@ -66,12 +66,12 @@ These are the currently defined triggers:
     - ``data.user``: The user who has sent the message
     - ``data.timestamp``: The timestamp of the message
     - ``data.private``: A boolean value if this was a direct message or visible to the room
-    - ``data.msg``: The message string of the sent message if any
+    - ``data.message``: The message string of the sent message if any
 - ``"incoming-image"``: Called when a new message arrives. These are the passed parameters
     - ``data.user``: The user who has sent the message
     - ``data.timestamp``: The timestamp of the message
     - ``data.private``: A boolean value if this was a direct message or visible to the room
-    - ``data.image``: The image url of the sent message if any (Either ``data.msg`` or ``data.image`` are available)
+    - ``data.image``: The image url of the sent message if any (Either ``data.message`` or ``data.image`` are available)
     - ``data.width``: The width of the sent image (available if ``data.image`` is set)
     - ``data.height``: The height of the sent image (available if ``data.image`` is set)
 - ``"submit-message"``: Called when the user hits RETURN on the typing area
