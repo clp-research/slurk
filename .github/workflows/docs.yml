@@ -1,7 +1,9 @@
 name: Documentation
 
 on:
-  - push
+  push:
+    branches:
+      - master
 
 jobs:
   Documentation:
@@ -31,16 +33,8 @@ jobs:
           cp docs/slurk_api_rapidoc.html docs/openapi.json docs/_build/html/
           touch docs/_build/html/.nojekyll
 
-      - name: Upload documentation
-        uses: actions/upload-artifact@v2
-        if: ${{ github.ref != 'refs/heads/master' }}
-        with:
-          name: documentation
-          path: ./docs/_build/html
-
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/_build/html
