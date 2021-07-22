@@ -1,10 +1,7 @@
 name: Documentation
 
 on:
-  push:
-    branches:
-      - master
-      - development
+  - push
 
 jobs:
   Documentation:
@@ -36,7 +33,7 @@ jobs:
 
       - name: Upload documentation
         uses: actions/upload-artifact@v2
-        if: ${{ github.ref == 'refs/heads/development' }}
+        if: ${{ github.ref != 'refs/heads/master' }}
         with:
           name: documentation
           path: ./docs/_build/html

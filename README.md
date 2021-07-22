@@ -1,25 +1,25 @@
-[![Lint Status](https://github.com/clp-research/slurk/actions/workflows/lint.yml/badge.svg?branch=development)](https://github.com/clp-research/slurk/actions/workflows/lint.yml)
-[![Test Status](https://github.com/clp-research/slurk/actions/workflows/test.yml/badge.svg?branch=development)](https://github.com/clp-research/slurk/actions/workflows/test.yml)
-[![Documentation Status](https://github.com/clp-research/slurk/actions/workflows/docs.yml/badge.svg?branch=development)](https://github.com/clp-research/slurk/actions/workflows/docs.yml)
+[![Lint Status](https://github.com/clp-research/slurk/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/lint.yml)
+[![Test Status](https://github.com/clp-research/slurk/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/test.yml)
+[![Documentation Status](https://github.com/clp-research/slurk/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/clp-research/slurk/actions/workflows/docs.yml)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/slurk/server)](https://hub.docker.com/r/slurk/server)
 
 Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 ==============================================================================
 
-Slurk (think “slack for mechanical turk”…) is a lightweight and easily extensible chat server built especially for 
-conducting multimodal dialogue experiments or data collections. See [Slurk: What’s this?][what's this] for a description 
+Slurk (think “slack for mechanical turk”…) is a lightweight and easily extensible chat server built especially for
+conducting multimodal dialogue experiments or data collections. See [Slurk: What’s this?][what's this] for a description
 of the main concepts. Or jump right in with the [Getting Started][] Guide!
 
 The main idea of Slurk is to have a platform can be used without any change to the Slurk Server
 by creating task-specific bots. The bots can create rooms, custom chat layouts and control
 the distribution of users to rooms. In the following architecture overview the main
-components of Slurk are outlined. 
+components of Slurk are outlined.
 
 ![Slurk architecture][architecture]
 
 Slurk is built in Python 3, on top of [flask] and [flask-socketio].
 
-To run locally 
+To run locally
 
 1. Download the sources
 
@@ -27,14 +27,14 @@ To run locally
 git clone git@github.com:clp-research/slurk.git
 cd slurk
 ```
-   
+
 2. create an environment
 
 ```bash
 conda create -n slurk python=3.7.10
 conda activate slurk
 ```
-   
+
 3. install the requirements and execute `run.py` or `local_run.py`
 
 ```bash
