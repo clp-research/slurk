@@ -6,13 +6,13 @@
 Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
 ==============================================================================
 
-Slurk (think “slack for mechanical turk”…) is a lightweight and easily extensible chat server built especially for
+Slurk (think "slack for mechanical turk"...) is a lightweight and easily extensible chat server built especially for
 conducting multimodal dialogue experiments or data collections. See [Slurk: What’s this?][what's this] for a description
 of the main concepts. Or jump right in with the [Getting Started][] Guide!
 
-The main idea of Slurk is to have a platform can be used without any change to the Slurk Server
-by creating task-specific bots. The bots can create rooms, custom chat layouts and control
-the distribution of users to rooms. In the following architecture overview the main
+The main idea of Slurk is to have a platform that can be used without any change to the Slurk Server
+by creating task-specific bots. The bots can create rooms, custom chat layouts, and control
+the distribution of users to rooms. In the following architecture overview, the main
 components of Slurk are outlined.
 
 ![Slurk architecture][architecture]
@@ -50,7 +50,7 @@ INFO [slurk]: loading layout from F:\Development\git\slurk\app\models/../static/
 INFO [slurk]: generating admin room and token...
 ```
 
-5. open a browser tab on `localhost:5000` and login with any username and the admin token
+5. open a browser tab on `localhost:5000` and log in with any username and the admin token
 
 If you want to build the documentation yourself, you need the packages _sphinx_ and _sphinx_rtd_theme_. Then you can create the documentation in the _docs_ folder:
 
