@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  Lint:
+  Black:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -26,6 +26,17 @@ jobs:
         with:
           auto_fix: true
           black: true
+
+  Flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
       - name: Install flake8
         run: |
