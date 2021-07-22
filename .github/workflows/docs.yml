@@ -1,0 +1,46 @@
+name: Documentation
+
+on:
+  - push
+
+jobs:
+  Documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install sphinx sphinxcontrib-openapi sphinx_rtd_theme
+
+      - name: Generate documentation
+        env:
+          DATABASE: sqlite:///
+          FLASK_APP: slurk
+        run: |
+          flask openapi write docs/openapi.json
+          (cd docs && make html)
+          cp docs/slurk_api_rapidoc.html docs/openapi.json docs/_build/html/
+          touch docs/_build/html/.nojekyll
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v2
+        if: ${{ github.ref != 'refs/heads/master' }}
+        with:
+          name: documentation
+          path: ./docs/_build/html
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html

@@ -1,20 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eu
 
-# create a TASK_ID
+# Parameters:
+#   scripts/create_task.sh name num_users layout_id
+# Environment variables:
+#   SLURK_TOKEN: Token to pass as authorization, defaults to `00000000-0000-0000-0000-000000000000`
+#   SLURK_HOST: Host name to use for the request, defaults to `http://localhost`
+#   SLURK_PORT: Port to use for the request, defaults to 80
 
-ADMIN=$1
-TASK_NAME=$2
-USERS=$3
+TOKEN=${SLURK_TOKEN:=00000000-0000-0000-0000-000000000000}
+HOST=${SLURK_HOST:-http://localhost}
+PORT=${SLURK_PORT:-5000}
 
-if [ "$#" -eq 3 ]
-then
-  export TASK_ID=$(curl -X POST \
-         -H "Authorization: Token $ADMIN" \
-         -H "Content-Type: application/json" \
-         -H "Accept: application/json" \
-         -d "{\"name\": \"$TASK_NAME\", \"num_users\": $USERS}" \
-         localhost/api/v2/task | jq .id)
-else
-  echo "You need to specify the authorization token, a task name, and the number of users"
-  echo "Ex: 'sh $0 \$ADMIN_TOKEN \"Echo Task\" 2'"
+if [ "$#" -lt 3 ]; then
+  echo "Usage: $0 name num_users layout_id" 1>&2
+  echo "For more info see $HOST:$PORT/rapidoc#post-/slurk/api/tasks"
+  exit 1
 fi
+
+NAME=$1
+USERS=$2
+LAYOUT=$3
+
+function check_error {
+    if [ "$(jq '. | has("code")' <<< "$1")" = true ]; then
+        jq -r .message <<< "$1" 1>&2
+        if [ "$(jq '. | has("errors")' <<< "$1")" = true ]; then
+            jq -r .errors <<< "$1" 1>&2
+        fi
+        exit 1
+    fi
+}
+
+response=$(curl -sX POST \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d "{\"name\": \"$NAME\", \"num_users\": $USERS, \"layout_id\": $LAYOUT}" \
+    $HOST:$PORT/slurk/api/tasks)
+check_error "$response"
+echo "$response" | jq

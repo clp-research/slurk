@@ -1,18 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eu
 
-# examine the log files of a particular room
+# Parameters:
+#   scripts/print_logs.sh room_id
+# Environment variables:
+#   SLURK_TOKEN: Token to pass as authorization, defaults to `00000000-0000-0000-0000-000000000000`
+#   SLURK_HOST: Host name to use for the request, defaults to `http://localhost`
+#   SLURK_PORT: Port to use for the request, defaults to 80
 
-TOKEN=$1
-ROOM=$2
+TOKEN=${SLURK_TOKEN:=00000000-0000-0000-0000-000000000000}
+HOST=${SLURK_HOST:-http://localhost}
+PORT=${SLURK_PORT:-5000}
 
-if [ "$#" -eq 2 ]
-then
-  curl -X GET \
-        -H "Authorization: Token $TOKEN" \
-        -H "Content-Type: application/json" \
-        -H "Accept: application/json" \
-        localhost/api/v2/room/$ROOM/logs
-else
-  echo "You need to specify the admin token and the room name (id)"
-  echo "Ex: 'sh $0 \$ADMIN_TOKEN test_room'"
+if [ "$#" -lt 1 ]; then
+  echo "Usage: $0 room_id" 1>&2
+  echo "For more info see $HOST:$PORT/rapidoc#get-/slurk/api/logs"
+  exit 1
 fi
+
+ROOM=$1
+
+response=$(curl -sX GET \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    $HOST:$PORT/slurk/api/logs?room_id=$ROOM)
+echo "$response"
