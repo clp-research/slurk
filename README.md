@@ -19,6 +19,39 @@ components of Slurk are outlined.
 
 Slurk is built in Python 3, on top of [flask] and [flask-socketio].
 
+To run locally 
+
+1. Download the sources
+
+```bash
+git clone git@github.com:clp-research/slurk.git
+cd slurk
+```
+   
+2. create an environment
+
+```bash
+conda create -n slurk python=3.7.10
+conda activate slurk
+```
+   
+3. install the requirements and execute `run.py` or `local_run.py`
+
+```bash
+pip install -r requirements-3710.txt
+python local_run.py
+```
+
+4. check server start
+
+```bash
+INFO [engineio.server]: Server initialized for gevent.
+INFO [slurk]: loading layout from F:\Development\git\slurk\app\models/../static/layouts/default.json
+INFO [slurk]: generating admin room and token...
+```
+
+5. open a browser tab on `localhost:5000` and login with any username and the admin token
+
 If you want to build the documentation yourself, you need the packages _sphinx_ and _sphinx_rtd_theme_. Then you can create the documentation in the _docs_ folder:
 
 ```
