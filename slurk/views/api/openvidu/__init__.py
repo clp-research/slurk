@@ -38,7 +38,10 @@ class Config(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        config = current_app.openvidu.config
+        response = current_app.openvidu.config()
+        if response.status_code != 200:
+            abort(response)
+        config = response.json()
         return dict(
             version=config["VERSION"],
             domain_or_public_ip=config["DOMAIN_OR_PUBLIC_IP"],

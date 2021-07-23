@@ -68,6 +68,9 @@ class OpenVidu:
             self._request_verify,
         )
 
+    def config(self):
+        return self._request.get("config")
+
     def list_sessions(self):
         return self._request.get("sessions")
 
@@ -127,16 +130,7 @@ def init_app(app):
         if openvidu_port != 443:
             openvidu_url = f"{openvidu_url}:{openvidu_port}"
         OV = OpenVidu(openvidu_url, openvidu_secret, verify=openvidu_verify)
-        response = OV._request.get("config")
-        if response.status_code != 200:
-            error = HTTP_STATUS_CODES.get(response.status_code, "Unknown Error")
-            app.logger.error(
-                f'Could not connection to OpenVidu Server "{openvidu_url}: {error})'
-            )
-            return
-
-        OV.config = response.json()
-        app.logger.info(f'Initializing OpenVidu connection to "{openvidu_url}"')
+        OV.app = app
         if not openvidu_verify:
             app.logger.warning(
                 "OpenVidu connection may be unsecure. Set `SLURK_OPENVIDU_VERIFY` to true or don't pass this variable"
