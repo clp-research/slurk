@@ -17,23 +17,26 @@ Prepare Windows 10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Docker cannot easily run on Windows by default. Thus we enable the Windows Subsystem for Linux.
-Make sure that Windows 10 has the latest updates installed.
+Make sure that Windows 10 has the latest updates installed:
+
++ For x64 systems: Version 1903 or higher, with Build 18362 or higher.
++ For ARM64 systems: Version 2004 or higher, with Build 19041 or higher.
 
 .. note::
 
-    This guide follows the `official WSL2 documentation <https://docs.microsoft.com/de-de/windows/wsl/install-win10>`_, so have a look into these for more details.
+    This guide follows the `official WSL2 documentation <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_, so have a look into these for more details.
     These instructions use experimental features for Docker on Windows and thus could be outdated at any time.
     Furthermore, this guide is a response to a `Problem with getting an admin token (Ubuntu on WSL) <https://github.com/clp-research/slurk/issues/99>`_.
 
 Setting up WSL 2
 ------------------------------
 
-1. Open a Powershell as Administrator
+1. Type PowerShell into the search field. Right-click on the Windows PowerShell and then select *run as administrator*.
 2. Enable WSL with the following command:
 
 .. code-block:: bash
 
-    $> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart``
+    $> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
 3. Upgrade to WSL2 with the following command:
 
@@ -41,13 +44,19 @@ Setting up WSL 2
 
     $> dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
-4. Set WSL2 as the default for linux distributions:
+4. Restart the system
+
+5. Download the `Linux Kernel update package <https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi>`_
+
+6. Double-click the update package downloaded in the previous step. Follow the installation steps.
+
+7. (Optional) If step 6 results in an error *update only applies to machines with the windows subsystem for Linux*: Type into the search field Turn Windows features on or off. Open the program. Deselect *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Open the program again and this time select *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Try running step 6 again.
+
+8. Set WSL2 as the default for linux distributions:
 
 .. code-block:: bash
 
     $> wsl --set-default-version 2
-
-5. Restart the system
 
 Install Ubuntu-20.04.1 using the App Store
 ------------------------------------------
@@ -92,13 +101,13 @@ Install docker into Ubuntu
 
     $> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-4. Use the following command to set up the stable repository.
+4. Use the following command to set up the stable repository:
 
 .. code-block:: bash
 
     $> sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-5. Install the docker engine
+5. Install the docker engine:
 
 .. code-block:: bash
 
@@ -135,7 +144,7 @@ Checkout and run slurk
 
     $> ssh-keygen
 
-2. Upload or copy the generated public key to your github SSH settings
+2. Upload or copy the generated public key to your `github SSH settings <https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>`_
 3. Clone the repository
 
 .. code-block:: bash
@@ -148,19 +157,22 @@ Checkout and run slurk
 
 .. code-block:: bash
 
-    $> source ./start_slurk_server.sh
-    $> echo $SLURK_SERVER_ID
-    ce96a2009c0be81f6a82161f611db2f5fd74ed95e8d9b8ea434aeb1bcbb2342b
+    $> export SLURK_DOCKER=slurky
+    $> bash scripts/start_server.sh
+    b4ad4ccd053bebd4ce80afbeea3a3a259d890ae7103577e003cb2e4b768687fb
 
 6. Fetch the admin token
 
 .. code-block:: bash
 
-    $> source ./get_admin_token.sh
-    $> echo $ADMIN_TOKEN
-    d858f508-da42-4ffb-847c-c7f378c35e02
+    $> bash scripts/read_admin_token.sh
+    00000000-0000-0000-0000-000000000000
 
-These commands have to be called with source, because they export environment variables.
+7. (Optional) In case the output of the above script is empty, you may find valuable information in the logs
+
+.. code-block:: bash
+
+   $> docker logs $SLURK_DOCKER
 
 Side-notes
 ~~~~~~~~~~
