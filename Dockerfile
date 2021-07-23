@@ -5,6 +5,7 @@ WORKDIR /usr/src
 
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-cache-dir psycopg2-binary
 run rm /tmp/requirements.txt
 
 COPY slurk /usr/src/slurk
