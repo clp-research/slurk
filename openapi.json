@@ -856,7 +856,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -865,7 +865,7 @@
         },
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -1741,7 +1741,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1750,7 +1750,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1861,20 +1861,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3482,7 +3482,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3491,7 +3491,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3662,20 +3662,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -4772,29 +4772,11 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "incoming-image": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when an image is received"
-          },
-          "print-history": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Used for printing the chat history"
-          },
           "incoming-text": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Called when a text message is received"
-          },
-          "submit-message": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a message is sent"
           },
           "document-ready": {
             "type": "array",
@@ -4819,6 +4801,24 @@
             "default": null,
             "nullable": true,
             "description": "Called when state of currently typing users is changed"
+          },
+          "submit-message": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a message is sent"
+          },
+          "print-history": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Used for printing the chat history"
+          },
+          "incoming-image": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when an image is received"
           }
         }
       },
@@ -4975,14 +4975,6 @@
       "Error": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
-          "status": {
-            "type": "string",
-            "description": "Error name"
-          },
           "errors": {
             "type": "object",
             "nullable": true,
@@ -4991,6 +4983,14 @@
           "message": {
             "type": "string",
             "description": "Error message"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error name"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
