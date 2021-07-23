@@ -1,4 +1,3 @@
-from werkzeug.http import HTTP_STATUS_CODES
 import requests
 
 from requests.auth import HTTPBasicAuth
