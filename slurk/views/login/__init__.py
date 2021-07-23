@@ -43,7 +43,11 @@ def load_user_from_request(request):
 
     current_app.logger.debug(f"loading user `{user_id}` from token `{token_id}`")
 
-    return current_app.session.query(User).filter_by(token_id=token_id, id=user_id).one_or_none()
+    return (
+        current_app.session.query(User)
+        .filter_by(token_id=token_id, id=user_id)
+        .one_or_none()
+    )
 
 
 @login.route("/", methods=["GET", "POST"])
