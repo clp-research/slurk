@@ -2,8 +2,8 @@ def register_views(api):
     from . import api as api_module, chat, login
 
     MODULES = (
-        api_module, 
-        chat, 
+        api_module,
+        chat,
         login
     )
 
