@@ -4,7 +4,7 @@ def register_views(api):
     MODULES = (
         api_module,
         chat,
-        login,
+        login
     )
 
     for module in MODULES:
