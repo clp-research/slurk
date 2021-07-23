@@ -1741,7 +1741,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1750,7 +1750,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1801,20 +1801,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1861,20 +1861,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1981,20 +1981,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2079,20 +2079,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3482,7 +3482,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3491,7 +3491,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3542,20 +3542,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3602,20 +3602,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "cls",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "cls",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3662,20 +3662,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3722,20 +3722,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3820,20 +3820,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -4772,17 +4772,41 @@
       "Scripts": {
         "type": "object",
         "properties": {
+          "plain": {
+            "type": "array",
+            "default": null,
+            "nullable": true,
+            "description": "Injected as a script file into the site",
+            "items": {
+              "type": "string"
+            }
+          },
           "submit-message": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Called when a message is sent"
           },
+          "document-ready": {
+            "type": "array",
+            "default": null,
+            "nullable": true,
+            "description": "Called when site is fully loaded",
+            "items": {
+              "type": "string"
+            }
+          },
           "typing-users": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Called when state of currently typing users is changed"
+          },
+          "incoming-text": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a text message is received"
           },
           "print-history": {
             "type": "string",
@@ -4795,30 +4819,6 @@
             "default": null,
             "nullable": true,
             "description": "Called when an image is received"
-          },
-          "document-ready": {
-            "type": "array",
-            "default": null,
-            "nullable": true,
-            "description": "Called when site is fully loaded",
-            "items": {
-              "type": "string"
-            }
-          },
-          "incoming-text": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a text message is received"
-          },
-          "plain": {
-            "type": "array",
-            "default": null,
-            "nullable": true,
-            "description": "Injected as a script file into the site",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },
@@ -4975,6 +4975,14 @@
       "Error": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
           "errors": {
             "type": "object",
             "nullable": true,
@@ -4983,14 +4991,6 @@
           "status": {
             "type": "string",
             "description": "Error name"
-          },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
-          "message": {
-            "type": "string",
-            "description": "Error message"
           }
         }
       },
@@ -6256,13 +6256,13 @@
       "Attribute": {
         "type": "object",
         "properties": {
-          "attribute": {
-            "type": "string",
-            "description": "The attribute to be updated"
-          },
           "value": {
             "type": "string",
             "description": "The value to be set for the given attribute"
+          },
+          "attribute": {
+            "type": "string",
+            "description": "The attribute to be updated"
           }
         },
         "required": [
