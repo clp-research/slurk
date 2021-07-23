@@ -856,7 +856,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -865,7 +865,7 @@
         },
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -1741,7 +1741,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1750,7 +1750,7 @@
         },
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1801,20 +1801,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -1861,20 +1861,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "cls",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "cls",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -1921,20 +1921,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -1981,20 +1981,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -2079,20 +2079,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3482,7 +3482,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3491,7 +3491,7 @@
         },
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3542,20 +3542,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3722,20 +3722,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3820,20 +3820,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -4772,29 +4772,17 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "incoming-text": {
+          "print-history": {
             "type": "string",
             "default": null,
             "nullable": true,
-            "description": "Called when a text message is received"
+            "description": "Used for printing the chat history"
           },
-          "document-ready": {
-            "type": "array",
+          "incoming-image": {
+            "type": "string",
             "default": null,
             "nullable": true,
-            "description": "Called when site is fully loaded",
-            "items": {
-              "type": "string"
-            }
-          },
-          "plain": {
-            "type": "array",
-            "default": null,
-            "nullable": true,
-            "description": "Injected as a script file into the site",
-            "items": {
-              "type": "string"
-            }
+            "description": "Called when an image is received"
           },
           "typing-users": {
             "type": "string",
@@ -4808,17 +4796,29 @@
             "nullable": true,
             "description": "Called when a message is sent"
           },
-          "print-history": {
-            "type": "string",
+          "plain": {
+            "type": "array",
             "default": null,
             "nullable": true,
-            "description": "Used for printing the chat history"
+            "description": "Injected as a script file into the site",
+            "items": {
+              "type": "string"
+            }
           },
-          "incoming-image": {
+          "document-ready": {
+            "type": "array",
+            "default": null,
+            "nullable": true,
+            "description": "Called when site is fully loaded",
+            "items": {
+              "type": "string"
+            }
+          },
+          "incoming-text": {
             "type": "string",
             "default": null,
             "nullable": true,
-            "description": "Called when an image is received"
+            "description": "Called when a text message is received"
           }
         }
       },
@@ -4980,10 +4980,6 @@
             "nullable": true,
             "description": "Errors"
           },
-          "message": {
-            "type": "string",
-            "description": "Error message"
-          },
           "status": {
             "type": "string",
             "description": "Error name"
@@ -4991,6 +4987,10 @@
           "code": {
             "type": "integer",
             "description": "Error code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
           }
         }
       },
