@@ -30,6 +30,8 @@ jobs:
         with:
           black: true
           auto_fix: ${{ github.event_name == 'push' }}
+          continue_on_error: ${{ github.event_name != 'push' }}
+          neutral_check_on_warning: true
 
   Flake8:
     runs-on: ubuntu-latest
@@ -52,3 +54,5 @@ jobs:
         with:
           flake8: true
           flake8_args: "--ignore=E501,W503"
+          continue_on_error: false
+          neutral_check_on_warning: true
