@@ -11,9 +11,7 @@ set -eu
 #   SLURK_ENV: Environment for flask, either `development` or `production`, defaults to `development`
 
 export SLURK_SECRET_KEY=${SLURK_SECRET_KEY:-$RANDOM}
-export SLURK_DATABASE_URI=${SLURK_DATABASE_URI:-sqlite:///slurk.db}
 export FLASK_ENV=${SLURK_ENV:-development}
-export FLASK_APP=slurk
 PORT=${SLURK_PORT:-5000}
 
 if [ -z ${SLURK_DOCKER+x} ]; then
@@ -21,10 +19,6 @@ if [ -z ${SLURK_DOCKER+x} ]; then
 else
     if ! command -v docker &> /dev/null; then
         echo '`docker` could not be found' 1>&2
-        exit 2
-    fi
-    if ! command -v realpath &> /dev/null; then
-        echo '`realpath` could not be found' 1>&2
         exit 2
     fi
 
@@ -36,20 +30,10 @@ else
         docker rm $SLURK_DOCKER 2> /dev/null | true
     fi
 
-    if $(echo "$SLURK_DATABASE_URI" | grep -q '^sqlite:///'); then
-        path=$(echo "$SLURK_DATABASE_URI" | sed 's#sqlite:///##')
-        touch $path
-        param="-e SLURK_DATABASE_URI=sqlite:///slurk.db -v $(realpath $path):/slurk.db"
-    else
-        param="-e SLURK_DATABASE_URI=$SLURK_DATABASE_URI"
-    fi
-
     docker run -d \
         --name=$SLURK_DOCKER \
         -p $PORT:80 \
         -e SLURK_SECRET_KEY=$SLURK_SECRET_KEY \
         -e SLURK_DISABLE_ETAG=${SLURK_DISABLE_ETAG:-False} \
-        -e FLASK_ENV=$FLASK_ENV \
-        $param \
         slurk/server:${SLURK_DOCKER_TAG:-latest}
 fi
