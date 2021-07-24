@@ -1,4 +1,4 @@
-from sqlalchemy import event
+from sqlalchemy import event, engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,6 +9,8 @@ Base = declarative_base()
 class Database:
     _engine = None
     _session = sessionmaker()
+    _connect_args = {}
+    _poolclass = None
 
     def __init__(self, app=None, engine=None):
         if engine:
@@ -24,10 +26,11 @@ class Database:
     def create_session(self):
         return self._session()
 
-    def bind(self, engine):
-        self._engine = engine
-        if engine.url.drivername == "sqlite":
+    def apply_driver_hacks(self, url):
+        url = engine.url.make_url(url)
+        if url.drivername == "sqlite":
             from flask.globals import current_app
+            from sqlalchemy.pool import StaticPool
 
             if current_app and not current_app.config["DEBUG"]:
                 current_app.logger.warning("SQLite should not be used in production")
@@ -38,6 +41,11 @@ class Database:
                 cursor.execute("PRAGMA foreign_keys=ON")
                 cursor.close()
 
+            self._connect_args = {"check_same_thread": False}
+            self._poolclass = StaticPool
+
+    def bind(self, engine):
+        self._engine = engine
         self._session.configure(bind=engine)
 
     def init(self):
@@ -52,23 +60,24 @@ class Database:
         from sqlalchemy.orm import scoped_session
 
         if not self.engine:
-            self.bind(engine=create_engine(current_app.config["DATABASE"]))
+            self.apply_driver_hacks(current_app.config["DATABASE"])
 
-        if (
-            self.engine.url.database == ":memory:"
-            or self.engine.url.drivername == "sqlite"
-            and self.engine.url.database == ""
-        ):
-            app.session = self.create_session()
-        else:
-            app.session = scoped_session(
-                lambda: self.create_session(), scopefunc=_app_ctx_stack
+            self.bind(
+                engine=create_engine(
+                    current_app.config["DATABASE"],
+                    connect_args=self._connect_args,
+                    poolclass=self._poolclass,
+                )
             )
 
-            @app.teardown_appcontext
-            def cleanup(resp_or_exc):
-                if current_app.session.is_active:
-                    current_app.session.remove()
+        app.session = scoped_session(
+            lambda: self.create_session(), scopefunc=_app_ctx_stack
+        )
+
+        @app.teardown_appcontext
+        def cleanup(resp_or_exc):
+            if current_app.session.is_active:
+                current_app.session.remove()
 
         self.init()
 
