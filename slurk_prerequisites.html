@@ -101,8 +101,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#install-docker-into-ubuntu">2.2. Install docker into Ubuntu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#potential-after-installation-steps">2.3. Potential after-installation steps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#checkout-and-run-slurk">2.4. Checkout and run slurk</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#side-notes">2.5. Side-notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkout-slurk">2.4. Checkout slurk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-with-docker-recommended">2.5. Run with docker (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-without-docker">2.6. Run without docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#side-notes">2.7. Side-notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
@@ -182,46 +184,52 @@
             
   <div class="section" id="prerequisites">
 <span id="slurk-prerequisites"></span><h1><span class="section-number">2. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
-<p>The easiest way to use the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended.</p>
+<p>Slurk was developed and tested on UNIX-systems only. We therefore recommend using it on such or using WSL for Windows.
+The easiest way to use the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended.</p>
 <ul class="simple">
 <li>If you are operating on Ubuntu, then follow <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a></li>
 <li>If you are operating on Windows 10, then follow <a class="reference internal" href="#label-install-wsl"><span class="std std-ref">Prepare Windows 10</span></a></li>
 </ul>
-<p>For other operating systems, please see the official docker documentation.</p>
+<p>For other operating systems, please see the <a class="reference external" href="https://docs.docker.com/get-docker/" target="_blank">official docker documentation</a>.</p>
 <div class="section" id="prepare-windows-10">
 <span id="label-install-wsl"></span><h2><span class="section-number">2.1. </span>Prepare Windows 10<a class="headerlink" href="#prepare-windows-10" title="Permalink to this headline">¶</a></h2>
 <p>Docker cannot easily run on Windows by default. Thus we enable the Windows Subsystem for Linux.
-Make sure that Windows 10 has the latest updates installed.</p>
+Make sure that Windows 10 has the latest updates installed:</p>
+<ul class="simple">
+<li>For x64 systems: Version 1903 or higher, with Build 18362 or higher.</li>
+<li>For ARM64 systems: Version 2004 or higher, with Build 19041 or higher.</li>
+</ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This guide follows the <a class="reference external" href="https://docs.microsoft.com/de-de/windows/wsl/install-win10" target="_blank">official WSL2 documentation</a>, so have a look into these for more details.
+<p class="last">This guide follows the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/install-win10" target="_blank">official WSL2 documentation</a>, so have a look into these for more details.
 These instructions use experimental features for Docker on Windows and thus could be outdated at any time.
 Furthermore, this guide is a response to a <a class="reference external" href="https://github.com/clp-research/slurk/issues/99" target="_blank">Problem with getting an admin token (Ubuntu on WSL)</a>.</p>
 </div>
 <div class="section" id="setting-up-wsl-2">
 <h3><span class="section-number">2.1.1. </span>Setting up WSL 2<a class="headerlink" href="#setting-up-wsl-2" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li>Open a Powershell as Administrator</li>
+<li>Type “PowerShell” into the search field. Right-click on the Windows PowerShell and then select <em>run as administrator</em>.</li>
 <li>Enable WSL with the following command:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart<span class="sb">``</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
 <li>Upgrade to WSL2 with the following command:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
+<li>Restart the system</li>
+<li>Download the <a class="reference external" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank">Linux Kernel update package</a></li>
+<li>Double-click the update package downloaded in the previous step. Follow the installation steps.</li>
+<li>(Optional) If step 6 results in an error <em>update only applies to machines with the Windows subsystem for Linux</em>: Type into the search field “Turn Windows features on or off”. Open the program. Deselect <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Open the program again and this time select <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Try running step 6 again.</li>
 <li>Set WSL2 as the default for linux distributions:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; wsl --set-default-version <span class="m">2</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wsl --set-default-version <span class="m">2</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="5">
-<li>Restart the system</li>
-</ol>
 </div>
 <div class="section" id="install-ubuntu-20-04-1-using-the-app-store">
 <h3><span class="section-number">2.1.2. </span>Install Ubuntu-20.04.1 using the App Store<a class="headerlink" href="#install-ubuntu-20-04-1-using-the-app-store" title="Permalink to this headline">¶</a></h3>
@@ -231,7 +239,7 @@ Furthermore, this guide is a response to a <a class="reference external" href="h
 <li>Open a Powershell</li>
 <li>Check the used WSL version for each distribution using PS:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; wsl --list --verbose
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wsl --list --verbose
   NAME                   STATE           VERSION
   Ubuntu-20.04           Running         <span class="m">2</span>
 </pre></div>
@@ -250,90 +258,146 @@ Furthermore, this guide is a response to a <a class="reference external" href="h
 <ol class="arabic simple">
 <li>Uninstall old versions:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get remove docker docker-engine docker.io containerd runc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get remove docker docker-engine docker.io containerd runc
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Install docker using the repository:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get update
-$&gt; sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
 <li>Add Docker’s official GPG key:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Use the following command to set up the stable repository.</li>
+<li>Use the following command to set up the stable repository:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo add-apt-repository <span class="s2">&quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo add-apt-repository <span class="s2">&quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&quot;</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>Install the docker engine</li>
+<li>Install the docker engine:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo apt-get update
-$&gt; sudo apt-get install docker-ce docker-ce-cli containerd.io
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
 </pre></div>
 </div>
 </div>
 <div class="section" id="potential-after-installation-steps">
 <h2><span class="section-number">2.3. </span>Potential after-installation steps<a class="headerlink" href="#potential-after-installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>Start the docker daemon manually (if not already started):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo service docker status
-$&gt; sudo service docker start
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo service docker status
+$ sudo service docker start
 </pre></div>
 </div>
-<p>Add the non-root user to the docker group and re-login:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; sudo groupadd docker
-$&gt; sudo usermod -aG docker <span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
-$&gt; su -s <span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+<p>Add the non-root user to the docker group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo groupadd docker
+$ sudo usermod -aG docker <span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Re-login.</p>
+<p>Verify that you are part of the <em>docker</em> group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ groups <span class="nv">$USER</span>
+</pre></div>
+</div>
+<p>Verify that Docker Engine is installed correctly (should print an informal message and exit):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run hello-world
 </pre></div>
 </div>
 </div>
-<div class="section" id="checkout-and-run-slurk">
-<h2><span class="section-number">2.4. </span>Checkout and run slurk<a class="headerlink" href="#checkout-and-run-slurk" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="checkout-slurk">
+<h2><span class="section-number">2.4. </span>Checkout slurk<a class="headerlink" href="#checkout-slurk" title="Permalink to this headline">¶</a></h2>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">WSL users need to checkout the project using the WSL otherwise the line-endings are not correct!</p>
 </div>
 <ol class="arabic simple">
-<li>Generate a ssh key pair (with defaults)</li>
+<li>Generate a ssh key pair (with defaults):</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; ssh-keygen
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Upload or copy the generated public key to your github SSH settings</li>
-<li>Clone the repository</li>
+<li>Upload or copy the generated public key to your <a class="reference external" href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account" target="_blank">github SSH settings</a></li>
+<li>Clone the repository:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; git clone git@github.com:clp-research/slurk.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:clp-research/slurk.git
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Go into the slurk top directory</li>
-<li>Start the server</li>
+<li>Go into the slurk top directory.</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; <span class="nb">source</span> ./start_slurk_server.sh
-$&gt; <span class="nb">echo</span> <span class="nv">$SLURK_SERVER_ID</span>
-ce96a2009c0be81f6a82161f611db2f5fd74ed95e8d9b8ea434aeb1bcbb2342b
+</div>
+<div class="section" id="run-with-docker-recommended">
+<h2><span class="section-number">2.5. </span>Run with docker (recommended)<a class="headerlink" href="#run-with-docker-recommended" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Start the server:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SLURK_DOCKER</span><span class="o">=</span>slurk
+$ scripts/start_server.sh
+b4ad4ccd053bebd4ce80afbeea3a3a259d890ae7103577e003cb2e4b768687fb
 </pre></div>
 </div>
-<ol class="arabic simple" start="6">
-<li>Fetch the admin token</li>
+<ol class="arabic simple" start="2">
+<li>Fetch the admin token:</li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$&gt; <span class="nb">source</span> ./get_admin_token.sh
-$&gt; <span class="nb">echo</span> <span class="nv">$ADMIN_TOKEN</span>
-d858f508-da42-4ffb-847c-c7f378c35e02
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/read_admin_token.sh
+<span class="m">00000000</span>-0000-0000-0000-000000000000
 </pre></div>
 </div>
-<p>These commands have to be called with source, because they export environment variables.</p>
+<ol class="arabic simple" start="3">
+<li>(Optional) In case the output of the above script is empty, you may find valuable information in the logs:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker logs <span class="nv">$SLURK_DOCKER</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-without-docker">
+<h2><span class="section-number">2.6. </span>Run without docker<a class="headerlink" href="#run-without-docker" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">(Optional) Create and activate a virtual environment (with Python 3.9).</p>
+<blockquote>
+<div><p>With <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html" target="_blank">Miniconda or Conda</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ conda create -n slurk <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+$ conda activate slurk
+</pre></div>
+</div>
+<p>With venv:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 -m venv slurk
+$ <span class="nb">source</span> ./slurk/bin/activate
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Install dependencies:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -r requirements.txt
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Start the server and get the admin token:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/start_server.sh
+<span class="o">[</span>INFO<span class="o">]</span> Starting gunicorn <span class="m">20</span>.1.0
+<span class="o">[</span>INFO<span class="o">]</span> Listening at: http://0.0.0.0:5000 <span class="o">(</span><span class="m">1232</span><span class="o">)</span>
+<span class="o">[</span>INFO<span class="o">]</span> Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+<span class="o">[</span>INFO<span class="o">]</span> Booting worker with pid: <span class="m">1233</span>
+admin token:
+<span class="m">00000000</span>-0000-0000-0000-000000000000
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
 </div>
 <div class="section" id="side-notes">
-<h2><span class="section-number">2.5. </span>Side-notes<a class="headerlink" href="#side-notes" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.7. </span>Side-notes<a class="headerlink" href="#side-notes" title="Permalink to this headline">¶</a></h2>
 <p>The installation of the docker-ce using the WSL showed “failures”, but these seem not to have an impact on the docker engine.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Setting up docker-ce-cli <span class="o">(</span><span class="m">5</span>:19.03.13~3-0~ubuntu-focal<span class="o">)</span> ...
 Setting up pigz <span class="o">(</span><span class="m">2</span>.4-1<span class="o">)</span> ...

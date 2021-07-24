@@ -856,7 +856,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -865,7 +865,7 @@
         },
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -1741,7 +1741,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1750,7 +1750,7 @@
         },
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1861,20 +1861,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1921,20 +1921,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3482,7 +3482,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3491,7 +3491,7 @@
         },
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3602,20 +3602,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3662,20 +3662,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -4772,6 +4772,12 @@
       "Scripts": {
         "type": "object",
         "properties": {
+          "submit-message": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a message is sent"
+          },
           "incoming-text": {
             "type": "string",
             "default": null,
@@ -4783,12 +4789,6 @@
             "default": null,
             "nullable": true,
             "description": "Called when state of currently typing users is changed"
-          },
-          "submit-message": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a message is sent"
           },
           "print-history": {
             "type": "string",
@@ -4805,6 +4805,12 @@
               "type": "string"
             }
           },
+          "incoming-image": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when an image is received"
+          },
           "plain": {
             "type": "array",
             "default": null,
@@ -4813,12 +4819,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "incoming-image": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when an image is received"
           }
         }
       },
@@ -4975,22 +4975,22 @@
       "Error": {
         "type": "object",
         "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message"
-          },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
           "status": {
             "type": "string",
             "description": "Error name"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
           },
           "errors": {
             "type": "object",
             "nullable": true,
             "description": "Errors"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
