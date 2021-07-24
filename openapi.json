@@ -856,7 +856,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -865,7 +865,7 @@
         },
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -3542,20 +3542,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3602,20 +3602,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "cls",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "cls",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3662,20 +3662,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3722,20 +3722,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3820,20 +3820,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -4781,12 +4781,6 @@
               "type": "string"
             }
           },
-          "incoming-text": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a text message is received"
-          },
           "plain": {
             "type": "array",
             "default": null,
@@ -4796,29 +4790,35 @@
               "type": "string"
             }
           },
-          "submit-message": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a message is sent"
-          },
           "typing-users": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Called when state of currently typing users is changed"
           },
-          "incoming-image": {
+          "submit-message": {
             "type": "string",
             "default": null,
             "nullable": true,
-            "description": "Called when an image is received"
+            "description": "Called when a message is sent"
+          },
+          "incoming-text": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a text message is received"
           },
           "print-history": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Used for printing the chat history"
+          },
+          "incoming-image": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when an image is received"
           }
         }
       },
@@ -4975,22 +4975,22 @@
       "Error": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error code"
+          },
           "errors": {
             "type": "object",
             "nullable": true,
             "description": "Errors"
           },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
+          "message": {
+            "type": "string",
+            "description": "Error message"
           },
           "status": {
             "type": "string",
             "description": "Error name"
-          },
-          "message": {
-            "type": "string",
-            "description": "Error message"
           }
         }
       },
