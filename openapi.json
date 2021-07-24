@@ -1741,7 +1741,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1750,7 +1750,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1801,20 +1801,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1921,20 +1921,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1981,20 +1981,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2079,20 +2079,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3542,20 +3542,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3722,20 +3722,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3820,20 +3820,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -4772,11 +4772,29 @@
       "Scripts": {
         "type": "object",
         "properties": {
+          "incoming-text": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a text message is received"
+          },
           "typing-users": {
             "type": "string",
             "default": null,
             "nullable": true,
             "description": "Called when state of currently typing users is changed"
+          },
+          "submit-message": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Called when a message is sent"
+          },
+          "print-history": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "description": "Used for printing the chat history"
           },
           "document-ready": {
             "type": "array",
@@ -4787,18 +4805,6 @@
               "type": "string"
             }
           },
-          "incoming-image": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when an image is received"
-          },
-          "print-history": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Used for printing the chat history"
-          },
           "plain": {
             "type": "array",
             "default": null,
@@ -4808,17 +4814,11 @@
               "type": "string"
             }
           },
-          "submit-message": {
+          "incoming-image": {
             "type": "string",
             "default": null,
             "nullable": true,
-            "description": "Called when a message is sent"
-          },
-          "incoming-text": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a text message is received"
+            "description": "Called when an image is received"
           }
         }
       },
@@ -4983,14 +4983,14 @@
             "type": "integer",
             "description": "Error code"
           },
+          "status": {
+            "type": "string",
+            "description": "Error name"
+          },
           "errors": {
             "type": "object",
             "nullable": true,
             "description": "Errors"
-          },
-          "status": {
-            "type": "string",
-            "description": "Error name"
           }
         }
       },
@@ -6256,13 +6256,13 @@
       "Attribute": {
         "type": "object",
         "properties": {
-          "value": {
-            "type": "string",
-            "description": "The value to be set for the given attribute"
-          },
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value to be set for the given attribute"
           }
         },
         "required": [
