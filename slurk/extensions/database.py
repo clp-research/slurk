@@ -26,12 +26,11 @@ class Database:
 
     def bind(self, engine):
         self._engine = engine
-        if "sqlite" in engine.url:
-            from logging import getLogger
+        if engine.url.drivername == "sqlite":
             from flask.globals import current_app
 
             if current_app and not current_app.config["DEBUG"]:
-                getLogger("slurk").warning("SQLite should not be used in production")
+                current_app.logger.warning("SQLite should not be used in production")
 
             @event.listens_for(Engine, "connect")
             def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -55,16 +54,23 @@ class Database:
         if not self.engine:
             self.bind(engine=create_engine(current_app.config["DATABASE"]))
 
-        app.session = scoped_session(
-            lambda: self.create_session(), scopefunc=_app_ctx_stack
-        )
+        if (
+            self.engine.url.database == ":memory:"
+            or self.engine.url.drivername == "sqlite"
+            and self.engine.url.database == ""
+        ):
+            app.session = self.create_session()
+        else:
+            app.session = scoped_session(
+                lambda: self.create_session(), scopefunc=_app_ctx_stack
+            )
+
+            @app.teardown_appcontext
+            def cleanup(resp_or_exc):
+                if current_app.session.is_active:
+                    current_app.session.remove()
 
         self.init()
-
-        @app.teardown_appcontext
-        def cleanup(resp_or_exc):
-            if current_app.session.is_active:
-                current_app.session.remove()
 
 
 db = Database()
