@@ -22,7 +22,12 @@ Slurk is built in Python 3.9, on top of [Flask] and [Flask-SocketIO].
 To run slurk, the simplest way is to use docker
 
 ```bash
-$ docker run -p 80:80 -e SLURK_DATABASE_URI=sqlite:////slurk.db slurk/server
+$ docker run -p 80:80 slurk/server
+[2021-07-24 10:49:41 +0000] [1] [INFO] Starting gunicorn 20.1.0
+[2021-07-24 10:49:41 +0000] [1] [INFO] Listening at: http://0.0.0.0:80 (1)
+[2021-07-24 10:49:41 +0000] [1] [INFO] Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+[2021-07-24 10:49:41 +0000] [8] [INFO] Booting worker with pid: 8
+[2021-07-24 10:49:42,779] WARNING in database: SQLite should not be used in production
 admin token:
 01234567-89ab-cdef-0123-456789abcdef
 ```
