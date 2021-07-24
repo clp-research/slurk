@@ -4,12 +4,13 @@
 Prerequisites
 =========================================
 
+Slurk was developed and tested on UNIX-systems only. We therefore recommend using it on such or using WSL for Windows.
 The easiest way to use the system is using Docker. For this, ``docker`` is recommended.
 
 - If you are operating on Ubuntu, then follow :ref:`label-install-ubuntu`
 - If you are operating on Windows 10, then follow :ref:`label-install-wsl`
 
-For other operating systems, please see the official docker documentation.
+For other operating systems, please see the `official docker documentation <https://docs.docker.com/get-docker/>`_.
 
 .. _label-install-wsl:
 
@@ -31,18 +32,18 @@ Make sure that Windows 10 has the latest updates installed:
 Setting up WSL 2
 ------------------------------
 
-1. Type PowerShell into the search field. Right-click on the Windows PowerShell and then select *run as administrator*.
+1. Type "PowerShell" into the search field. Right-click on the Windows PowerShell and then select *run as administrator*.
 2. Enable WSL with the following command:
 
 .. code-block:: bash
 
-    $> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+    $ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
 3. Upgrade to WSL2 with the following command:
 
 .. code-block:: bash
 
-    $> dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+    $ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
 4. Restart the system
 
@@ -50,13 +51,13 @@ Setting up WSL 2
 
 6. Double-click the update package downloaded in the previous step. Follow the installation steps.
 
-7. (Optional) If step 6 results in an error *update only applies to machines with the windows subsystem for Linux*: Type into the search field Turn Windows features on or off. Open the program. Deselect *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Open the program again and this time select *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Try running step 6 again.
+7. (Optional) If step 6 results in an error *update only applies to machines with the Windows subsystem for Linux*: Type into the search field "Turn Windows features on or off". Open the program. Deselect *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Open the program again and this time select *Virtual Machine Platform* and *Windows Subsystem for Linux* and click OK. Restart your system. Try running step 6 again.
 
 8. Set WSL2 as the default for linux distributions:
 
 .. code-block:: bash
 
-    $> wsl --set-default-version 2
+    $ wsl --set-default-version 2
 
 Install Ubuntu-20.04.1 using the App Store
 ------------------------------------------
@@ -68,7 +69,7 @@ Install Ubuntu-20.04.1 using the App Store
 
 .. code-block:: bash
 
-    $> wsl --list --verbose
+    $ wsl --list --verbose
       NAME                   STATE           VERSION
       Ubuntu-20.04           Running         2
 
@@ -86,33 +87,33 @@ Install docker into Ubuntu
 
 .. code-block:: bash
 
-    $> sudo apt-get remove docker docker-engine docker.io containerd runc
+    $ sudo apt-get remove docker docker-engine docker.io containerd runc
 
 2. Install docker using the repository:
 
 .. code-block:: bash
 
-    $> sudo apt-get update
-    $> sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+    $ sudo apt-get update
+    $ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
 3. Add Docker’s official GPG key:
 
 .. code-block:: bash
 
-    $> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 4. Use the following command to set up the stable repository:
 
 .. code-block:: bash
 
-    $> sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 5. Install the docker engine:
 
 .. code-block:: bash
 
-    $> sudo apt-get update
-    $> sudo apt-get install docker-ce docker-ce-cli containerd.io
+    $ sudo apt-get update
+    $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 Potential after-installation steps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -121,58 +122,112 @@ Start the docker daemon manually (if not already started):
 
 .. code-block:: bash
 
-    $> sudo service docker status
-    $> sudo service docker start
+    $ sudo service docker status
+    $ sudo service docker start
 
-Add the non-root user to the docker group and re-login:
+Add the non-root user to the docker group:
 
 .. code-block:: bash
 
-    $> sudo groupadd docker
-    $> sudo usermod -aG docker ${USER}
-    $> su -s ${USER}
+    $ sudo groupadd docker
+    $ sudo usermod -aG docker ${USER}
 
-Checkout and run slurk
+Re-login.
+
+Verify that you are part of the *docker* group:
+
+.. code-block:: bash
+
+    $ groups $USER
+
+Verify that Docker Engine is installed correctly (should print an informal message and exit):
+
+.. code-block:: bash
+
+    $ docker run hello-world
+
+Checkout slurk
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning::
     WSL users need to checkout the project using the WSL otherwise the line-endings are not correct!
 
-1. Generate a ssh key pair (with defaults)
+1. Generate a ssh key pair (with defaults):
 
 .. code-block:: bash
 
-    $> ssh-keygen
+    $ ssh-keygen
 
 2. Upload or copy the generated public key to your `github SSH settings <https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>`_
-3. Clone the repository
+3. Clone the repository:
 
 .. code-block:: bash
 
-    $> git clone git@github.com:clp-research/slurk.git
+    $ git clone git@github.com:clp-research/slurk.git
 
-4. Go into the slurk top directory
+4. Go into the slurk top directory.
 
-5. Start the server
+Run with docker (recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Start the server:
 
 .. code-block:: bash
 
-    $> export SLURK_DOCKER=slurky
-    $> bash scripts/start_server.sh
+    $ export SLURK_DOCKER=slurk
+    $ scripts/start_server.sh
     b4ad4ccd053bebd4ce80afbeea3a3a259d890ae7103577e003cb2e4b768687fb
 
-6. Fetch the admin token
+2. Fetch the admin token:
 
 .. code-block:: bash
 
-    $> bash scripts/read_admin_token.sh
+    $ scripts/read_admin_token.sh
     00000000-0000-0000-0000-000000000000
 
-7. (Optional) In case the output of the above script is empty, you may find valuable information in the logs
+3. (Optional) In case the output of the above script is empty, you may find valuable information in the logs:
 
 .. code-block:: bash
 
-   $> docker logs $SLURK_DOCKER
+   $ docker logs $SLURK_DOCKER
+
+Run without docker
+~~~~~~~~~~~~~~~~~
+
+1. (Optional) Create and activate a virtual environment (with Python 3.9).
+
+    With `Miniconda or Conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html>`_:
+
+    .. code-block:: bash
+
+        $ conda create -n slurk python=3.9
+        $ conda activate slurk
+
+    With venv:
+
+    .. code-block:: bash
+
+        $ python3 -m venv slurk
+        $ source ./slurk/bin/activate
+
+2. Install dependencies:
+
+    .. code-block:: bash
+
+        $ pip install -r requirements.txt
+
+3. Start the server and get the admin token:
+
+    .. code-block:: bash
+
+        $ scripts/start_server.sh
+        [INFO] Starting gunicorn 20.1.0
+        [INFO] Listening at: http://0.0.0.0:5000 (1232)
+        [INFO] Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+        [INFO] Booting worker with pid: 1233
+        admin token:
+        00000000-0000-0000-0000-000000000000
+
 
 Side-notes
 ~~~~~~~~~~
