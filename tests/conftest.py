@@ -19,7 +19,7 @@ def engine():
 
     logging.getLogger("slurk").addFilter(NoSQLiteInProduction())
 
-    return create_engine(f"sqlite:///:memory:")
+    return create_engine("sqlite:///:memory:")
 
 
 @pytest.fixture(scope="session")
