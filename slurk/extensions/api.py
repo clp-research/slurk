@@ -151,6 +151,11 @@ class Api(flask_smorest.Api, ErrorHandlerMixin):
             "TokenAuthentication", dict(type="http", scheme="bearer")
         )
 
+    # Workaround for https://github.com/marshmallow-code/flask-smorest/pull/262
+    # This uses the local `rapidoc.html` template rather then the provided one
+    def _openapi_rapidoc(self):
+        return super()._openapi_rapidoc()
+
 
 api = Api()
 
