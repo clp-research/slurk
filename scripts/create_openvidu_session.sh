@@ -6,7 +6,7 @@ set -eu
 # Environment variables:
 #   SLURK_TOKEN: Token to pass as authorization, defaults to `00000000-0000-0000-0000-000000000000`
 #   SLURK_HOST: Host name to use for the request, defaults to `http://localhost`
-#   SLURK_PORT: Port to use for the request, defaults to 80
+#   SLURK_PORT: Port to use for the request, defaults to 5000
 
 TOKEN=${SLURK_TOKEN:=00000000-0000-0000-0000-000000000000}
 HOST=${SLURK_HOST:-http://localhost}
