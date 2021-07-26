@@ -5,7 +5,6 @@ from sqlalchemy.orm import relationship
 
 from .common import Common, user_room
 from .log import Log
-from .room import Room
 
 
 class User(Common):
