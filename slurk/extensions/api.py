@@ -65,14 +65,39 @@ class Blueprint(flask_smorest.Blueprint):
         return decorator
 
     @staticmethod
+    def append_auth_headers(wrapper, func):
+        parameters = {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization: Bearer <access_token>",
+            "required": "true",
+        }
+
+        wrapper._apidoc = getattr(func, "_apidoc", {})
+        wrapper._apidoc.setdefault("parameters", []).append(parameters)
+
+        getattr(wrapper, "_apidoc", {})["auth"] = True
+
+    @staticmethod
     def login_required(func):
         from slurk.views.api.auth import auth
         from flask.globals import current_app
 
-        if not current_app.config["DEBUG"]:
-            func = auth.login_required(func)
-        getattr(func, "_apidoc", {})["auth"] = True
-        return func
+        wrapper = auth.login_required(func)
+        Blueprint.append_auth_headers(wrapper, func)
+        return wrapper
+
+    @staticmethod
+    def login_possible(func):
+        from slurk.views.api.auth import auth
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            kwargs["authenticated"] = auth.authenticate(auth.get_auth(), None)
+            return func(*args, **kwargs)
+
+        Blueprint.append_auth_headers(wrapper, func)
+        return wrapper
 
     @staticmethod
     def _prepare_auth_doc(doc, doc_info, **kwargs):
