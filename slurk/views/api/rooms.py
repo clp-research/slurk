@@ -147,7 +147,6 @@ class LogsByUserByRoomById(MethodView):
         if not authenticated and current_user != user:
             abort(HTTPStatus.UNAUTHORIZED)
 
-        # request.headers
         return (
             current_app.session.query(Log)
             .filter_by(room_id=room.id)
