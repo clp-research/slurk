@@ -11,7 +11,6 @@ from slurk.extensions.openvidu import OpenVidu
 
 @pytest.fixture(scope="session")
 def engine():
-    import tempfile
     from sqlalchemy import create_engine
 
     class NoSQLiteInProduction(logging.Filter):
@@ -20,8 +19,7 @@ def engine():
 
     logging.getLogger("slurk").addFilter(NoSQLiteInProduction())
 
-    with tempfile.NamedTemporaryFile() as f:
-        yield create_engine(f"sqlite:///{f.name}")
+    return create_engine("sqlite:///:memory:")
 
 
 @pytest.fixture(scope="session")
