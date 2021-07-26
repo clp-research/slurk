@@ -77,7 +77,7 @@ $(document).ready(() => {
         user_map = tmp_user_map
     }
 
-    async function joined_room(data) {
+    async function joined_room(data, ack) {
         self_room = data['room'];
 
         let room_request = $.get({ url: uri + "/rooms/" + self_room, beforeSend: headers });
@@ -119,6 +119,7 @@ $(document).ready(() => {
         }
 
         apply_user_permissions(await permissions_request)
+        ack()
     }
 
     async function left_room(data) {
