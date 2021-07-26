@@ -85,8 +85,9 @@ class Blueprint(flask_smorest.Blueprint):
 
         if not current_app.config["DEBUG"]:
             wrapper = auth.login_required(func)
-        Blueprint.append_auth_headers(wrapper, func)
-        return wrapper
+            Blueprint.append_auth_headers(wrapper, func)
+            func = wrapper
+        return func
 
     @staticmethod
     def login_possible(func):
