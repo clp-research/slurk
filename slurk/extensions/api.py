@@ -83,7 +83,8 @@ class Blueprint(flask_smorest.Blueprint):
         from slurk.views.api.auth import auth
         from flask.globals import current_app
 
-        wrapper = auth.login_required(func)
+        if not current_app.config["DEBUG"]:
+            wrapper = auth.login_required(func)
         Blueprint.append_auth_headers(wrapper, func)
         return wrapper
 
