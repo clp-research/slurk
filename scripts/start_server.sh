@@ -35,5 +35,6 @@ else
         -p $PORT:80 \
         -e SLURK_SECRET_KEY=$SLURK_SECRET_KEY \
         -e SLURK_DISABLE_ETAG=${SLURK_DISABLE_ETAG:-False} \
+        -e FLASK_ENV=$FLASK_ENV \
         slurk/server:${SLURK_DOCKER_TAG:-latest}
 fi
