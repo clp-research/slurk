@@ -20,7 +20,7 @@ def room_created(payload):
     if "task" in payload and task is None:
         return False, f'Task "{task}" does not exist'
 
-    socketio.emit("new_room", {"room": payload["room"]}, broadcast=True)
+    socketio.emit("new_room", {"room": room.id}, broadcast=True)
 
     users = []
     for user in room.users:
@@ -28,7 +28,7 @@ def room_created(payload):
 
     socketio.emit(
         "new_task_room",
-        {"room": payload["room"], "task": payload["task"], "users": users},
+        {"room": room.id, "task": task.id, "users": users},
         broadcast=True,
     )
     return True
@@ -120,7 +120,7 @@ def emit_message(event, payload, data):
         event,
         dict(
             user=user,
-            room=str(room.id) if room else None,
+            room=room.id if room else None,
             timestamp=str(datetime.utcnow()),
             private=private,
             **data,
