@@ -1,5 +1,6 @@
 from flask.views import MethodView
 from flask.globals import current_app
+from flask_login import current_user
 from flask_smorest import abort
 from flask_smorest.error_handler import ErrorSchema
 from http import HTTPStatus
@@ -140,8 +141,12 @@ class LogsByUserByRoomById(MethodView):
     @blp.query("room", RoomSchema)
     @blp.query("user", UserSchema)
     @blp.response(200, LogSchema.Response(many=True))
-    def get(self, *, room, user):
+    @blp.login_possible
+    def get(self, *, room, user, authenticated):
         """List logs by room and user"""
+        if not authenticated and current_user != user:
+            abort(HTTPStatus.UNAUTHORIZED)
+
         return (
             current_app.session.query(Log)
             .filter_by(room_id=room.id)

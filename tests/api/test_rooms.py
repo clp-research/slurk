@@ -761,3 +761,15 @@ class TestGetLogsByUserByRoomByIdValid:
             headers={"If-None-Match": response.headers["ETag"]},
         )
         assert response.status_code == HTTPStatus.NOT_MODIFIED
+
+
+class TestGetLogsByUserByRoomByIdInvalid:
+    @pytest.mark.depends(
+        on=["tests/api/test_rooms.py::TestGetLogsByUserByRoomByIdValid"]
+    )
+    def test_unauthorized_access(self, client, rooms, users, tokens):
+        response = client.get(
+            f'/slurk/api/rooms/{rooms.json["id"]}/users/{users.json["id"]}/logs',
+            headers={"Authorization": f'Bearer {tokens.json["id"]}'},
+        )
+        assert response.status_code == HTTPStatus.UNAUTHORIZED, parse_error(response)
