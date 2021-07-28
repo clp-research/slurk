@@ -53,7 +53,7 @@ class User(Common):
             socketio.emit(
                 "joined_room",
                 {
-                    "room": str(room.id),
+                    "room": room.id,
                     "user": self.id,
                 },
                 room=self.session_id,
@@ -64,7 +64,7 @@ class User(Common):
                 dict(
                     type="join",
                     user=dict(id=self.id, name=self.name),
-                    room=str(room.id),
+                    room=room.id,
                     timestamp=str(datetime.utcnow()),
                 ),
                 room=str(room.id),
@@ -159,7 +159,7 @@ class User(Common):
             socketio.emit(
                 "left_room",
                 {
-                    "room": str(room.id),
+                    "room": room.id,
                     "user": self.id,
                 },
                 room=self.session_id,
@@ -172,7 +172,7 @@ class User(Common):
             dict(
                 type="leave",
                 user=dict(id=self.id, name=self.name),
-                room=str(room.id),
+                room=room.id,
                 timestamp=str(datetime.utcnow()),
             ),
             room=str(room.id),
