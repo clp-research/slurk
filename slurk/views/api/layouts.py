@@ -10,31 +10,41 @@ from slurk.views.api import BaseSchema, CommonSchema
 blp = Blueprint(Layout.__tablename__ + "s", __name__)
 
 
+class ScriptSource(ma.fields.Field):
+    def __init__(self, **kwargs):
+        super().__init__(type="[string] | string", **kwargs)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        if isinstance(value, str):
+            return value
+        if isinstance(value, list) and all(map(lambda x: isinstance(x, str), value)):
+            return value
+        raise ma.exceptions.ValidationError('Field should be str or list of strings')
+
+
 script_dict = ma.Schema.from_dict(
     {
-        "incoming-text": ma.fields.String(
+        "incoming-text": ScriptSource(
             missing=None, description="Called when a text message is received"
         ),
-        "incoming-image": ma.fields.String(
+        "incoming-image": ScriptSource(
             missing=None, description="Called when an image is received"
         ),
-        "submit-message": ma.fields.String(
+        "submit-message": ScriptSource(
             missing=None, description="Called when a message is sent"
         ),
-        "print-history": ma.fields.String(
+        "print-history": ScriptSource(
             missing=None, description="Used for printing the chat history"
         ),
-        "typing-users": ma.fields.String(
+        "typing-users": ScriptSource(
             missing=None,
             description="Called when state of currently typing users is changed",
         ),
-        "document-ready": ma.fields.List(
-            ma.fields.String,
+        "document-ready": ScriptSource(
             missing=None,
             description="Called when site is fully loaded",
         ),
-        "plain": ma.fields.List(
-            ma.fields.String,
+        "plain": ScriptSource(
             missing=None,
             description="Injected as a script file into the site",
         ),

@@ -9,7 +9,7 @@ import marshmallow as ma
 
 from slurk.extensions.api import Blueprint
 from slurk.extensions.events import socketio
-from slurk.models import Room, Layout, Log
+from slurk.models import Room, User, Layout, Log
 from slurk.views.api.openvidu.fields import SessionId as OpenViduSessionId
 
 from .users import UserSchema, blp as user_blp
@@ -170,11 +170,21 @@ class AttributeSchema(ma.Schema):
         required=True,
         metadata={"description": "The value to be set for the given attribute"},
     )
+    receiver_id = Id(
+        User,
+        missing=None,
+        metadata={"description": "Receiver for which the attribute should be set"},
+    )
 
 
 class TextSchema(ma.Schema):
     text = ma.fields.Str(
         required=True, metadata={"description": "The text to be set for the given ID"}
+    )
+    receiver_id = Id(
+        User,
+        missing=None,
+        metadata={"description": "Receiver for which the text should be set"},
     )
 
 
@@ -184,6 +194,11 @@ class ClassSchema(ma.Schema):
         attribute="class",
         data_key="class",
         metadata={"description": "The class to be modified"},
+    )
+    receiver_id = Id(
+        User,
+        missing=None,
+        metadata={"description": "Receiver for which the class should be modified"},
     )
 
 
@@ -196,30 +211,24 @@ class AttributeId(MethodView):
     def patch(self, *, room, id, **kwargs):
         """Update an element identified by it's ID"""
         kwargs["id"] = id
-        Log.add("set_attribute", room=room, data=kwargs)
-        socketio.emit("attribute_update", kwargs, room=str(room.id))
-        return kwargs
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
+        else:
+            target = str(room.id)
 
-
-# Note: user_blp. Required here as otherwise we would have circular dependencies
-@user_blp.route("/<int:user_id>/attribute/id/<string:id>")
-class UserAttributeId(MethodView):
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(AttributeSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def patch(self, *, user, id, **kwargs):
-        """Update an element identified by it's ID"""
-        kwargs["id"] = id
-        Log.add("set_attribute", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("attribute_update", kwargs, room=user.session_id)
+        Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
 
 
@@ -232,30 +241,24 @@ class AttributeClass(MethodView):
     def patch(self, *, room, cls, **kwargs):
         """Update an element identified by it's class"""
         kwargs["cls"] = cls
-        Log.add("set_attribute", room=room, data=kwargs)
-        socketio.emit("attribute_update", kwargs, room=str(room.id))
-        return kwargs
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
+        else:
+            target = str(room.id)
 
-
-# Note: user_blp. Required here as otherwise we would have circular dependencies
-@user_blp.route("/<int:user_id>/attribute/class/<string:cls>")
-class UserAttributeClass(MethodView):
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(AttributeSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def patch(self, *, user, cls, **kwargs):
-        """Update an element identified by it's class"""
-        kwargs["cls"] = cls
-        Log.add("set_attribute", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("attribute_update", kwargs, room=user.session_id)
+        Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
 
 
@@ -268,30 +271,24 @@ class AttributeElement(MethodView):
     def patch(self, *, room, element, **kwargs):
         """Update an element identified by it's type"""
         kwargs["element"] = element
-        Log.add("set_attribute", room=room, data=kwargs)
-        socketio.emit("attribute_update", kwargs, room=str(room.id))
-        return kwargs
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
+        else:
+            target = str(room.id)
 
-
-# Note: user_blp. Required here as otherwise we would have circular dependencies
-@user_blp.route("/<int:user_id>/attribute/element/<string:element>")
-class UserAttributeElement(MethodView):
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(AttributeSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def patch(self, *, user, element, **kwargs):
-        """Update an element identified by it's type"""
-        kwargs["element"] = element
-        Log.add("set_attribute", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("attribute_update", kwargs, room=user.session_id)
+        Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
 
 
@@ -304,30 +301,24 @@ class Text(MethodView):
     def patch(self, *, room, id, **kwargs):
         """Update the text of an element identified by it's ID"""
         kwargs["id"] = id
-        Log.add("set_text", room=room, data=kwargs)
-        socketio.emit("text_update", kwargs, room=str(room.id))
-        return kwargs
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
+        else:
+            target = str(room.id)
 
-
-# Note: user_blp. Required here as otherwise we would have circular dependencies
-@user_blp.route("/<int:user_id>/text/<string:id>")
-class UserText(MethodView):
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(TextSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def patch(self, *, user, id, **kwargs):
-        """Update the text of an element identified by it's ID"""
-        kwargs["id"] = id
-        Log.add("set_text", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("text_update", kwargs, room=str(user.session_id))
+        Log.add("set_text", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("text_update", kwargs, room=target)
         return kwargs
 
 
@@ -340,8 +331,24 @@ class Class(MethodView):
     def post(self, *, room, id, **kwargs):
         """Add a class to an element identified by it's ID"""
         kwargs["id"] = id
-        Log.add("class_add", room=room, data=kwargs)
-        socketio.emit("class_add", kwargs, room=str(room.id))
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
+        else:
+            target = str(room.id)
+
+        Log.add("class_add", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("class_add", kwargs, room=target)
         return kwargs
 
     @blp.query("room", RoomSchema, check_etag=False)
@@ -351,46 +358,23 @@ class Class(MethodView):
     def delete(self, *, room, id, **kwargs):
         """Remove a class from an element identified by it's ID"""
         kwargs["id"] = id
-        Log.add("class_remove", room=room, data=kwargs)
-        socketio.emit("class_remove", kwargs, room=str(room.id))
-        return kwargs
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver = None
+        if receiver_id is not None:
+            db = current_app.session
+            receiver = db.query(User).get(receiver_id)
+            target = receiver.session_id
+            if target is None:
+                abort(
+                    HTTPStatus.UNPROCESSABLE_ENTITY,
+                    query={
+                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
+                    },
+                )
 
+        else:
+            target = str(room.id)
 
-# Note: user_blp. Required here as otherwise we would have circular dependencies
-@user_blp.route("/<int:user_id>/class/<string:id>")
-class UserClass(MethodView):
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(ClassSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def post(self, *, user, id, **kwargs):
-        """Add a class to an element identified by it's ID"""
-        kwargs["id"] = id
-        Log.add("class_add", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("class_add", kwargs, room=str(user.session_id))
-        return kwargs
-
-    @blp.query("user", UserSchema, check_etag=False)
-    @blp.arguments(ClassSchema, as_kwargs=True)
-    @blp.response(204)
-    @blp.login_required
-    def delete(self, *, user, id, **kwargs):
-        """Remove a class from an element identified by it's ID"""
-        kwargs["id"] = id
-        Log.add("class_remove", user=user, data=kwargs)
-        if user.session_id is None:
-            abort(
-                HTTPStatus.UNPROCESSABLE_ENTITY,
-                query={
-                    "user_id": f"User `{user.id} does not have a session id associated"
-                },
-            )
-        socketio.emit("class_remove", kwargs, room=str(user.session_id))
+        Log.add("class_remove", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("class_remove", kwargs, room=target)
         return kwargs
