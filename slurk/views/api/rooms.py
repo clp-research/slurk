@@ -202,6 +202,24 @@ class ClassSchema(ma.Schema):
     )
 
 
+def get_receiver_target(receiver_id, fallback):
+    receiver = None
+    if receiver_id is not None:
+        db = current_app.session
+        receiver = db.query(User).get(receiver_id)
+        target = receiver.session_id
+        if target is None:
+            abort(
+                HTTPStatus.UNPROCESSABLE_ENTITY,
+                query={
+                    "receiver_id": f"User `{receiver.id}` does not have a session id associated"
+                },
+            )
+    else:
+        target = fallback
+    return receiver, target
+
+
 @blp.route("/<int:room_id>/attribute/id/<string:id>")
 class AttributeId(MethodView):
     @blp.query("room", RoomSchema, check_etag=False)
@@ -212,21 +230,7 @@ class AttributeId(MethodView):
         """Update an element identified by it's ID"""
         kwargs["id"] = id
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
         socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
@@ -242,21 +246,7 @@ class AttributeClass(MethodView):
         """Update an element identified by it's class"""
         kwargs["cls"] = cls
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
         socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
@@ -272,21 +262,7 @@ class AttributeElement(MethodView):
         """Update an element identified by it's type"""
         kwargs["element"] = element
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("set_attribute", room=room, receiver=receiver, data=kwargs)
         socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
@@ -302,21 +278,7 @@ class Text(MethodView):
         """Update the text of an element identified by it's ID"""
         kwargs["id"] = id
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("set_text", room=room, receiver=receiver, data=kwargs)
         socketio.emit("text_update", kwargs, room=target)
         return kwargs
@@ -332,21 +294,7 @@ class Class(MethodView):
         """Add a class to an element identified by it's ID"""
         kwargs["id"] = id
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("class_add", room=room, receiver=receiver, data=kwargs)
         socketio.emit("class_add", kwargs, room=target)
         return kwargs
@@ -359,22 +307,7 @@ class Class(MethodView):
         """Remove a class from an element identified by it's ID"""
         kwargs["id"] = id
         receiver_id = kwargs.pop("receiver_id", None)
-        receiver = None
-        if receiver_id is not None:
-            db = current_app.session
-            receiver = db.query(User).get(receiver_id)
-            target = receiver.session_id
-            if target is None:
-                abort(
-                    HTTPStatus.UNPROCESSABLE_ENTITY,
-                    query={
-                        "receiver_id": f"User `{receiver_id}` does not have a session id associated"
-                    },
-                )
-
-        else:
-            target = str(room.id)
-
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
         Log.add("class_remove", room=room, receiver=receiver, data=kwargs)
         socketio.emit("class_remove", kwargs, room=target)
         return kwargs

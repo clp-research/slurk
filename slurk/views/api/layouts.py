@@ -19,7 +19,7 @@ class ScriptSource(ma.fields.Field):
             return value
         if isinstance(value, list) and all(map(lambda x: isinstance(x, str), value)):
             return value
-        raise ma.exceptions.ValidationError('Field should be str or list of strings')
+        raise ma.exceptions.ValidationError("Field should be str or list of strings")
 
 
 script_dict = ma.Schema.from_dict(

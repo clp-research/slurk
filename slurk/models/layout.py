@@ -193,7 +193,7 @@ def _script(data):
         elif isinstance(script_file, list):
             for file in iter(script_file):
                 content += _parse_content(file)
-        script += _create_script(trigger, content)  + "\n\n\n"
+        script += _create_script(trigger, content) + "\n\n\n"
     return script if script != "" else None
 
 
