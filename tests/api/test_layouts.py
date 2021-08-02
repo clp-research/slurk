@@ -370,7 +370,7 @@ class TestPutInvalid(LayoutsTable, InvalidWithEtagTemplate):
     REQUEST_CONTENT = [
         ({"json": {"subtitle": "Room for testing"}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
-            {"json": {"title": "Test Room", "scripts": {"plain": "script"}}},
+            {"json": {"title": "Test Room", "scripts": {"plain": 4}}},
             HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (

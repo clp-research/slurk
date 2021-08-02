@@ -158,11 +158,11 @@ def _create_script(trigger: str, content: str):
     return ""
 
 
-def _parse_trigger(trigger, script_file):
-    script = ""
+def _parse_content(script_file):
+    content = ""
     try:
         with urllib.request.urlopen(script_file) as url:
-            script += _create_script(trigger, url.read().decode("utf-8")) + "\n\n\n"
+            content += url.read().decode("utf-8") + "\n\n"
     except BaseException:
         pass
 
@@ -175,10 +175,10 @@ def _parse_trigger(trigger, script_file):
 
     try:
         with open(plugin_path) as script_content:
-            script += _create_script(trigger, script_content.read()) + "\n\n\n"
+            content += script_content.read() + "\n\n"
     except FileNotFoundError:
         current_app.logger.error("Could not find script: %s", script_file)
-    return script
+    return content
 
 
 def _script(data):
@@ -187,12 +187,13 @@ def _script(data):
 
     script = ""
     for trigger, script_file in data["scripts"].items():
+        content = ""
         if isinstance(script_file, str):
-            script += _parse_trigger(trigger, script_file)
+            content += _parse_content(script_file)
         elif isinstance(script_file, list):
             for file in iter(script_file):
-                script += _parse_trigger(trigger, file)
-
+                content += _parse_content(file)
+        script += _create_script(trigger, content) + "\n\n\n"
     return script if script != "" else None
 
 

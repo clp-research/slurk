@@ -445,21 +445,34 @@ class TestPatchInvalid(RoomsTable, InvalidWithEtagTemplate):
 class TestPatchAttributeValid:
     REQUEST_CONTENT = [
         ({"json": {"attribute": "color", "value": "red"}}, "id"),
-        ({"json": {"attribute": "background-color", "value": "yellow"}}, "class"),
+        ({"json": {"attribute": "color", "value": "red", "receiver_id": -1}}, "id"),
+        ({"json": {"attribute": "color", "value": "yellow"}}, "class"),
+        (
+            {"json": {"attribute": "color", "value": "yellow", "receiver_id": -1}},
+            "class",
+        ),
         ({"json": {"attribute": "font-size", "value": "30px"}}, "element"),
+        (
+            {"json": {"attribute": "font-size", "value": "30px", "receiver_id": -1}},
+            "element",
+        ),
     ]
 
     @pytest.mark.parametrize("content, attribute_on", REQUEST_CONTENT)
-    def test_valid_request(self, client, rooms, content, attribute_on):
+    def test_valid_request(self, client, rooms, users, content, attribute_on):
         with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get("json", {}) or content.get("data", {})
+            if data.get("receiver_id") == -1:
+                data["receiver_id"] = users.json["id"]
 
-            # test-field could here be a custom class, id or a pseudo element
-            response = client.patch(
-                f'/slurk/api/rooms/{rooms.json["id"]}/attribute/{attribute_on}/test-field',
-                **content,
-            )
+            with mock.patch("slurk.views.api.rooms.abort"):
+                # test-field could here be a custom class, id or a pseudo element
+                response = client.patch(
+                    f'/slurk/api/rooms/{rooms.json["id"]}/attribute/{attribute_on}/test-field',
+                    **content,
+                )
             assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
+            receiver_id = data.pop("receiver_id", None)
             # check that event was triggered
             socketio_mock.assert_called_with(
                 "attribute_update",
@@ -467,7 +480,7 @@ class TestPatchAttributeValid:
                     **data,
                     "cls" if attribute_on == "class" else attribute_on: "test-field",
                 },
-                room=str(rooms.json["id"]),
+                room=str(rooms.json["id"]) if receiver_id is None else None,
             )
 
 
@@ -519,11 +532,43 @@ class TestPatchAttributeInvalid(RoomsTable, InvalidTemplate):
             # check that event was not triggered
             socketio_mock.assert_not_called()
 
+    REQUEST_CONTENT2 = [
+        (
+            {"json": {"attribute": "color", "value": "blue", "receiver_id": 0}},
+            "id",
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
+        (
+            {"json": {"attribute": "color", "value": "yellow", "receiver_id": 0}},
+            "class",
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
+        (
+            {"json": {"attribute": "color", "value": "red", "receiver_id": 0}},
+            "element",
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        ),
+    ]
+
+    @pytest.mark.parametrize("content, attribute_on, status", REQUEST_CONTENT2)
+    def test_inactive_user(self, client, rooms, content, attribute_on, status):
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
+            response = client.patch(
+                f'/slurk/api/rooms/{rooms.json["id"]}/attribute/{attribute_on}/test-field',
+                **content,
+            )
+            assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+                response
+            )
+            # check that event was not triggered
+            socketio_mock.assert_not_called()
+
 
 @pytest.mark.depends(
     on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_class[POST]",
         f"{PREFIX}::TestPostValid",
+        "tests/api/test_users.py::TestPostValid",
     ]
 )
 class TestPostClassValid:
@@ -533,21 +578,26 @@ class TestPostClassValid:
     ]
 
     @pytest.mark.parametrize("content", REQUEST_CONTENT)
-    def test_valid_request(self, client, rooms, content):
+    def test_valid_request(self, client, rooms, users, content):
         with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get("json", {}) or content.get("data", {})
-
+            if data.get("receiver_id") == -1:
+                data["receiver_id"] = users.json["id"]
             # convert dictionary to json
             if "data" in content:
                 content["data"] = json.dumps(content["data"])
 
-            response = client.post(
-                f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field', **content
-            )
+            with mock.patch("slurk.views.api.rooms.abort"):
+                response = client.post(
+                    f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field', **content
+                )
             assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
+            receiver_id = data.pop("receiver_id", None)
             # check that event was triggered
             socketio_mock.assert_called_with(
-                "class_add", {**data, "id": "test-field"}, room=str(rooms.json["id"])
+                "class_add",
+                {**data, "id": "test-field"},
+                room=str(rooms.json["id"]) if receiver_id is None else None,
             )
 
 
@@ -555,6 +605,7 @@ class TestPostClassValid:
     on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_class[POST]",
         f"{PREFIX}::TestPostValid",
+        "tests/api/test_rooms.py::TestPostValid",
     ]
 )
 class TestPostClassInvalid(RoomsTable, InvalidTemplate):
@@ -584,35 +635,54 @@ class TestPostClassInvalid(RoomsTable, InvalidTemplate):
             # check that event was not triggered
             socketio_mock.assert_not_called()
 
+    def test_inactive_user(self, client, rooms):
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
+            response = client.post(
+                f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field',
+                json={"text": "test", "receiver_id": 0},
+            )
+            assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+                response
+            )
+            # check that event was not triggered
+            socketio_mock.assert_not_called()
+
 
 @pytest.mark.depends(
     on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_class[DELETE]",
         f"{PREFIX}::TestPostValid",
+        "tests/api/test_users.py::TestPostValid",
     ]
 )
 class TestDeleteClassValid:
     REQUEST_CONTENT = [
         {"json": {"class": "test"}},
+        {"json": {"class": "test", "receiver_id": -1}},
         {"data": {"class": "test"}, "headers": {"Content-Type": "application/json"}},
     ]
 
     @pytest.mark.parametrize("content", REQUEST_CONTENT)
-    def test_valid_request(self, client, rooms, content):
+    def test_valid_request(self, client, rooms, users, content):
         with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get("json", {}) or content.get("data", {})
-
+            if data.get("receiver_id") == -1:
+                data["receiver_id"] = users.json["id"]
             # convert dictionary to json
             if "data" in content:
                 content["data"] = json.dumps(content["data"])
 
-            response = client.delete(
-                f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field', **content
-            )
+            with mock.patch("slurk.views.api.rooms.abort"):
+                response = client.delete(
+                    f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field', **content
+                )
             assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
+            receiver_id = data.pop("receiver_id", None)
             # check that event was triggered
             socketio_mock.assert_called_with(
-                "class_remove", {**data, "id": "test-field"}, room=str(rooms.json["id"])
+                "class_remove",
+                {**data, "id": "test-field"},
+                room=str(rooms.json["id"]) if receiver_id is None else None,
             )
 
 
@@ -649,28 +719,50 @@ class TestDeleteClassInvalid(RoomsTable, InvalidTemplate):
             # check that event was not triggered
             socketio_mock.assert_not_called()
 
+    def test_inactive_user(self, client, rooms):
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
+            response = client.delete(
+                f'/slurk/api/rooms/{rooms.json["id"]}/class/test-field',
+                json={"text": "test", "receiver_id": 0},
+            )
+            assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+                response
+            )
+            # check that event was not triggered
+            socketio_mock.assert_not_called()
+
 
 @pytest.mark.depends(
     on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_text[PATCH]",
         f"{PREFIX}::TestPostValid",
+        "tests/api/test_users.py::TestPostValid",
     ]
 )
 class TestPatchTextValid:
-    REQUEST_CONTENT = [{"json": {"text": "test"}}]
+    REQUEST_CONTENT = [
+        {"json": {"text": "test"}},
+        {"json": {"text": "test", "receiver_id": -1}},
+    ]
 
     @pytest.mark.parametrize("content", REQUEST_CONTENT)
-    def test_valid_request(self, client, rooms, content):
+    def test_valid_request(self, client, rooms, users, content):
         with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
             data = content.get("json", {}) or content.get("data", {})
+            if data.get("receiver_id") == -1:
+                data["receiver_id"] = users.json["id"]
 
-            response = client.patch(
-                f'/slurk/api/rooms/{rooms.json["id"]}/text/test-field', **content
-            )
+            with mock.patch("slurk.views.api.rooms.abort"):
+                response = client.patch(
+                    f'/slurk/api/rooms/{rooms.json["id"]}/text/test-field', **content
+                )
             assert response.status_code == HTTPStatus.NO_CONTENT, parse_error(response)
+            receiver_id = data.pop("receiver_id", None)
             # check that event was triggered
             socketio_mock.assert_called_with(
-                "text_update", {**data, "id": "test-field"}, room=str(rooms.json["id"])
+                "text_update",
+                {**data, "id": "test-field"},
+                room=str(rooms.json["id"]) if receiver_id is None else None,
             )
 
 
@@ -707,6 +799,18 @@ class TestPatchTextInvalid(RoomsTable, InvalidTemplate):
             assert response.status_code == status, parse_error(response)
             socketio_mock.assert_not_called()
 
+    def test_inactive_user(self, client, rooms):
+        with mock.patch("slurk.views.api.rooms.socketio.emit") as socketio_mock:
+            response = client.patch(
+                f'/slurk/api/rooms/{rooms.json["id"]}/text/test-field',
+                json={"text": "test", "receiver_id": 0},
+            )
+            assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
+                response
+            )
+            # check that event was not triggered
+            socketio_mock.assert_not_called()
+
 
 @pytest.mark.depends(
     on=[
@@ -734,8 +838,8 @@ class TestGetUsersByRoomByIdValid:
     on=[
         f"{PREFIX}::TestRequestOptions::test_request_option_with_id_user_logs[GET]",
         f"{PREFIX}::TestPostValid",
-        # TODO 'tests/api/test_users.py::TestPostValid',
-        # TODO 'tests/api/test_logs.py::TestPostValid'
+        "tests/api/test_users.py::TestPostValid",
+        "tests/api/test_logs.py::TestPostValid",
     ]
 )
 class TestGetLogsByUserByRoomByIdValid:
