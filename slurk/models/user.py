@@ -58,7 +58,7 @@ class User(Common):
                     "status",
                     dict(
                         type="join",
-                        user=dict(id=user["id"], name=user["name"]),
+                        user=user,
                         room=room_id,
                         timestamp=str(datetime.utcnow()),
                     ),
