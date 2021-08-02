@@ -4,13 +4,12 @@
 Layouts and Plugins
 =========================================
 
-In Slurk you have the possibility to integrate your own layouts.
-With layouts it is possible to modify the display area on the right side and specify a stylesheet.
+In slurk you have the possibility to integrate your own layouts.
+With layouts, it is possible to modify the display area on the right side and specify a stylesheet.
 
-A layout is a JSON file with a top level dictionary with the following keys:
+A layout is a JSON file with a top-level dictionary. In addition to the fields listed in the :ref:`slurk_api`
+there are three fields, which worth pointing out:
 
-- ``"title"``: String displayed in the header. If no title is specified, "Slurk" is used.
-- ``"subtitle"``: String displayed under the title.
 - ``"html"``: Consists of a list of further dictionaries or strings.
     Each dictionary represents an HTML node.  Each key in this dictionary corresponds to the attribute in an HTML tag. There are also two predefined tags: ``"layout-type"`` and ``"layout-content"``. ``"layout-type"`` corresponds to the name of the node, ``"layout-content"`` corresponds to the content between the opening and closing tag. For example
 
@@ -18,12 +17,27 @@ A layout is a JSON file with a top level dictionary with the following keys:
 
       {
         "layout-type": "span",
-        "layout-content": "text",
+        "layout-content": "Text",
         "id": "box"
       }
 
-    corresponds to the HTML of ``<span id="box">Text</span>``
-- ``"css"``: A dictionary which is similar to a typical css stylesheet. Example:
+    corresponds to the HTML of ``<span id="box">Text</span>``.
+    It's also possible to nest the content. The following object will result in
+    ``<span id="outer"><span id="inner">Text</span></span>``:
+
+    .. code-block:: json
+
+      {
+        "layout-type": "span",
+        "layout-content": {
+          "layout-type": "span",
+          "layout-content": "Text",
+          "id": "inner"
+        },
+        "id": "outer"
+      }
+
+- ``"css"``: A dictionary which is similar to a typical CSS stylesheet. Example:
     .. code-block:: json
 
        {
@@ -32,63 +46,116 @@ A layout is a JSON file with a top level dictionary with the following keys:
            "margin": "50px 20px 15px"
          }
        }
+
+  This is injected as the following stylesheet:
+
+    .. code-block:: css
+
+      #image-area {
+        align-content: left
+        margin: 50px 20px 15px
+      }
+
 - ``"script"``: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which
-  maps different triggers to scripts or a list of scripts. Scripts can either be a predefined one, or can be passed by
+  maps different triggers to scripts or a list of scripts. Scripts can either be a predefined one or can be passed by
   link. Example:
 
     .. code-block:: json
 
       {
-        "incoming-message": "display-message",
+        "incoming-text": "display-text",
         "submit-message": "send-message",
         "print-history": "plain-history"
       }
-- ``"external"``: A list of javascript links to load. Example:
 
-    .. code-block:: json
+Triggers
+~~~~~~~~
 
-      [
-        "https://github.com/OpenVidu/openvidu/releases/download/v2.11.0/openvidu-browser-2.11.0.min.js"
-      ]
+A full list of available keys is shown in the :ref:`slurk_api`. There are some predefined scripts
+which can be used. Also, several variables may be defined in a trigger:
 
-Predefined scripts:
-    - ``"display-text"``: Displays texts in the chat as they arrive
-    - ``"display-image"``: Displays images in the chat as they arrive
-    - ``"plain-history"``: Shows messages in the chat, which have arrived before login
-    - ``"send-message"``: Sends text, images, and commands depending on the entered text
-    - ``"typing-users"``: Displays the currently typing users in the ``#typing`` element
-    - ``"ask-reload"``: A popup asks on page reload, if this is the desired action
+``"incoming-text"``
+-------------------
+Displays text messages as they arrive
 
+Variables:
+  - ``data.user``: The user who has sent the message
+  - ``data.timestamp``: The timestamp of the message
+  - ``data.private``: A boolean value if this was a direct message or visible to the room
+  - ``data.message``: The message string of the sent message if any
+  - ``data.html``: Tag if the message is marked as HTML
+Examples:
+  - ``"display-text"``: Prints as plain text
+  - ``"markdown"``: Prints as formatted markdown if tagged as html
 
-These are the currently defined triggers:
+``"incoming-image"``
+--------------------
+Displays images in the chat area they arrive
 
-- ``"incoming-text"``: Called when a new message arrives. These are the passed parameters
-    - ``data.user``: The user who has sent the message
-    - ``data.timestamp``: The timestamp of the message
-    - ``data.private``: A boolean value if this was a direct message or visible to the room
-    - ``data.message``: The message string of the sent message if any
-- ``"incoming-image"``: Called when a new message arrives. These are the passed parameters
-    - ``data.user``: The user who has sent the message
-    - ``data.timestamp``: The timestamp of the message
-    - ``data.private``: A boolean value if this was a direct message or visible to the room
-    - ``data.image``: The image url of the sent message if any (Either ``data.message`` or ``data.image`` are available)
-    - ``data.width``: The width of the sent image (available if ``data.image`` is set)
-    - ``data.height``: The height of the sent image (available if ``data.image`` is set)
-- ``"submit-message"``: Called when the user hits RETURN on the typing area
-    - ``text``: The text which was entered in the typing area
-    - ``current_user``: The user who just hit RETURN
-    - ``current_timestamp``: The current timestamp
-- ``"print-history"``: Triggered when the server sends the history of the chat on joining a room
-    - ``element.event``: Type of the event. Either ``"text"``, ``"command"`` or ``"status"``
-    - ``element.user``: The user who sent the event
-    - ``element.timestamp``: The timestamp of the event
-    - ``element.message`` (``"text"``): The message of the text event
-    - ``element.receiver_id`` (``"text"``, Optional): The receiver id, if it was a private message
-    - ``element.command`` (``"command"``): The command which was executed
-- ``"document-ready"``: Inserted into the JQuery ``$(document).ready`` function
-- ``"plain"``: Inserted as plain script into the chat
-- ``"typing-users"``: Triggered when a user starts or stops typing
-    - ``users``: A map of currently typing users, with its id as the key
+Variables:
+  - ``data.user``: The user who has sent the message
+  - ``data.timestamp``: The timestamp of the message
+  - ``data.private``: A boolean value if this was a direct message or visible to the room
+  - ``data.image``: The image URL
+  - ``data.width``: The width of the sent image
+  - ``data.height``: The height of the sent image
+Examples:
+  - ``"display-image"``: Displays ss a simple image
+
+``"submit-message"``
+--------------------
+Called when the user hits RETURN on the typing area
+
+Variables:
+  - ``text``: The text which was entered in the typing area
+  - ``current_user``: The user who just hit RETURN
+  - ``current_timestamp``: The current timestamp
+Examples:
+  - ``"send-message"``: Sends plain text and commands depending on the entered text
+
+``"print-history"``
+-------------------
+Shows previous messages in the chat area after joining a room
+
+Variables:
+  Not all variables in ``element.data`` may be defined
+
+  - ``element.event``: Type of the event
+  - ``element.user``: The user who sent the event
+  - ``element.timestamp``: The timestamp of the event
+  - ``element.data.message``: The message of the text event
+  - ``element.data.url``: The URL of an image
+  - ``element.data.width``: The width of an image
+  - ``element.data.height``: The height of an image
+  - ``element.receiver``: The receiver, if it was a private message
+  - ``element.command``: The command which was executed
+Examples:
+  - ``"plain-history"``: As plain text and images
+  - ``"markdown-history"``: Formatted as markdown if tagged as html
+  - ``"attribute-history"``: Applies previous changes to the layout
+
+``"typing-users"``
+------------------
+Called when state of currently typing users is changed
+
+Variables:
+  - ``users``: A map of currently typing users, with its id as the key
+Examples:
+  - ``"typing-users"``: Shows which users are currently typing
+
+``"plain"``
+-----------
+"Injected as a script file into the site
+
+Examples:
+  - ``"ask-reload"``: A popup asks on page reload if this is the desired action
+
+``"document-ready"``
+--------------------
+Called when the document is loaded
+
+Variables:
+  - Everything defined from ``"plain"``
 
 Additionally, some functions are guaranteed to exist:
 
@@ -100,11 +167,8 @@ Additionally, some functions are guaranteed to exist:
 - ``submit_command(parameter)``
 
 
-
-
-******************************
 Layout development in practice
-******************************
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and
 chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with
