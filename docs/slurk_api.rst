@@ -16,10 +16,10 @@ The API is more or less sorted in chronical order, as many tables requires a pre
 value.
 
 Layouts, Rooms, and Tasks
------------------
+-------------------------
 
 A Layout defines how a room looks like. A room could either be a room, which is created by hand
-or it could be created from a task. For more information on layouts have a look at :ref:`layouts`.
+or it could be created from a task. For more information on layouts have a look at :ref:`slurk_layouts`.
 
 Users
 -----

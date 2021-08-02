@@ -128,7 +128,7 @@ Now create the token and a user for the bot:
   $ echo $BOT_USER
   2
 
-There are several bots available at :`GitHub<https://github.com/clp-research/slurk-bots>`_,
+There are several bots available at `GitHub <https://github.com/clp-research/slurk-bots>`_,
 in our example the echo-bot is used. Start the bot with the provided token
 
 .. code-block:: bash
