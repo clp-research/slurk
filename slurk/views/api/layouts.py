@@ -12,7 +12,7 @@ blp = Blueprint(Layout.__tablename__ + "s", __name__)
 
 class ScriptSource(ma.fields.Field):
     def __init__(self, **kwargs):
-        super().__init__(type="[string] | string", **kwargs)
+        super().__init__(type=["[string]", "string"], **kwargs)
 
     def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, str):
