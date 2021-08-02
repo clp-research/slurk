@@ -30,6 +30,11 @@ class RoomSchema(CommonSchema):
         description="Layout for this room",
         filter_description="Filter for layout used in the rooms",
     )
+    read_only = ma.fields.Boolean(
+        missing=False,
+        description="Make the room read-only",
+        filter_description="Filter for read-only rooms",
+    )
     openvidu_session_id = OpenViduSessionId(
         description="Session for OpenVidu",
         filter_description="Filter for an OpenVidu session",

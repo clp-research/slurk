@@ -109,8 +109,8 @@ def emit_message(event, payload, data):
                 return False, "Room not found"
             if current_user not in room.users:
                 return False, "Not in room"
-            if room.layout.read_only:
-                return False, f"Room {room.label} is read-only"
+            if room.layout.read_only or room.read_only:
+                return False, f"Room {room.id} is read-only"
             target = str(room.id)
             private = False
 

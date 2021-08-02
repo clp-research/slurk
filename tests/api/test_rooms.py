@@ -68,7 +68,7 @@ class TestRequestOptions(RoomsTable, RequestOptionsTemplate):
     @pytest.mark.depends(
         on=[
             f"{PREFIX}::TestPostValid",
-            # TODO 'tests/api/test_users.py::TestPostValid'
+            "tests/api/test_users.py::TestPostValid"
         ]
     )
     @pytest.mark.parametrize("option", ["GET"])
@@ -116,6 +116,7 @@ class TestGetValid:
 class TestPostValid:
     REQUEST_CONTENT = [
         {"json": {"layout_id": -1}},
+        {"json": {"layout_id": -1, "read_only": True}},
         {"data": {"layout_id": -1}, "headers": {"Content-Type": "application/json"}},
     ]
 
@@ -214,7 +215,10 @@ class TestGetIdInvalid:
     ]
 )
 class TestPutValid:
-    REQUEST_CONTENT = [{"json": {"layout_id": -1}}]
+    REQUEST_CONTENT = [
+        {"json": {"layout_id": -1}},
+        {"json": {"layout_id": -1, "read_only": True}}
+    ]
 
     @pytest.mark.parametrize("content", REQUEST_CONTENT)
     def test_valid_request(self, client, rooms, content):
@@ -338,8 +342,8 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
 
     @pytest.mark.depends(
         on=[
-            # TODO 'tests/api/test_logs.py::TestPostValid',
-            # TODO 'tests/api/test_logs.py::TestDeleteValid'
+            "tests/api/test_logs.py::TestPostValid",
+            "tests/api/test_logs.py::TestDeleteValid"
         ]
     )
     def test_deletion_of_room_in_logs(self, client, rooms):
@@ -368,6 +372,7 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
 class TestPatchValid:
     REQUEST_CONTENT = [
         {"json": {"layout_id": -1}},
+        {"json": {"read_only": True}},
         {"data": {"layout_id": -1}, "headers": {"Content-Type": "application/json"}},
     ]
 
@@ -417,6 +422,7 @@ class TestPatchInvalid(RoomsTable, InvalidWithEtagTemplate):
 
     REQUEST_CONTENT = [
         ({"json": {"layout_id": -42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
+        ({"json": {"read_only": 42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({"json": {"date_modified": "something"}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({"data": {"layout_id": -1}}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
     ]

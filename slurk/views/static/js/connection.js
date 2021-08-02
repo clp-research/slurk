@@ -50,12 +50,6 @@ $(document).ready(() => {
         }
         $("#title").text(layout.title);
         $("#subtitle").text(layout.subtitle);
-        if (layout.read_only) {
-            $('#text').prop('readonly', true).prop('placeholder', 'This room is read-only');
-        } else {
-            $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
-        }
-
         $('#user-list').fadeTo(null, layout.show_users);
         $('#latency').fadeTo(null, layout.show_latency);
         if (layout.show_latency) {
@@ -104,8 +98,17 @@ $(document).ready(() => {
         let permissions_request = $.get({ url: uri + "/permissions/" + token.permissions_id, beforeSend: headers });
 
         await update_user_request
-        apply_layout(await layout_request);
-        if (typeof print_history !== "undefined") {
+
+	let layout = await layout_request
+        apply_layout(layout);
+
+	if (layout.read_only || room.read_only) {
+	    $('#text').prop('readonly', true).prop('placeholder', 'This room is read-only');
+	} else {
+	    $('#text').prop('readonly', false).prop('placeholder', 'Enter your message here!');
+	}
+
+	if (typeof print_history !== "undefined") {
             $("#chat-area").empty();
             logs = await history_request;
             for (let i = 0; i < logs.length; i++) {
