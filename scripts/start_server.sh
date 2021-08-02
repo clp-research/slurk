@@ -4,6 +4,7 @@ set -eu
 # Starts slurk on the local machine.
 # Environment variables:
 #   SLURK_SECRET_KEY: Secret key used for flask for cookies, defaults to `$RANDOM`
+#   SLURK_DATABASE_URI: URI for the database, defaults to `sqlite:///:memory:`; mutual exclusive with `SLURK_DOCKER`
 #   SLURK_PORT: Port to listen on, defaults to 5000
 #   SLURK_DOCKER: Docker container name to be used. When not provided, docker is not used
 #   SLURK_DISABLE_ETAG: Disables the ETag for the rest API, defaults to `False`
