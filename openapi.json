@@ -1285,6 +1285,16 @@
           },
           {
             "in": "query",
+            "name": "read_only",
+            "required": false,
+            "description": "Filter for read-only rooms",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "in": "query",
             "name": "openvidu_session_id",
             "required": false,
             "description": "Filter for an OpenVidu session",
@@ -1929,20 +1939,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -3508,344 +3518,6 @@
         }
       ]
     },
-    "/slurk/api/users/{user_id}/attribute/id/{id}": {
-      "patch": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Attribute"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Update an element identified by it's ID",
-        "tags": [
-          "Users"
-        ]
-      },
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "/slurk/api/users/{user_id}/attribute/class/{cls}": {
-      "patch": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Attribute"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Update an element identified by it's class",
-        "tags": [
-          "Users"
-        ]
-      },
-      "parameters": [
-        {
-          "in": "path",
-          "name": "cls",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "/slurk/api/users/{user_id}/attribute/element/{element}": {
-      "patch": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Attribute"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Update an element identified by it's type",
-        "tags": [
-          "Users"
-        ]
-      },
-      "parameters": [
-        {
-          "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "/slurk/api/users/{user_id}/text/{id}": {
-      "patch": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Text"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Update the text of an element identified by it's ID",
-        "tags": [
-          "Users"
-        ]
-      },
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "/slurk/api/users/{user_id}/class/{id}": {
-      "post": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Class"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Add a class to an element identified by it's ID",
-        "tags": [
-          "Users"
-        ]
-      },
-      "delete": {
-        "responses": {
-          "422": {
-            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
-          },
-          "415": {
-            "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "$ref": "#/components/responses/UNAUTHORIZED"
-          },
-          "404": {
-            "$ref": "#/components/responses/NOT_FOUND"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Class"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TokenAuthentication": []
-          }
-        ],
-        "summary": "Remove a class from an element identified by it's ID",
-        "tags": [
-          "Users"
-        ]
-      },
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
-          "name": "user_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      ]
-    },
     "/slurk/api/tasks": {
       "get": {
         "parameters": [
@@ -4781,52 +4453,67 @@
         "type": "object",
         "properties": {
           "plain": {
-            "type": "array",
             "default": null,
             "nullable": true,
-            "description": "Injected as a script file into the site",
-            "items": {
-              "type": "string"
-            }
-          },
-          "submit-message": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when a message is sent"
-          },
-          "incoming-image": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when an image is received"
-          },
-          "typing-users": {
-            "type": "string",
-            "default": null,
-            "nullable": true,
-            "description": "Called when state of currently typing users is changed"
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Injected as a script file into the site"
           },
           "document-ready": {
-            "type": "array",
             "default": null,
             "nullable": true,
-            "description": "Called when site is fully loaded",
-            "items": {
-              "type": "string"
-            }
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when site is fully loaded"
+          },
+          "incoming-image": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when an image is received"
+          },
+          "submit-message": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a message is sent"
           },
           "incoming-text": {
-            "type": "string",
             "default": null,
             "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
             "description": "Called when a text message is received"
           },
           "print-history": {
-            "type": "string",
             "default": null,
             "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
             "description": "Used for printing the chat history"
+          },
+          "typing-users": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when state of currently typing users is changed"
           }
         }
       },
@@ -4983,22 +4670,22 @@
       "Error": {
         "type": "object",
         "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message"
-          },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
           "errors": {
             "type": "object",
             "nullable": true,
             "description": "Errors"
           },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
           "status": {
             "type": "string",
             "description": "Error name"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
@@ -6143,6 +5830,10 @@
             "type": "integer",
             "description": "Layout for this room"
           },
+          "read_only": {
+            "type": "boolean",
+            "description": "Make the room read-only"
+          },
           "openvidu_session_id": {
             "type": "string",
             "description": "Session for OpenVidu"
@@ -6156,6 +5847,11 @@
           "layout_id": {
             "type": "integer",
             "description": "Layout for this room"
+          },
+          "read_only": {
+            "type": "boolean",
+            "default": false,
+            "description": "Make the room read-only"
           },
           "openvidu_session_id": {
             "type": "string",
@@ -6173,6 +5869,10 @@
           "layout_id": {
             "type": "integer",
             "description": "Layout for this room"
+          },
+          "read_only": {
+            "type": "boolean",
+            "description": "Make the room read-only"
           },
           "openvidu_session_id": {
             "type": "string",
@@ -6264,13 +5964,19 @@
       "Attribute": {
         "type": "object",
         "properties": {
+          "value": {
+            "type": "string",
+            "description": "The value to be set for the given attribute"
+          },
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
           },
-          "value": {
-            "type": "string",
-            "description": "The value to be set for the given attribute"
+          "receiver_id": {
+            "type": "integer",
+            "default": null,
+            "nullable": true,
+            "description": "Receiver for which the attribute should be set"
           }
         },
         "required": [
@@ -6284,6 +5990,12 @@
           "text": {
             "type": "string",
             "description": "The text to be set for the given ID"
+          },
+          "receiver_id": {
+            "type": "integer",
+            "default": null,
+            "nullable": true,
+            "description": "Receiver for which the text should be set"
           }
         },
         "required": [
@@ -6293,6 +6005,12 @@
       "Class": {
         "type": "object",
         "properties": {
+          "receiver_id": {
+            "type": "integer",
+            "default": null,
+            "nullable": true,
+            "description": "Receiver for which the class should be modified"
+          },
           "class": {
             "type": "string",
             "description": "The class to be modified"
