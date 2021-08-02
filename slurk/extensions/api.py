@@ -84,7 +84,7 @@ class Blueprint(flask_smorest.Blueprint):
 
         func = auth.login_required(func)
         getattr(func, "_apidoc", {})["auth"] = True
-    
+
         wrapper = auth.login_required(func)
         Blueprint.append_auth_headers(wrapper, func)
         return wrapper
@@ -178,11 +178,6 @@ class Api(flask_smorest.Api, ErrorHandlerMixin):
         self.spec.components.security_scheme(
             "TokenAuthentication", dict(type="http", scheme="bearer")
         )
-
-    # Workaround for https://github.com/marshmallow-code/flask-smorest/pull/262
-    # This uses the local `rapidoc.html` template rather then the provided one
-    def _openapi_rapidoc(self):
-        return super()._openapi_rapidoc()
 
 
 api = Api()
