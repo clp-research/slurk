@@ -213,62 +213,7 @@ class Layout(Common):
     openvidu_settings = Column(PickleType, nullable=False)
 
     @classmethod
-    def from_json(cls, json_data):
-        """
-        Create a layout from the give JSON string
-        :param json_data: the json_data to create the layout from
-        :return: the Layout
-        """
-        return cls.from_json_data(json.loads(json_data))
-
-    @classmethod
-    def from_json_file(cls, name: str):
-        """
-        Create a layout from the give file name. The file must be either a URL or
-        lie in `app/static/layouts` and the extension. For the latter, the file
-        extension must be omitted.
-
-        Example: ``Layout.from_json_file("Meetup")``
-        :param name: the url or the file name
-        :return: the Layout
-        """
-        if not name:
-            return None
-        if not isinstance(name, str):
-            raise TypeError(
-                f"Object of type `str` expected, however type `{type(name)}` was passed"
-            )
-
-        try:
-            with urllib.request.urlopen(name) as url:
-                current_app.logger.info("loading layout from %s", url)
-                return cls.from_json_data(json.loads(url.read().decode()))
-        except BaseException:
-            pass
-
-        layout_path = (
-            os.path.dirname(os.path.realpath(__file__)) + "/../views/static/layouts/"
-        )
-
-        try:
-            with open(layout_path + name + ".json") as json_data:
-                current_app.logger.info(
-                    "loading layout from %s%s.json", layout_path, name
-                )
-                return cls.from_json_data(json.load(json_data))
-        except FileNotFoundError:
-            try:
-                with open(layout_path + "default.json") as json_data:
-                    current_app.logger.warn(
-                        'could not find layout "%s". loaded default layout instead',
-                        name,
-                    )
-                    return cls.from_json_data(json.load(json_data))
-            except FileNotFoundError:
-                return None
-
-    @classmethod
-    def from_json_data(cls, data):
+    def from_json(cls, data):
         title = _title(data)
         subtitle = _subtitle(data)
         html = _html(data)

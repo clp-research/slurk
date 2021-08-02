@@ -162,7 +162,7 @@ class LayoutSchema(CommonSchema):
     )
 
     def put(self, old, new):
-        layout = Layout.from_json_data(new)
+        layout = Layout.from_json(new)
         old.html = layout.html
         del new["html_obj"]
         old.css = layout.css
@@ -172,7 +172,7 @@ class LayoutSchema(CommonSchema):
         return super().put(old, new)
 
     def patch(self, old, new):
-        layout = Layout.from_json_data(new)
+        layout = Layout.from_json(new)
         if "html_obj" in new:
             old.html = layout.html
             del new["html_obj"]
@@ -212,7 +212,7 @@ class Layouts(MethodView):
     @blp.login_required
     def post(self, item):
         """Add a new layout"""
-        return LayoutSchema().post(Layout.from_json_data(item))
+        return LayoutSchema().post(Layout.from_json(item))
 
 
 @blp.route("/<int:layout_id>")
