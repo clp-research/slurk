@@ -81,13 +81,13 @@ class Blueprint(flask_smorest.Blueprint):
     @staticmethod
     def login_required(func):
         from slurk.views.api.auth import auth
-        from flask.globals import current_app
 
-        if not current_app.config["DEBUG"]:
-            wrapper = auth.login_required(func)
-            Blueprint.append_auth_headers(wrapper, func)
-            func = wrapper
-        return func
+        func = auth.login_required(func)
+        getattr(func, "_apidoc", {})["auth"] = True
+
+        wrapper = auth.login_required(func)
+        Blueprint.append_auth_headers(wrapper, func)
+        return wrapper
 
     @staticmethod
     def login_possible(func):

@@ -47,3 +47,11 @@ OPENAPI_RAPIDOC_CONFIG = {
     "schema-style": "table",
     "schema-description-expanded": "true",
 }
+if DEBUG:
+    OPENAPI_RAPIDOC_CONFIG.update(
+        {
+            "api-key-name": "Authorization",
+            "api-key-location": "header",
+            "api-key-value": "Bearer 00000000-0000-0000-0000-000000000000",
+        }
+    )
