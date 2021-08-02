@@ -66,10 +66,7 @@ class TestRequestOptions(RoomsTable, RequestOptionsTemplate):
         ), HTTPStatus.METHOD_NOT_ALLOWED.description
 
     @pytest.mark.depends(
-        on=[
-            f"{PREFIX}::TestPostValid",
-            "tests/api/test_users.py::TestPostValid"
-        ]
+        on=[f"{PREFIX}::TestPostValid", "tests/api/test_users.py::TestPostValid"]
     )
     @pytest.mark.parametrize("option", ["GET"])
     def test_request_option_with_id_user_logs(self, client, option, rooms, users):
@@ -217,7 +214,7 @@ class TestGetIdInvalid:
 class TestPutValid:
     REQUEST_CONTENT = [
         {"json": {"layout_id": -1}},
-        {"json": {"layout_id": -1, "read_only": True}}
+        {"json": {"layout_id": -1, "read_only": True}},
     ]
 
     @pytest.mark.parametrize("content", REQUEST_CONTENT)
@@ -343,7 +340,7 @@ class TestDeleteInvalid(RoomsTable, InvalidWithEtagTemplate):
     @pytest.mark.depends(
         on=[
             "tests/api/test_logs.py::TestPostValid",
-            "tests/api/test_logs.py::TestDeleteValid"
+            "tests/api/test_logs.py::TestDeleteValid",
         ]
     )
     def test_deletion_of_room_in_logs(self, client, rooms):
