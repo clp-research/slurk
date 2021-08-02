@@ -50,6 +50,21 @@ class User(Common):
         if self.session_id is not None:
             join_room(str(room.id), self.session_id, "/")
 
+            user = dict(id=self.id, name=self.name)
+            room_id = room.id
+
+            def joined():
+                socketio.emit(
+                    "status",
+                    dict(
+                        type="join",
+                        user=user,
+                        room=room_id,
+                        timestamp=str(datetime.utcnow()),
+                    ),
+                    room=str(room_id),
+                )
+
             socketio.emit(
                 "joined_room",
                 {
@@ -57,17 +72,7 @@ class User(Common):
                     "user": self.id,
                 },
                 room=self.session_id,
-            )
-
-            socketio.emit(
-                "status",
-                dict(
-                    type="join",
-                    user=dict(id=self.id, name=self.name),
-                    room=room.id,
-                    timestamp=str(datetime.utcnow()),
-                ),
-                room=str(room.id),
+                callback=joined,
             )
 
             Log.add("join", self, room)
