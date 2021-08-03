@@ -29,7 +29,7 @@ The second event can be triggered only if a task room was created. A task room i
 ``data`` in ``new_task_room`` has this structure:
 
 - ``room(int)``: the ``id`` of the room, that was created
-- ``task(int)``: the ``id`` the task, that was assigned to the room
+- ``task(int)``: the ``id`` of the task, that was assigned to the room
 - ``users(list)``: a list of users that are linked to this task room. Each ``user(dict)`` is represented by an ``id(int)`` and a ``name(str)``
 
 It is important to remember, that those events are not sent automatically on room creation, but have to be triggered by a bot after it has created a room:
@@ -109,7 +109,7 @@ Bots are also notified once a user joins or leaves one of the rooms the bot is p
 - ``type(str)``: the status type, either `join` or `leave`
 - ``user(dict)``: dictionary of ``id(int)`` and ``name(str)`` of the user, who caused this event
 - ``room(int)``: the ``id`` of the room, that was entered or left, respectively
-- ``timestamp(str)``: e.g. ``2021-08-02 18:18:32.016447``
+- ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
 
 Chat
 ~~~~
@@ -149,7 +149,7 @@ Messages cause an event on the server side that can be handled by bots as follow
 - ``room(int)``: the ``id`` of the room, where the message was sent
 - ``private(bool)``: ``True`` if this was a private message meant for a single user. ``False`` otherwise
 - ``broadcast(bool)``: ``True`` if the message should be transmitted to all connected users. ``False`` otherwise
-- ``timestamp(str)``: e.g. ``2021-08-02 18:18:32.016447``
+- ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
 
 Images
 ------
@@ -189,7 +189,7 @@ Images cause an event on the server side that can be handled by bots as follows:
 - ``room(int)``: the ``id`` of the room, where the image was sent
 - ``private(bool)``: ``True`` if this was a private image meant for a single user. ``False`` otherwise
 - ``broadcast(bool)``: ``True`` if the image was transmitted to all connected users. ``False`` otherwise
-- ``timestamp(str)``: e.g. ``2021-08-02 18:18:32.016447``
+- ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
 
 Commands
 --------
@@ -225,4 +225,4 @@ Commands cause an event on the server side that can be handled by bots as follow
 - ``room(int)``: the ``id`` of the room, where the command was sent
 - ``private(bool)``: ``True`` if this was a private command meant for a single user. ``False`` otherwise
 - ``broadcast(bool)``: ``True`` if the command was transmitted to all connected users. ``False`` otherwise
-- ``timestamp(str)``: e.g. ``2021-08-02 18:18:32.016447``
+- ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
