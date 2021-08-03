@@ -15,6 +15,7 @@ Slurk - A Lightweight Chat Server for Dialogue Experiments and Data Collection
    slurk_layouts
    slurk_permission
    slurk_bots
+   slurk_bots_events
    slurk_api
    slurk_deployment
    slurk_amt
