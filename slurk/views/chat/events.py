@@ -22,15 +22,16 @@ def room_created(payload):
 
     socketio.emit("new_room", {"room": room.id}, broadcast=True)
 
-    users = []
-    for user in room.users:
-        users.append({"id": user.id, "name": user.name})
+    if task is not None:
+        users = []
+        for user in room.users:
+            users.append({"id": user.id, "name": user.name})
 
-    socketio.emit(
-        "new_task_room",
-        {"room": room.id, "task": task.id, "users": users},
-        broadcast=True,
-    )
+        socketio.emit(
+            "new_task_room",
+            {"room": room.id, "task": task.id, "users": users},
+            broadcast=True,
+        )
     return True
 
 
@@ -79,10 +80,16 @@ def typed_message(payload):
 
 
 def emit_message(event, payload, data):
-    broadcast = data["broadcast"] = payload.get("broadcast", False)
+    if "room" not in payload:
+        return False, 'missing argument: "room"'
 
     db = current_app.session
-    room = db.query(Room).get(payload["room"]) if "room" in payload else None
+    room = db.query(Room).get(payload["room"])
+
+    if not room:
+        return False, "Room not found"
+
+    broadcast = data["broadcast"] = payload.get("broadcast", False)
 
     if broadcast:
         if not current_user.token.permissions.broadcast:
@@ -100,13 +107,11 @@ def emit_message(event, payload, data):
                 return False, f'User "{receiver_id}" does not exist'
             if not receiver.session_id:
                 return False, f'User "{receiver_id}" is not logged in'
+            if room not in receiver.rooms:
+                return False, f'User "{receiver_id}" is not in this room'
             target = receiver.session_id
             private = True
         else:
-            if "room" not in payload:
-                return False, 'missing argument: "room"'
-            if not room:
-                return False, "Room not found"
             if current_user not in room.users:
                 return False, "Not in room"
             if room.layout.read_only or room.read_only:
@@ -137,9 +142,8 @@ def emit_message(event, payload, data):
         data=data,
     )
 
-    if room:
-        for room in current_user.rooms:
-            socketio.emit("stop_typing", {"user": user}, room=str(room.id))
+    for room in current_user.rooms:
+        socketio.emit("stop_typing", {"user": user}, room=str(room.id))
 
     return True
 
