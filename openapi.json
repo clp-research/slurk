@@ -407,6 +407,16 @@
     "/slurk/api/openvidu/config": {
       "get": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -436,6 +446,16 @@
     "/slurk/api/openvidu/sessions": {
       "get": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -482,6 +502,16 @@
               }
             }
           },
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "409": {
             "description": "Conflict"
           },
@@ -515,6 +545,16 @@
     "/slurk/api/openvidu/sessions/{session_id}": {
       "get": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -552,6 +592,16 @@
       },
       "delete": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "406": {
             "description": "Not Acceptable",
             "content": {
@@ -618,6 +668,16 @@
           "415": {
             "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
           },
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "406": {
             "description": "Not Acceptable",
             "content": {
@@ -681,6 +741,16 @@
     "/slurk/api/openvidu/sessions/{session_id}/connections": {
       "get": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -726,6 +796,16 @@
           },
           "415": {
             "$ref": "#/components/responses/UNSUPPORTED_MEDIA_TYPE"
+          },
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
             "description": "Not Found",
@@ -788,6 +868,16 @@
     "/slurk/api/openvidu/sessions/{session_id}/connections/{connection_id}": {
       "get": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -825,6 +915,16 @@
       },
       "delete": {
         "responses": {
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -856,7 +956,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -865,7 +965,7 @@
         },
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -1879,20 +1979,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "cls",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "cls",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -1939,20 +2039,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "element",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        {
-          "in": "path",
           "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        {
+          "in": "path",
+          "name": "element",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
           }
         }
       ]
@@ -4452,23 +4552,14 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "submit-message": {
+          "document-ready": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when a message is sent"
-          },
-          "incoming-image": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when an image is received"
+            "description": "Called when site is fully loaded"
           },
           "print-history": {
             "default": null,
@@ -4478,15 +4569,6 @@
               "string"
             ],
             "description": "Used for printing the chat history"
-          },
-          "plain": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Injected as a script file into the site"
           },
           "incoming-text": {
             "default": null,
@@ -4506,14 +4588,32 @@
             ],
             "description": "Called when state of currently typing users is changed"
           },
-          "document-ready": {
+          "incoming-image": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when site is fully loaded"
+            "description": "Called when an image is received"
+          },
+          "submit-message": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a message is sent"
+          },
+          "plain": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Injected as a script file into the site"
           }
         }
       },
@@ -4674,10 +4774,6 @@
             "type": "string",
             "description": "Error name"
           },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
           "errors": {
             "type": "object",
             "nullable": true,
@@ -4686,6 +4782,10 @@
           "message": {
             "type": "string",
             "description": "Error message"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
@@ -5964,6 +6064,10 @@
       "Attribute": {
         "type": "object",
         "properties": {
+          "value": {
+            "type": "string",
+            "description": "The value to be set for the given attribute"
+          },
           "receiver_id": {
             "type": "integer",
             "default": null,
@@ -5973,10 +6077,6 @@
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
-          },
-          "value": {
-            "type": "string",
-            "description": "The value to be set for the given attribute"
           }
         },
         "required": [
