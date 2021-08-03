@@ -26,9 +26,19 @@ from slurk.views.api.openvidu.schemas import (
 blp = Blueprint("OpenVidu", __name__)
 
 
+def openvidu():
+    if not hasattr(current_app, "openvidu"):
+        abort(
+            NotImplemented,
+            query="OpenVidu module is not enabled. Define `SLURK_OPENVIDU_URL` and `SLURK_OPENVIDU_SECRET` in order to activate it.",
+        )
+    return current_app.openvidu
+
+
 @blp.route("/config")
 class Config(MethodView):
     @blp.response(200, ConfigSchema.Response)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def get(self):
         """Retrieve current OpenVidu configuration
@@ -38,7 +48,7 @@ class Config(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.config()
+        response = openvidu().config()
         if response.status_code != 200:
             abort(response)
         config = response.json()
@@ -89,13 +99,14 @@ class Config(MethodView):
 @blp.route("sessions")
 class Sessions(MethodView):
     @blp.response(200, SessionSchema.Response(many=True))
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def get(self):
         """Retrieve all Session from OpenVidu Server
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.list_sessions()
+        response = openvidu().list_sessions()
 
         if response.status_code == 200:
             return response.json()["content"]
@@ -103,6 +114,7 @@ class Sessions(MethodView):
 
     @blp.arguments(SessionSchema.Creation, example={})
     @blp.alt_response(409, None)
+    @blp.alt_response(501, ErrorSchema)
     @blp.response(201, SessionSchema.Response)
     @blp.login_required
     def post(self, args):
@@ -114,7 +126,7 @@ class Sessions(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.post_session(args)
+        response = openvidu().post_session(args)
 
         if response.status_code == 200:
             session = response.json()
@@ -134,12 +146,13 @@ class Sessions(MethodView):
 class SessionsById(MethodView):
     @blp.response(200, SessionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def get(self, *, session_id):
         """Retrieve a Session from OpenVidu Server
 
         Only available if OpenVidu is enabled."""
-        response = current_app.openvidu.get_session(session_id)
+        response = openvidu().get_session(session_id)
 
         if response.status_code == 200:
             return response.json()
@@ -150,6 +163,7 @@ class SessionsById(MethodView):
     @blp.response(204)
     @blp.alt_response(404, ErrorSchema)
     @blp.alt_response(406, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def delete(self, *, session_id):
         """Close a Session
@@ -162,7 +176,7 @@ class SessionsById(MethodView):
         if current_app.session.query(Room).filter_by(session=session_id).count() > 0:
             abort(NotAcceptable, query=f"Session `{session_id}` is still in use")
 
-        response = current_app.openvidu.delete_session(session_id)
+        response = openvidu().delete_session(session_id)
 
         if response.status_code == 204:
             return
@@ -178,6 +192,7 @@ class SessionsSignal(MethodView):
     @blp.alt_response(404, ErrorSchema)
     @blp.alt_response(406, ErrorSchema)
     @blp.alt_response(422, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def post(self, args, *, session_id):
         """Send a signal to a Session, to specific Connections or as a broadcast message to all Connections.
@@ -186,7 +201,7 @@ class SessionsSignal(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.signal(session_id, args)
+        response = openvidu().signal(session_id, args)
 
         if response.status_code == 200:
             return
@@ -206,13 +221,14 @@ class SessionsSignal(MethodView):
 class Connection(MethodView):
     @blp.response(200, WebRtcConnectionSchema.Response(many=True))
     @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def get(self, *, session_id):
         """List all Connections from a Session
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.list_connections(session_id)
+        response = openvidu().list_connections(session_id)
 
         if response.status_code == 200:
             return response.json()["content"]
@@ -223,13 +239,14 @@ class Connection(MethodView):
     @blp.arguments(WebRtcConnectionSchema.Creation, example={})
     @blp.response(201, WebRtcConnectionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def post(self, args, *, session_id):
         """Create a new Connection in the Session
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.post_connection(session_id, args)
+        response = openvidu().post_connection(session_id, args)
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 400:
@@ -243,13 +260,14 @@ class Connection(MethodView):
 class ConnectionById(MethodView):
     @blp.response(200, WebRtcConnectionSchema.Response)
     @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def get(self, *, session_id, connection_id):
         """Get a Connection from a Session
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.get_connection(session_id, connection_id)
+        response = openvidu().get_connection(session_id, connection_id)
 
         if response.status_code == 200:
             return response.json()
@@ -261,6 +279,7 @@ class ConnectionById(MethodView):
 
     @blp.response(204)
     @blp.alt_response(404, ErrorSchema)
+    @blp.alt_response(501, ErrorSchema)
     @blp.login_required
     def delete(self, *, session_id, connection_id):
         """Force the disconnection of a user from a Session
@@ -274,7 +293,7 @@ class ConnectionById(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.delete_connection(session_id, connection_id)
+        response = openvidu().delete_connection(session_id, connection_id)
         if response.status_code == 204:
             return
         elif response.status_code == 400:
@@ -294,7 +313,7 @@ class Recordings(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.list_recordings()
+        response = openvidu().list_recordings()
 
         if response.status_code == 200:
             return response.json()["items"]
@@ -314,7 +333,7 @@ class RecordingsById(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.get_recording(recording_id)
+        response = openvidu().get_recording(recording_id)
 
         if response.status_code == 200:
             return response.json()
@@ -336,7 +355,7 @@ class RecordingsById(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.delete_recording(recording_id)
+        response = openvidu().delete_recording(recording_id)
 
         if response.status_code == 204:
             return
@@ -364,7 +383,7 @@ class RecordingsDownload(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.get_recording(recording_id)
+        response = openvidu().get_recording(recording_id)
 
         if response.status_code == 200:
             recording = response.json()
@@ -380,7 +399,7 @@ class RecordingsDownload(MethodView):
                 Conflict,
                 query="The recording has not finished",
             )
-        request = current_app.openvidu.request.get(recording["url"], stream=True)
+        request = openvidu().request.get(recording["url"], stream=True)
 
         # Response does not accept `headers=request.headers` so we create them ourself
         headers = {}
@@ -408,7 +427,7 @@ class RecordingsStart(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.start_recording(session_id, json=args)
+        response = openvidu().start_recording(session_id, json=args)
 
         if response.status_code == 200:
             data = response.json()
@@ -452,7 +471,7 @@ class RecordingsStop(MethodView):
 
         Only available if OpenVidu is enabled."""
 
-        response = current_app.openvidu.stop_recording(recording_id)
+        response = openvidu().stop_recording(recording_id)
 
         if response.status_code == 200:
             data = response.json()
