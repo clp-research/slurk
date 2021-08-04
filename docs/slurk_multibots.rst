@@ -71,7 +71,7 @@ The token for the echo bot is stored in ``ECHO_TOKEN``. The associated user is s
   $ ECHO_USER=$(scripts/create_user.sh "EchoBot" $ECHO_TOKEN | jq .id)
   $ echo $ECHO_USER
 
-Open two new terminals and copy ``CONCIERGE_TOKEN`` & ``CONCIERGE_USER`` to one terminal and ``ECHO_TOKEN`` & ``ECHO_USER`` & ``TASK_ID`` to another terminal.
+Open two new terminals and copy ``CONCIERGE_TOKEN`` & ``CONCIERGE_USER`` to one terminal and ``ECHO_TOKEN`` & ``ECHO_USER`` & ``TASK_ID`` to another terminal. `copy` is to be understood as setting those as environment variables.
 Now start the concierge bot using the token you just created from the new terminal:
 
 .. code-block:: bash

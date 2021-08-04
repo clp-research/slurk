@@ -27,7 +27,7 @@ The URL defaults to ``http://localhost``.
     concierge_bot.run()
 
 If the connection was successful, the bot now listens to the events emitted by the server.
-Listening on events is straight forward with adding new functions to the ``register_callbacks`` method.
+Listening on events is straightforward with adding new functions to the ``register_callbacks`` method.
 
 The bot has to be notified when a user joins or leaves the room. For this purpose it can listen to the ``status`` event. More detailed information on existing events can be found in the next section.
 
