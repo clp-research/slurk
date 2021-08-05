@@ -32,9 +32,7 @@ admin token:
 01234567-89ab-cdef-0123-456789abcdef
 ```
 
-Now you can open `http://localhost:5000` in your browser and log in with any username and the provided admin token. With this token, you can't send any messages, however.
-The [full documentation][doc] on GitHub contains a step-by-step guide on how to create
-new tokens and much more.
+Now you may create a room and a token with the provided admin token, open `http://localhost:5000` in your browser, and login. The [full documentation][doc] on GitHub contains a detailed step-by-step guide on how to proceed further.
 
 Happy slurking!
 
