@@ -96,17 +96,17 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Pairing up participants and running multiple rooms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">4.1. Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-a-waiting-room-and-a-task">4.2. Create a waiting room and a task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#assign-bots-to-rooms">4.3. Assign bots to rooms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-user-tokens-for-the-task">4.4. Create user tokens for the task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-waiting-room-and-a-task">4.1. Create a waiting room and a task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assign-bots-to-rooms">4.2. Assign bots to rooms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-user-tokens-for-the-task">4.3. Create user tokens for the task</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot related Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -177,85 +177,77 @@
   <div class="section" id="pairing-up-participants-and-running-multiple-rooms">
 <span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this headline">¶</a></h1>
 <p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be
-paired up and put into a new task-specific chatroom along with bots. We provided an example bot handling this mechanism:
-The <strong>concierge bot</strong> moves human users and other bots from the waiting room to a taskroom.</p>
-<div class="section" id="prerequisites">
-<h2><span class="section-number">4.1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Install the <code class="docutils literal notranslate"><span class="pre">jq</span></code> command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install jq
-</pre></div>
-</div>
-<p>Start the server if it’s not running already (it might ask for your computer’s password):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> scripts/start_slurk_server.sh
-$ <span class="nb">source</span> scripts/get_admin_token.sh
-</pre></div>
-</div>
-<p>Check your admin token, you may need it later when running bots in different shells:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$ADMIN_TOKEN</span>
-</pre></div>
-</div>
-</div>
+paired up and put into a new task-specific chatroom along with bots. We provide an example bot handling this mechanism:
+The <strong>concierge bot</strong> moves human users from the waiting room to a task room.</p>
 <div class="section" id="create-a-waiting-room-and-a-task">
-<h2><span class="section-number">4.2. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this headline">¶</a></h2>
-<p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the layout
+<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this headline">¶</a></h2>
+<p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the one
 provided in the slurk-bots repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/layout.json &gt; waiting_room_layout.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/waiting_room_layout.json &gt; waiting_room_layout.json
 </pre></div>
 </div>
 <p>This layout now has to be pushed to the server:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_LAYOUT</span><span class="o">=</span><span class="k">$(</span>sh scripts/push_room_layout.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room_layout.json<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh waiting_room_layout.json <span class="p">|</span> jq .id<span class="k">)</span>
 </pre></div>
 </div>
-<p>Ensure we have a valid id (should not be empty):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$WAITING_ROOM_LAYOUT</span>
+<p>Ensure we have a valid id (should return an integer):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$WAITING_ROOM_LAYOUT_ID</span>
 </pre></div>
 </div>
 <p>We can now create the waiting room with the associated layout:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_room_with_layout.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room <span class="s2">&quot;Waiting Room&quot;</span> <span class="nv">$WAITING_ROOM_LAYOUT</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_room.sh <span class="nv">$WAITING_ROOM_LAYOUT_ID</span> <span class="p">|</span> jq .id<span class="k">)</span>
 </pre></div>
 </div>
-<p>The next step is to create a task. Each task contains information about the number of users required in order to start
-the task:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> scripts/create_task.sh <span class="nv">$ADMIN_TOKEN</span> <span class="s2">&quot;Echo Task&quot;</span> <span class="m">2</span>
-$ <span class="nb">echo</span> <span class="nv">$TASK_ID</span>
+<p>The next step is to create a task. You may wish to use a special layout for the task room.
+Each task contains information about the number of users required in order to start the task (here 2):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">TASK_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh examples/simple_layout.json <span class="p">|</span> jq .id<span class="k">)</span>
+$ <span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_task.sh  <span class="s2">&quot;Echo Task&quot;</span> <span class="m">2</span> <span class="nv">$TASK_LAYOUT_ID</span> <span class="p">|</span> jq .id<span class="k">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="assign-bots-to-rooms">
-<h2><span class="section-number">4.3. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this headline">¶</a></h2>
-<p>Each bot needs a token in order to be run.
-The token for the concierge bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CONCIERGE_BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>sh scripts/create_token.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room --concierge<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_BOT_TOKEN</span>
+<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this headline">¶</a></h2>
+<p>Each bot has special permissions that it requires. For our example bots those are provided as JSON files.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/concierge_bot_permissions.json &gt; concierge_bot_permissions.json
+$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/echo/echo_bot_permissions.json &gt; echo_bot_permissions.json
 </pre></div>
 </div>
-<p>The token for the echo bot is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_BOT_TOKEN</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ECHO_BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>sh scripts/create_token.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room --echo<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$ECHO_BOT_TOKEN</span>
+<p>The token for the concierge bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_TOKEN</span></code>. The associated user is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_USER</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CONCIERGE_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> concierge_bot_permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_TOKEN</span>
+$ <span class="nv">CONCIERGE_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh <span class="s2">&quot;ConciergeBot&quot;</span> <span class="nv">$CONCIERGE_TOKEN</span> <span class="p">|</span> jq .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_USER</span>
 </pre></div>
 </div>
-<p>Open two new terminals and copy <code class="docutils literal notranslate"><span class="pre">CONCIERGE_BOT_TOKEN</span></code> to one terminal and <code class="docutils literal notranslate"><span class="pre">ECHO_BOT_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">TASK_ID</span></code> to another terminal.
+<p>The token for the echo bot is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_TOKEN</span></code>. The associated user is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_USER</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ECHO_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> echo_bot_permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$ECHO_TOKEN</span>
+$ <span class="nv">ECHO_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh <span class="s2">&quot;EchoBot&quot;</span> <span class="nv">$ECHO_TOKEN</span> <span class="p">|</span> jq .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$ECHO_USER</span>
+</pre></div>
+</div>
+<p>Open two new terminals and copy <code class="docutils literal notranslate"><span class="pre">CONCIERGE_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">CONCIERGE_USER</span></code> to one terminal and <code class="docutils literal notranslate"><span class="pre">ECHO_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">ECHO_USER</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">TASK_ID</span></code> to another terminal. <cite>copy</cite> is to be understood as setting those as environment variables.
 Now start the concierge bot using the token you just created from the new terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_BOT_TOKEN</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/concierge-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_TOKEN</span> -e <span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$CONCIERGE_USER</span> -e <span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/concierge-bot
 </pre></div>
 </div>
 <p>The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, who both have the
-specified task assigned. Once both have joined, the bot will create a new task room and move both users into that room.
-We want the echo bot to join this task room as well. The concierge bot emits two events when creating a new task room:
-<code class="docutils literal notranslate"><span class="pre">new_room</span></code> and <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code>.</p>
-<p>The echo bot is able to listen to those events. This bot has an optional <code class="docutils literal notranslate"><span class="pre">ECHO_TASK_ID</span></code> parameter, to listen to specific tasks to join. Let’s start it
+same task assigned. Once both have joined, the bot will create a new task room and move both users into that room.
+We want the echo bot to join this task room as well.</p>
+<p>This bot has an optional <code class="docutils literal notranslate"><span class="pre">ECHO_TASK_ID</span></code> parameter, to listen to specific tasks to join. Let’s start it
 from the new terminal that contains the echo bot token:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">TOKEN</span><span class="o">=</span><span class="nv">$ECHO_BOT_TOKEN</span> -e <span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$ECHO_TOKEN</span> -e <span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$ECHO_USER</span> -e <span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span> -e <span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
 </pre></div>
 </div>
 </div>
 <div class="section" id="create-user-tokens-for-the-task">
-<h2><span class="section-number">4.4. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this headline">¶</a></h2>
 <p>Now let’s create two user tokens from the original terminal (run the command twice) and specify the task:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_token_for_task.sh <span class="nv">$ADMIN_TOKEN</span> waiting_room <span class="nv">$TASK_ID</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> examples/message_permissions.json <span class="m">1</span> <span class="nv">$TASK_ID</span> <span class="p">|</span> jq .id <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>
 </div>
-<p>Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
+<p>The last part of the command beginning with sed strips quotation marks from the token.
+Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
 users to a new room. The echo bot will also join this room and reply to every chat message.</p>
 </div>
 </div>

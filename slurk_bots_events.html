@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>7. Bot related Events &mdash; slurk 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. REST API for slurk" href="slurk_api.html" />
+    <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Bot related Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rooms">7.1. Rooms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-echo-bot">7.1.1. Example: Echo Bot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#movement">7.2. Movement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring-own-movement">7.2.1. Monitoring own movement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitoring-overall-movement">7.2.2. Monitoring overall movement</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chat">7.3. Chat</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#messages">7.3.1. Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#images">7.3.2. Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commands">7.3.3. Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">slurk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">7. </span>Bot related Events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/slurk_bots_events.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bot-related-events">
+<span id="slurk-bots-events"></span><h1><span class="section-number">7. </span>Bot related Events<a class="headerlink" href="#bot-related-events" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rooms">
+<h2><span class="section-number">7.1. </span>Rooms<a class="headerlink" href="#rooms" title="Permalink to this headline">¶</a></h2>
+<p>There are two types of events indicating that a new room was created. The first of the two <code class="docutils literal notranslate"><span class="pre">new_room</span></code> is the more general one. It can be triggered for every created room independently of its purpose and layout. Both events are received by all connected users.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">new_room</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">new_room</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was created</li>
+</ul>
+<p>The second event can be triggered only if a task room was created. A task room is a room that has a <code class="docutils literal notranslate"><span class="pre">task_id</span></code> assigned.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">new_task_room</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was created</li>
+<li><code class="docutils literal notranslate"><span class="pre">task(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the task that was assigned to the room</li>
+<li><code class="docutils literal notranslate"><span class="pre">users(list)</span></code>: a list of users that are linked to this task room. Each <code class="docutils literal notranslate"><span class="pre">user(dict)</span></code> is represented by an <code class="docutils literal notranslate"><span class="pre">id(int)</span></code> and a <code class="docutils literal notranslate"><span class="pre">name(str)</span></code></li>
+</ul>
+<p>It is important to remember that those events are not sent automatically on room creation but have to be triggered by a bot after it has created a room:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;room_created&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is a dictionary with the following keys:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was created</li>
+<li><code class="docutils literal notranslate"><span class="pre">task(int,</span> <span class="pre">optional)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the task that will be performed in this room</li>
+</ul>
+<div class="section" id="example-echo-bot">
+<h3><span class="section-number">7.1.1. </span>Example: Echo Bot<a class="headerlink" href="#example-echo-bot" title="Permalink to this headline">¶</a></h3>
+<p>When the concierge bot creates a new room, it will move the assigned users to this room and send a <code class="docutils literal notranslate"><span class="pre">room_created</span></code> event to the server. In order to join those task rooms as a bot, they may listen to the <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> event just like the echo bot:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">new_task_room</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">room_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;room&quot;</span><span class="p">]</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;task&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">task_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">/users/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2">/rooms/</span><span class="si">{</span><span class="n">room_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>If a task room has been opened, it compares the task id of the task room with its own task id. It joins the room only if the two task ids match or it is not assigned any task id. We interpret the latter as the echo bot being relevant to all tasks.</p>
+</div>
+</div>
+<div class="section" id="movement">
+<h2><span class="section-number">7.2. </span>Movement<a class="headerlink" href="#movement" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="monitoring-own-movement">
+<h3><span class="section-number">7.2.1. </span>Monitoring own movement<a class="headerlink" href="#monitoring-own-movement" title="Permalink to this headline">¶</a></h3>
+<p>Bots can monitor their own movement between rooms. This includes them joining or leaving a room. For this purpose, they have to listen to the <code class="docutils literal notranslate"><span class="pre">joined_room</span></code> and <code class="docutils literal notranslate"><span class="pre">left_room</span></code> events, respectively. Both events are only sent to the user (e.g. bot) that caused them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">joined_room</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">joined_room</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">user(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the user who caused this event</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was entered by this user</li>
+</ul>
+<p>Task bots are generally sent to rooms to instruct users and provide resources necessary to the task fulfillment. The <code class="docutils literal notranslate"><span class="pre">joined_room</span></code> event handler could be used to introduce the bot to the users and set an initial task description.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">left_room</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">left_room</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">user(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the user who caused this event</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was left by this user</li>
+</ul>
+</div>
+<div class="section" id="monitoring-overall-movement">
+<h3><span class="section-number">7.2.2. </span>Monitoring overall movement<a class="headerlink" href="#monitoring-overall-movement" title="Permalink to this headline">¶</a></h3>
+<p>Bots are also notified once a user joins or leaves one of the rooms the bot is placed in. The term <cite>user</cite> here includes the bot itself, as well as other bots and human users.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">status</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">type(str)</span></code>: the status type, either <cite>join</cite> or <cite>leave</cite></li>
+<li><code class="docutils literal notranslate"><span class="pre">user(dict)</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id(int)</span></code> and <code class="docutils literal notranslate"><span class="pre">name(str)</span></code> of the user who caused this event</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room that was entered or left, respectively</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp(str)</span></code>: as ISO 8601: <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss.ssssss</span></code> in UTC Time</li>
+</ul>
+</div>
+</div>
+<div class="section" id="chat">
+<h2><span class="section-number">7.3. </span>Chat<a class="headerlink" href="#chat" title="Permalink to this headline">¶</a></h2>
+<p>All of the events mentioned below can be either <code class="docutils literal notranslate"><span class="pre">private</span></code> or not. If an event is <code class="docutils literal notranslate"><span class="pre">private</span></code> it is only sent to a designated receiver. If this receiver is the bot, it receives the event. Otherwise it does not receive it. If an event is not <code class="docutils literal notranslate"><span class="pre">private</span></code> it can be seen by all users in the specified room.
+Only bots should send private content, but for debugging purposes, you can use the chat interface and the following syntax to send private messages <code class="docutils literal notranslate"><span class="pre">&#64;&lt;user_id&gt;</span> <span class="pre">&lt;text&gt;</span></code> or private images <code class="docutils literal notranslate"><span class="pre">&#64;&lt;user_id&gt;</span> <span class="pre">image:</span> <span class="pre">&lt;url&gt;</span></code>. Make sure that whoever is supposed to send private content is assigned the <code class="docutils literal notranslate"><span class="pre">send_privately</span></code> permission.</p>
+<div class="section" id="messages">
+<h3><span class="section-number">7.3.1. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h3>
+<p>Every data collection experiment evolves around users exchanging messages. Those can be sent by any user that is assigned the <code class="docutils literal notranslate"><span class="pre">send_message</span></code> or <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code> permission. A bot may wish to verify message content, count messages until a certain milestone is reached or otherwise process user messages.
+Messages can also be sent by bots:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+    <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">data</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is a dictionary with the following keys:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">message(str)</span></code>: the content of the text message</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the text message will be sent to</li>
+<li><code class="docutils literal notranslate"><span class="pre">receiver_id(int,</span> <span class="pre">optional)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the user that this message is directed at</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool,</span> <span class="pre">optional)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the message should be transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">html(bool,</span> <span class="pre">optional)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if special html formatting should be applied to a message. This requires <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code> permissions. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
+</ul>
+<p>Messages cause an event on the server side that can be handled by bots:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">text_message</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">message(str)</span></code>: the content of the text message</li>
+<li><code class="docutils literal notranslate"><span class="pre">user(dict)</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id(int)</span></code> and <code class="docutils literal notranslate"><span class="pre">name(str)</span></code> of the user who sent the message</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the message was sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">private(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this was a private message meant for a single user. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the message should be transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp(str)</span></code>: as ISO 8601: <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss.ssssss</span></code> in UTC Time</li>
+</ul>
+</div>
+<div class="section" id="images">
+<h3><span class="section-number">7.3.2. </span>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
+<p>If given the appropriate rights <code class="docutils literal notranslate"><span class="pre">send_image</span></code>, a user may send image data. Normally, only bots are supposed to do so. But for debugging purposes, it is possible to send images via the chat interface using the syntax <code class="docutils literal notranslate"><span class="pre">image:</span> <span class="pre">&lt;url&gt;</span></code>.
+Bots can send images like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+    <span class="n">data</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is a dictionary with the following keys:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">url(str)</span></code>: URL of the image to display</li>
+<li><code class="docutils literal notranslate"><span class="pre">width(int,</span> <span class="pre">optional)</span></code>: the recommended width of the image. Defaults to 200</li>
+<li><code class="docutils literal notranslate"><span class="pre">height(int,</span> <span class="pre">optional)</span></code>: the recommended height of the image. Defaults to 200</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the image is sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">receiver_id(int,</span> <span class="pre">optional)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the user that this image is directed at</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool,</span> <span class="pre">optional)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the image should be transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+</ul>
+<p>Images cause an event on the server side that can be handled by bots:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">image_message</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">image_message</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">url(str)</span></code>: URL of the displayed image</li>
+<li><code class="docutils literal notranslate"><span class="pre">width(int)</span></code>: the recommended width of the image or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">height(int)</span></code>: the recommended height of the image or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">user(dict)</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id(int)</span></code> and <code class="docutils literal notranslate"><span class="pre">name(str)</span></code> of the user who submitted the image</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the image was sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">private(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this was a private image meant for a single user. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the image was transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp(str)</span></code>: as ISO 8601: <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss.ssssss</span></code> in UTC Time</li>
+</ul>
+</div>
+<div class="section" id="commands">
+<h3><span class="section-number">7.3.3. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<p>Commands are very similar to text messages, but they are only visible to bots. In order for a user to be able to send commands, they need the permission <code class="docutils literal notranslate"><span class="pre">send_command</span></code>. Commands are normally sent by human users. For a chat message to be understood as a command, it needs to be prefixed by a slash <code class="docutils literal notranslate"><span class="pre">/</span></code>.
+It is, however, also possible for bots to send commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+    <span class="s2">&quot;message_command&quot;</span><span class="p">,</span>
+    <span class="n">data</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is a dictionary with the following keys:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">command(str)</span></code>: the command content</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the command is sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">receiver_id(int,</span> <span class="pre">optional)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the user that this command is directed at</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool,</span> <span class="pre">optional)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the message should be transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+</ul>
+<p>Commands cause an event on the server side that can be handled by bots:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> in <code class="docutils literal notranslate"><span class="pre">command</span></code> has this structure:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">command(str)</span></code>: the command content</li>
+<li><code class="docutils literal notranslate"><span class="pre">user(dict)</span></code>: dictionary of <code class="docutils literal notranslate"><span class="pre">id(int)</span></code> and <code class="docutils literal notranslate"><span class="pre">name(str)</span></code> of the user who sent the command</li>
+<li><code class="docutils literal notranslate"><span class="pre">room(int)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the room where the command was sent</li>
+<li><code class="docutils literal notranslate"><span class="pre">private(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if this was a private command meant for a single user. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">broadcast(bool)</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> if the command was transmitted to all connected users. <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</li>
+<li><code class="docutils literal notranslate"><span class="pre">timestamp(str)</span></code>: as ISO 8601: <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss.ssssss</span></code> in UTC Time</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="slurk_api.html" class="btn btn-neutral float-right" title="8. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017-2018 DSG Bielefeld, 2019 CL Potsdam.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

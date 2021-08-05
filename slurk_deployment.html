@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>8. Deployment of the system &mdash; slurk 2.0.0 documentation</title>
+  <title>9. Deployment of the system &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
-    <link rel="prev" title="7. REST API for slurk" href="slurk_api.html" /> 
+    <link rel="next" title="10. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
+    <link rel="prev" title="8. REST API for slurk" href="slurk_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,21 +98,22 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Deployment of the system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#environment-variables">8.1. Environment variables</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#openvidu-support">8.1.1. OpenVidu support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot related Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Deployment of the system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">9.1. Environment variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openvidu-support">9.1.1. OpenVidu support</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#hosting-slurk">8.2. Hosting slurk</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#docker">8.2.1. Docker</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flask">8.2.2. Flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hosting-slurk">9.2. Hosting slurk</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#docker">9.2.1. Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flask">9.2.2. Flask</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#example-using-docker-compose-and-postgres">8.3. Example using docker-compose and Postgres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-using-docker-compose-and-postgres">9.3. Example using docker-compose and Postgres</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -161,7 +162,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">8. </span>Deployment of the system</li>
+      <li><span class="section-number">9. </span>Deployment of the system</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -181,9 +182,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="deployment-of-the-system">
-<span id="slurk-deployment"></span><h1><span class="section-number">8. </span>Deployment of the system<a class="headerlink" href="#deployment-of-the-system" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-deployment"></span><h1><span class="section-number">9. </span>Deployment of the system<a class="headerlink" href="#deployment-of-the-system" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="environment-variables">
-<h2><span class="section-number">8.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">9.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
 <p>slurk reads a few environment variables for configuration. Because slurk is a flask application,
 it reads <code class="docutils literal notranslate"><span class="pre">FLASK_ENV</span></code> and defaults to a more verbose logging, when <code class="docutils literal notranslate"><span class="pre">FLASK_ENV=development</span></code>.
 Also, the admin token is fixed to <code class="docutils literal notranslate"><span class="pre">00000000-0000-0000-0000-000000000000</span></code> and for RapiDoc,
@@ -201,7 +202,7 @@ docker-compose.</p>
 <p>The API of slurk uses ETags for patching, putting, and deleting entries. Those can be disabled
 when setting <code class="docutils literal notranslate"><span class="pre">SLURK_DISABLE_ETAG</span></code>.</p>
 <div class="section" id="openvidu-support">
-<h3><span class="section-number">8.1.1. </span>OpenVidu support<a class="headerlink" href="#openvidu-support" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">9.1.1. </span>OpenVidu support<a class="headerlink" href="#openvidu-support" title="Permalink to this headline">¶</a></h3>
 <p>When slurk should connect to an OpenVidu server, those additional variables may be set:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">SLURK_OPENVIDU_URL</span></code>: for example <code class="docutils literal notranslate"><span class="pre">&quot;https://openvidu.example.com&quot;</span></code></li>
@@ -213,12 +214,12 @@ when setting <code class="docutils literal notranslate"><span class="pre">SLURK_
 </div>
 </div>
 <div class="section" id="hosting-slurk">
-<h2><span class="section-number">8.2. </span>Hosting slurk<a class="headerlink" href="#hosting-slurk" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">9.2. </span>Hosting slurk<a class="headerlink" href="#hosting-slurk" title="Permalink to this headline">¶</a></h2>
 <p>There is a script in the slurk-repository called <code class="docutils literal notranslate"><span class="pre">scripts/start_server.sh</span></code>. Depending
 on the environment variables set, the script starts a GUnicorn server locally or in a
 docker container. Please see the header of the script for the usage.</p>
 <div class="section" id="docker">
-<h3><span class="section-number">8.2.1. </span>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">9.2.1. </span>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
 <p>As described in <a class="reference internal" href="slurk_gettingstarted.html#slurk-gettingstarted"><span class="std std-ref">Getting Started</span></a>, the easiest way is to use <code class="docutils literal notranslate"><span class="pre">docker</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -p <span class="m">5000</span>:80 slurk/server
 </pre></div>
@@ -228,7 +229,7 @@ the database should be persistent. For Postgres, make sure that the docker conta
 can access the same domain as the database.</p>
 </div>
 <div class="section" id="flask">
-<h3><span class="section-number">8.2.2. </span>Flask<a class="headerlink" href="#flask" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">9.2.2. </span>Flask<a class="headerlink" href="#flask" title="Permalink to this headline">¶</a></h3>
 <p>Flask provides several ways for hosting an application, for example</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">FLASK_APP</span><span class="o">=</span>slurk
 $ flask run
@@ -239,7 +240,7 @@ Flask for a comprehensive list of different options.</p>
 </div>
 </div>
 <div class="section" id="example-using-docker-compose-and-postgres">
-<h2><span class="section-number">8.3. </span>Example using docker-compose and Postgres<a class="headerlink" href="#example-using-docker-compose-and-postgres" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">9.3. </span>Example using docker-compose and Postgres<a class="headerlink" href="#example-using-docker-compose-and-postgres" title="Permalink to this headline">¶</a></h2>
 <p>Before spinning up slurk, we need a proper database. For our case, we chose postgres.
 When using the postgres docker container and the slurk docker container, the two
 containers probably can’t see each other, so we use <a class="reference external" href="https://docs.docker.com/compose/" target="_blank">docker-compose</a> here.
@@ -282,8 +283,8 @@ As we also want OpenVidu support, the two required OpenVidu-variables are also p
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="9. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="slurk_api.html" class="btn btn-neutral float-left" title="7. REST API for slurk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="10. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_api.html" class="btn btn-neutral float-left" title="8. REST API for slurk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
