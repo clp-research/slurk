@@ -7,62 +7,59 @@ Getting Started
 "Hello World": A basic test of the server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to use system is using Docker (https://www.docker.com/products/docker-desktop). For this, ``docker`` is
-recommended:
+First, spin up a slurk server. Either use the server from :ref:`slurk_prerequisites` or see :ref:`slurk_deployment` for more information on this.
+
+Next, the admin token is needed. If you are running slurk from docker, run:
 
 .. code-block:: bash
 
-  $ sudo apt-get install docker
+  $ export SLURK_TOKEN=$(scripts/read_admin_token.sh)
+  $ echo $SLURK_TOKEN
+  01234567-89ab-cdef-0123-456789abcdef
 
-In order to run the server on port 80, store the container id, and
-read the admin token, run:
 
-.. code-block:: bash
-
-    $ source scripts/start_slurk_server.sh
-    $ source scripts/get_admin_token.sh
-
-Verify you have a server id and proper UUID token (neither of these
-should be empty):
+Otherwise, assign it:
 
 .. code-block:: bash
 
-    $ echo $SLURK_SERVER_ID
-    $ echo $ADMIN_TOKEN
+  $ export SLURK_TOKEN=01234567-89ab-cdef-0123-456789abcdef
 
-Create a room as landing page for our new token. In order to create a room,
-specify the token, the room name (as identifier), and a label:
+The token is exported so subsequent scripts can read the token. All scripts are using the :ref:`slurk_api` internally.
 
-.. code-block:: bash
 
-   $ sh scripts/create_room.sh $ADMIN_TOKEN test_room "Test Room"
-
-This will return the room settings::
-
-   {
-     "current_users": {},
-     "label": "Test Room",
-     "layout": null,
-     "name": "test_room",
-     "read_only": false,
-     "show_latency": true,
-     "show_users": true,
-     "static": false,
-     "users": {}
-   }
-
-Generate a new token for the room you just created (the room
-name). The clients need this token to log in:
+Create a room as the landing page for our new token. In order to create a room,
+we need a layout for the room. We use a default layout provided by slurk:
 
 .. code-block:: bash
 
-   $ sh scripts/create_token.sh $ADMIN_TOKEN test_room
+   $ scripts/create_layout.sh examples/simple_layout.json
 
-If you want to set other parameters see the :ref:`slurk_api` and
-modify the script accordingly.
+This will return the layout with all its settings, only the id is needed:
 
-Visit http://localhost and enter whatever Name you like and the token
-you generated, and click "enter chatroom".
+.. code-block:: bash
+
+   $ LAYOUT_ID=$(scripts/create_layout.sh examples/simple_layout.json | jq .id)
+   $ echo $LAYOUT_ID
+   2
+
+With the layout provided, we can create the actual room:
+
+.. code-block:: bash
+
+   $ ROOM_ID=$(scripts/create_room.sh $LAYOUT_ID | jq .id)
+   $ echo $ROOM_ID
+   1
+
+To log into the room, a token has to be generated:
+
+.. code-block:: bash
+
+  $ TOKEN=$(scripts/create_room_token.sh $ROOM_ID examples/message_permissions.json | jq -r .id)
+  $ echo $TOKEN
+  fedcba98-7654-3210-fedc-ba9876543210
+
+Now visit your server (e.g. http://localhost:5000) and enter whatever name you like and the token
+you just generated, and click "enter chatroom".
 
 This should transport you to the chat interface, where you then can
 happily type messages which no one will see (apart from you, that is).
@@ -71,7 +68,7 @@ happily type messages which no one will see (apart from you, that is).
 .. _screenshot_void:
 .. figure:: single_user.png
    :align: center
-   :scale: 60 %
+   :scale: 25%
 
    A single user talking to no one in particular
 
@@ -93,10 +90,10 @@ these browsers. Hurray!
 
 (If your machine is set up in the right way [that is, the machine that
 is localhost is accessible from your network], this might work across
-machines, and so you can have a chat with an actual different person.)
+machines, and so you can have a chat with an actual distinct person.)
 
 This has demonstrated the very basic capabilities – providing a chat
-environment – but so far there hasn't been any use made of the display
+environment – but so far there has been no use made of the display
 window. Let's change that by inviting a bot into our chat room.
 
 
@@ -104,40 +101,49 @@ Chatting with a bot
 ~~~~~~~~~~~~~~~~~~~
 
 Without additional environment variables, the server uses an in-memory
-database and resets on every restart of the server. Now let's restart
-the server to reset the database:
+database and resets on every restart of the server. If you restarted the
+server, make sure you have created the layout and the room.
+
+For the bot, more permissions are needed. Create a file where the
+permissions are set:
 
 .. code-block:: bash
 
-  $ source scripts/start_slurk_server.sh
+  $ cat bot-permissions.json
+  {
+      "api": true,
+      "send_message": true,
+      "send_image": true,
+      "send_privately": true
+   }
 
-You also need to reset the $ADMIN_TOKEN, and create the test room again:
-
-.. code-block:: bash
-
-  $ source scripts/get_admin_token.sh
-  $ sh scripts/create_room.sh $ADMIN_TOKEN test_room "Test Room"
-
-Before we log onto the server in the way described above, we need to
-create a bot user and let it log on first. Create two tokens as
-described above (if you used a different room name or label, make sure
-to specify the correct ones). One of these tokens is for the user and one
-is for the bot:
+Now create the token and a user for the bot:
 
 .. code-block:: bash
 
-  $ sh scripts/create_token.sh $ADMIN_TOKEN test_room
+  $ BOT_TOKEN=$(scripts/create_room_token.sh $ROOM_ID bot-permissions.json | jq -r .id)
+  $ echo $BOT_TOKEN
+  45670123-cdef-89ab-4567-012389abcdef
+  $ BOT_USER=$(scripts/create_user.sh 'Echo Bot' $BOT_TOKEN | jq -r .id)
+  $ echo $BOT_USER
+  2
 
-There are Docker containers for all example bots. To run the echo-bot
-using docker, you need to type the following, inserting your bot
-token:
+There are several bots available at `GitHub <https://github.com/clp-research/slurk-bots>`_,
+in our example the echo-bot is used. Start the bot with the provided token
 
 .. code-block:: bash
 
-   $ sh scripts/run_echo_bot.sh TOKEN
+   $ docker run -e SLURK_TOKEN=$BOT_TOKEN -e SLURK_USER=$BOT_USER -e SLURK_PORT=5000 --net=host slurk/echo-bot
 
-After the bot has logged in, you can log yourself in as a user, using the
-other generated token and seeing the bot perform.
+After the bot has logged in, you can chat with yourself.
+
+
+.. _screenshot_void:
+.. figure:: echo-bot.png
+   :align: center
+   :scale: 25%
+
+   Chatting with myself
 
 Examining the log files
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,11 +152,11 @@ The point of all this, however, is not just to make interaction
 *possible*, it is to *record* these interactions to be able to later
 study them or train models on them.
 
-In order to read the logs for our `test_room`, run:
+In order to read the logs for our room, run:
 
 .. code-block:: bash
 
-   $ sh scripts/get_logs.sh $ADMIN_TOKEN test_room
+   $ scripts/get_logs.sh $ROOM_ID | jq
 
 The returned data contains, as a JSON list, most of the events that
 the server handled, including all the messages that were sent. This
@@ -158,11 +164,11 @@ should contain the information that you need for your particular
 purposes.
 
 This concludes the quick start. We now can be reasonably confident
-that the setup is working on your machine; and you also got a first
+that the setup is working on your machine; you also got a first
 introduction to the basic concepts. But what we have seen so far would
 only allow us to run a single room at a time. That may already be all
 you want if you conduct experiments locally with participants that you
-bring into the lab. If you want to make use of crowdsourcing though,
+bring into the lab. If you want to make use of crowdsourcing, though,
 you will want to be able to automatically pair up participants and
 create task rooms for each pair. This will be explained in the next
 section.

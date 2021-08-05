@@ -4,236 +4,109 @@
 Deployment of the system
 =========================================
 
-Using docker
-~~~~~~~~~~~~
+Environment variables
+~~~~~~~~~~~~~~~~~~~~~
 
-As described in :ref:`slurk_gettingstarted`, the easiest way is to use ``docker``:
+slurk reads a few environment variables for configuration. Because slurk is a flask application,
+it reads ``FLASK_ENV`` and defaults to a more verbose logging, when ``FLASK_ENV=development``.
+Also, the admin token is fixed to ``00000000-0000-0000-0000-000000000000`` and for RapiDoc,
+the token is provided. To provide cookies, a secret key is required, which can be set with
+``SLURK_SECRET_KEY``, which defaults to a random value. This implies that every time the
+server is restarted, the cookies will be invalidated.
 
-.. code-block:: bash
+slurk is backed by a database. When no database is provided, an in-memory database is used.
+This can be changed by setting ``SLURK_DATABASE_URI``. For a list of possible engines, see
+`the SQLAlchemy documentation <https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls>`_,
+however only SQLite and Postgres are tested. If you notice errors with other providers, please
+`file an issue <https://github.com/clp-research/slurk/issues/new>`_. Also note, that
+SQLite behaves weirdly when using auto-increment keys, so deletion of entries may cause the
+same id to be used again. Later, we will see how slurk can be set up with a Postgres-database and
+docker-compose.
 
-  sudo apt-get install docker
-  
-In order to run the server on port 80, just run
+The API of slurk uses ETags for patching, putting, and deleting entries. Those can be disabled
+when setting ``SLURK_DISABLE_ETAG``.
 
-.. code-block:: bash
+OpenVidu support
+----------------
 
-  $ docker run -p 80:5000 -e SECRET_KEY=your-key -d slurk/server
+When slurk should connect to an OpenVidu server, those additional variables may be set:
 
-These additional environment variables can be specified:
+- ``SLURK_OPENVIDU_URL``: for example ``"https://openvidu.example.com"``
+- ``SLURK_OPENVIDU_SECRET``: Secret used for the openvidu server
+- ``SLURK_OPENVIDU_PORT``, defaults to ``443``
+- ``SLURK_OPENVIDU_VERIFY``, Enable SSL validation, defaults to ``True``
 
-- ``DEBUG``: admin token is ``00000000-0000-0000-0000-000000000000``
-- ``SQLALCHEMY_DATABASE_URI``: URI to the database, defaults to ``sqlite:///:memory:``
-- ``SQLALCHEMY_TRACK_MODIFICATIONS``: Tracks modifications in the database
-- ``SQLALCHEMY_ECHO``: Prints all executed commands to the database
-- ``DROP_DATABASE_ON_STARTUP``: Database will be recreated on restart
+For spinning up an OpenVidu server, please consult the `corresponding documentation <https://docs.openvidu.io/en/2.18.0/deployment/>`_.
 
-If you don't want to run it detached, you may omit ``-d``.
+Hosting slurk
+~~~~~~~~~~~~~
 
+There is a script in the slurk-repository called ``scripts/start_server.sh``. Depending
+on the environment variables set, the script starts a GUnicorn server locally or in a
+docker container. Please see the header of the script for the usage.
 
-Manual setup
-~~~~~~~~~~~~
+Docker
+------
 
-If you don't want to use docker for whatever reason, you can also manually setup the server.
-
-General description and requirements
-------------------------------------
-
-This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
-with SSL connection.
-
-First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
-``server`` and install required packages via executing
-
-.. code-block:: bash
-
-  pip install -r requirements.txt
-
-Also please make sure that your Ubuntu server is running on Nginx [1]_ and ``systemd`` package is installed.
-Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine [2]_.
-
-Serving Slurk with Gunicorn
----------------------------
-
-You can serve our Flask application on a permanent basis.
-Such setup will allow you to have faster connections which are automatic since you are not required to manually start
-the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
-`this tutorial <https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04>`_.
-
-First, isolate your Flask application on your computer. For this you have to install *virtualenv* package.
+As described in :ref:`slurk_gettingstarted`, the easiest way is to use ``docker``.
 
 .. code-block:: bash
 
-  sudo apt install python3-venv
+  $ docker run -p 5000:80 slurk/server
 
-Navigate to your project directory and create a new project environment there. Also activate the environment and
-install required packages
+Please note that passing an SQLite database also requires a volume to be bound when
+the database should be persistent. For Postgres, make sure that the docker container
+can access the same domain as the database.
 
-.. code-block:: bash
+Flask
+-----
 
-  cd ~/server
-  python3.6 -m venv serverenv
-  source serverenv/bin/activate
-  pip install -r requirements.txt
-
-Now, assuming that *gunicorn* and *flask* are already installed, we will create the WSGI entry point for our application.
+Flask provides several ways for hosting an application, for example
 
 .. code-block:: bash
 
-  nano ~/server/wsgi.py
+  $ export FLASK_APP=slurk
+  $ flask run
 
-The chat instance itself is created in ``~/server/app/__init__.py``, and that is why we will use this instance in our `wsgi.py` file.
-Import this instance into the file, save and close it once you are finished
+See the `Deployment Options <https://flask.palletsprojects.com/en/2.0.x/deploying/>`_ of
+Flask for a comprehensive list of different options.
 
-.. code-block:: python
 
-  from app import create_app
+Example using docker-compose and Postgres
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  app = create_app(debug=True)
+Before spinning up slurk, we need a proper database. For our case, we chose postgres.
+When using the postgres docker container and the slurk docker container, the two
+containers probably can't see each other, so we use `docker-compose <https://docs.docker.com/compose/>`_ here.
+We want to host slurk on port 5000 and connect it to the postgres database. The database
+should be persistent, so a volume for the data has to be mounted. This is the
+``docker-compose.yml`` file we end up with:
 
-  if __name__ == "__main__":
-      app.run()
+.. code-block:: yaml
 
-Next step would be to configure Gunicorn, but first we should check if the application is served correctly [3]_
+  version: "3.9"
 
-.. code-block:: bash
+  services:
+    db:
+      image: postgres
+      restart: always
+      environment:
+        - POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD
+      volumes:
+        - ./postgres-data:/path/to/postgres/data
 
-  cd ~/server
-  gunicorn --bind host:5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker wsgi:app
+    slurk:
+      image: slurk/server
+      restart: on-failure
+      ports:
+        - 5000:80
+      environment:
+        - SLURK_DATABASE_URI=postgresql://postgres:SUPER_SECRET_PSQL_PASSWORD@db:5432/postgres
+        - SLURK_SECRET_KEY=MY_SLURK_SECRET_KEY
+        - SLURK_OPENVIDU_URL=https://openvidu.example.com
+        - SLURK_OPENVIDU_SECRET=MY_SUPER_SECRET_OV_SECRET
 
-Visit you server's address with the port ``:5000`` and check if you see the login page.
-If it functions properly, please press ``CTRL-C`` in your terminal window and deactivate your environment.
-
-Now we have to create the systemd service unit file. It will allow Ubuntu to automatically start our application
-once the machine boots.
-
-.. code-block:: bash
-
-  sudo nano /etc/systemd/system/chat.service
-
-Fill this service file with information about your application and adjust paths/variable names where required
-
-.. code-block:: ini
-
-  [Unit]
-  Description=Gunicorn instance to serve MeetUp
-  After=network.target
-
-  [Service]
-  User=user
-  Group=www-data
-  WorkingDirectory=/home/user/server
-  Environment="PATH=/home/user/server/serverenv/bin"
-  ExecStart=/home/user/server/serverenv/bin/gunicorn --bind unix:myproject.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -m 007 wsgi:app
-
-  [Install]
-  WantedBy=multi-user.target
-
-Save and close this file. Now we will start the Gunicorn service and enable it so that it is active once our machine is booted
-
-.. code-block:: bash
-
-  sudo systemctl start chat
-  sudo systemctl enable chat
-
-To be sure that it is active, check its status
-
-.. code-block:: bash
-
-  sudo systemctl status chat
-
-The output should be similar to the following
-
-.. code-block:: bash
-
-  chat.service - Gunicorn instance to serve meetup
-  Loaded: loaded (/etc/systemd/system/chat.service; enabled; vendor preset: enabled)
-  Active: active (running) since Fri 2018-08-17 11:25:12 CEST; 4h 20min ago
-  Main PID: 18101 (gunicorn)
-  Tasks: 2 (limit: 4915)
-  CGroup: /system.slice/chat.service
-        ├─18101 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-        └─18103 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-
-Configuring Nginx
------------------
-
-At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
-First, we will create a new server block configuration file in Nginx's `sites-available` directory
-
-.. code-block:: bash
-
-  sudo nano /etc/nginx/sites-available/chat
-
-We will have to specify location of our socket file, that serves the application
-and include certificates which were created earlier [4]_
-
-.. code-block:: nginx
-
-  server {
-
-      listen 5000 ssl default_server;
-      listen [::]:5000 ssl default_server;
-
-      server_name _;
-      root /home/user/slurk/server/app;
-
-      access_log /home/user/slurk/server/nginx_logs/nginx-access.log;
-      error_log /home/user/slurk/server/nginx_logs/nginx-error.log;
-
-      include snippets/certs.conf;
-      include snippets/ssl-params.conf;
-
-      location / {
-          include proxy_params;
-          proxy_pass http://unix:/home/user/slurk/server/chat.sock;
-
-          }
-
-      }
-
-Do not forget to link this file to the ``sites-enabled`` directory
-
-.. code-block:: bash
-
-  sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
-
-Test it for syntax errors and restart Nginx
-
-.. code-block:: bash
-
-  sudo nginx -t
-  sudo systemctl restart nginx
-
-As the last step, adjust UFW setting once again, adding full access to the Nginx server
-
-.. code-block:: bash
-
-  sudo ufw delete allow 5000
-  sudo ufw allow 'Nginx Full'
-
-When you navigate to your server's domain name, you should be able to see the login interface [5]_.
-
-Congratulations! You have managed to fully deploy Slurk!
-
----------------------------------------------------------------------------
-
-.. [1] There is a nice tutorial on `how to install Nginx on Ubuntu 18.04 <https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04>`_.
-
-.. [2] A very detailed tutorial can be found here: `Initial Server Setup with Ubuntu 18.04 <https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04>`_.
-
-.. [3] An important thing is that you specify type of the worker associated with the Gunicorn process. You should use websockets provided by `gevent` package:
-
-      ``-k geventwebsocket.gunicorn.workers.GeventWebSocketWorker``
-
-      More information can be found in `official Flask documentation <http://flask.pocoo.org/docs/1.0/deploying/wsgi-standalone/#gunicorn>`_.
-
-.. [4] Different configurations require specification of static files' location,
-       which include CSS files of your applications. In order to enable it, add additional
-       location block where you specify location of the static files::
-
-        location /static/ {
-            alias /home/user/server/app/main/static/;
-            }
-
-.. [5] Regarding the port that you use: some ports are not accessible for the use (for example, ``7000`` is used for internal processes), so be careful when deciding which port to use.
-       If you choose incorrect one, the application will not be accessible from outside of your network, even if you adjust firewall settings.
+First, we start the postgres-container, named ``db``. We define the password to login
+to the database and mount the database content to ``/path/to/postgres/data``.
+When postgres has started, we pass the postgres URI to slurk, alongside a secret key.
+As we also want OpenVidu support, the two required OpenVidu-variables are also passed.

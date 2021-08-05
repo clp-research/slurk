@@ -103,11 +103,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -179,56 +178,48 @@
 <span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="hello-world-a-basic-test-of-the-server">
 <h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to use system is using Docker (<a class="reference external" href="https://www.docker.com/products/docker-desktop" target="_blank">https://www.docker.com/products/docker-desktop</a>). For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is
-recommended:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install docker
+<p>First, spin up a slurk server. Either use the server from <a class="reference internal" href="slurk_prerequisites.html#slurk-prerequisites"><span class="std std-ref">Prerequisites</span></a> or see <a class="reference internal" href="slurk_deployment.html#slurk-deployment"><span class="std std-ref">Deployment of the system</span></a> for more information on this.</p>
+<p>Next, the admin token is needed. If you are running slurk from docker, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/read_admin_token.sh<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$SLURK_TOKEN</span>
+<span class="m">01234567</span>-89ab-cdef-0123-456789abcdef
 </pre></div>
 </div>
-<p>In order to run the server on port 80, store the container id, and
-read the admin token, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> scripts/start_slurk_server.sh
-$ <span class="nb">source</span> scripts/get_admin_token.sh
+<p>Otherwise, assign it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="m">01234567</span>-89ab-cdef-0123-456789abcdef
 </pre></div>
 </div>
-<p>Verify you have a server id and proper UUID token (neither of these
-should be empty):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$SLURK_SERVER_ID</span>
-$ <span class="nb">echo</span> <span class="nv">$ADMIN_TOKEN</span>
+<p>The token is exported so subsequent scripts can read the token. All scripts are using the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a> internally.</p>
+<p>Create a room as the landing page for our new token. In order to create a room,
+we need a layout for the room. We use a default layout provided by slurk:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/create_layout.sh examples/simple_layout.json
 </pre></div>
 </div>
-<p>Create a room as landing page for our new token. In order to create a room,
-specify the token, the room name (as identifier), and a label:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_room.sh <span class="nv">$ADMIN_TOKEN</span> test_room <span class="s2">&quot;Test Room&quot;</span>
+<p>This will return the layout with all its settings, only the id is needed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh examples/simple_layout.json <span class="p">|</span> jq .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$LAYOUT_ID</span>
+<span class="m">2</span>
 </pre></div>
 </div>
-<p>This will return the room settings:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;current_users&quot;</span><span class="p">:</span> <span class="p">{},</span>
-  <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Test Room&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;layout&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
-  <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test_room&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;read_only&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;show_latency&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-  <span class="s2">&quot;show_users&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-  <span class="s2">&quot;static&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="p">{}</span>
-<span class="p">}</span>
+<p>With the layout provided, we can create the actual room:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ROOM_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_room.sh <span class="nv">$LAYOUT_ID</span> <span class="p">|</span> jq .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$ROOM_ID</span>
+<span class="m">1</span>
 </pre></div>
 </div>
-<p>Generate a new token for the room you just created (the room
-name). The clients need this token to log in:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_token.sh <span class="nv">$ADMIN_TOKEN</span> test_room
+<p>To log into the room, a token has to be generated:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$ROOM_ID</span> examples/message_permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$TOKEN</span>
+fedcba98-7654-3210-fedc-ba9876543210
 </pre></div>
 </div>
-<p>If you want to set other parameters see the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a> and
-modify the script accordingly.</p>
-<p>Visit <a class="reference external" href="http://localhost" target="_blank">http://localhost</a> and enter whatever Name you like and the token
-you generated, and click “enter chatroom”.</p>
+<p>Now visit your server (e.g. <a class="reference external" href="http://localhost:5000" target="_blank">http://localhost:5000</a>) and enter whatever name you like and the token
+you just generated, and click “enter chatroom”.</p>
 <p>This should transport you to the chat interface, where you then can
 happily type messages which no one will see (apart from you, that is).</p>
-<div class="figure align-center" id="id1">
-<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 639.6px; height: 424.8px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<div class="figure align-center" id="id2">
+<span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 476.5px; height: 245.75px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>This has confirmed that the server is working correctly, but so far
 this hasn’t really been very exciting. So we move on.</p>
@@ -244,48 +235,54 @@ windows, and you should be able to talk with your two selves across
 these browsers. Hurray!</p>
 <p>(If your machine is set up in the right way [that is, the machine that
 is localhost is accessible from your network], this might work across
-machines, and so you can have a chat with an actual different person.)</p>
+machines, and so you can have a chat with an actual distinct person.)</p>
 <p>This has demonstrated the very basic capabilities – providing a chat
-environment – but so far there hasn’t been any use made of the display
+environment – but so far there has been no use made of the display
 window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
 <div class="section" id="chatting-with-a-bot">
 <h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline">¶</a></h2>
 <p>Without additional environment variables, the server uses an in-memory
-database and resets on every restart of the server. Now let’s restart
-the server to reset the database:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> scripts/start_slurk_server.sh
+database and resets on every restart of the server. If you restarted the
+server, make sure you have created the layout and the room.</p>
+<p>For the bot, more permissions are needed. Create a file where the
+permissions are set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat bot-permissions.json
+<span class="o">{</span>
+    <span class="s2">&quot;api&quot;</span>: true,
+    <span class="s2">&quot;send_message&quot;</span>: true,
+    <span class="s2">&quot;send_image&quot;</span>: true,
+    <span class="s2">&quot;send_privately&quot;</span>: <span class="nb">true</span>
+ <span class="o">}</span>
 </pre></div>
 </div>
-<p>You also need to reset the $ADMIN_TOKEN, and create the test room again:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> scripts/get_admin_token.sh
-$ sh scripts/create_room.sh <span class="nv">$ADMIN_TOKEN</span> test_room <span class="s2">&quot;Test Room&quot;</span>
+<p>Now create the token and a user for the bot:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">BOT_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$ROOM_ID</span> bot-permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$BOT_TOKEN</span>
+<span class="m">45670123</span>-cdef-89ab-4567-012389abcdef
+$ <span class="nv">BOT_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh <span class="s1">&#39;Echo Bot&#39;</span> <span class="nv">$BOT_TOKEN</span> <span class="p">|</span> jq -r .id<span class="k">)</span>
+$ <span class="nb">echo</span> <span class="nv">$BOT_USER</span>
+<span class="m">2</span>
 </pre></div>
 </div>
-<p>Before we log onto the server in the way described above, we need to
-create a bot user and let it log on first. Create two tokens as
-described above (if you used a different room name or label, make sure
-to specify the correct ones). One of these tokens is for the user and one
-is for the bot:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/create_token.sh <span class="nv">$ADMIN_TOKEN</span> test_room
+<p>There are several bots available at <a class="reference external" href="https://github.com/clp-research/slurk-bots" target="_blank">GitHub</a>,
+in our example the echo-bot is used. Start the bot with the provided token</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$BOT_TOKEN</span> -e <span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$BOT_USER</span> -e <span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span> --net<span class="o">=</span>host slurk/echo-bot
 </pre></div>
 </div>
-<p>There are Docker containers for all example bots. To run the echo-bot
-using docker, you need to type the following, inserting your bot
-token:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/run_echo_bot.sh TOKEN
-</pre></div>
+<p>After the bot has logged in, you can chat with yourself.</p>
+<div class="figure align-center" id="id3">
+<span id="id1"></span><a class="reference internal image-reference" href="_images/echo-bot.png"><img alt="_images/echo-bot.png" src="_images/echo-bot.png" style="width: 476.0px; height: 245.75px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Chatting with myself</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
-<p>After the bot has logged in, you can log yourself in as a user, using the
-other generated token and seeing the bot perform.</p>
 </div>
 <div class="section" id="examining-the-log-files">
 <h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline">¶</a></h2>
 <p>The point of all this, however, is not just to make interaction
 <em>possible</em>, it is to <em>record</em> these interactions to be able to later
 study them or train models on them.</p>
-<p>In order to read the logs for our <cite>test_room</cite>, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sh scripts/get_logs.sh <span class="nv">$ADMIN_TOKEN</span> test_room
+<p>In order to read the logs for our room, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/get_logs.sh <span class="nv">$ROOM_ID</span> <span class="p">|</span> jq
 </pre></div>
 </div>
 <p>The returned data contains, as a JSON list, most of the events that
@@ -293,11 +290,11 @@ the server handled, including all the messages that were sent. This
 should contain the information that you need for your particular
 purposes.</p>
 <p>This concludes the quick start. We now can be reasonably confident
-that the setup is working on your machine; and you also got a first
+that the setup is working on your machine; you also got a first
 introduction to the basic concepts. But what we have seen so far would
 only allow us to run a single room at a time. That may already be all
 you want if you conduct experiments locally with participants that you
-bring into the lab. If you want to make use of crowdsourcing though,
+bring into the lab. If you want to make use of crowdsourcing, though,
 you will want to be able to automatically pair up participants and
 create task rooms for each pair. This will be explained in the next
 section.</p>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>8. REST API for slurk &mdash; slurk 2.0.0 documentation</title>
+  <title>7. REST API for slurk &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. Deployment of the system" href="slurk_deployment.html" />
-    <link rel="prev" title="7. Writing your own bots" href="slurk_bots.html" /> 
+    <link rel="next" title="8. Deployment of the system" href="slurk_deployment.html" />
+    <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +97,16 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">8. REST API for slurk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. REST API for slurk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#layouts-rooms-and-tasks">7.1. Layouts, Rooms, and Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#users">7.2. Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">7.3. Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#video-and-audio">7.4. Video and Audio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">8. Deployment of the system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -150,7 +155,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">8. </span>REST API for slurk</li>
+      <li><span class="section-number">7. </span>REST API for slurk</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -170,8 +175,47 @@
            <div itemprop="articleBody">
             
   <div class="section" id="rest-api-for-slurk">
-<span id="slurk-api"></span><h1><span class="section-number">8. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this headline">¶</a></h1>
+<span id="slurk-api"></span><h1><span class="section-number">7. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="slurk_api_rapidoc.html" target="_blank">View in RapiDoc</a></p>
+<p>slurk uses a RESTful API to modify the underlying database. In the link above, the full documentation
+for each method is shown. When the slurk server is running, you can also visit <code class="docutils literal notranslate"><span class="pre">/rapidoc</span></code>, <code class="docutils literal notranslate"><span class="pre">/redoc</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">/swagger-ui</span></code> to see the API and try it out directly.</p>
+<p>The API is more or less sorted in chronological order, as many tables require a previously returned
+value.</p>
+<div class="section" id="layouts-rooms-and-tasks">
+<h2><span class="section-number">7.1. </span>Layouts, Rooms, and Tasks<a class="headerlink" href="#layouts-rooms-and-tasks" title="Permalink to this headline">¶</a></h2>
+<p>A Layout defines how a room looks like. A room could either be a room, which is created by hand,
+or it could be created from a task. For more information on layouts, have a look at <a class="reference internal" href="slurk_layouts.html#slurk-layouts"><span class="std std-ref">Layouts and Plugins</span></a>.</p>
+</div>
+<div class="section" id="users">
+<h2><span class="section-number">7.2. </span>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>A user is a human user, mostly with very limited permissions, or a bot. Every user needs a
+token to log in. While a token can register multiple users, it’s not possible to assign more
+than one token to a single user. Security and permissions are important aspects to consider when giving access to
+bots and users. A token is associated with a permissions list and should only contain permissions,
+which are really needed for the corresponding user (human or bot). Especially, the permissions to send
+html messages have to be avoided when giving out to human users, as they allow users to inject arbitrary html objects into messages.</p>
+<p>Also, the <code class="docutils literal notranslate"><span class="pre">&quot;api&quot;</span></code>-permissions should not be given to arbitrary or unknown users, as with the api-token, everything
+in the server can be accessed.</p>
+</div>
+<div class="section" id="logging">
+<h2><span class="section-number">7.3. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Almost any action in slurk is logged to evaluate the experiment at a later point. The logging endpoint
+can be used to filter for specific events or even add custom events.</p>
+</div>
+<div class="section" id="video-and-audio">
+<h2><span class="section-number">7.4. </span>Video and Audio<a class="headerlink" href="#video-and-audio" title="Permalink to this headline">¶</a></h2>
+<p>Besides sending images and text messages or change some attribute at the client, slurk can
+connect to a <a class="reference external" href="https://docs.openvidu.io/en/2.19.0/" target="_blank">OpenVidu</a> server. To enable the
+OpenVidu module, see <a class="reference internal" href="slurk_deployment.html#slurk-deployment"><span class="std std-ref">Deployment of the system</span></a>.
+With OpenVidu enabled, the openvidu-endpoint is available. This implies that you never have to
+talk to the OpenVidu-API directly, but can use slurk for this task. In order to let users communicate
+with each other, the room has to be associated with an OpenVidu session. The session can be created
+by the API. The returned id then has to be passed to the room, which is used for the call.
+After connecting to the room, the server checks if a user may subscribe or publish to
+the associated session. For this, they may have the <code class="docutils literal notranslate"><span class="pre">&quot;openvidu_role&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;SUBSCRIBER&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;PUBLISHER&quot;</span></code> assigned
+as permission.</p>
+</div>
 </div>
 
 
@@ -180,8 +224,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="slurk_deployment.html" class="btn btn-neutral float-right" title="9. Deployment of the system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="7. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="slurk_deployment.html" class="btn btn-neutral float-right" title="8. Deployment of the system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_bots.html" class="btn btn-neutral float-left" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

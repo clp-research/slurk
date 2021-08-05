@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>9. Deployment of the system &mdash; slurk 2.0.0 documentation</title>
+  <title>8. Deployment of the system &mdash; slurk 2.0.0 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
-    <link rel="prev" title="8. REST API for slurk" href="slurk_api.html" /> 
+    <link rel="next" title="9. Getting participants from Amazon Mechanical Turk" href="slurk_amt.html" />
+    <link rel="prev" title="7. REST API for slurk" href="slurk_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,20 +97,22 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_gettingstarted.html">3. Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_permission.html">6. Security and Permissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">7. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Deployment of the system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-docker">9.1. Using docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-setup">9.2. Manual setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#general-description-and-requirements">9.2.1. General description and requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#serving-slurk-with-gunicorn">9.2.2. Serving Slurk with Gunicorn</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuring-nginx">9.2.3. Configuring Nginx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_api.html">7. REST API for slurk</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Deployment of the system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">8.1. Environment variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#openvidu-support">8.1.1. OpenVidu support</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#hosting-slurk">8.2. Hosting slurk</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#docker">8.2.1. Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flask">8.2.2. Flask</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-using-docker-compose-and-postgres">8.3. Example using docker-compose and Postgres</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">9. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
             
@@ -159,7 +161,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">9. </span>Deployment of the system</li>
+      <li><span class="section-number">8. </span>Deployment of the system</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -179,215 +181,98 @@
            <div itemprop="articleBody">
             
   <div class="section" id="deployment-of-the-system">
-<span id="slurk-deployment"></span><h1><span class="section-number">9. </span>Deployment of the system<a class="headerlink" href="#deployment-of-the-system" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="using-docker">
-<h2><span class="section-number">9.1. </span>Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">¶</a></h2>
-<p>As described in <a class="reference internal" href="slurk_gettingstarted.html#slurk-gettingstarted"><span class="std std-ref">Getting Started</span></a>, the easiest way is to use <code class="docutils literal notranslate"><span class="pre">docker</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install docker
-</pre></div>
-</div>
-<p>In order to run the server on port 80, just run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -p <span class="m">80</span>:5000 -e <span class="nv">SECRET_KEY</span><span class="o">=</span>your-key -d slurk/server
-</pre></div>
-</div>
-<p>These additional environment variables can be specified:</p>
+<span id="slurk-deployment"></span><h1><span class="section-number">8. </span>Deployment of the system<a class="headerlink" href="#deployment-of-the-system" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="environment-variables">
+<h2><span class="section-number">8.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>slurk reads a few environment variables for configuration. Because slurk is a flask application,
+it reads <code class="docutils literal notranslate"><span class="pre">FLASK_ENV</span></code> and defaults to a more verbose logging, when <code class="docutils literal notranslate"><span class="pre">FLASK_ENV=development</span></code>.
+Also, the admin token is fixed to <code class="docutils literal notranslate"><span class="pre">00000000-0000-0000-0000-000000000000</span></code> and for RapiDoc,
+the token is provided. To provide cookies, a secret key is required, which can be set with
+<code class="docutils literal notranslate"><span class="pre">SLURK_SECRET_KEY</span></code>, which defaults to a random value. This implies that every time the
+server is restarted, the cookies will be invalidated.</p>
+<p>slurk is backed by a database. When no database is provided, an in-memory database is used.
+This can be changed by setting <code class="docutils literal notranslate"><span class="pre">SLURK_DATABASE_URI</span></code>. For a list of possible engines, see
+<a class="reference external" href="https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls" target="_blank">the SQLAlchemy documentation</a>,
+however only SQLite and Postgres are tested. If you notice errors with other providers, please
+<a class="reference external" href="https://github.com/clp-research/slurk/issues/new" target="_blank">file an issue</a>. Also note, that
+SQLite behaves weirdly when using auto-increment keys, so deletion of entries may cause the
+same id to be used again. Later, we will see how slurk can be set up with a Postgres-database and
+docker-compose.</p>
+<p>The API of slurk uses ETags for patching, putting, and deleting entries. Those can be disabled
+when setting <code class="docutils literal notranslate"><span class="pre">SLURK_DISABLE_ETAG</span></code>.</p>
+<div class="section" id="openvidu-support">
+<h3><span class="section-number">8.1.1. </span>OpenVidu support<a class="headerlink" href="#openvidu-support" title="Permalink to this headline">¶</a></h3>
+<p>When slurk should connect to an OpenVidu server, those additional variables may be set:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>: admin token is <code class="docutils literal notranslate"><span class="pre">00000000-0000-0000-0000-000000000000</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_DATABASE_URI</span></code>: URI to the database, defaults to <code class="docutils literal notranslate"><span class="pre">sqlite:///:memory:</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_TRACK_MODIFICATIONS</span></code>: Tracks modifications in the database</li>
-<li><code class="docutils literal notranslate"><span class="pre">SQLALCHEMY_ECHO</span></code>: Prints all executed commands to the database</li>
-<li><code class="docutils literal notranslate"><span class="pre">DROP_DATABASE_ON_STARTUP</span></code>: Database will be recreated on restart</li>
+<li><code class="docutils literal notranslate"><span class="pre">SLURK_OPENVIDU_URL</span></code>: for example <code class="docutils literal notranslate"><span class="pre">&quot;https://openvidu.example.com&quot;</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SLURK_OPENVIDU_SECRET</span></code>: Secret used for the openvidu server</li>
+<li><code class="docutils literal notranslate"><span class="pre">SLURK_OPENVIDU_PORT</span></code>, defaults to <code class="docutils literal notranslate"><span class="pre">443</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">SLURK_OPENVIDU_VERIFY</span></code>, Enable SSL validation, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
-<p>If you don’t want to run it detached, you may omit <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
+<p>For spinning up an OpenVidu server, please consult the <a class="reference external" href="https://docs.openvidu.io/en/2.18.0/deployment/" target="_blank">corresponding documentation</a>.</p>
 </div>
-<div class="section" id="manual-setup">
-<h2><span class="section-number">9.2. </span>Manual setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h2>
-<p>If you don’t want to use docker for whatever reason, you can also manually setup the server.</p>
-<div class="section" id="general-description-and-requirements">
-<h3><span class="section-number">9.2.1. </span>General description and requirements<a class="headerlink" href="#general-description-and-requirements" title="Permalink to this headline">¶</a></h3>
-<p>This section includes information on how to run Slurk on Nginx server (Ubuntu 18.04)
-with SSL connection.</p>
-<p>First, you have to be sure that Python3.6+ is installed on your machine. Please navigate to
-<code class="docutils literal notranslate"><span class="pre">server</span></code> and install required packages via executing</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
+</div>
+<div class="section" id="hosting-slurk">
+<h2><span class="section-number">8.2. </span>Hosting slurk<a class="headerlink" href="#hosting-slurk" title="Permalink to this headline">¶</a></h2>
+<p>There is a script in the slurk-repository called <code class="docutils literal notranslate"><span class="pre">scripts/start_server.sh</span></code>. Depending
+on the environment variables set, the script starts a GUnicorn server locally or in a
+docker container. Please see the header of the script for the usage.</p>
+<div class="section" id="docker">
+<h3><span class="section-number">8.2.1. </span>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
+<p>As described in <a class="reference internal" href="slurk_gettingstarted.html#slurk-gettingstarted"><span class="std std-ref">Getting Started</span></a>, the easiest way is to use <code class="docutils literal notranslate"><span class="pre">docker</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -p <span class="m">5000</span>:80 slurk/server
 </pre></div>
 </div>
-<p>Also please make sure that your Ubuntu server is running on Nginx <a class="footnote-reference" href="#id6" id="id1">[1]</a> and <code class="docutils literal notranslate"><span class="pre">systemd</span></code> package is installed.
-Do not forget to check if UFW (Uncomplicated Firewall) is installed on your machine <a class="footnote-reference" href="#id7" id="id2">[2]</a>.</p>
+<p>Please note that passing an SQLite database also requires a volume to be bound when
+the database should be persistent. For Postgres, make sure that the docker container
+can access the same domain as the database.</p>
 </div>
-<div class="section" id="serving-slurk-with-gunicorn">
-<h3><span class="section-number">9.2.2. </span>Serving Slurk with Gunicorn<a class="headerlink" href="#serving-slurk-with-gunicorn" title="Permalink to this headline">¶</a></h3>
-<p>You can serve our Flask application on a permanent basis.
-Such setup will allow you to have faster connections which are automatic since you are not required to manually start
-the process with Python, but Nginx will configure everything for you. Most of the instructions are taken or adopted from
-<a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04" target="_blank">this tutorial</a>.</p>
-<p>First, isolate your Flask application on your computer. For this you have to install <em>virtualenv</em> package.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install python3-venv
+<div class="section" id="flask">
+<h3><span class="section-number">8.2.2. </span>Flask<a class="headerlink" href="#flask" title="Permalink to this headline">¶</a></h3>
+<p>Flask provides several ways for hosting an application, for example</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">FLASK_APP</span><span class="o">=</span>slurk
+$ flask run
 </pre></div>
 </div>
-<p>Navigate to your project directory and create a new project environment there. Also activate the environment and
-install required packages</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/server
-python3.6 -m venv serverenv
-<span class="nb">source</span> serverenv/bin/activate
-pip install -r requirements.txt
-</pre></div>
+<p>See the <a class="reference external" href="https://flask.palletsprojects.com/en/2.0.x/deploying/" target="_blank">Deployment Options</a> of
+Flask for a comprehensive list of different options.</p>
 </div>
-<p>Now, assuming that <em>gunicorn</em> and <em>flask</em> are already installed, we will create the WSGI entry point for our application.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nano ~/server/wsgi.py
-</pre></div>
 </div>
-<p>The chat instance itself is created in <code class="docutils literal notranslate"><span class="pre">~/server/app/__init__.py</span></code>, and that is why we will use this instance in our <cite>wsgi.py</cite> file.
-Import this instance into the file, save and close it once you are finished</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">create_app</span>
+<div class="section" id="example-using-docker-compose-and-postgres">
+<h2><span class="section-number">8.3. </span>Example using docker-compose and Postgres<a class="headerlink" href="#example-using-docker-compose-and-postgres" title="Permalink to this headline">¶</a></h2>
+<p>Before spinning up slurk, we need a proper database. For our case, we chose postgres.
+When using the postgres docker container and the slurk docker container, the two
+containers probably can’t see each other, so we use <a class="reference external" href="https://docs.docker.com/compose/" target="_blank">docker-compose</a> here.
+We want to host slurk on port 5000 and connect it to the postgres database. The database
+should be persistent, so a volume for the data has to be mounted. This is the
+<code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file we end up with:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&quot;3.9&quot;</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nt">services</span><span class="p">:</span>
+  <span class="nt">db</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./postgres-data:/path/to/postgres/data</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+  <span class="nt">slurk</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">slurk/server</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">on-failure</span>
+    <span class="nt">ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5000:80</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_DATABASE_URI=postgresql://postgres:SUPER_SECRET_PSQL_PASSWORD@db:5432/postgres</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_SECRET_KEY=MY_SLURK_SECRET_KEY</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_URL=https://openvidu.example.com</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_SECRET=MY_SUPER_SECRET_OV_SECRET</span>
 </pre></div>
 </div>
-<p>Next step would be to configure Gunicorn, but first we should check if the application is served correctly <a class="footnote-reference" href="#id8" id="id3">[3]</a></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/server
-gunicorn --bind host:5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker wsgi:app
-</pre></div>
-</div>
-<p>Visit you server’s address with the port <code class="docutils literal notranslate"><span class="pre">:5000</span></code> and check if you see the login page.
-If it functions properly, please press <code class="docutils literal notranslate"><span class="pre">CTRL-C</span></code> in your terminal window and deactivate your environment.</p>
-<p>Now we have to create the systemd service unit file. It will allow Ubuntu to automatically start our application
-once the machine boots.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nano /etc/systemd/system/chat.service
-</pre></div>
-</div>
-<p>Fill this service file with information about your application and adjust paths/variable names where required</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Gunicorn instance to serve MeetUp</span>
-<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-
-<span class="k">[Service]</span>
-<span class="na">User</span><span class="o">=</span><span class="s">user</span>
-<span class="na">Group</span><span class="o">=</span><span class="s">www-data</span>
-<span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/user/server</span>
-<span class="na">Environment</span><span class="o">=</span><span class="s">&quot;PATH=/home/user/server/serverenv/bin&quot;</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/home/user/server/serverenv/bin/gunicorn --bind unix:myproject.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -m 007 wsgi:app</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-</pre></div>
-</div>
-<p>Save and close this file. Now we will start the Gunicorn service and enable it so that it is active once our machine is booted</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo systemctl start chat
-sudo systemctl <span class="nb">enable</span> chat
-</pre></div>
-</div>
-<p>To be sure that it is active, check its status</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo systemctl status chat
-</pre></div>
-</div>
-<p>The output should be similar to the following</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chat.service - Gunicorn instance to serve meetup
-Loaded: loaded <span class="o">(</span>/etc/systemd/system/chat.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
-Active: active <span class="o">(</span>running<span class="o">)</span> since Fri <span class="m">2018</span>-08-17 <span class="m">11</span>:25:12 CEST<span class="p">;</span> 4h 20min ago
-Main PID: <span class="m">18101</span> <span class="o">(</span>gunicorn<span class="o">)</span>
-Tasks: <span class="m">2</span> <span class="o">(</span>limit: <span class="m">4915</span><span class="o">)</span>
-CGroup: /system.slice/chat.service
-      ├─18101 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-      └─18103 /home/user/slurk/server/chatenv/bin/python3 /home/user/slurk/server/chatenv/bin/gunicorn --bind unix:chat.sock -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
-</pre></div>
-</div>
-</div>
-<div class="section" id="configuring-nginx">
-<h3><span class="section-number">9.2.3. </span>Configuring Nginx<a class="headerlink" href="#configuring-nginx" title="Permalink to this headline">¶</a></h3>
-<p>At this point our Gunicorn application server must be actively running, and now we have to enable Nginx to accept requests for our application.
-First, we will create a new server block configuration file in Nginx’s <cite>sites-available</cite> directory</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nano /etc/nginx/sites-available/chat
-</pre></div>
-</div>
-<p>We will have to specify location of our socket file, that serves the application
-and include certificates which were created earlier <a class="footnote-reference" href="#id9" id="id4">[4]</a></p>
-<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
-
-    <span class="kn">listen</span> <span class="mi">5000</span> <span class="s">ssl</span> <span class="s">default_server</span><span class="p">;</span>
-    <span class="kn">listen</span> <span class="s">[::]:5000</span> <span class="s">ssl</span> <span class="s">default_server</span><span class="p">;</span>
-
-    <span class="kn">server_name</span> <span class="s">_</span><span class="p">;</span>
-    <span class="kn">root</span> <span class="s">/home/user/slurk/server/app</span><span class="p">;</span>
-
-    <span class="kn">access_log</span> <span class="s">/home/user/slurk/server/nginx_logs/nginx-access.log</span><span class="p">;</span>
-    <span class="kn">error_log</span> <span class="s">/home/user/slurk/server/nginx_logs/nginx-error.log</span><span class="p">;</span>
-
-    <span class="kn">include</span> <span class="s">snippets/certs.conf</span><span class="p">;</span>
-    <span class="kn">include</span> <span class="s">snippets/ssl-params.conf</span><span class="p">;</span>
-
-    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-        <span class="kn">include</span> <span class="s">proxy_params</span><span class="p">;</span>
-        <span class="kn">proxy_pass</span> <span class="s">http://unix:/home/user/slurk/server/chat.sock</span><span class="p">;</span>
-
-        <span class="p">}</span>
-
-    <span class="p">}</span>
-</pre></div>
-</div>
-<p>Do not forget to link this file to the <code class="docutils literal notranslate"><span class="pre">sites-enabled</span></code> directory</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
-</pre></div>
-</div>
-<p>Test it for syntax errors and restart Nginx</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo nginx -t
-sudo systemctl restart nginx
-</pre></div>
-</div>
-<p>As the last step, adjust UFW setting once again, adding full access to the Nginx server</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo ufw delete allow <span class="m">5000</span>
-sudo ufw allow <span class="s1">&#39;Nginx Full&#39;</span>
-</pre></div>
-</div>
-<p>When you navigate to your server’s domain name, you should be able to see the login interface <a class="footnote-reference" href="#id10" id="id5">[5]</a>.</p>
-<p>Congratulations! You have managed to fully deploy Slurk!</p>
-<hr class="docutils" />
-<table class="docutils footnote" frame="void" id="id6" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>There is a nice tutorial on <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04" target="_blank">how to install Nginx on Ubuntu 18.04</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id7" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>A very detailed tutorial can be found here: <a class="reference external" href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04" target="_blank">Initial Server Setup with Ubuntu 18.04</a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id8" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><p class="first">An important thing is that you specify type of the worker associated with the Gunicorn process. You should use websockets provided by <cite>gevent</cite> package:</p>
-<p><code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">geventwebsocket.gunicorn.workers.GeventWebSocketWorker</span></code></p>
-<p class="last">More information can be found in <a class="reference external" href="http://flask.pocoo.org/docs/1.0/deploying/wsgi-standalone/#gunicorn" target="_blank">official Flask documentation</a>.</p>
-</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id9" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td><p class="first">Different configurations require specification of static files’ location,
-which include CSS files of your applications. In order to enable it, add additional
-location block where you specify location of the static files:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">location</span> <span class="o">/</span><span class="n">static</span><span class="o">/</span> <span class="p">{</span>
-    <span class="n">alias</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="p">;</span>
-    <span class="p">}</span>
-</pre></div>
-</div>
-</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id10" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>Regarding the port that you use: some ports are not accessible for the use (for example, <code class="docutils literal notranslate"><span class="pre">7000</span></code> is used for internal processes), so be careful when deciding which port to use.
-If you choose incorrect one, the application will not be accessible from outside of your network, even if you adjust firewall settings.</td></tr>
-</tbody>
-</table>
-</div>
+<p>First, we start the postgres-container, named <code class="docutils literal notranslate"><span class="pre">db</span></code>. We define the password to login
+to the database and mount the database content to <code class="docutils literal notranslate"><span class="pre">/path/to/postgres/data</span></code>.
+When postgres has started, we pass the postgres URI to slurk, alongside a secret key.
+As we also want OpenVidu support, the two required OpenVidu-variables are also passed.</p>
 </div>
 </div>
 
@@ -397,8 +282,8 @@ If you choose incorrect one, the application will not be accessible from outside
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="10. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="slurk_api.html" class="btn btn-neutral float-left" title="8. REST API for slurk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="slurk_amt.html" class="btn btn-neutral float-right" title="9. Getting participants from Amazon Mechanical Turk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_api.html" class="btn btn-neutral float-left" title="7. REST API for slurk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
