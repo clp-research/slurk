@@ -20,7 +20,7 @@ This can be changed by setting ``SLURK_DATABASE_URI``. For a list of possible en
 however only SQLite and Postgres are tested. If you notice errors with other providers, please
 `file an issue <https://github.com/clp-research/slurk/issues/new>`_. Also note, that
 SQLite behaves weirdly when using auto-increment keys, so deletion of entries may cause the
-same id being used again. Later, we will see how slurk can be set up with a Postgres-database and
+same id to be used again. Later, we will see how slurk can be set up with a Postgres-database and
 docker-compose.
 
 The API of slurk uses ETags for patching, putting, and deleting entries. Those can be disabled
@@ -52,9 +52,9 @@ As described in :ref:`slurk_gettingstarted`, the easiest way is to use ``docker`
 
 .. code-block:: bash
 
-  $ docker run -p 80:80 slurk/server
+  $ docker run -p 5000:80 slurk/server
 
-Please note that passing an SQLite database also requires a volume to be bound, when
+Please note that passing an SQLite database also requires a volume to be bound when
 the database should be persistent. For Postgres, make sure that the docker container
 can access the same domain as the database.
 
@@ -69,7 +69,7 @@ Flask provides several ways for hosting an application, for example
   $ flask run
 
 See the `Deployment Options <https://flask.palletsprojects.com/en/2.0.x/deploying/>`_ of
-Flask for a big list of different options.
+Flask for a comprehensive list of different options.
 
 
 Example using docker-compose and Postgres

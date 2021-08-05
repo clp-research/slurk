@@ -58,7 +58,7 @@ To log into the room, a token has to be generated:
   $ echo $TOKEN
   fedcba98-7654-3210-fedc-ba9876543210
 
-Now visit your server (e.g. http://localhost:5000) and enter whatever Name you like and the token
+Now visit your server (e.g. http://localhost:5000) and enter whatever name you like and the token
 you just generated, and click "enter chatroom".
 
 This should transport you to the chat interface, where you then can
@@ -90,10 +90,10 @@ these browsers. Hurray!
 
 (If your machine is set up in the right way [that is, the machine that
 is localhost is accessible from your network], this might work across
-machines, and so you can have a chat with an actual different person.)
+machines, and so you can have a chat with an actual distinct person.)
 
 This has demonstrated the very basic capabilities – providing a chat
-environment – but so far there hasn't been any use made of the display
+environment – but so far there has been no use made of the display
 window. Let's change that by inviting a bot into our chat room.
 
 
@@ -102,7 +102,7 @@ Chatting with a bot
 
 Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. If you restarted the
-server make sure you have created the layout and the room.
+server, make sure you have created the layout and the room.
 
 For the bot, more permissions are needed. Create a file where the
 permissions are set:
@@ -168,7 +168,7 @@ that the setup is working on your machine; you also got a first
 introduction to the basic concepts. But what we have seen so far would
 only allow us to run a single room at a time. That may already be all
 you want if you conduct experiments locally with participants that you
-bring into the lab. If you want to make use of crowdsourcing though,
+bring into the lab. If you want to make use of crowdsourcing, though,
 you will want to be able to automatically pair up participants and
 create task rooms for each pair. This will be explained in the next
 section.

@@ -7,10 +7,10 @@ Layouts and Plugins
 In slurk you have the possibility to integrate your own layouts.
 With layouts, it is possible to modify the display area on the right side and specify a stylesheet.
 
-A layout is a JSON file with a top-level dictionary. In addition to the fields listed in the :ref:`slurk_api`
+A layout is a JSON file with a top-level dictionary. Besides the fields listed in the :ref:`slurk_api`
 there are three fields, which are worth pointing out:
 
-- ``"html"``: Consists of a list of further dictionaries or strings.
+- ``"html"``: Comprises a list of further dictionaries or strings.
     Each dictionary represents an HTML node.  Each key in this dictionary corresponds to the attribute in an HTML tag. There are also two predefined tags: ``"layout-type"`` and ``"layout-content"``. ``"layout-type"`` corresponds to the name of the node, ``"layout-content"`` corresponds to the content between the opening and closing tag. For example
 
     .. code-block:: json
@@ -22,7 +22,7 @@ there are three fields, which are worth pointing out:
       }
 
     corresponds to the HTML of ``<span id="box">Text</span>``.
-    It's also possible to nest the content. The following object will result in
+    It's also possible to nest the content. The following object will cause
     ``<span id="outer"><span id="inner">Text</span></span>``:
 
     .. code-block:: json
@@ -37,7 +37,7 @@ there are three fields, which are worth pointing out:
         "id": "outer"
       }
 
-- ``"css"``: A dictionary which is similar to a typical CSS stylesheet. Example:
+- ``"css"``: A dictionary which is like a typical CSS stylesheet. Example:
     .. code-block:: json
 
        {
@@ -56,8 +56,8 @@ there are three fields, which are worth pointing out:
         margin: 50px 20px 15px
       }
 
-- ``"script"``: Provides the ability to inject a script plugin into the chat. It consists of another dictionary, which
-  maps different triggers to scripts or a list of scripts. Scripts can either be a predefined one or can be passed by
+- ``"script"``: Provides the ability to inject a script plugin into the chat. It comprises another dictionary, which
+  maps different triggers to scripts or a list of scripts. Scripts can either be a pre-defined one or can be passed by
   link. Example:
 
     .. code-block:: json
@@ -71,7 +71,7 @@ there are three fields, which are worth pointing out:
 Triggers
 ~~~~~~~~
 
-A full list of available keys is shown in the :ref:`slurk_api`. There are some predefined scripts
+A full list of keys is shown in the :ref:`slurk_api`. There are some pre-defined scripts
 which can be used. Also, several variables may be defined in a trigger:
 
 ``"incoming-text"``
@@ -136,10 +136,10 @@ Examples:
 
 ``"typing-users"``
 ------------------
-Called when state of currently typing users is changed
+Called when the state of currently typing users is changed
 
 Variables:
-  - ``users``: A map of currently typing users, with whose id as the key
+  - ``users``: A map of currently typing users, with their ids as keys
 Examples:
   - ``"typing-users"``: Shows which users are currently typing
 
@@ -148,7 +148,7 @@ Examples:
 "Injected as a script file into the site
 
 Examples:
-  - ``"ask-reload"``: A popup asks on page reload if this is the desired action
+  - ``"ask-reload"``: A pop-up asks on page reload if this is the desired action
 
 ``"document-ready"``
 --------------------
