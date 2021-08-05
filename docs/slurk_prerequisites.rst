@@ -70,8 +70,8 @@ Install Ubuntu-20.04.1 using the App Store
 .. code-block:: bash
 
     $ wsl --list --verbose
-      NAME                   STATE           VERSION
-      Ubuntu-20.04           Running         2
+    NAME                   STATE           VERSION
+    Ubuntu-20.04           Running         2
 
 5. Open a shell for the Ubuntu sub-system and follow the :ref:`label-install-ubuntu` guide.
 
@@ -168,7 +168,7 @@ Checkout slurk
 4. Go into the slurk top directory.
 
 Run with docker (recommended)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Start the server:
 
@@ -176,14 +176,14 @@ Run with docker (recommended)
 
     $ export SLURK_DOCKER=slurk
     $ scripts/start_server.sh
-    b4ad4ccd053bebd4ce80afbeea3a3a259d890ae7103577e003cb2e4b768687fb
+    0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 
 2. Fetch the admin token:
 
 .. code-block:: bash
 
     $ scripts/read_admin_token.sh
-    00000000-0000-0000-0000-000000000000
+    01234567-89ab-cdef-0123-456789abcdef
 
 3. (Optional) In case the output of the above script is empty, you may find valuable information in the logs:
 
@@ -192,7 +192,7 @@ Run with docker (recommended)
    $ docker logs $SLURK_DOCKER
 
 Run without docker
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 1. (Optional) Create and activate a virtual environment (with Python 3.9).
 
@@ -226,7 +226,7 @@ Run without docker
         [INFO] Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
         [INFO] Booting worker with pid: 1233
         admin token:
-        00000000-0000-0000-0000-000000000000
+        01234567-89ab-cdef-0123-456789abcdef
 
 
 Side-notes
