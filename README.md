@@ -22,7 +22,7 @@ Slurk is built in Python 3.9, on top of [Flask] and [Flask-SocketIO].
 To run slurk, the simplest way is to use docker
 
 ```bash
-$ docker run -p 80:80 slurk/server
+$ docker run -p 5000:80 slurk/server
 [2021-07-24 10:49:41 +0000] [1] [INFO] Starting gunicorn 20.1.0
 [2021-07-24 10:49:41 +0000] [1] [INFO] Listening at: http://0.0.0.0:80 (1)
 [2021-07-24 10:49:41 +0000] [1] [INFO] Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
@@ -32,10 +32,9 @@ admin token:
 01234567-89ab-cdef-0123-456789abcdef
 ```
 
-Now you can open `localhost` in your browser and log in with any username and the provided admin token
-
-
-The [full documentation][doc] can be found on GitHUb.
+Now you can open `http://localhost:5000` in your browser and log in with any username and the provided admin token. With this token, you can't send any messages, however.
+The [full documentation][doc] on GitHub contains a step-by-step guide on how to create
+new tokens and much more.
 
 Happy slurking!
 

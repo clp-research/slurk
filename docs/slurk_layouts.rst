@@ -8,7 +8,7 @@ In slurk you have the possibility to integrate your own layouts.
 With layouts, it is possible to modify the display area on the right side and specify a stylesheet.
 
 A layout is a JSON file with a top-level dictionary. In addition to the fields listed in the :ref:`slurk_api`
-there are three fields, which worth pointing out:
+there are three fields, which are worth pointing out:
 
 - ``"html"``: Consists of a list of further dictionaries or strings.
     Each dictionary represents an HTML node.  Each key in this dictionary corresponds to the attribute in an HTML tag. There are also two predefined tags: ``"layout-type"`` and ``"layout-content"``. ``"layout-type"`` corresponds to the name of the node, ``"layout-content"`` corresponds to the content between the opening and closing tag. For example
@@ -81,7 +81,7 @@ Displays text messages as they arrive
 Variables:
   - ``data.user``: The user who has sent the message
   - ``data.timestamp``: The timestamp of the message
-  - ``data.private``: A boolean value if this was a direct message or visible to the room
+  - ``data.private``: A boolean value showing whether this was a direct message or visible to the room
   - ``data.message``: The message string of the sent message if any
   - ``data.html``: Tag if the message is marked as HTML
 Examples:
@@ -90,17 +90,17 @@ Examples:
 
 ``"incoming-image"``
 --------------------
-Displays images in the chat area they arrive
+Displays images in the chat area as they arrive
 
 Variables:
   - ``data.user``: The user who has sent the message
   - ``data.timestamp``: The timestamp of the message
-  - ``data.private``: A boolean value if this was a direct message or visible to the room
+  - ``data.private``: A boolean value showing whether this was a direct message or visible to the room
   - ``data.image``: The image URL
   - ``data.width``: The width of the sent image
   - ``data.height``: The height of the sent image
 Examples:
-  - ``"display-image"``: Displays ss a simple image
+  - ``"display-image"``: Displays a simple image
 
 ``"submit-message"``
 --------------------
@@ -139,7 +139,7 @@ Examples:
 Called when state of currently typing users is changed
 
 Variables:
-  - ``users``: A map of currently typing users, with its id as the key
+  - ``users``: A map of currently typing users, with whose id as the key
 Examples:
   - ``"typing-users"``: Shows which users are currently typing
 

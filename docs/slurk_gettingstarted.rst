@@ -102,7 +102,7 @@ Chatting with a bot
 
 Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. If you restarted the
-the server make sure you have created the layout and the room.
+server make sure you have created the layout and the room.
 
 For the bot, more permissions are needed. Create a file where the
 permissions are set:
@@ -135,7 +135,7 @@ in our example the echo-bot is used. Start the bot with the provided token
 
    $ docker run -e SLURK_TOKEN=$BOT_TOKEN -e SLURK_USER=$BOT_USER -e SLURK_PORT=5000 --net=host slurk/echo-bot
 
-After the bot has logged in, you can log chat with yourself.
+After the bot has logged in, you can chat with yourself.
 
 
 .. _screenshot_void:

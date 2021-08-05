@@ -11,16 +11,16 @@ slurk reads a few environment variables for configuration. Because slurk is a fl
 it reads ``FLASK_ENV`` and defaults to a more verbose logging, when ``FLASK_ENV=development``.
 Also, the admin token is fixed to ``00000000-0000-0000-0000-000000000000`` and for RapiDoc,
 the token is provided. To provide cookies, a secret key is required, which can be set with
-``SLURK_SECRET_KEY``, which defaults to a random value. This implies, that every time, the
+``SLURK_SECRET_KEY``, which defaults to a random value. This implies that every time the
 server is restarted, the cookies will be invalidated.
 
 slurk is backed by a database. When no database is provided, an in-memory database is used.
-This can be changed with setting ``SLURK_DATABASE_URI``. For a list of possible engines see
+This can be changed by setting ``SLURK_DATABASE_URI``. For a list of possible engines, see
 `the SQLAlchemy documentation <https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls>`_,
 however only SQLite and Postgres are tested. If you notice errors with other providers, please
-feel free to `file an issue <https://github.com/clp-research/slurk/issues/new>`_. Also note, that
-SQLite behaves weirdly when using auto-increment keys, so deletion of entries may result in the
-same id being used again. Later, we will see, how slurk can be set up with a Postgres-database and
+`file an issue <https://github.com/clp-research/slurk/issues/new>`_. Also note, that
+SQLite behaves weirdly when using auto-increment keys, so deletion of entries may cause the
+same id being used again. Later, we will see how slurk can be set up with a Postgres-database and
 docker-compose.
 
 The API of slurk uses ETags for patching, putting, and deleting entries. Those can be disabled
@@ -41,8 +41,8 @@ For spinning up an OpenVidu server, please consult the `corresponding documentat
 Hosting slurk
 ~~~~~~~~~~~~~
 
-There is a script in the slurk-repository called ``scripts/start_server.sh``. depending
-on the environment variables set, the scripts starts a GUnicorn server locally or in a
+There is a script in the slurk-repository called ``scripts/start_server.sh``. Depending
+on the environment variables set, the script starts a GUnicorn server locally or in a
 docker container. Please see the header of the script for the usage.
 
 Docker
@@ -54,7 +54,7 @@ As described in :ref:`slurk_gettingstarted`, the easiest way is to use ``docker`
 
   $ docker run -p 80:80 slurk/server
 
-Please note, that passing an SQLite database also requires a volume to be bound, when
+Please note that passing an SQLite database also requires a volume to be bound, when
 the database should be persistent. For Postgres, make sure that the docker container
 can access the same domain as the database.
 
@@ -77,7 +77,7 @@ Example using docker-compose and Postgres
 
 Before spinning up slurk, we need a proper database. For our case, we chose postgres.
 When using the postgres docker container and the slurk docker container, the two
-container probably can't see each other, so we use `docker-compose <https://docs.docker.com/compose/>`_ here.
+containers probably can't see each other, so we use `docker-compose <https://docs.docker.com/compose/>`_ here.
 We want to host slurk on port 5000 and connect it to the postgres database. The database
 should be persistent, so a volume for the data has to be mounted. This is the
 ``docker-compose.yml`` file we end up with:

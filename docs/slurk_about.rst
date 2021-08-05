@@ -4,7 +4,7 @@
 Slurk: What's this?
 =========================================
 
-Many fields of research have profited in the last years from the availability, through so-called "crowd working platforms", of a large pool of workers that can do small, web-based tasks. This has helped research in psychology as well as, dramatically so, research in artificial intelligence, where it made possible the collection of large amounts of labeled data from which models can be derived. While the common platforms offer templates for tasks such as image labeling or answering questions, there are no such templates for dialogue tasks, where more than one participant is needed at the same time.
+Many fields of research have profited in the last years from the availability, through so-called "crowdworking platforms", of a large pool of workers that can do small, web-based tasks. This has helped research in psychology as well as, dramatically so, research in artificial intelligence, where it made possible the collection of large amounts of labeled data from which models can be derived. While the common platforms offer templates for tasks such as image labeling or answering questions, there are no such templates for dialogue tasks, where more than one participant is needed at the same time.
 
 To facilitate web-based dialogue experiments, we built **slurk**. (Think: "slack for mechanical turk"...) Slurk is a chat server onto which human participants, as well as "bots", can log on to interact. Conversations happen in *rooms*, which are closed off to each other: While the server can handle many separate conversations in parallel, a given user will only be in one room and hence in one conversation.
 
@@ -45,7 +45,7 @@ Technical concepts
   in.
 
   **Commands**: is basically the same as a public text message, but is only sent to the users with the required
-  permissions.
+  permissi
 
   **Tokens**: To provide control over who is allowed to log into the chat (since we're not interested in running a
   public server here), access is regulated via tokens. Tokens need to be created in advance and link a user (who is
@@ -60,4 +60,4 @@ are allowed to give themselves a name and they must insert the token. The user w
 
 The user will be automatically transferred to the room for which the token was generated. Therefore, we have to create
 an experiment room before we can generate tokens for an experiment. The sequence is: ``rooms -> tokens -> users``.
-Bots also can also be represented as users. For this purpose, they can send a ``Name`` header.
+Bots also are represented as users.
