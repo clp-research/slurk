@@ -7,7 +7,7 @@ Writing your own bots
 Bots are little client programs, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.
 
 There are some sample bots provided as examples, one of which is explained below.
-The complete code to all bots can be found on `GitHub <https://github.com/clp-research/slurk-bots>`_ .
+The complete code to all bots can be found on `GitHub <https://github.com/clp-research/slurk-bots>`_.
 
 Dissecting the concierge bot
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,7 +45,7 @@ The bot has to be notified when a user joins or leaves the room. For this purpos
             :param token: A uuid; a string following the same pattern
                 as `0c45b30f-d049-43d1-b80d-e3c3a3ca22a0`
             :type token: str
-            :param user: ID of a `User` object that was created with
+            :param user: id of a `User` object that was created with
             the token.
             :type user: int
             :param host: Full URL including protocol and hostname.
@@ -66,7 +66,7 @@ The bot has to be notified when a user joins or leaves the room. For this purpos
 
         def run(self):
             # establish a connection to the server
-            # for authorization the token has to be provided in the headers
+            # for authorization, the token has to be provided in the headers
             self.sio.connect(
                 self.uri,
                 headers={"Authorization": f"Bearer {self.token}", "user": self.user},
@@ -144,7 +144,7 @@ first argument and an optional error message as a second argument, passed only i
             exit(1)
         LOG.debug("Sent message successfully.")
 
-In order to verify requests one can read out their status code. For an overview of all status codes that a request could possibly return and their meaning view :ref:`slurk_api`
+In order to verify requests, one can read out their status code. For an overview of all status codes that a request could possibly return and their meaning view :ref:`slurk_api`
 
 .. code-block:: python
 

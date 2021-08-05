@@ -67,7 +67,7 @@ Movement
 Monitoring own movement
 -----------------------
 
-Bots can monitor their own movement between rooms. This includes them joining or leaving a room. For this purpose they have to listen to the ``joined_room`` and ``left_room`` events, respectively. Both events are only sent to the user (e.g. bot) that caused them.
+Bots can monitor their own movement between rooms. This includes them joining or leaving a room. For this purpose, they have to listen to the ``joined_room`` and ``left_room`` events, respectively. Both events are only sent to the user (e.g. bot) that caused them.
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@ Task bots are generally sent to rooms to instruct users and provide resources ne
 
 Monitoring overall movement
 ---------------------------
-Bots are also notified once a user joins or leaves one of the rooms the bot is placed in. The term `user` here includes the bot itself as well as other bots and human users.
+Bots are also notified once a user joins or leaves one of the rooms the bot is placed in. The term `user` here includes the bot itself, as well as other bots and human users.
 
 
 .. code-block:: python
@@ -114,7 +114,7 @@ Bots are also notified once a user joins or leaves one of the rooms the bot is p
 Chat
 ~~~~
 All of the events mentioned below can be either ``private`` or not. If an event is ``private`` it is only sent to a designated receiver. If this receiver is the bot, it receives the event. Otherwise it does not receive it. If an event is not ``private`` it can be seen by all users in the specified room.
-Only bots are intended to send private content but for debugging purposes you can use the chat interface and the following syntax to send private messages ``@<user_id> <text>`` or private images ``@<user_id> image: <url>``. Make sure that whoever is supposed to send private content is assigned the ``send_privately`` permission.
+Only bots should send private content, but for debugging purposes, you can use the chat interface and the following syntax to send private messages ``@<user_id> <text>`` or private images ``@<user_id> image: <url>``. Make sure that whoever is supposed to send private content is assigned the ``send_privately`` permission.
 
 Messages
 --------
@@ -136,7 +136,7 @@ Messages can also be sent by bots:
 - ``broadcast(bool, optional)``: ``True`` if the message should be transmitted to all connected users. ``False`` otherwise
 - ``html(bool, optional)``: ``True`` if special html formatting should be applied to a message. This requires ``send_html_message`` permissions. ``False`` otherwise.
 
-Messages cause an event on the server side that can be handled by bots as follows:
+Messages cause an event on the server side that can be handled by bots:
 
 .. code-block:: python
 
@@ -153,7 +153,7 @@ Messages cause an event on the server side that can be handled by bots as follow
 
 Images
 ------
-If given the appropriate rights ``send_image``, a user may send image data. Normally, only bots are supposed to do so. But for debugging purposes it is possible to send images via the chat interface using the syntax ``image: <url>``.
+If given the appropriate rights ``send_image``, a user may send image data. Normally, only bots are supposed to do so. But for debugging purposes, it is possible to send images via the chat interface using the syntax ``image: <url>``.
 Bots can send images like this:
 
 .. code-block:: python
@@ -172,7 +172,7 @@ Bots can send images like this:
 - ``receiver_id(int, optional)``: the ``id`` of the user that this image is directed at
 - ``broadcast(bool, optional)``: ``True`` if the image should be transmitted to all connected users. ``False`` otherwise
 
-Images cause an event on the server side that can be handled by bots as follows:
+Images cause an event on the server side that can be handled by bots:
 
 .. code-block:: python
 
@@ -193,7 +193,7 @@ Images cause an event on the server side that can be handled by bots as follows:
 
 Commands
 --------
-Commands are very similar to text messages, but they are only visible to bots. In order for a user to be able to send commands they need the permission ``send_command``. Commands are normally sent by human users. For a chat message to be understood as a command, it needs to be prefixed by a slash ``/``.
+Commands are very similar to text messages, but they are only visible to bots. In order for a user to be able to send commands, they need the permission ``send_command``. Commands are normally sent by human users. For a chat message to be understood as a command, it needs to be prefixed by a slash ``/``.
 It is, however, also possible for bots to send commands:
 
 .. code-block:: python
@@ -210,7 +210,7 @@ It is, however, also possible for bots to send commands:
 - ``receiver_id(int, optional)``: the ``id`` of the user that this command is directed at
 - ``broadcast(bool, optional)``: ``True`` if the message should be transmitted to all connected users. ``False`` otherwise
 
-Commands cause an event on the server side that can be handled by bots as follows:
+Commands cause an event on the server side that can be handled by bots:
 
 .. code-block:: python
 
