@@ -21,7 +21,7 @@ Slurk is built in Python 3.9, on top of [Flask] and [Flask-SocketIO].
 
 To run slurk, the simplest way is to use docker
 
-```bash
+```text
 $ docker run -p 5000:80 slurk/server
 [2021-07-24 10:49:41 +0000] [1] [INFO] Starting gunicorn 20.1.0
 [2021-07-24 10:49:41 +0000] [1] [INFO] Listening at: http://0.0.0.0:80 (1)
