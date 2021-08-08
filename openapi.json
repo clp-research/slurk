@@ -956,7 +956,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -965,7 +965,7 @@
         },
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -1919,20 +1919,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1979,20 +1979,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2039,20 +2039,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2099,20 +2099,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2197,20 +2197,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -4552,50 +4552,14 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "incoming-image": {
+          "typing-users": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when an image is received"
-          },
-          "document-ready": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when site is fully loaded"
-          },
-          "incoming-text": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a text message is received"
-          },
-          "print-history": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Used for printing the chat history"
-          },
-          "submit-message": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a message is sent"
+            "description": "Called when state of currently typing users is changed"
           },
           "plain": {
             "default": null,
@@ -4606,14 +4570,50 @@
             ],
             "description": "Injected as a script file into the site"
           },
-          "typing-users": {
+          "print-history": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when state of currently typing users is changed"
+            "description": "Used for printing the chat history"
+          },
+          "incoming-image": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when an image is received"
+          },
+          "incoming-text": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a text message is received"
+          },
+          "document-ready": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when site is fully loaded"
+          },
+          "submit-message": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a message is sent"
           }
         }
       },
@@ -4770,22 +4770,22 @@
       "Error": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "description": "Error code"
+          "status": {
+            "type": "string",
+            "description": "Error name"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
           },
           "errors": {
             "type": "object",
             "nullable": true,
             "description": "Errors"
           },
-          "message": {
-            "type": "string",
-            "description": "Error message"
-          },
-          "status": {
-            "type": "string",
-            "description": "Error name"
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
