@@ -145,10 +145,11 @@ Examples:
 
 ``"plain"``
 -----------
-"Injected as a script file into the site
+Injected as a script file into the site
 
 Examples:
   - ``"ask-reload"``: A pop-up asks on page reload if this is the desired action
+  - ``"enforce-fullscreen"``: Page content is grayed out, until a button is clicked that sends user into fullscreen. See ``enforce-fullscreen_layout.json`` in ``examples`` for an example layout
 
 ``"document-ready"``
 --------------------
