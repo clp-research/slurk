@@ -54,6 +54,7 @@ class Token(Common):
                         send_image=False,
                         send_command=False,
                         send_privately=False,
+                        receive_bounding_box=False,
                         broadcast=False,
                     ),
                     registrations_left=-1,

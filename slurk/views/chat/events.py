@@ -36,6 +36,37 @@ def room_created(payload):
 
 
 @socketio.event
+def bounding_box(payload):
+    if "room" not in payload:
+        return False, 'missing argument: "room"'
+
+    db = current_app.session
+    room = db.query(Room).get(payload.pop("room"))
+
+    if not room:
+        return False, "Room not found"
+    if current_user not in room.users:
+        return False, "User not in this room"
+
+    if "type" not in payload:
+        return False, "Missing type"
+    if payload["type"] == "add" and "coordinates" not in payload:
+        return False, "Missing coordinates"
+
+    Log.add(event="bounding_box", user=current_user, room=room, data=payload)
+
+    user = {"id": current_user.get_id(), "name": current_user.name}
+
+    for usr in room.users:
+        if usr.token.permissions.receive_bounding_box and usr.session_id:
+            socketio.emit(
+                "bounding_box",
+                {"user": user, "room": room.id, **payload},
+                room=usr.session_id,
+            )
+
+
+@socketio.event
 def keypress(message):
     typing = message.get("typing", None)
     if typing is None:

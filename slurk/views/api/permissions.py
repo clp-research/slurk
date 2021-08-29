@@ -45,6 +45,11 @@ class PermissionsSchema(CommonSchema):
         description='Permit sending privately. This has to be combined with any other `"send_*"` permission',
         filter_description="Filter for private sending permissions",
     )
+    receive_bounding_box = ma.fields.Boolean(
+        missing=False,
+        description="Permit receiving drawn bounding boxes from other players in the same room",
+        filter_description="Filter for bounding box receiving permissions",
+    )
     broadcast = ma.fields.Boolean(
         missing=False,
         description="Permit broadcasting messages",
