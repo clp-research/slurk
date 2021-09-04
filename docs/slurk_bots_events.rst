@@ -226,3 +226,43 @@ Commands cause an event on the server side that can be handled by bots:
 - ``private(bool)``: ``True`` if this was a private command meant for a single user. ``False`` otherwise
 - ``broadcast(bool)``: ``True`` if the command was transmitted to all connected users. ``False`` otherwise
 - ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
+
+Others
+~~~~~~
+For both events below ``coordinates`` are given in percentage. For example an x-value of 0.4 for an image of width 100px should be interpreted as the mouse being 40px to the right of the left corner of the html element.
+
+Mouse Tracking
+--------------
+If one specifies the plain script ``mouse-tracking`` in a room layout bots will receive an additional ``mouse`` event.
+
+.. code-block:: python
+
+    @self.sio.event
+    def mouse(data):
+        do_something(data)
+
+``data`` in ``mouse`` has this structure:
+
+- ``type(str)``: ``click`` if the user clicked on the html element, ``move`` for every few miliseconds of mouse movement
+- ``coordinates(dict)``: contains the keys ``x`` and ``y``, the position ``{"x": 0, "y": 0}`` would be the top left corner of the html element
+- ``element_id(str)``: the ``id`` of the html element in which movement is tracked
+- ``user(dict)``: dictionary of ``id(int)`` and ``name(str)`` of the user who caused this event
+- ``room(int)``: the ``id`` of the room where the event was triggered
+- ``timestamp(str)``: as ISO 8601: ``YYYY-MM-DD hh:mm:ss.ssssss`` in UTC Time
+
+Bounding Boxes
+--------------
+If one specifies the plain script ``bounding-boxes`` in a room layout and assigns a bot the permission ``receive_bounding_box`` it will receive an additional ``bounding_box`` event.
+
+.. code-block:: python
+
+    @self.sio.event
+    def bounding_box(data):
+        do_something(data)
+
+``data`` in ``bounding_box`` has this structure:
+
+- ``type(str)``: ``add`` if a bounding box was added, ``remove`` if the canvas was resetted and all bounding boxes removed in the process
+- ``coordinates(dict, optional)``: only passed for the ``add`` event, contains the keys ``left``, ``top``, ``bottom`` and ``right`` specifying all four corners of the rectangle
+- ``user(dict)``: dictionary of ``id(int)`` and ``name(str)`` of the user who caused this event
+- ``room(int)``: the ``id`` of the room where the event was triggered
