@@ -16,7 +16,6 @@ function getPosition (evt, area) {
 
 function emitPosition(area) {
     if (mousePointer.isMoving) {
-        console.log(mousePointer.pos)
         socket.emit("mouse", {
            type: "move",
            coordinates: mousePointer.pos,
@@ -37,7 +36,6 @@ function trackMovement(area, interval) {
 
 function trackClicks(area) {
     $("#" + area).click(function(e) {
-	console.log('You clicked.');
         getPosition(e, area);
         socket.emit("mouse", {
             type: "click",
