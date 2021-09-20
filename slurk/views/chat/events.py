@@ -93,18 +93,23 @@ def mouse(payload):
     if room is None:
         return False, "Room not found"
 
+    data = dict(
+        type=payload.get("type"),
+        coordinates=payload.get("coordinates"),
+        element_id=payload.get("element_id"),
+    )
+
     socketio.emit(
         "mouse",
         dict(
-            type=payload.get("type"),
-            coordinates=payload.get("coordinates"),
-            element_id=payload.get("element_id"),
             user=user,
             room=room.id,
             timestamp=str(datetime.utcnow()),
+            **data,
         ),
         room=str(room.id),
     )
+    Log.add(event="mouse", user=current_user, room=room, data=data)
 
 
 def emit_message(event, payload, data):
