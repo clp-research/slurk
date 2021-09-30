@@ -110,6 +110,39 @@ def typed_message(payload):
         )
 
 
+@socketio.event
+def mouse(payload):
+    current_user_id = current_user.get_id()
+    if not current_user_id:
+        return False, "invalid session id"
+
+    user = dict(id=current_user_id, name=current_user.name)
+
+    db = current_app.session
+    room = db.query(Room).get(payload["room"]) if "room" in payload else None
+
+    if room is None:
+        return False, "Room not found"
+
+    data = dict(
+        type=payload.get("type"),
+        coordinates=payload.get("coordinates"),
+        element_id=payload.get("element_id"),
+    )
+
+    socketio.emit(
+        "mouse",
+        dict(
+            user=user,
+            room=room.id,
+            timestamp=str(datetime.utcnow()),
+            **data,
+        ),
+        room=str(room.id),
+    )
+    Log.add(event="mouse", user=current_user, room=room, data=data)
+
+
 def emit_message(event, payload, data):
     if "room" not in payload:
         return False, 'missing argument: "room"'
