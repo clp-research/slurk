@@ -1919,20 +1919,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -1979,20 +1979,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2039,20 +2039,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2099,20 +2099,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2197,20 +2197,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "id",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2273,6 +2273,16 @@
             "name": "send_privately",
             "required": false,
             "description": "Filter for private sending permissions",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "receive_bounding_box",
+            "required": false,
+            "description": "Filter for bounding box receiving permissions",
             "schema": {
               "type": "boolean",
               "nullable": true
@@ -4552,6 +4562,51 @@
       "Scripts": {
         "type": "object",
         "properties": {
+          "plain": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Injected as a script file into the site"
+          },
+          "submit-message": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a message is sent"
+          },
+          "document-ready": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when site is fully loaded"
+          },
+          "typing-users": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when state of currently typing users is changed"
+          },
+          "print-history": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Used for printing the chat history"
+          },
           "incoming-image": {
             "default": null,
             "nullable": true,
@@ -4569,51 +4624,6 @@
               "string"
             ],
             "description": "Called when a text message is received"
-          },
-          "document-ready": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when site is fully loaded"
-          },
-          "plain": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Injected as a script file into the site"
-          },
-          "print-history": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Used for printing the chat history"
-          },
-          "submit-message": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a message is sent"
-          },
-          "typing-users": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when state of currently typing users is changed"
           }
         }
       },
@@ -4770,10 +4780,6 @@
       "Error": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
           "errors": {
             "type": "object",
             "nullable": true,
@@ -4786,6 +4792,10 @@
           "message": {
             "type": "string",
             "description": "Error message"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
@@ -6064,12 +6074,6 @@
       "Attribute": {
         "type": "object",
         "properties": {
-          "receiver_id": {
-            "type": "integer",
-            "default": null,
-            "nullable": true,
-            "description": "Receiver for which the attribute should be set"
-          },
           "value": {
             "type": "string",
             "description": "The value to be set for the given attribute"
@@ -6077,6 +6081,12 @@
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
+          },
+          "receiver_id": {
+            "type": "integer",
+            "default": null,
+            "nullable": true,
+            "description": "Receiver for which the attribute should be set"
           }
         },
         "required": [
@@ -6165,6 +6175,10 @@
             "type": "boolean",
             "description": "Permit sending privately. This has to be combined with any other `\"send_*\"` permission"
           },
+          "receive_bounding_box": {
+            "type": "boolean",
+            "description": "Permit receiving drawn bounding boxes from other players in the same room"
+          },
           "broadcast": {
             "type": "boolean",
             "description": "Permit broadcasting messages"
@@ -6215,6 +6229,11 @@
             "default": false,
             "description": "Permit sending privately. This has to be combined with any other `\"send_*\"` permission"
           },
+          "receive_bounding_box": {
+            "type": "boolean",
+            "default": false,
+            "description": "Permit receiving drawn bounding boxes from other players in the same room"
+          },
           "broadcast": {
             "type": "boolean",
             "default": false,
@@ -6260,6 +6279,10 @@
           "send_privately": {
             "type": "boolean",
             "description": "Permit sending privately. This has to be combined with any other `\"send_*\"` permission"
+          },
+          "receive_bounding_box": {
+            "type": "boolean",
+            "description": "Permit receiving drawn bounding boxes from other players in the same room"
           },
           "broadcast": {
             "type": "boolean",
