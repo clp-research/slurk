@@ -26,7 +26,7 @@ header{
     height: 80px;
     border-bottom: #E5E7E9;
     box-shadow: rgba(0,0,0,0.10) 0 1px 1px 0,rgba(0,0,0,0.30) 0 4px 4px 0;
-    z-index: 1;
+    z-index: 5;
 }
 
 header #title {
@@ -70,7 +70,6 @@ header video {
     min-width: 300px;
     max-width: calc(100% - 200px);
     height: 100%;
-    z-index: 0;
 }
 
 #sidebar:after {
@@ -96,6 +95,7 @@ header video {
     max-width: calc(100% - 300px);
     height: calc(100% - 80px - 60px);
     overflow-y: auto;
+    z-index: 0;
 }
 
 #chat-area {
@@ -222,6 +222,7 @@ time:before{
     left: 0;
     right: 0;
     font-size: 1.2em;
+    z-index: 2;
 
     padding: 0 55px;
     width: 100%;
