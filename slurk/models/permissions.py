@@ -14,5 +14,6 @@ class Permissions(Common):
     send_image = Column(Boolean, nullable=False)
     send_command = Column(Boolean, nullable=False)
     send_privately = Column(Boolean, nullable=False)
+    receive_bounding_box = Column(Boolean, nullable=False)
     broadcast = Column(Boolean, nullable=False)
     openvidu_role = Column(String)

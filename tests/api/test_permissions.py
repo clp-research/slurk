@@ -65,6 +65,11 @@ class TestPostValid:
         },
         {
             "json": {
+                "receive_bounding_box": True,
+            }
+        },
+        {
+            "json": {
                 "api": False,
                 "send_message": True,
                 "send_html_message": True,
@@ -94,6 +99,9 @@ class TestPostValid:
         assert permissions["send_message"] == data.get("send_message", False)
         assert permissions["send_image"] == data.get("send_image", False)
         assert permissions["send_command"] == data.get("send_command", False)
+        assert permissions["receive_bounding_box"] == data.get(
+            "receive_bounding_box", False
+        )
 
 
 @pytest.mark.depends(on=[f"{PREFIX}::TestRequestOptions::test_request_option[POST]"])
@@ -201,6 +209,9 @@ class TestPutValid:
         assert new_permissions["send_message"] == data.get("send_message", False)
         assert new_permissions["send_image"] == data.get("send_image", False)
         assert new_permissions["send_command"] == data.get("send_command", False)
+        assert new_permissions["receive_bounding_box"] == data.get(
+            "receive_bounding_box", False
+        )
 
 
 @pytest.mark.depends(
@@ -218,6 +229,7 @@ class TestPutInvalid(PermissionsTable, InvalidWithEtagTemplate):
         ({"json": {"send_command": 42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({"json": {"api": None}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({"json": {"id": 42}}, HTTPStatus.UNPROCESSABLE_ENTITY),
+        ({"json": {"receive_bounding_box": "string"}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         ({"data": "{}"}, HTTPStatus.UNSUPPORTED_MEDIA_TYPE),
     ]
 
@@ -303,6 +315,7 @@ class TestPatchValid:
     REQUEST_CONTENT = [
         {"json": {"send_command": True}},
         {"json": {"api": False, "send_image": True}},
+        {"json": {"receive_bounding_box": True}},
         {"data": {"api": True}, "headers": {"Content-Type": "application/json"}},
     ]
 
@@ -343,6 +356,10 @@ class TestPatchValid:
             "send_command", permissions.json["send_command"]
         )
         assert new_permissions["send_command"] == expected_send_command
+        expected_receive_bounding_box = data.get(
+            "receive_bounding_box", permissions.json["receive_bounding_box"]
+        )
+        assert new_permissions["receive_bounding_box"] == expected_receive_bounding_box
 
 
 @pytest.mark.depends(
