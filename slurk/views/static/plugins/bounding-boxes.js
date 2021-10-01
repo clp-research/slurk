@@ -53,8 +53,8 @@ function createCanvas() {
 function configureCanvas(cnv) {
     cnv.width = drawingElem.clientWidth;
     cnv.height = drawingElem.clientHeight;
-    cnv.style.top = $("#" + drawingArea).css("margin-top");
-    cnv.style.left = $("#" + drawingArea).css("margin-left");
+    cnv.style.left = drawingElem.offsetLeft + "px";
+    cnv.style.top = drawingElem.offsetTop + "px";
 }
 
 // set context attributes such as line color
