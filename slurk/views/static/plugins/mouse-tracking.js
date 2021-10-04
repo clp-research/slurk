@@ -2,44 +2,44 @@
 // padding and border-width but not margin will count as part of the area
 let trackingArea = "tracking-area"
 
-let mousePointer = {
+let trackMousePointer = {
     isMoving: false,
     pos: {x: undefined, y: undefined}
 };
 
-function getPosition (evt, area) {
+function trackGetPosition (evt, area) {
     let elem = document.getElementById(area);
     let position = elem.getBoundingClientRect();
-    mousePointer.pos.x = (evt.clientX - position.left) / position.width;
-    mousePointer.pos.y = (evt.clientY - position.top) / position.height;
+    trackMousePointer.pos.x = (evt.clientX - position.left) / position.width;
+    trackMousePointer.pos.y = (evt.clientY - position.top) / position.height;
 }
 
 function emitPosition(area) {
-    if (mousePointer.isMoving) {
+    if (trackMousePointer.isMoving) {
         socket.emit("mouse", {
            type: "move",
-           coordinates: mousePointer.pos,
+           coordinates: trackMousePointer.pos,
            element_id: area,
            room: self_room
 	});
-        mousePointer.isMoving = false;
+        trackMousePointer.isMoving = false;
     }
 }
 
 function trackMovement(area, interval) {
     $("#" + area).mousemove(function(e) {
-        getPosition(e, area);
-        mousePointer.isMoving = true;
+        trackGetPosition(e, area);
+        trackMousePointer.isMoving = true;
     });
     setInterval(emitPosition, interval, area);
 }
 
 function trackClicks(area) {
     $("#" + area).click(function(e) {
-        getPosition(e, area);
+        trackGetPosition(e, area);
         socket.emit("mouse", {
             type: "click",
-            coordinates: mousePointer.pos,
+            coordinates: trackMousePointer.pos,
             element_id: area,
             room: self_room
         });
