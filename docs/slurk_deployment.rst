@@ -110,3 +110,41 @@ First, we start the postgres-container, named ``db``. We define the password to 
 to the database and mount the database content to ``/path/to/postgres/data``.
 When postgres has started, we pass the postgres URI to slurk, alongside a secret key.
 As we also want OpenVidu support, the two required OpenVidu-variables are also passed.
+
+Now follow these steps if you want to (re-)start slurk.
+
+1. Navigate into the directory of your ``docker-compose.yml`` file.
+
+2. Stop old containers and remove containers, networks, volumes and images created by ``up``.
+
+.. code-block:: bash
+
+  $ docker-compose down
+
+3. Pull all associated docker images.
+
+.. code-block:: bash
+
+  $ docker-compose pull
+   
+
+4. (Optional) If you do not wish to use the default slurk from GitHub, you should manually build a slurk image of your preferred version afterwards. Start by navigating into your slurk project folder.
+
+.. code-block:: bash
+
+  $ docker build --tag "slurk/server" -f Dockerfile .
+
+Navigate back to the directory of your ``docker-compose.yml`` file afterwards.
+
+5. Start all specified containers in the background and leave them running.
+
+.. code-block:: bash
+
+  $ docker-compose up -d
+
+6. (Optional) Verify that all containers have been successfully started.
+
+.. code-block:: bash
+
+  $ docker container ls -a
+
