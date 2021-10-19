@@ -181,6 +181,39 @@ should be persistent, so a volume for the data has to be mounted. This is the
 to the database and mount the database content to <code class="docutils literal notranslate"><span class="pre">/path/to/postgres/data</span></code>.
 When postgres has started, we pass the postgres URI to slurk, alongside a secret key.
 As we also want OpenVidu support, the two required OpenVidu-variables are also passed.</p>
+<p>Now follow these steps if you want to (re-)start slurk.</p>
+<ol class="arabic simple">
+<li>Navigate into the directory of your <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file.</li>
+<li>Stop old containers and remove containers, networks, volumes and images created by <code class="docutils literal notranslate"><span class="pre">up</span></code>.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose down
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Pull all associated docker images.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose pull
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>(Optional) If you do not wish to use the default slurk from GitHub, you should manually build a slurk image of your preferred version. Start by navigating into your slurk project folder.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker build --tag <span class="s2">&quot;slurk/server&quot;</span> -f Dockerfile .
+</pre></div>
+</div>
+<p>Navigate back to the directory of your <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file afterwards.</p>
+<ol class="arabic simple" start="5">
+<li>Start all specified containers in the background and leave them running.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose up -d
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li>(Optional) Verify that all containers have been successfully started.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker container ls -a
+</pre></div>
+</div>
 </div>
 </div>
 

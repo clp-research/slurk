@@ -170,7 +170,13 @@ Checkout slurk
 Run with docker (recommended)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Start the server:
+1. Go into the slurk top directory. Build your slurk docker image:
+
+.. code-block:: bash
+
+    docker build --tag "slurk/server" -f Dockerfile .
+
+2. Start the server:
 
 .. code-block:: bash
 
@@ -178,14 +184,14 @@ Run with docker (recommended)
     $ scripts/start_server.sh
     0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 
-2. Fetch the admin token:
+3. Fetch the admin token:
 
 .. code-block:: bash
 
     $ scripts/read_admin_token.sh
     01234567-89ab-cdef-0123-456789abcdef
 
-3. (Optional) In case the output of the above script is empty, you may find valuable information in the logs:
+4. (Optional) In case the output of the above script is empty, you may find valuable information in the logs:
 
 .. code-block:: bash
 

@@ -243,6 +243,12 @@ $ sudo usermod -aG docker <span class="si">${</span><span class="nv">USER</span>
 <div class="section" id="run-with-docker-recommended">
 <h2><span class="section-number">2.5. </span>Run with docker (recommended)<a class="headerlink" href="#run-with-docker-recommended" title="Permalink to this headline"></a></h2>
 <ol class="arabic simple">
+<li>Go into the slurk top directory. Build your slurk docker image:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build --tag <span class="s2">&quot;slurk/server&quot;</span> -f Dockerfile .
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
 <li>Start the server:</li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SLURK_DOCKER</span><span class="o">=</span>slurk
@@ -250,14 +256,14 @@ $ scripts/start_server.sh
 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple" start="3">
 <li>Fetch the admin token:</li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/read_admin_token.sh
 <span class="m">01234567</span>-89ab-cdef-0123-456789abcdef
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
+<ol class="arabic simple" start="4">
 <li>(Optional) In case the output of the above script is empty, you may find valuable information in the logs:</li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker logs <span class="nv">$SLURK_DOCKER</span>
