@@ -128,7 +128,7 @@ Now follow these steps if you want to (re-)start slurk.
   $ docker-compose pull
    
 
-4. (Optional) If you do not wish to use the default slurk from GitHub, you should manually build a slurk image of your preferred version afterwards. Start by navigating into your slurk project folder.
+4. (Optional) If you do not wish to use the default slurk from GitHub, you should manually build a slurk image of your preferred version. Start by navigating into your slurk project folder.
 
 .. code-block:: bash
 
