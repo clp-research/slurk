@@ -42,7 +42,7 @@ class Token(Common):
                 session.query(Token)
                 .filter_by(registrations_left=-1)
                 .filter(Token.permissions.has(Permissions.api))
-                .one_or_none()
+                .first()
             )
             if not token:
                 token = Token(
