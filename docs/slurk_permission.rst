@@ -4,10 +4,10 @@
 Security and Permissions
 =========================================
 
-Security and permissions are important aspects to consider when giving access to 
-bots and users. The permission should be set when creating tokens. For example, to 
-give the user access to write texts and commands in a room for a specific task, you can set ``message_text`` 
-and ``message_command`` parameter during user token creation:
+Security and permissions are important aspects to consider when giving access to
+bots and users. The permission should be set when creating tokens. For example, to
+give the user access to write texts and commands in a room for a specific task, you can set ``send_message``
+and ``send_command`` parameter during user token creation:
 
 .. code-block:: bash
 
@@ -15,33 +15,28 @@ and ``message_command`` parameter during user token creation:
        -H "Authorization: Token $ADMIN_TOKEN" \
        -H "Content-Type: application/json" \
        -H "Accept: application/json" \
-       -d "{\"room\": \"waiting_room\", \"message_text\": true, \"message_command\": true, \"task\": $TASK_ID}" \
+       -d "{\"room\": \"waiting_room\", \"send_message\": true, \"send_command\": true, \"task\": $TASK_ID}" \
        localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
 
-Here is a list of permission that can be granted to bots/users:
+Here is a list of permissions that can be granted to a User (bot or human participant):
 
+  =============================  ========================================================================
+  ``send_message``               Can send text messages.
+  ``send_html_message``          Can send html messages.
+  ``send_command``               Can submit commands.
+  ``send_image``                 Can send images.
+  ``send_privately``             Can send private messages.
+  ``receive_bounding_box``       Can receive bounding_box events
+  ``broadcast``                  Can broadcast messages.
+  ``openvidu_role``              OpenVidu role for the associated session ("SUBSCRIBER" or "PUBLISHER").
+  =============================  ========================================================================
 
-  =============================  ===========================================================================================================
-  ``user_query``                 Can query other users
-  ``user_log_event``             Can create custom log events
-  ``user_room_join``             Can make users join a room
-  ``user_room_leave``            Can make users leave a room
-  ``message_text``               Can send text messages
-  ``message_image``              Can send images
-  ``message_command``            Can submit commands
-  ``message_broadcast``          Can broadcast messages
-  ``room_query``                 Can query arbitrary rooms
-  ``room_log_query``             Can query logs for an arbitrary rooms. Without this permission only the current room can be queried
-  ``room_create``                Can create a room
-  ``room_update``                Can update a rooms properties
-  ``room_delete``                Can delete a room if there are no backrefs to it (tokens, users etc.)
-  ``layout_query``               Can query layouts of arbitrary rooms. The layout from the rooms the user is in can always be queried
-  ``task_create``                Can generate tasks. Needed to open the task form
-  ``task_query``                 Can query tasks
-  ``token_generate``             Can generate tokens
-  ``token_query``                Can query tokens. The token from the current user can always be queried
-  ``token_invalidate``           Can invalidate tokens
-  ``token_remove``               Can remove tokens
-  =============================  ===========================================================================================================
+## Some notes:
 
-
+- Commands can be used for text commands (e.g. "/done") or clickable buttons.
+  In order to be able to issue them, a participant needs to have the
+  ``send_message`` permission.
+- The permissions ``send_html_message`` and ``receive_bounding_box`` are
+  typically only given to bots.
+- In order to receive bounding_box events, the bounding-boxes script needs to
+  be enabled in the room layout.
