@@ -1,4 +1,4 @@
-.. _slurk_permission:
+.. _slurk_permissions:
 
 =========================================
 Security and Permissions
