@@ -37,7 +37,7 @@ Some notes:
 - Commands can be used for text commands (e.g. "/done") or clickable buttons.
   In order to be able to issue them, a participant needs to have the
   ``send_message`` permission.
-- The permissions ``send_html_message`` and ``receive_bounding_box`` are
-  typically only given to bots.
+- The permissions ``send_html_message``, ``send_image`` and
+  ``receive_bounding_box`` are typically only given to bots.
 - In order to receive bounding_box events, the bounding-boxes script needs to
   be enabled in the room layout.
