@@ -31,7 +31,8 @@ Here is a list of permissions that can be granted to a User (bot or human partic
   ``openvidu_role``              OpenVidu role for the associated session ("SUBSCRIBER" or "PUBLISHER").
   =============================  ========================================================================
 
-## Some notes:
+Some notes:
+-----------
 
 - Commands can be used for text commands (e.g. "/done") or clickable buttons.
   In order to be able to issue them, a participant needs to have the
