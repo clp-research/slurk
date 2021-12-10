@@ -7,16 +7,16 @@ Security and Permissions
 Security and permissions are important aspects to consider when giving access to
 bots and users. The permission should be set when creating tokens. For example, to
 give the user access to write texts and commands in a room for a specific task, you can set ``send_message``
-and ``send_command`` parameter during user token creation:
+and ``send_command`` parameter during user permission creation:
 
 .. code-block:: bash
 
     $ curl -X POST \
-       -H "Authorization: Token $ADMIN_TOKEN" \
-       -H "Content-Type: application/json" \
-       -H "Accept: application/json" \
-       -d "{\"room\": \"waiting_room\", \"send_message\": true, \"send_command\": true, \"task\": $TASK_ID}" \
-       localhost/api/v2/token | sed 's/^"\(.*\)"$/\1/'
+      -H "Accept: application/json" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "{\"send_message\": true, \"send_command\": true}" \
+      localhost:5000/slurk/api/permissions
 
 Here is a list of permissions that can be granted to a User (bot or human participant):
 
@@ -37,7 +37,7 @@ Some notes:
 
 - Commands can be used for text commands (e.g. "/done") or clickable buttons.
   In order to be able to issue them, a participant needs to have the
-  ``send_message`` permission.
+  ``send_command`` permission.
 - The permissions ``api``, ``send_html_message``, ``send_image`` and
   ``receive_bounding_box`` are typically only given to bots.
 - In order to receive bounding_box events, the bounding-boxes script needs to
