@@ -13,7 +13,7 @@ and ``send_command`` parameter during user permission creation:
 
     $ curl -X POST \
       -H "Accept: application/json" \
-      -H "Authorization: Bearer $TOKEN" \
+      -H "Authorization: Bearer $ADMIN_TOKEN" \
       -H "Content-Type: application/json" \
       -d "{\"send_message\": true, \"send_command\": true}" \
       localhost:5000/slurk/api/permissions
