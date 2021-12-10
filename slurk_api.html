@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="9. Deployment of the system" href="slurk_deployment.html" />
-    <link rel="prev" title="7. Bot related Events" href="slurk_bots_events.html" /> 
+    <link rel="prev" title="7. Bot-related events" href="slurk_bots_events.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot related Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot-related events</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">8. REST API for slurk</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#layouts-rooms-and-tasks">8.1. Layouts, Rooms, and Tasks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#users">8.2. Users</a></li>
@@ -92,7 +92,7 @@ or <code class="docutils literal notranslate"><span class="pre">/swagger-ui</spa
 value.</p>
 <div class="section" id="layouts-rooms-and-tasks">
 <h2><span class="section-number">8.1. </span>Layouts, Rooms, and Tasks<a class="headerlink" href="#layouts-rooms-and-tasks" title="Permalink to this headline"></a></h2>
-<p>A Layout defines how a room looks like. A room could either be a room, which is created by hand,
+<p>A Layout defines what a room looks like. A room could either be a room which is created by hand,
 or it could be created from a task. For more information on layouts, have a look at <a class="reference internal" href="slurk_layouts.html#slurk-layouts"><span class="std std-ref">Layouts and Plugins</span></a>.</p>
 </div>
 <div class="section" id="users">
@@ -100,11 +100,12 @@ or it could be created from a task. For more information on layouts, have a look
 <p>A user is a human user, mostly with very limited permissions, or a bot. Every user needs a
 token to log in. While a token can register multiple users, it’s not possible to assign more
 than one token to a single user. Security and permissions are important aspects to consider when giving access to
-bots and users. A token is associated with a permissions list and should only contain permissions,
+bots and users. A token is associated with a permissions list and should only contain permissions
 which are really needed for the corresponding user (human or bot). Especially, the permissions to send
 html messages have to be avoided when giving out to human users, as they allow users to inject arbitrary html objects into messages.</p>
 <p>Also, the <code class="docutils literal notranslate"><span class="pre">&quot;api&quot;</span></code>-permissions should not be given to arbitrary or unknown users, as with the api-token, everything
 in the server can be accessed.</p>
+<p>For more information on permissions, see <a class="reference internal" href="slurk_permissions.html#slurk-permissions"><span class="std std-ref">Security and Permissions</span></a>.</p>
 </div>
 <div class="section" id="logging">
 <h2><span class="section-number">8.3. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this headline"></a></h2>
@@ -130,7 +131,7 @@ as permission.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="slurk_bots_events.html" class="btn btn-neutral float-left" title="7. Bot related Events" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="slurk_bots_events.html" class="btn btn-neutral float-left" title="7. Bot-related events" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="slurk_deployment.html" class="btn btn-neutral float-right" title="9. Deployment of the system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

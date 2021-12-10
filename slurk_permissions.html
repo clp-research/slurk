@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_multibots.html">4. Pairing up participants and running multiple rooms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_layouts.html">5. Layouts and Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_bots.html">6. Writing your own bots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot related Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slurk_bots_events.html">7. Bot-related events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_api.html">8. REST API for slurk</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_deployment.html">9. Deployment of the system</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
@@ -66,7 +66,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Security and Permissions</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/slurk_permission.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/slurk_permissions.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -75,90 +75,69 @@
            <div itemprop="articleBody">
              
   <div class="section" id="security-and-permissions">
-<span id="slurk-permission"></span><h1>Security and Permissions<a class="headerlink" href="#security-and-permissions" title="Permalink to this headline"></a></h1>
+<span id="slurk-permissions"></span><h1>Security and Permissions<a class="headerlink" href="#security-and-permissions" title="Permalink to this headline"></a></h1>
 <p>Security and permissions are important aspects to consider when giving access to
 bots and users. The permission should be set when creating tokens. For example, to
-give the user access to write texts and commands in a room for a specific task, you can set <code class="docutils literal notranslate"><span class="pre">message_text</span></code>
-and <code class="docutils literal notranslate"><span class="pre">message_command</span></code> parameter during user token creation:</p>
+give the user access to write texts and commands in a room for a specific task, you can set <code class="docutils literal notranslate"><span class="pre">send_message</span></code>
+and <code class="docutils literal notranslate"><span class="pre">send_command</span></code> parameter during user token creation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
    -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
    -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
    -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
-   -d <span class="s2">&quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;message_text\&quot;: true, \&quot;message_command\&quot;: true, \&quot;task\&quot;: </span><span class="nv">$TASK_ID</span><span class="s2">}&quot;</span> <span class="se">\</span>
+   -d <span class="s2">&quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;send_message\&quot;: true, \&quot;send_command\&quot;: true, \&quot;task\&quot;: </span><span class="nv">$TASK_ID</span><span class="s2">}&quot;</span> <span class="se">\</span>
    localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>
 </div>
-<p>Here is a list of permission that can be granted to bots/users:</p>
+<p>Here is a list of permissions that can be granted to a User (bot or human participant):</p>
 <blockquote>
 <div><table border="1" class="docutils align-default">
 <colgroup>
-<col width="21%" />
-<col width="79%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">user_query</span></code></td>
-<td>Can query other users</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">api</span></code></td>
+<td>Can call the api.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">user_log_event</span></code></td>
-<td>Can create custom log events</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_message</span></code></td>
+<td>Can send text messages.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">user_room_join</span></code></td>
-<td>Can make users join a room</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">send_html_message</span></code></td>
+<td>Can send html messages.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">user_room_leave</span></code></td>
-<td>Can make users leave a room</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_command</span></code></td>
+<td>Can submit commands.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">message_text</span></code></td>
-<td>Can send text messages</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">send_image</span></code></td>
+<td>Can send images.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">message_image</span></code></td>
-<td>Can send images</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_privately</span></code></td>
+<td>Can send private messages.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">message_command</span></code></td>
-<td>Can submit commands</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code></td>
+<td>Can receive bounding_box events</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">message_broadcast</span></code></td>
-<td>Can broadcast messages</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">broadcast</span></code></td>
+<td>Can broadcast messages.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_query</span></code></td>
-<td>Can query arbitrary rooms</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">room_log_query</span></code></td>
-<td>Can query logs for an arbitrary rooms. Without this permission only the current room can be queried</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_create</span></code></td>
-<td>Can create a room</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">room_update</span></code></td>
-<td>Can update a rooms properties</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">room_delete</span></code></td>
-<td>Can delete a room if there are no backrefs to it (tokens, users etc.)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">layout_query</span></code></td>
-<td>Can query layouts of arbitrary rooms. The layout from the rooms the user is in can always be queried</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">task_create</span></code></td>
-<td>Can generate tasks. Needed to open the task form</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">task_query</span></code></td>
-<td>Can query tasks</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">token_generate</span></code></td>
-<td>Can generate tokens</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">token_query</span></code></td>
-<td>Can query tokens. The token from the current user can always be queried</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">token_invalidate</span></code></td>
-<td>Can invalidate tokens</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">token_remove</span></code></td>
-<td>Can remove tokens</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">openvidu_role</span></code></td>
+<td>OpenVidu role for the associated session (“SUBSCRIBER” or “PUBLISHER”).</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
+<div class="section" id="some-notes">
+<h2>Some notes:<a class="headerlink" href="#some-notes" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li>Commands can be used for text commands (e.g. “/done”) or clickable buttons.
+In order to be able to issue them, a participant needs to have the
+<code class="docutils literal notranslate"><span class="pre">send_message</span></code> permission.</li>
+<li>The permissions <code class="docutils literal notranslate"><span class="pre">api</span></code>, <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code>, <code class="docutils literal notranslate"><span class="pre">send_image</span></code> and
+<code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code> are typically only given to bots.</li>
+<li>In order to receive bounding_box events, the bounding-boxes script needs to
+be enabled in the room layout.</li>
+</ul>
+</div>
 </div>
 
 
