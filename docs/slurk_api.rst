@@ -18,7 +18,7 @@ value.
 Layouts, Rooms, and Tasks
 -------------------------
 
-A Layout defines how a room looks like. A room could either be a room, which is created by hand,
+A Layout defines what a room looks like. A room could either be a room which is created by hand,
 or it could be created from a task. For more information on layouts, have a look at :ref:`slurk_layouts`.
 
 Users
@@ -27,12 +27,14 @@ Users
 A user is a human user, mostly with very limited permissions, or a bot. Every user needs a
 token to log in. While a token can register multiple users, it's not possible to assign more
 than one token to a single user. Security and permissions are important aspects to consider when giving access to
-bots and users. A token is associated with a permissions list and should only contain permissions,
+bots and users. A token is associated with a permissions list and should only contain permissions
 which are really needed for the corresponding user (human or bot). Especially, the permissions to send
 html messages have to be avoided when giving out to human users, as they allow users to inject arbitrary html objects into messages.
 
 Also, the ``"api"``-permissions should not be given to arbitrary or unknown users, as with the api-token, everything
 in the server can be accessed.
+
+For more information on permissions, see :ref:`slurk_permissions`.
 
 Logging
 -------
