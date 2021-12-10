@@ -79,13 +79,13 @@
 <p>Security and permissions are important aspects to consider when giving access to
 bots and users. The permission should be set when creating tokens. For example, to
 give the user access to write texts and commands in a room for a specific task, you can set <code class="docutils literal notranslate"><span class="pre">send_message</span></code>
-and <code class="docutils literal notranslate"><span class="pre">send_command</span></code> parameter during user token creation:</p>
+and <code class="docutils literal notranslate"><span class="pre">send_command</span></code> parameter during user permission creation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -X POST <span class="se">\</span>
-   -H <span class="s2">&quot;Authorization: Token </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
-   -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
-   -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
-   -d <span class="s2">&quot;{\&quot;room\&quot;: \&quot;waiting_room\&quot;, \&quot;send_message\&quot;: true, \&quot;send_command\&quot;: true, \&quot;task\&quot;: </span><span class="nv">$TASK_ID</span><span class="s2">}&quot;</span> <span class="se">\</span>
-   localhost/api/v2/token <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
+  -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+  -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+  -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+  -d <span class="s2">&quot;{\&quot;send_message\&quot;: true, \&quot;send_command\&quot;: true}&quot;</span> <span class="se">\</span>
+  localhost:5000/slurk/api/permissions
 </pre></div>
 </div>
 <p>Here is a list of permissions that can be granted to a User (bot or human participant):</p>
@@ -131,7 +131,7 @@ and <code class="docutils literal notranslate"><span class="pre">send_command</s
 <ul class="simple">
 <li>Commands can be used for text commands (e.g. “/done”) or clickable buttons.
 In order to be able to issue them, a participant needs to have the
-<code class="docutils literal notranslate"><span class="pre">send_message</span></code> permission.</li>
+<code class="docutils literal notranslate"><span class="pre">send_command</span></code> permission.</li>
 <li>The permissions <code class="docutils literal notranslate"><span class="pre">api</span></code>, <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code>, <code class="docutils literal notranslate"><span class="pre">send_image</span></code> and
 <code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code> are typically only given to bots.</li>
 <li>In order to receive bounding_box events, the bounding-boxes script needs to
@@ -148,7 +148,7 @@ be enabled in the room layout.</li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017-2018 DSG Bielefeld, 2019– CL Potsdam.</p>
+    <p>&#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
