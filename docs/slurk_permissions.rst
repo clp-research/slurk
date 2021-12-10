@@ -21,6 +21,7 @@ and ``send_command`` parameter during user token creation:
 Here is a list of permissions that can be granted to a User (bot or human participant):
 
   =============================  ========================================================================
+  ``api``                        Can call the api.
   ``send_message``               Can send text messages.
   ``send_html_message``          Can send html messages.
   ``send_command``               Can submit commands.
@@ -37,7 +38,7 @@ Some notes:
 - Commands can be used for text commands (e.g. "/done") or clickable buttons.
   In order to be able to issue them, a participant needs to have the
   ``send_message`` permission.
-- The permissions ``send_html_message``, ``send_image`` and
+- The permissions ``api``, ``send_html_message``, ``send_image`` and
   ``receive_bounding_box`` are typically only given to bots.
 - In order to receive bounding_box events, the bounding-boxes script needs to
   be enabled in the room layout.
