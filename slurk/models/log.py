@@ -24,11 +24,11 @@ class Log(Common):
         if event == "join":
             current_app.logger.info(f"{user.name} joined {room.layout.title}")
         if event == "leave":
-            current_app.logger.info(f"{user.name} left {room.layout.title})")
+            current_app.logger.info(f"{user.name} left {room.layout.title}")
         if event == "connect":
             current_app.logger.info(f"{user.name} connected")
         if event == "disconnect":
-            current_app.logger.info(f"{user.name} disconnected")
+            current_app.logger.info(f"{user.name} disconnected from {user.rooms}")
 
         log = Log(event=event, user=user, room=room, data=data, receiver=receiver)
 
