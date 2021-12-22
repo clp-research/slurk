@@ -183,12 +183,18 @@ def emit_message(event, payload, data):
             target = str(room.id)
             private = False
 
-    user = dict(id=current_user.get_id(), name=current_user.name)
+    sender = dict(id=current_user.get_id(), name=current_user.name)
+    impersonate = payload.get("impersonate")
+    if impersonate:
+        # only impersonate someone who is in the room
+        for user in room.users:
+            if user.id == impersonate:
+                sender = dict(id=user.id, name=user.name)
 
     socketio.emit(
         event,
         dict(
-            user=user,
+            user=sender,
             room=room.id if room else None,
             timestamp=str(datetime.utcnow()),
             private=private,
@@ -207,7 +213,8 @@ def emit_message(event, payload, data):
     )
 
     for room in current_user.rooms:
-        socketio.emit("stop_typing", {"user": user}, room=str(room.id))
+        # TODO: decide whether impersonator (sender) or current_user should emit this
+        socketio.emit("stop_typing", {"user": sender}, room=str(room.id))
 
     return True
 
