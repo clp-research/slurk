@@ -67,8 +67,9 @@ class Users(MethodView):
             )
 
         user = UserSchema().post(item)
-        user.rooms = [token.room]
-        db.commit()
+        if token.room is not None:
+            user.rooms = [token.room]
+            db.commit()
         return user
 
 
