@@ -111,7 +111,8 @@ Variables:
   - ``current_user``: The user who just hit RETURN
   - ``current_timestamp``: The current timestamp
 Examples:
-  - ``"send-message"``: Sends plain text and commands depending on the entered text
+- ``"send-message"``: Sends plain text and commands depending on the entered text
+- ``"send-intercepted-message"``: Emits sent text as a command for a bot to intercept.
 
 ``"print-history"``
 -------------------
