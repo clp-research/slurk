@@ -213,7 +213,6 @@ def emit_message(event, payload, data):
     )
 
     for room in current_user.rooms:
-        # TODO: decide whether impersonator (sender) or current_user should emit this
         socketio.emit("stop_typing", {"user": sender}, room=str(room.id))
 
     return True
