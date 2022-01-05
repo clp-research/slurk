@@ -154,27 +154,27 @@ containers probably can’t see each other, so we use <a class="reference extern
 We want to host slurk on port 5000 and connect it to the postgres database. The database
 should be persistent, so a volume for the data has to be mounted. This is the
 <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file we end up with:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&quot;3.9&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.9&quot;</span><span class="w"></span>
 
-<span class="nt">services</span><span class="p">:</span>
-  <span class="nt">db</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
-    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./postgres-data:/path/to/postgres/data</span>
+<span class="nt">services</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span><span class="w"></span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD</span><span class="w"></span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./postgres-data:/path/to/postgres/data</span><span class="w"></span>
 
-  <span class="nt">slurk</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">slurk/server</span>
-    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">on-failure</span>
-    <span class="nt">ports</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5000:80</span>
-    <span class="nt">environment</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_DATABASE_URI=postgresql://postgres:SUPER_SECRET_PSQL_PASSWORD@db:5432/postgres</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_SECRET_KEY=MY_SLURK_SECRET_KEY</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_URL=https://openvidu.example.com</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_SECRET=MY_SUPER_SECRET_OV_SECRET</span>
+<span class="w">  </span><span class="nt">slurk</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slurk/server</span><span class="w"></span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">on-failure</span><span class="w"></span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000:80</span><span class="w"></span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SLURK_DATABASE_URI=postgresql://postgres:SUPER_SECRET_PSQL_PASSWORD@db:5432/postgres</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SLURK_SECRET_KEY=MY_SLURK_SECRET_KEY</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_URL=https://openvidu.example.com</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SLURK_OPENVIDU_SECRET=MY_SUPER_SECRET_OV_SECRET</span><span class="w"></span>
 </pre></div>
 </div>
 <p>First, we start the postgres-container, named <code class="docutils literal notranslate"><span class="pre">db</span></code>. We define the password to login
