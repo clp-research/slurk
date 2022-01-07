@@ -99,8 +99,7 @@ header video {
 }
 
 #chat-area {
-    padding: 0 0 50px;
-    margin: 10px 0 15px;
+    margin: 10px 0 0px;
 }
 #chat-area li {
     padding: 0.5rem;
@@ -214,6 +213,17 @@ time:before{
     margin-left:auto;
     margin-right:0;
     font-size: 11px;
+}
+
+#typing {
+    margin: 0px 0px 15px;
+}
+
+#typing li {
+    padding: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    opacity: 0.7;
 }
 
 #type-area input {
