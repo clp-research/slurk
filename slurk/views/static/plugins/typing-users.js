@@ -1,5 +1,4 @@
 let typing_users = Object.values(users);
-
 let info_text = $(
     "<li class='other'>" +
     "  <div class='message-box'>" +
@@ -8,6 +7,12 @@ let info_text = $(
     "  </div>" +
     "</li>");
 
+
+let scrollbar_at_bottom = false;
+let content = $('#content');
+if (content.prop("scrollTop") + content.prop("clientHeight") + 20 >= content.prop("scrollHeight")) {
+    scrollbar_at_bottom = true;
+}
 
 if (typing_users.length === 0) {
     $("#typing").text("");
@@ -20,8 +25,10 @@ if (typing_users.length === 0) {
         info_text.find(".message").html("<em>" + typing_users.join("</em>, <em>") + "</em> are typing ...");
     }
     $("#typing").html(info_text);
+}
 
-    let content = $('#content');
+// only scroll down, if user not looking through older history
+if (scrollbar_at_bottom) {
     content.animate({ scrollTop: content.prop("scrollHeight") }, 0);
 }
 
