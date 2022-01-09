@@ -104,8 +104,8 @@ def typed_message(payload):
             "name": current_user.name,
         }
         socketio.emit(
-            "user_message",
-            {"user": user, "message": payload["message"]},
+            "typed_message",
+            {"user": user, "text": payload["text"]},
             room=str(room.id),
         )
 
