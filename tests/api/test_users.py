@@ -154,15 +154,6 @@ class TestPostInvalid:
         )
         response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
 
-    def test_token_no_assigned_room(self, client, admin_token):
-        response = client.post(
-            "/slurk/api/users",
-            json={"name": "Another Test User", "token_id": admin_token},
-        )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
-            response
-        )
-
     def test_unauthorized_access(self, client, tokens):
         response = client.post(
             "/slurk/api/users",
@@ -397,16 +388,6 @@ class TestPatchInvalid(UsersTable, InvalidWithEtagTemplate):
             headers={"If-Match": users.headers["ETag"]},
         )
         response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(response)
-
-    def test_token_no_assigned_room(self, client, users, admin_token):
-        response = client.patch(
-            f'/slurk/api/users/{users.json["id"]}',
-            json={"name": "Another Test User", "token_id": admin_token},
-            headers={"If-Match": users.headers["ETag"]},
-        )
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY, parse_error(
-            response
-        )
 
 
 @pytest.mark.depends(
