@@ -53,7 +53,7 @@ $(document).ready(() => {
     window.setInterval(function () {
         if (is_typing !== -1)
             is_typing += 1;
-        if (is_typing === 5) {
+        if (is_typing === 3) {
             socket.emit("keypress", { "typing": false });
             is_typing = -1;
 	}
