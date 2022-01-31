@@ -16,7 +16,7 @@ def room_created(payload):
     if "room" not in payload:
         False, 'Missing argument "room"'
     if not room:
-        return False, f'User "{room}" does not exist'
+        return False, f'Room "{room}" does not exist'
     if "task" in payload and task is None:
         return False, f'Task "{task}" does not exist'
 
