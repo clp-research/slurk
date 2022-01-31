@@ -48,7 +48,7 @@ def get_version():
     if version:
         return version.decode("unicode_escape")
     else:
-        return u"1.0"
+        return "1.0"
 
 
 # -- General configuration ------------------------------------------------
