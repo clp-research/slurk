@@ -956,7 +956,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "session_id",
+          "name": "connection_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -965,7 +965,7 @@
         },
         {
           "in": "path",
-          "name": "connection_id",
+          "name": "session_id",
           "required": true,
           "schema": {
             "type": "string",
@@ -2039,20 +2039,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -4562,14 +4562,14 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "incoming-text": {
+          "typing-users": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when a text message is received"
+            "description": "Called when state of currently typing users is changed"
           },
           "print-history": {
             "default": null,
@@ -4580,15 +4580,6 @@
             ],
             "description": "Used for printing the chat history"
           },
-          "submit-message": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a message is sent"
-          },
           "incoming-image": {
             "default": null,
             "nullable": true,
@@ -4598,14 +4589,23 @@
             ],
             "description": "Called when an image is received"
           },
-          "typing-users": {
+          "plain": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Called when state of currently typing users is changed"
+            "description": "Injected as a script file into the site"
+          },
+          "incoming-text": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a text message is received"
           },
           "document-ready": {
             "default": null,
@@ -4616,14 +4616,14 @@
             ],
             "description": "Called when site is fully loaded"
           },
-          "plain": {
+          "submit-message": {
             "default": null,
             "nullable": true,
             "type": [
               "[string]",
               "string"
             ],
-            "description": "Injected as a script file into the site"
+            "description": "Called when a message is sent"
           }
         }
       },
@@ -6074,12 +6074,6 @@
       "Attribute": {
         "type": "object",
         "properties": {
-          "receiver_id": {
-            "type": "integer",
-            "default": null,
-            "nullable": true,
-            "description": "Receiver for which the attribute should be set"
-          },
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
@@ -6087,6 +6081,12 @@
           "value": {
             "type": "string",
             "description": "The value to be set for the given attribute"
+          },
+          "receiver_id": {
+            "type": "integer",
+            "default": null,
+            "nullable": true,
+            "description": "Receiver for which the attribute should be set"
           }
         },
         "required": [
@@ -6115,15 +6115,15 @@
       "Class": {
         "type": "object",
         "properties": {
+          "class": {
+            "type": "string",
+            "description": "The class to be modified"
+          },
           "receiver_id": {
             "type": "integer",
             "default": null,
             "nullable": true,
             "description": "Receiver for which the class should be modified"
-          },
-          "class": {
-            "type": "string",
-            "description": "The class to be modified"
           }
         },
         "required": [
