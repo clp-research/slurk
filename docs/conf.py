@@ -75,9 +75,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"slurk"
-copyright = u"2017–2018 DSG Bielefeld, 2019– CL Potsdam"
-author = u"Tim Diekmann, Wencke Liermann, Simeon Schüz, Ayten Tüfekci"
+project = "slurk"
+copyright = "2017–2018 DSG Bielefeld, 2019– CL Potsdam"
+author = "Tim Diekmann, Wencke Liermann, Simeon Schüz, Ayten Tüfekci"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -154,7 +154,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "slurk.tex", u"slurk Documentation", u"DSG Bielefeld", "manual"),
+    (master_doc, "slurk.tex", "slurk Documentation", "DSG Bielefeld", "manual"),
 ]
 
 numfig = True
@@ -163,7 +163,7 @@ numfig = True
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "slurk", u"slurk Documentation", [author], 1)]
+man_pages = [(master_doc, "slurk", "slurk Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -175,7 +175,7 @@ texinfo_documents = [
     (
         master_doc,
         "slurk",
-        u"slurk Documentation",
+        "slurk Documentation",
         author,
         "slurk",
         "One line description of project.",

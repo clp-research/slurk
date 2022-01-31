@@ -20,7 +20,7 @@ class TaskSchema(CommonSchema):
         filter_description="Filter for a task name",
     )
     num_users = ma.fields.Integer(
-        validate=ma.validate.Range(min=0, max=2 ** 63 - 1),
+        validate=ma.validate.Range(min=0, max=2**63 - 1),
         required=True,
         description="Number of users needed for this task",
         filter_description="Filter for number of users needed for this task",
