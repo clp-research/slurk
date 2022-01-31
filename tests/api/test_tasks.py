@@ -104,7 +104,7 @@ class TestPostInvalid:
             HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
-            {"json": {"num_users": 2 ** 63, "name": "Test Task", "layout_id": -1}},
+            {"json": {"num_users": 2**63, "name": "Test Task", "layout_id": -1}},
             HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (

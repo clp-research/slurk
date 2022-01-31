@@ -261,7 +261,7 @@ class TestPutInvalid(TokensTable, InvalidWithEtagTemplate):
     REQUEST_CONTENT = [
         ({"json": {"permissions_id": None}}, HTTPStatus.UNPROCESSABLE_ENTITY),
         (
-            {"json": {"permissions_id": -1, "registrations_left": 2 ** 63}},
+            {"json": {"permissions_id": -1, "registrations_left": 2**63}},
             HTTPStatus.UNPROCESSABLE_ENTITY,
         ),
         (
@@ -358,7 +358,7 @@ class TestDeleteInvalid(TokensTable, InvalidWithEtagTemplate):
 class TestPatchValid:
     REQUEST_CONTENT = [
         {"json": {"registrations_left": 0}},
-        {"json": {"registrations_left": 2 ** 63 - 1}},
+        {"json": {"registrations_left": 2**63 - 1}},
         {"json": {"room_id": None}},
         {"json": {"task_id": -1, "room_id": None}},
     ]
