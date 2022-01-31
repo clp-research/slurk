@@ -28,7 +28,7 @@ class Log(Common):
         if event == "connect":
             current_app.logger.info(f"{user.name} connected")
         if event == "disconnect":
-            current_app.logger.info(f"{user.name} disconnected from {user.rooms}")
+            current_app.logger.info(f"{user.name} disconnected")
 
         log = Log(event=event, user=user, room=room, data=data, receiver=receiver)
 
