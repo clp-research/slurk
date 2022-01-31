@@ -153,6 +153,7 @@ Examples:
   - ``"enforce-fullscreen"``: Page content is grayed out, until a button is clicked that sends user into fullscreen. See ``enforce-fullscreen_layout.json`` in ``examples`` for an example layout
   - ``"bounding-boxes"``: Makes it possible for users to draw rectangles inside a designated drawing area (html element with the id ``drawing-area``). Per default, drawn rectangles are not shared between users inside a room. If you wish for all users in a room to share a common canvas give all users inside the room the permission ``receive_bounding_box``
   - ``"mouse-tracking"``: Mouse movement and clicks inside the designated html element with the id ``tracking-area`` are registered. They can be handled by bots through the ``mouse`` event.
+  - ``"live-typing"``: Chat partners receive a preview of messages that are currently being typed. Typed messages can't be edited in this mode. If a user started a message and stopped typing for 3sec, it is automatically submitted.
 
 ``"document-ready"``
 --------------------
