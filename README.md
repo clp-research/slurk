@@ -18,6 +18,7 @@ components of Slurk are outlined.
 ![Slurk architecture][architecture]
 
 Slurk is built in Python 3.9, on top of [Flask] and [Flask-SocketIO].
+The latest version lives on the master branch. Branch 2.0.0 holds an older version.
 
 To run slurk, the simplest way is to use docker
 
