@@ -43,8 +43,7 @@ response=$(curl -sX POST \
     -d @$path \
     $HOST:$PORT/slurk/api/layouts)
 check_error "$response"
-echo "$response" | jq
-$LAYOUT=$(echo "$response" | jq .id)
+LAYOUT=$(echo "$response" | jq .id)
 
 response=$(curl -sX POST \
     -H "Authorization: Bearer $TOKEN" \
