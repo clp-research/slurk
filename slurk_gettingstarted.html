@@ -13,6 +13,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -83,9 +84,9 @@
            <div itemprop="articleBody">
              
   <div class="section" id="getting-started">
-<span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
 <div class="section" id="hello-world-a-basic-test-of-the-server">
-<h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this heading"></a></h2>
 <p>First, spin up a slurk server. Either use the server from <a class="reference internal" href="slurk_prerequisites.html#slurk-prerequisites"><span class="std std-ref">Prerequisites</span></a> or see <a class="reference internal" href="slurk_deployment.html#slurk-deployment"><span class="std std-ref">Deployment of the system</span></a> for more information on this.</p>
 <p>Next, the admin token is needed. If you are running slurk from docker, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/read_admin_token.sh<span class="k">)</span>
@@ -133,7 +134,7 @@ happily type messages which no one will see (apart from you, that is).</p>
 this hasn’t really been very exciting. So we move on.</p>
 </div>
 <div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<span id="twobrowsers"></span><h2><span class="section-number">3.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this headline"></a></h2>
+<span id="twobrowsers"></span><h2><span class="section-number">3.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this heading"></a></h2>
 <p>Run the steps from the previous section (starting the server, creating
 a token and logging in), and then create an additional token by
 running the create_token script with the same parameters again. <strong>From
@@ -149,7 +150,7 @@ environment – but so far there has been no use made of the display
 window. Let’s change that by inviting a bot into our chat room.</p>
 </div>
 <div class="section" id="chatting-with-a-bot">
-<h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this heading"></a></h2>
 <p>Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. If you restarted the
 server, make sure you have created the layout and the room.</p>
@@ -185,7 +186,7 @@ in our example the echo-bot is used. Start the bot with the provided token</p>
 </div>
 </div>
 <div class="section" id="examining-the-log-files">
-<h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this heading"></a></h2>
 <p>The point of all this, however, is not just to make interaction
 <em>possible</em>, it is to <em>record</em> these interactions to be able to later
 study them or train models on them.</p>

@@ -13,6 +13,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -82,12 +83,12 @@
            <div itemprop="articleBody">
              
   <div class="section" id="pairing-up-participants-and-running-multiple-rooms">
-<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this headline"></a></h1>
+<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this heading"></a></h1>
 <p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be
 paired up and put into a new task-specific chatroom along with bots. We provide an example bot handling this mechanism:
 The <strong>concierge bot</strong> moves human users from the waiting room to a task room.</p>
 <div class="section" id="create-a-waiting-room-and-a-task">
-<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this heading"></a></h2>
 <p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the one
 provided in the slurk-bots repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/waiting_room_layout.json &gt; waiting_room_layout.json
@@ -113,7 +114,7 @@ $ <span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</spa
 </div>
 </div>
 <div class="section" id="assign-bots-to-rooms">
-<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this heading"></a></h2>
 <p>Each bot has special permissions that it requires. For our example bots those are provided as JSON files.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/concierge_bot_permissions.json &gt; concierge_bot_permissions.json
 $ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/echo/echo_bot_permissions.json &gt; echo_bot_permissions.json
@@ -148,7 +149,7 @@ from the new terminal that contains the echo bot token:</p>
 </div>
 </div>
 <div class="section" id="create-user-tokens-for-the-task">
-<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this heading"></a></h2>
 <p>Now let’s create two user tokens from the original terminal (run the command twice) and specify the task:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> examples/message_permissions.json <span class="m">1</span> <span class="nv">$TASK_ID</span> <span class="p">|</span> jq .id <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>

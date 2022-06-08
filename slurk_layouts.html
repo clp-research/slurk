@@ -13,6 +13,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -90,7 +91,7 @@
            <div itemprop="articleBody">
              
   <div class="section" id="layouts-and-plugins">
-<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this headline"></a></h1>
+<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this heading"></a></h1>
 <p>In slurk you have the possibility to integrate your own layouts.
 With layouts, it is possible to modify the display area on the right side and specify a stylesheet.</p>
 <p>A layout is a JSON file with a top-level dictionary. Besides the fields listed in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>
@@ -158,11 +159,11 @@ link. Example:</p>
 </li>
 </ul>
 <div class="section" id="triggers">
-<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Permalink to this heading"></a></h2>
 <p>A full list of keys is shown in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>. There are some pre-defined scripts
 which can be used. Also, several variables may be defined in a trigger:</p>
 <div class="section" id="incoming-text">
-<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Permalink to this heading"></a></h3>
 <p>Displays text messages as they arrive</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -181,7 +182,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="incoming-image">
-<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Permalink to this heading"></a></h3>
 <p>Displays images in the chat area as they arrive</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -200,7 +201,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="submit-message">
-<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Permalink to this heading"></a></h3>
 <p>Called when the user hits RETURN on the typing area</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -215,7 +216,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 - <code class="docutils literal notranslate"><span class="pre">&quot;send-intercepted-message&quot;</span></code>: Emits sent text as a command for a bot to intercept.</p>
 </div>
 <div class="section" id="print-history">
-<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Permalink to this heading"></a></h3>
 <p>Shows previous messages in the chat area after joining a room</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><p>Not all variables in <code class="docutils literal notranslate"><span class="pre">element.data</span></code> may be defined</p>
@@ -240,7 +241,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="typing-users">
-<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Permalink to this heading"></a></h3>
 <p>Called when the state of currently typing users is changed</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -254,7 +255,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="plain">
-<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Permalink to this heading"></a></h3>
 <p>Injected as a script file into the site</p>
 <dl class="docutils">
 <dt>Examples:</dt><dd><ul class="simple">
@@ -268,7 +269,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="document-ready">
-<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Permalink to this headline"></a></h3>
+<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Permalink to this heading"></a></h3>
 <p>Called when the document is loaded</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -288,7 +289,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </div>
 </div>
 <div class="section" id="layout-development-in-practice">
-<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this headline"></a></h2>
+<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this heading"></a></h2>
 <p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and
 chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with
 existing ones.</p>
