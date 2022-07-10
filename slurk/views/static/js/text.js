@@ -59,6 +59,20 @@ $(document).ready(() => {
 	}
     }, 1000);
 
+
+    $('#text').keyup(function (e){
+        console.log(e.key, Date());
+        socket.emit(
+            "keystroke",
+            { "key": e.key,
+              "alt": e.altKex,
+              "ctrl": e.ctrlKey,
+              "shift": e.shiftKey
+            }
+        );
+    })
+
+
     $("#text").keypress(function (e) {
         if (keypress === undefined || $("#text").is("[readonly]")) {
             return;
