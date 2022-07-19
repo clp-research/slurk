@@ -1,6 +1,5 @@
 $(document).ready(() => {
     $('#text').keyup(function (e){
-        console.log(e);
         unwanted = ["Shift", "Control", "Alt", "AltGraph"]
         if (!unwanted.includes(e.key)){ 
             socket.emit(
