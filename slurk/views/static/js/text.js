@@ -60,21 +60,6 @@ $(document).ready(() => {
     }, 1000);
 
 
-    $('#text').keyup(function (e){
-        unwanted = ["Shift", "Control", "Alt", "AltGraph"]
-        if (!unwanted.includes(e.key)){ 
-            socket.emit(
-                "keystroke",
-                { "key": e.key,
-                "alt": e.altKey,
-                "ctrl": e.ctrlKey,
-                "shift": e.shiftKey
-                }
-            );
-        }
-    })
-
-
     $("#text").keypress(function (e) {
         if (keypress === undefined || $("#text").is("[readonly]")) {
             return;
