@@ -70,8 +70,9 @@ def bounding_box(payload):
 def keystroke(key):
     db = current_app.session
     room = db.query(Room).get(key["room"]) if "room" in key else None
-    key["timestamp"] = str(datetime.utcnow())
-    Log.add(event="keystroke", user=current_user, room=room, data=key)
+    if room is not None:
+        key["timestamp"] = str(datetime.utcnow())
+        Log.add(event="keystroke", user=current_user, room=room, data=key)
 
 
 @socketio.event
