@@ -59,6 +59,7 @@ $(document).ready(() => {
 	}
     }, 1000);
 
+
     $("#text").keypress(function (e) {
         if (keypress === undefined || $("#text").is("[readonly]")) {
             return;
