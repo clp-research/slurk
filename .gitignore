@@ -11,3 +11,4 @@ openapi.json
 env/
 venv/
 /.ipynb_checkpoints/
+.vscode
