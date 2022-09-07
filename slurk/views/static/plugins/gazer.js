@@ -1,6 +1,5 @@
 
 webgazer.setGazeListener(function(data, elapsedTime) {
-    console.log("try")
     if (data == null) {
         return;
     }
