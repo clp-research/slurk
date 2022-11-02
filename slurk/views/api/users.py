@@ -8,6 +8,7 @@ from slurk.extensions.api import Blueprint, abort
 from slurk.models import User, Task, Token
 
 from . import CommonSchema
+from .permissions import PermissionsSchema
 from .tasks import TaskSchema
 from .tokens import TokenId
 
@@ -143,3 +144,15 @@ class TaskByUserById(MethodView):
         if task_id is not None:
             task = current_app.session.query(Task).get(task_id)
             return task
+
+
+@blp.route("/<int:user_id>/permissions")
+class PermissionsByUserById(MethodView):
+    @blp.etag
+    @blp.query("user", UserSchema)
+    @blp.response(200, PermissionsSchema.Response)
+    def get(self, *, user):
+        # only return permissions if this token is not going to
+        # be used again to prevent rendering this token useless
+        if user.token.registrations_left == 0:
+            return user.token.permissions
