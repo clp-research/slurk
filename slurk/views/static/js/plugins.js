@@ -7,7 +7,7 @@ function _append(text) {
 function _getTime(timestamp) {
     let currentDate = undefined
     if (typeof timestamp === "string") {
-        currentDate = new Date(timestamp)
+        currentDate = new Date(timestamp.replace(" ", "T"))
         currentDate.setTime(currentDate.getTime() - new Date().getTimezoneOffset() * 60000)
     } else if (timestamp === null) {
         currentDate = new Date()
