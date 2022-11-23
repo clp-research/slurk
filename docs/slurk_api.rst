@@ -43,8 +43,8 @@ Almost any action in slurk is logged to evaluate the experiment at a later point
 can be used to filter for specific events or even add custom events.
 
 Notice that when working without an external database (Postgres), the timestamps are saved without milliseconds:  
-| External database: ``2022-11-22T13:32:49.133840``  
-| Internal database: ``2022-11-22T13:32:49``  
+ | External database: ``2022-11-22T13:32:49.133840``  
+ | Internal database: ``2022-11-22T13:32:49``  
 
 Video and Audio
 ---------------
