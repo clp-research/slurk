@@ -113,6 +113,13 @@ in the server can be accessed.</p>
 <h2><span class="section-number">8.3. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
 <p>Almost any action in slurk is logged to evaluate the experiment at a later point. The logging endpoint
 can be used to filter for specific events or even add custom events.</p>
+<dl class="docutils">
+<dt>Note: when working without an external database (Postgres), the timestamps are saved without milliseconds:</dt><dd><div class="line-block">
+<div class="line">External database: <code class="docutils literal notranslate"><span class="pre">2022-11-22T13:32:49.133840</span></code></div>
+<div class="line">Internal database: <code class="docutils literal notranslate"><span class="pre">2022-11-22T13:32:49</span></code></div>
+</div>
+</dd>
+</dl>
 </div>
 <div class="section" id="video-and-audio">
 <h2><span class="section-number">8.4. </span>Video and Audio<a class="headerlink" href="#video-and-audio" title="Permalink to this heading"></a></h2>
