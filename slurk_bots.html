@@ -1,38 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>6. Writing your own bots &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="7. Bot-related events" href="slurk_bots_events.html" />
     <link rel="prev" title="5. Layouts and Plugins" href="slurk_layouts.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 2.0.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
@@ -57,37 +106,78 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">slurk</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">6. </span>Writing your own bots</li>
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">6. </span>Writing your own bots</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/slurk_bots.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="writing-your-own-bots">
-<span id="slurk-bots"></span><h1><span class="section-number">6. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this heading"></a></h1>
+<span id="slurk-bots"></span><h1><span class="section-number">6. </span>Writing your own bots<a class="headerlink" href="#writing-your-own-bots" title="Permalink to this heading">¶</a></h1>
 <p>Bots are little client programs, which can both communicate with human clients and the server. By sending commands and responding to socket events they can perform various actions, e.g. sending messages, changing images shown to human clients, connecting clients to task rooms and handling dialogue tasks. Defining an experimental or data collection setting typically includes writing one or multiple bots.</p>
 <p>There are some sample bots provided as examples, one of which is explained below.
 The complete code to all bots can be found on <a class="reference external" href="https://github.com/clp-research/slurk-bots" target="_blank">GitHub</a>.</p>
 <div class="section" id="dissecting-the-concierge-bot">
-<h2><span class="section-number">6.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">6.1. </span>Dissecting the concierge bot<a class="headerlink" href="#dissecting-the-concierge-bot" title="Permalink to this heading">¶</a></h2>
 <p>The concierge bot is an example for a bot able to group up users and move them into a newly created room.</p>
 <p>The bot has to be started with a valid token, user id and optionally with a server URL and Port.
 The URL defaults to <code class="docutils literal notranslate"><span class="pre">http://localhost</span></code>.</p>
@@ -105,7 +195,7 @@ Listening on events is straightforward with adding new functions to the <code cl
     <span class="n">tasks</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This bot lists users joining a designated</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This bot lists users joining a designated</span>
 <span class="sd">        waiting room and sends a group of users to a task room</span>
 <span class="sd">        as soon as the minimal number of users needed for the</span>
 <span class="sd">        task is reached.</span>
@@ -162,7 +252,7 @@ Listening on events is straightforward with adding new functions to the <code cl
                     <span class="bp">self</span><span class="o">.</span><span class="n">user_task_leave</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">user_task_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">room</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A connected user and their task are registered.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A connected user and their task are registered.&quot;&quot;&quot;</span>
         <span class="n">task_id</span> <span class="o">=</span> <span class="n">task</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
         <span class="n">user_id</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
         <span class="n">user_name</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
@@ -212,7 +302,7 @@ first argument and an optional error message as a second argument, passed only i
 </div>
 <p>In order to verify requests, one can read out their status code. For an overview of all status codes that a request could possibly return and their meaning view <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_user_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Retrieve task assigned to user.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve task assigned to user.&quot;&quot;&quot;</span>
     <span class="c1"># for authorization the token has to be provided in the headers</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s1">/users/</span><span class="si">{</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">/task&#39;</span><span class="p">,</span>
@@ -230,33 +320,50 @@ first argument and an optional error message as a second argument, passed only i
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="slurk_layouts.html" class="btn btn-neutral float-left" title="5. Layouts and Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="slurk_bots_events.html" class="btn btn-neutral float-right" title="7. Bot-related events" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_layouts.html" class="btn btn-neutral float-left" title="5. Layouts and Plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.</p>
-  </div>
+    <p>
+        &#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

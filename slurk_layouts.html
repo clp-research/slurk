@@ -1,38 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>5. Layouts and Plugins &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="6. Writing your own bots" href="slurk_bots.html" />
     <link rel="prev" title="4. Pairing up participants and running multiple rooms" href="slurk_multibots.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 2.0.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
@@ -67,32 +116,73 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">slurk</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">5. </span>Layouts and Plugins</li>
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">5. </span>Layouts and Plugins</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/slurk_layouts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="layouts-and-plugins">
-<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this heading"></a></h1>
+<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this heading">¶</a></h1>
 <p>In slurk you have the possibility to integrate your own layouts.
 With layouts, it is possible to modify the display area on the right side and specify a stylesheet.</p>
 <p>A layout is a JSON file with a top-level dictionary. Besides the fields listed in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>
@@ -100,47 +190,47 @@ there are three fields, which are worth pointing out:</p>
 <ul>
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">&quot;html&quot;</span></code>: Comprises a list of further dictionaries or strings.</dt><dd><p>Each dictionary represents an HTML node.  Each key in this dictionary corresponds to the attribute in an HTML tag. There are also two predefined tags: <code class="docutils literal notranslate"><span class="pre">&quot;layout-type&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;layout-content&quot;</span></code>. <code class="docutils literal notranslate"><span class="pre">&quot;layout-type&quot;</span></code> corresponds to the name of the node, <code class="docutils literal notranslate"><span class="pre">&quot;layout-content&quot;</span></code> corresponds to the content between the opening and closing tag. For example</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Text&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;box&quot;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;box&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>corresponds to the HTML of <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">id=&quot;box&quot;&gt;Text&lt;/span&gt;</span></code>.
 It’s also possible to nest the content. The following object will cause
 <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">id=&quot;outer&quot;&gt;&lt;span</span> <span class="pre">id=&quot;inner&quot;&gt;Text&lt;/span&gt;&lt;/span&gt;</span></code>:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Text&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;inner&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;outer&quot;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Text&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;inner&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;outer&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&quot;css&quot;</span></code>: A dictionary which is like a typical CSS stylesheet. Example:</dt><dd><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;#image-area&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;align-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;margin&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50px 20px 15px&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;css&quot;</span></code>: A dictionary which is like a typical CSS stylesheet. Example:</dt><dd><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;#image-area&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;align-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;margin&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50px 20px 15px&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 <p>This is injected as the following stylesheet:</p>
 <blockquote>
-<div><div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="p">#</span><span class="nn">image-area</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">align-content</span><span class="p">:</span><span class="w"> </span><span class="kc">left</span><span class="w"></span>
-<span class="w">  </span><span class="k">margin</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span><span class="kt">px</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="w"> </span><span class="mi">15</span><span class="kt">px</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="p">#</span><span class="nn">image-area</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">align-content</span><span class="p">:</span><span class="w"> </span><span class="kc">left</span>
+<span class="w">  </span><span class="k">margin</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span><span class="kt">px</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="w"> </span><span class="mi">15</span><span class="kt">px</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -149,22 +239,22 @@ It’s also possible to nest the content. The following object will cause
 maps different triggers to scripts or a list of scripts. Scripts can either be a pre-defined one or can be passed by
 link. Example:</p>
 <blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;incoming-text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-text&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;submit-message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;send-message&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;print-history&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;plain-history&quot;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;incoming-text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;submit-message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;send-message&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;print-history&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;plain-history&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 </ul>
 <div class="section" id="triggers">
-<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Permalink to this heading">¶</a></h2>
 <p>A full list of keys is shown in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>. There are some pre-defined scripts
 which can be used. Also, several variables may be defined in a trigger:</p>
 <div class="section" id="incoming-text">
-<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Permalink to this heading">¶</a></h3>
 <p>Displays text messages as they arrive</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -183,7 +273,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="incoming-image">
-<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Permalink to this heading">¶</a></h3>
 <p>Displays images in the chat area as they arrive</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -202,7 +292,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="submit-message">
-<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Permalink to this heading">¶</a></h3>
 <p>Called when the user hits RETURN on the typing area</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -217,7 +307,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 - <code class="docutils literal notranslate"><span class="pre">&quot;send-intercepted-message&quot;</span></code>: Emits sent text as a command for a bot to intercept.</p>
 </div>
 <div class="section" id="print-history">
-<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Permalink to this heading">¶</a></h3>
 <p>Shows previous messages in the chat area after joining a room</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><p>Not all variables in <code class="docutils literal notranslate"><span class="pre">element.data</span></code> may be defined</p>
@@ -242,7 +332,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="typing-users">
-<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Permalink to this heading">¶</a></h3>
 <p>Called when the state of currently typing users is changed</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -256,7 +346,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="plain">
-<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Permalink to this heading">¶</a></h3>
 <p>Injected as a script file into the site</p>
 <dl class="docutils">
 <dt>Examples:</dt><dd><ul class="simple">
@@ -271,7 +361,7 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </dl>
 </div>
 <div class="section" id="document-ready">
-<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Permalink to this heading"></a></h3>
+<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Permalink to this heading">¶</a></h3>
 <p>Called when the document is loaded</p>
 <dl class="docutils">
 <dt>Variables:</dt><dd><ul class="simple">
@@ -291,47 +381,47 @@ which can be used. Also, several variables may be defined in a trigger:</p>
 </div>
 </div>
 <div class="section" id="layout-development-in-practice">
-<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this heading">¶</a></h2>
 <p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and
 chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with
 existing ones.</p>
 <p>The following steps demonstrate how to build your own layout for an example waiting room used by the concierge bot.</p>
 <p>The waiting room is supposed to have a custom title, an image on the right, and a blue theme:</p>
 <blockquote>
-<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Waiting Room&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;waiting for other players...&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;html&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;div&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image-area&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;current-image&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"></span>
-<span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">]</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">],</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;css&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;header, footer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;background&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#115E91&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;#image-area&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;align-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;margin&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50px 20px 15px&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;incoming-text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-text&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;incoming-image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-image&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;submit-message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;send-message&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;print-history&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;plain-history&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Waiting Room&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;subtitle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;waiting for other players...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;html&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;div&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image-area&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;layout-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;current-image&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;css&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;header, footer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;background&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#115E91&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;#image-area&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;align-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;margin&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50px 20px 15px&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;incoming-text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-text&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;incoming-image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;display-image&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;submit-message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;send-message&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;print-history&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;plain-history&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -340,33 +430,50 @@ existing ones.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="slurk_multibots.html" class="btn btn-neutral float-left" title="4. Pairing up participants and running multiple rooms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="slurk_bots.html" class="btn btn-neutral float-right" title="6. Writing your own bots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_multibots.html" class="btn btn-neutral float-left" title="4. Pairing up participants and running multiple rooms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.</p>
-  </div>
+    <p>
+        &#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

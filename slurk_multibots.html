@@ -1,38 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>4. Pairing up participants and running multiple rooms &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="5. Layouts and Plugins" href="slurk_layouts.html" />
     <link rel="prev" title="3. Getting Started" href="slurk_gettingstarted.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> slurk
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 2.0.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
@@ -59,85 +108,126 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">slurk</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">4. </span>Pairing up participants and running multiple rooms</li>
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">4. </span>Pairing up participants and running multiple rooms</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/slurk_multibots.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="pairing-up-participants-and-running-multiple-rooms">
-<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this heading"></a></h1>
+<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this heading">¶</a></h1>
 <p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be
 paired up and put into a new task-specific chatroom along with bots. We provide an example bot handling this mechanism:
 The <strong>concierge bot</strong> moves human users from the waiting room to a task room.</p>
 <div class="section" id="create-a-waiting-room-and-a-task">
-<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this heading">¶</a></h2>
 <p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the one
 provided in the slurk-bots repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/waiting_room_layout.json &gt; waiting_room_layout.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/waiting_room_layout.json<span class="w"> </span>&gt;<span class="w"> </span>waiting_room_layout.json
 </pre></div>
 </div>
 <p>This layout now has to be pushed to the server:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh waiting_room_layout.json <span class="p">|</span> jq .id<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">WAITING_ROOM_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh<span class="w"> </span>waiting_room_layout.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
 </pre></div>
 </div>
 <p>Ensure we have a valid id (should return an integer):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="nv">$WAITING_ROOM_LAYOUT_ID</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$WAITING_ROOM_LAYOUT_ID</span>
 </pre></div>
 </div>
 <p>We can now create the waiting room with the associated layout:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">WAITING_ROOM_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_room.sh <span class="nv">$WAITING_ROOM_LAYOUT_ID</span> <span class="p">|</span> jq .id<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">WAITING_ROOM_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_room.sh<span class="w"> </span><span class="nv">$WAITING_ROOM_LAYOUT_ID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
 </pre></div>
 </div>
 <p>The next step is to create a task. You may wish to use a special layout for the task room.
 Each task contains information about the number of users required in order to start the task (here 2):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">TASK_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh examples/simple_layout.json <span class="p">|</span> jq .id<span class="k">)</span>
-$ <span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_task.sh  <span class="s2">&quot;Echo Task&quot;</span> <span class="m">2</span> <span class="nv">$TASK_LAYOUT_ID</span> <span class="p">|</span> jq .id<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">TASK_LAYOUT_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_layout.sh<span class="w"> </span>examples/simple_layout.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
+$<span class="w"> </span><span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_task.sh<span class="w">  </span><span class="s2">&quot;Echo Task&quot;</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="nv">$TASK_LAYOUT_ID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="assign-bots-to-rooms">
-<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this heading">¶</a></h2>
 <p>Each bot has special permissions that it requires. For our example bots those are provided as JSON files.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/concierge_bot_permissions.json &gt; concierge_bot_permissions.json
-$ curl https://raw.githubusercontent.com/clp-research/slurk-bots/master/echo/echo_bot_permissions.json &gt; echo_bot_permissions.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/concierge_bot_permissions.json<span class="w"> </span>&gt;<span class="w"> </span>concierge_bot_permissions.json
+$<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/echo/echo_bot_permissions.json<span class="w"> </span>&gt;<span class="w"> </span>echo_bot_permissions.json
 </pre></div>
 </div>
 <p>The token for the concierge bot is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_TOKEN</span></code>. The associated user is stored in <code class="docutils literal notranslate"><span class="pre">CONCIERGE_USER</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CONCIERGE_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> concierge_bot_permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_TOKEN</span>
-$ <span class="nv">CONCIERGE_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh <span class="s2">&quot;ConciergeBot&quot;</span> <span class="nv">$CONCIERGE_TOKEN</span> <span class="p">|</span> jq .id<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$CONCIERGE_USER</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">CONCIERGE_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh<span class="w"> </span><span class="nv">$WAITING_ROOM_ID</span><span class="w"> </span>concierge_bot_permissions.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.id<span class="k">)</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$CONCIERGE_TOKEN</span>
+$<span class="w"> </span><span class="nv">CONCIERGE_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh<span class="w"> </span><span class="s2">&quot;ConciergeBot&quot;</span><span class="w"> </span><span class="nv">$CONCIERGE_TOKEN</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$CONCIERGE_USER</span>
 </pre></div>
 </div>
 <p>The token for the echo bot is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_TOKEN</span></code>. The associated user is stored in <code class="docutils literal notranslate"><span class="pre">ECHO_USER</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ECHO_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> echo_bot_permissions.json <span class="p">|</span> jq -r .id<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$ECHO_TOKEN</span>
-$ <span class="nv">ECHO_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh <span class="s2">&quot;EchoBot&quot;</span> <span class="nv">$ECHO_TOKEN</span> <span class="p">|</span> jq .id<span class="k">)</span>
-$ <span class="nb">echo</span> <span class="nv">$ECHO_USER</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">ECHO_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/create_room_token.sh<span class="w"> </span><span class="nv">$WAITING_ROOM_ID</span><span class="w"> </span>echo_bot_permissions.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.id<span class="k">)</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ECHO_TOKEN</span>
+$<span class="w"> </span><span class="nv">ECHO_USER</span><span class="o">=</span><span class="k">$(</span>scripts/create_user.sh<span class="w"> </span><span class="s2">&quot;EchoBot&quot;</span><span class="w"> </span><span class="nv">$ECHO_TOKEN</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ECHO_USER</span>
 </pre></div>
 </div>
 <p>Open two new terminals and copy <code class="docutils literal notranslate"><span class="pre">CONCIERGE_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">CONCIERGE_USER</span></code> to one terminal and <code class="docutils literal notranslate"><span class="pre">ECHO_TOKEN</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">ECHO_USER</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">TASK_ID</span></code> to another terminal. <cite>copy</cite> is to be understood as setting those as environment variables.
 Now start the concierge bot using the token you just created from the new terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_TOKEN</span> -e <span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$CONCIERGE_USER</span> -e <span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/concierge-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$CONCIERGE_TOKEN</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$CONCIERGE_USER</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span><span class="w"> </span>--net<span class="o">=</span><span class="s2">&quot;host&quot;</span><span class="w"> </span>slurk/concierge-bot
 </pre></div>
 </div>
 <p>The concierge bot is joining the waiting room now. It waits for two users to join the waiting room, who both have the
@@ -145,14 +235,14 @@ same task assigned. Once both have joined, the bot will create a new task room a
 We want the echo bot to join this task room as well.</p>
 <p>This bot has an optional <code class="docutils literal notranslate"><span class="pre">ECHO_TASK_ID</span></code> parameter, to listen to specific tasks to join. Let’s start it
 from the new terminal that contains the echo bot token:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run -e <span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$ECHO_TOKEN</span> -e <span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$ECHO_USER</span> -e <span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span> -e <span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span> --net<span class="o">=</span><span class="s2">&quot;host&quot;</span> slurk/echo-bot
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$ECHO_TOKEN</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$ECHO_USER</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span><span class="w"> </span>--net<span class="o">=</span><span class="s2">&quot;host&quot;</span><span class="w"> </span>slurk/echo-bot
 </pre></div>
 </div>
 </div>
 <div class="section" id="create-user-tokens-for-the-task">
-<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this heading">¶</a></h2>
 <p>Now let’s create two user tokens from the original terminal (run the command twice) and specify the task:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/create_room_token.sh <span class="nv">$WAITING_ROOM_ID</span> examples/message_permissions.json <span class="m">1</span> <span class="nv">$TASK_ID</span> <span class="p">|</span> jq .id <span class="p">|</span> sed <span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>scripts/create_room_token.sh<span class="w"> </span><span class="nv">$WAITING_ROOM_ID</span><span class="w"> </span>examples/message_permissions.json<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$TASK_ID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>
 </div>
 <p>The last part of the command beginning with sed strips quotation marks from the token.
@@ -163,33 +253,50 @@ users to a new room. The echo bot will also join this room and reply to every ch
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-left" title="3. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="slurk_layouts.html" class="btn btn-neutral float-right" title="5. Layouts and Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slurk_gettingstarted.html" class="btn btn-neutral float-left" title="3. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.</p>
-  </div>
+    <p>
+        &#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
