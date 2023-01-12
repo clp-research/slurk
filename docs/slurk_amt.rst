@@ -22,7 +22,7 @@ These links can be used multiple times, guaranteeing that if worker decides to r
 it will be accessible for the others to complete. Also it significantly reduces amount of time spent for
 the analysis of returned HITs, since they can be simply ignored because they were never completed.
 
-Before publishing our tasks on AMT, we activate Slurk along with two bots: multi bot and minimal bot.
+Before publishing our tasks on AMT, we activate Slurk along with two bots: the concierge bot and the task bot.
 Their task is monitor activity of workers joining the rooms, and move them between rooms,
 issue commands, etc.
 
