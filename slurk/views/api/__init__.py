@@ -88,7 +88,8 @@ class BaseSchema(ma.Schema):
     def Response(cls):
         """Returns the class only with dump fields
 
-        For all fields the required property is set to False and the missing property is reset"""
+        For all fields the required property is set to False and the missing property is reset
+        """
 
         def create_schema(schema):
             fields = schema.dump_fields
@@ -140,7 +141,8 @@ class BaseSchema(ma.Schema):
     def Update(cls):
         """Returns the class only with load fields
 
-        For all fields the required property is set to False, None is allowed, and the missing property is reset"""
+        For all fields the required property is set to False, None is allowed, and the missing property is reset
+        """
 
         def create_schema(schema):
             fields = schema.load_fields

@@ -60,7 +60,7 @@ def _attributes(attributes):
         return ""
 
     html = ""
-    for (name, value) in attributes:
+    for name, value in attributes:
         html += _attribute(name, value)
     return html
 
