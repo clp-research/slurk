@@ -1,6 +1,6 @@
 apispec==4.7.1
 bidict==0.21.2
-certifi==2021.5.30
+certifi==2022.12.7
 chardet==4.0.0
 click==8.0.1
 Flask==2.0.0
