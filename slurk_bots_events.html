@@ -1,95 +1,47 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>7. Bot-related events &mdash; slurk 2.0.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="8. REST API for slurk" href="slurk_api.html" />
     <link rel="prev" title="6. Writing your own bots" href="slurk_bots.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> slurk
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            slurk
           </a>
-
-          
-            
-            
               <div class="version">
                 2.0.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="slurk_about.html">1. Slurk: What’s this?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slurk_prerequisites.html">2. Prerequisites</a></li>
@@ -125,75 +77,34 @@
 <li class="toctree-l1"><a class="reference internal" href="slurk_amt.html">10. Getting participants from Amazon Mechanical Turk</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">slurk</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li><span class="section-number">7. </span>Bot-related events</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">7. </span>Bot-related events</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/slurk_bots_events.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <div class="section" id="bot-related-events">
-<span id="slurk-bots-events"></span><h1><span class="section-number">7. </span>Bot-related events<a class="headerlink" href="#bot-related-events" title="Permalink to this heading">¶</a></h1>
+<span id="slurk-bots-events"></span><h1><span class="section-number">7. </span>Bot-related events<a class="headerlink" href="#bot-related-events" title="Permalink to this heading"></a></h1>
 <div class="section" id="rooms">
-<h2><span class="section-number">7.1. </span>Rooms<a class="headerlink" href="#rooms" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">7.1. </span>Rooms<a class="headerlink" href="#rooms" title="Permalink to this heading"></a></h2>
 <p>There are two types of events indicating that a new room was created.
 Both events are received by all connected users.
 The first of the two <code class="docutils literal notranslate"><span class="pre">new_room</span></code> is the more general one.
@@ -231,7 +142,7 @@ room creation but have to be emitted by a bot after it has created a room:</p>
 <li><code class="docutils literal notranslate"><span class="pre">task(int,</span> <span class="pre">optional)</span></code>: the <code class="docutils literal notranslate"><span class="pre">id</span></code> of the task that will be performed in this room</li>
 </ul>
 <div class="section" id="example-echo-bot">
-<h3><span class="section-number">7.1.1. </span>Example: Echo Bot<a class="headerlink" href="#example-echo-bot" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.1.1. </span>Example: Echo Bot<a class="headerlink" href="#example-echo-bot" title="Permalink to this heading"></a></h3>
 <p>When the Concierge Bot creates a new room, it will move the assigned users to
 this room and send a <code class="docutils literal notranslate"><span class="pre">room_created</span></code> event to the server. In order to join
 those task rooms, bots may listen to the <code class="docutils literal notranslate"><span class="pre">new_task_room</span></code> event just like the Echo Bot:</p>
@@ -252,9 +163,9 @@ assigned any task id. We interpret the latter as the Echo Bot being relevant to 
 </div>
 </div>
 <div class="section" id="movement">
-<h2><span class="section-number">7.2. </span>Movement<a class="headerlink" href="#movement" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">7.2. </span>Movement<a class="headerlink" href="#movement" title="Permalink to this heading"></a></h2>
 <div class="section" id="monitoring-own-movement">
-<h3><span class="section-number">7.2.1. </span>Monitoring own movement<a class="headerlink" href="#monitoring-own-movement" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.2.1. </span>Monitoring own movement<a class="headerlink" href="#monitoring-own-movement" title="Permalink to this heading"></a></h3>
 <p>Bots can monitor their own movement between rooms. This includes them joining
 or leaving a room. For this purpose, they have to listen to the <code class="docutils literal notranslate"><span class="pre">joined_room</span></code>
 and <code class="docutils literal notranslate"><span class="pre">left_room</span></code> events, respectively. Both events are only sent to the user
@@ -284,7 +195,7 @@ used to introduce the bot to the users and set an initial task description.</p>
 </ul>
 </div>
 <div class="section" id="monitoring-overall-movement">
-<h3><span class="section-number">7.2.2. </span>Monitoring overall movement<a class="headerlink" href="#monitoring-overall-movement" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.2.2. </span>Monitoring overall movement<a class="headerlink" href="#monitoring-overall-movement" title="Permalink to this heading"></a></h3>
 <p>Bots are also notified once a user joins or leaves one of the rooms the bot is
 placed in. The term <cite>user</cite> here includes the bot itself, as well as other bots
 and human users.</p>
@@ -303,7 +214,7 @@ and human users.</p>
 </div>
 </div>
 <div class="section" id="chat">
-<h2><span class="section-number">7.3. </span>Chat<a class="headerlink" href="#chat" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">7.3. </span>Chat<a class="headerlink" href="#chat" title="Permalink to this heading"></a></h2>
 <p>All of the events mentioned below can be either <code class="docutils literal notranslate"><span class="pre">private</span></code> or not. If an event
 is <code class="docutils literal notranslate"><span class="pre">private</span></code> it is only sent to a designated receiver. If this receiver is
 the bot, it receives the event. Otherwise it does not receive it. If an event
@@ -313,7 +224,7 @@ the chat interface and the following syntax to send private messages
 <code class="docutils literal notranslate"><span class="pre">&#64;&lt;user_id&gt;</span> <span class="pre">&lt;text&gt;</span></code> or private images <code class="docutils literal notranslate"><span class="pre">&#64;&lt;user_id&gt;</span> <span class="pre">image:</span> <span class="pre">&lt;url&gt;</span></code>. Make sure
 that whoever is supposed to send private content is assigned the <code class="docutils literal notranslate"><span class="pre">send_privately</span></code> permission.</p>
 <div class="section" id="messages">
-<h3><span class="section-number">7.3.1. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.3.1. </span>Messages<a class="headerlink" href="#messages" title="Permalink to this heading"></a></h3>
 <p>Every data collection experiment evolves around users exchanging messages.
 Those can be sent by any user that is assigned the <code class="docutils literal notranslate"><span class="pre">send_message</span></code> or
 <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code> permission. A bot may wish to verify message content,
@@ -349,7 +260,7 @@ Messages can also be sent by bots:</p>
 </ul>
 </div>
 <div class="section" id="images">
-<h3><span class="section-number">7.3.2. </span>Images<a class="headerlink" href="#images" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.3.2. </span>Images<a class="headerlink" href="#images" title="Permalink to this heading"></a></h3>
 <p>If given the permission <code class="docutils literal notranslate"><span class="pre">send_image</span></code>, a user may send image data. Normally,
 only bots are supposed to do so. But for debugging purposes, it is possible to
 send images via the chat interface using the syntax <code class="docutils literal notranslate"><span class="pre">image:</span> <span class="pre">&lt;url&gt;</span></code>.
@@ -388,7 +299,7 @@ Bots can send images like this:</p>
 </ul>
 </div>
 <div class="section" id="commands">
-<h3><span class="section-number">7.3.3. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.3.3. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h3>
 <p>Commands are very similar to text messages, but they are only visible to bots. In order for a user to be able to send commands, they need the permission <code class="docutils literal notranslate"><span class="pre">send_command</span></code>. Commands are normally sent by human users. For a chat message to be understood as a command, it needs to be prefixed by a slash <code class="docutils literal notranslate"><span class="pre">/</span></code>.
 It is, however, also possible for bots to send commands:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
@@ -422,10 +333,10 @@ It is, however, also possible for bots to send commands:</p>
 </div>
 </div>
 <div class="section" id="others">
-<h2><span class="section-number">7.4. </span>Others<a class="headerlink" href="#others" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">7.4. </span>Others<a class="headerlink" href="#others" title="Permalink to this heading"></a></h2>
 <p>For both events below <code class="docutils literal notranslate"><span class="pre">coordinates</span></code> are given in percentage. For example an x-value of 0.4 for an image of width 100px should be interpreted as the mouse being 40px to the right of the left corner of the html element.</p>
 <div class="section" id="mouse-tracking">
-<h3><span class="section-number">7.4.1. </span>Mouse Tracking<a class="headerlink" href="#mouse-tracking" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.4.1. </span>Mouse Tracking<a class="headerlink" href="#mouse-tracking" title="Permalink to this heading"></a></h3>
 <p>If one specifies the plain script <code class="docutils literal notranslate"><span class="pre">mouse-tracking</span></code> in a room layout bots will receive an additional <code class="docutils literal notranslate"><span class="pre">mouse</span></code> event.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
 <span class="k">def</span> <span class="nf">mouse</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -443,7 +354,7 @@ It is, however, also possible for bots to send commands:</p>
 </ul>
 </div>
 <div class="section" id="bounding-boxes">
-<h3><span class="section-number">7.4.2. </span>Bounding Boxes<a class="headerlink" href="#bounding-boxes" title="Permalink to this heading">¶</a></h3>
+<h3><span class="section-number">7.4.2. </span>Bounding Boxes<a class="headerlink" href="#bounding-boxes" title="Permalink to this heading"></a></h3>
 <p>If one specifies the plain script <code class="docutils literal notranslate"><span class="pre">bounding-boxes</span></code> in a room layout and assigns a bot the permission <code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code> it will receive an additional <code class="docutils literal notranslate"><span class="pre">bounding_box</span></code> event.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@self</span><span class="o">.</span><span class="n">sio</span><span class="o">.</span><span class="n">event</span>
 <span class="k">def</span> <span class="nf">bounding_box</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -463,50 +374,33 @@ It is, however, also possible for bots to send commands:</p>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="slurk_api.html" class="btn btn-neutral float-right" title="8. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="slurk_bots.html" class="btn btn-neutral float-left" title="6. Writing your own bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="slurk_api.html" class="btn btn-neutral float-right" title="8. REST API for slurk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.
-
-    </p>
+    <p>&#169; Copyright 2017–2018 DSG Bielefeld, 2019– CL Potsdam.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
