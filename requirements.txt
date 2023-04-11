@@ -7,7 +7,7 @@ Flask-Smorest==0.31.3
 marshmallow==3.12
 requests==2.25.1
 SQLAlchemy==1.4
-Werkzeug==2.0
+Werkzeug==2.2.3
 WTForms==2.3
 six
 gevent-websocket
