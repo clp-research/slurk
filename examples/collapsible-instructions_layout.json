@@ -2,9 +2,9 @@
   "title": "Example Layout - Collapsible Task Instructions",
   "html": [
     {
-        "layout-type": "div",
-        "class": "card",
-        "layout-content": [
+      "layout-type": "div",
+      "class": "card",
+      "layout-content": [
         {
           "layout-type": "button",
           "class": "collapsible",
@@ -29,27 +29,27 @@
               "style": "padding-bottom: 5px",
               "layout-content": "It requires 2 elements: a button of class collapsible, and an immediately neighboring element of class collapsible-content."
             },
-              {
-                  "layout-type": "p",
-                  "style": "padding-bottom: 5px",
-                  "layout-content": "Clicking the button repeatedly hides and shows the content."
-              }
+            {
+              "layout-type": "p",
+              "style": "padding-bottom: 5px",
+              "layout-content": "Clicking the button repeatedly hides and shows the content."
+            }
           ]
         }
       ]
     }
   ],
   "css": {
-      ".card": {
-          "position": "relative",
-          "background-color": "#fff",
-          "background-clip": "border-box",
-          "border": "1px solid rgba(0,0,0,.125)",
-          "border-radius": ".25rem",
-          "height": "100%",
-          "margin": "10px",
-          "padding": "15px"
-      },
+    ".card": {
+      "position": "relative",
+      "background-color": "#fff",
+      "background-clip": "border-box",
+      "border": "1px solid rgba(0,0,0,.125)",
+      "border-radius": ".25rem",
+      "height": "100%",
+      "margin": "10px",
+      "padding": "15px"
+    },
     ".collapsible": {
       "background-color": "#eee",
       "color": "#444",
