@@ -20,7 +20,7 @@ def room_created(payload):
     if "task" in payload and task is None:
         return False, f'Task "{task}" does not exist'
 
-    socketio.emit("new_room", {"room": room.id}, broadcast=True)
+    socketio.emit("new_room", {"room": room.id})
 
     if task is not None:
         users = []
@@ -30,7 +30,6 @@ def room_created(payload):
         socketio.emit(
             "new_task_room",
             {"room": room.id, "task": task.id, "users": users},
-            broadcast=True,
         )
     return True
 
@@ -209,6 +208,12 @@ def emit_message(event, payload, data):
             if user.id == impersonate:
                 sender = dict(id=user.id, name=user.name)
 
+    extra_args = {
+        "room": target
+    }
+    if broadcast:
+        extra_args.pop("room")
+
     socketio.emit(
         event,
         dict(
@@ -218,8 +223,7 @@ def emit_message(event, payload, data):
             private=private,
             **data,
         ),
-        room=target,
-        broadcast=broadcast,
+        **extra_args
     )
 
     Log.add(
