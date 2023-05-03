@@ -208,9 +208,7 @@ def emit_message(event, payload, data):
             if user.id == impersonate:
                 sender = dict(id=user.id, name=user.name)
 
-    extra_args = {
-        "room": target
-    }
+    extra_args = {"room": target}
     if broadcast:
         extra_args.pop("room")
 
@@ -223,7 +221,7 @@ def emit_message(event, payload, data):
             private=private,
             **data,
         ),
-        **extra_args
+        **extra_args,
     )
 
     Log.add(
