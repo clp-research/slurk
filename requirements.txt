@@ -12,4 +12,3 @@ WTForms==2.3
 six
 gevent-websocket
 gunicorn
-python-socketio==5.7.2
