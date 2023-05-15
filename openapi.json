@@ -1859,7 +1859,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1868,7 +1868,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -1979,20 +1979,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "cls",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -2039,20 +2039,20 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        {
-          "in": "path",
           "name": "element",
           "required": true,
           "schema": {
             "type": "string",
             "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "room_id",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
           }
         }
       ]
@@ -3664,7 +3664,7 @@
       "parameters": [
         {
           "in": "path",
-          "name": "room_id",
+          "name": "user_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -3673,7 +3673,7 @@
         },
         {
           "in": "path",
-          "name": "user_id",
+          "name": "room_id",
           "required": true,
           "schema": {
             "type": "integer",
@@ -4616,15 +4616,6 @@
       "Scripts": {
         "type": "object",
         "properties": {
-          "plain": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Injected as a script file into the site"
-          },
           "print-history": {
             "default": null,
             "nullable": true,
@@ -4633,24 +4624,6 @@
               "string"
             ],
             "description": "Used for printing the chat history"
-          },
-          "incoming-text": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a text message is received"
-          },
-          "submit-message": {
-            "default": null,
-            "nullable": true,
-            "type": [
-              "[string]",
-              "string"
-            ],
-            "description": "Called when a message is sent"
           },
           "incoming-image": {
             "default": null,
@@ -4670,6 +4643,24 @@
             ],
             "description": "Called when state of currently typing users is changed"
           },
+          "submit-message": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a message is sent"
+          },
+          "plain": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Injected as a script file into the site"
+          },
           "document-ready": {
             "default": null,
             "nullable": true,
@@ -4678,6 +4669,15 @@
               "string"
             ],
             "description": "Called when site is fully loaded"
+          },
+          "incoming-text": {
+            "default": null,
+            "nullable": true,
+            "type": [
+              "[string]",
+              "string"
+            ],
+            "description": "Called when a text message is received"
           }
         }
       },
@@ -4834,6 +4834,10 @@
       "Error": {
         "type": "object",
         "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
           "errors": {
             "type": "object",
             "nullable": true,
@@ -4846,10 +4850,6 @@
           "status": {
             "type": "string",
             "description": "Error name"
-          },
-          "message": {
-            "type": "string",
-            "description": "Error message"
           }
         }
       },
@@ -6128,10 +6128,6 @@
       "Attribute": {
         "type": "object",
         "properties": {
-          "value": {
-            "type": "string",
-            "description": "The value to be set for the given attribute"
-          },
           "attribute": {
             "type": "string",
             "description": "The attribute to be updated"
@@ -6141,6 +6137,10 @@
             "default": null,
             "nullable": true,
             "description": "Receiver for which the attribute should be set"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value to be set for the given attribute"
           }
         },
         "required": [
@@ -6151,15 +6151,15 @@
       "Text": {
         "type": "object",
         "properties": {
-          "text": {
-            "type": "string",
-            "description": "The text to be set for the given ID"
-          },
           "receiver_id": {
             "type": "integer",
             "default": null,
             "nullable": true,
             "description": "Receiver for which the text should be set"
+          },
+          "text": {
+            "type": "string",
+            "description": "The text to be set for the given ID"
           }
         },
         "required": [
@@ -6169,15 +6169,15 @@
       "Class": {
         "type": "object",
         "properties": {
+          "class": {
+            "type": "string",
+            "description": "The class to be modified"
+          },
           "receiver_id": {
             "type": "integer",
             "default": null,
             "nullable": true,
             "description": "Receiver for which the class should be modified"
-          },
-          "class": {
-            "type": "string",
-            "description": "The class to be modified"
           }
         },
         "required": [
