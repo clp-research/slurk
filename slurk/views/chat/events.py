@@ -99,9 +99,13 @@ def keypress(message):
             "name": current_user.name,
         }
         if typing:
-            socketio.emit("start_typing", {"user": user, "room": str(room.id)}, room=str(room.id))
+            socketio.emit(
+                "start_typing", {"user": user, "room": str(room.id)}, room=str(room.id)
+            )
         else:
-            socketio.emit("stop_typing", {"user": user, "room": str(room.id)}, room=str(room.id))
+            socketio.emit(
+                "stop_typing", {"user": user, "room": str(room.id)}, room=str(room.id)
+            )
 
 
 @socketio.event
@@ -233,7 +237,9 @@ def emit_message(event, payload, data):
     )
 
     for room in current_user.rooms:
-        socketio.emit("stop_typing", {"user": sender, "room": str(room.id)}, room=str(room.id))
+        socketio.emit(
+            "stop_typing", {"user": sender, "room": str(room.id)}, room=str(room.id)
+        )
 
     return True
 
