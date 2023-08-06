@@ -90,8 +90,6 @@ should be persistent, so a volume for the data has to be mounted. This is the
     db:
       image: postgres
       restart: always
-      networks:
-        - slurk_net
       environment:
         - POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD
         - POSTGRES_USER=postgres
@@ -104,16 +102,11 @@ should be persistent, so a volume for the data has to be mounted. This is the
       restart: on-failure
       ports:
         - 5000:80
-      networks:
-        - slurk_net
       environment:
         - SLURK_DATABASE_URI=postgresql://postgres:SUPER_SECRET_PSQL_PASSWORD@db:5432/postgres
         - SLURK_SECRET_KEY=MY_SLURK_SECRET_KEY
         - SLURK_OPENVIDU_URL=https://openvidu.example.com
         - SLURK_OPENVIDU_SECRET=MY_SUPER_SECRET_OV_SECRET
-
-  networks:
-    slurk_net:
 
 First, we start the postgres-container, named ``db``. We define the password to login
 to the database and mount the database content to ``/path/to/postgres/data``.
