@@ -92,8 +92,10 @@ should be persistent, so a volume for the data has to be mounted. This is the
       restart: always
       environment:
         - POSTGRES_PASSWORD=SUPER_SECRET_PSQL_PASSWORD
+        - POSTGRES_USER=postgres
+        - PGDATA=/var/lib/postgresql/data/pgdata
       volumes:
-        - ./postgres-data:/path/to/postgres/data
+        - ./postgres-data:/var/lib/postgresql/data/pgdata
 
     slurk:
       image: slurk/server
