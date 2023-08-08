@@ -240,6 +240,17 @@ class AttributeId(MethodView):
         socketio.emit("attribute_update", kwargs, room=target)
         return kwargs
 
+    @blp.query("room", RoomSchema, check_etag=False)
+    @blp.arguments(AttributeSchema, as_kwargs=True)
+    @blp.response(204)
+    @blp.login_required
+    def delete(self, *, room, id, **kwargs):
+        kwargs["id"] = id
+        receiver_id = kwargs.pop("receiver_id", None)
+        receiver, target = get_receiver_target(receiver_id, str(room.id))
+        Log.add("delete_attribute", room=room, receiver=receiver, data=kwargs)
+        socketio.emit("remove_attribute", kwargs, room=target)
+        return kwargs
 
 @blp.route("/<int:room_id>/attribute/class/<string:cls>")
 class AttributeClass(MethodView):

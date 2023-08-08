@@ -4,7 +4,12 @@ function attribute_update(data) {
     if (data.class)
         $('.' + data.class).attr(data.attribute, data.value).show();
     if (data.element)
-        $(data.element).attr(data.attribute, data.value).show();
+        $('#' + data.id).attr(data.attribute, data.value).show();
+}
+
+function remove_attribute(data) {
+    console.log(data)
+    $('#' + data.id).removeAttr(data.attribute).show();
 }
 
 function class_add(data) {
@@ -21,6 +26,7 @@ function text_update(data) {
 
 $(document).ready(() => {
     socket.on('attribute_update', attribute_update);
+    socket.on('remove_attribute', remove_attribute);
     socket.on('class_add', class_add);
     socket.on('class_remove', class_remove);
     socket.on('text_update', text_update);
