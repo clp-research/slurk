@@ -252,6 +252,7 @@ class AttributeId(MethodView):
         socketio.emit("remove_attribute", kwargs, room=target)
         return kwargs
 
+
 @blp.route("/<int:room_id>/attribute/class/<string:cls>")
 class AttributeClass(MethodView):
     @blp.query("room", RoomSchema, check_etag=False)
