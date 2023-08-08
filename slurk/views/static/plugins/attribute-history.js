@@ -11,4 +11,7 @@ switch (element.event) {
     case 'class_removed':
         class_remove(element.data);
         break;
+    case 'remove_attribute':
+        remove_attribute;
+        break;
 }

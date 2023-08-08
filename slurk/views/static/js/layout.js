@@ -8,7 +8,6 @@ function attribute_update(data) {
 }
 
 function remove_attribute(data) {
-    console.log(data)
     $('#' + data.id).removeAttr(data.attribute).show();
 }
 
