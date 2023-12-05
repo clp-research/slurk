@@ -226,7 +226,7 @@ time:before{
     opacity: 0.7;
 }
 
-#type-area input {
+#type-area textarea {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -234,11 +234,17 @@ time:before{
     font-size: 1.2em;
     z-index: 2;
 
-    padding: 0 55px;
-    width: 100%;
+    padding: 0 55px 10px;
+    width: 95%;
     height: 60px;
     box-shadow: rgba(0,0,0,0.15) 0 10px 10px 0,rgba(0,0,0,0.10) 0 10px 20px 0;
 
     border: none;
-    outline: none;
+    outline: none;   
+}
+
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 2;
 }
