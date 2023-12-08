@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>5. Layouts and Plugins &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -94,14 +97,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="layouts-and-plugins">
-<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Permalink to this heading"></a></h1>
+  <section id="layouts-and-plugins">
+<span id="slurk-layouts"></span><h1><span class="section-number">5. </span>Layouts and Plugins<a class="headerlink" href="#layouts-and-plugins" title="Link to this heading"></a></h1>
 <p>In slurk you have the possibility to integrate your own layouts.
 With layouts, it is possible to modify the display area on the right side and specify a stylesheet.</p>
 <p>A layout is a JSON file with a top-level dictionary. Besides the fields listed in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>
 there are three fields, which are worth pointing out:</p>
 <ul>
-<li><dl class="first docutils">
+<li><dl>
 <dt><code class="docutils literal notranslate"><span class="pre">&quot;html&quot;</span></code>: Comprises a list of further dictionaries or strings.</dt><dd><p>Each dictionary represents an HTML node.  Each key in this dictionary corresponds to the attribute in an HTML tag. There are also two predefined tags: <code class="docutils literal notranslate"><span class="pre">&quot;layout-type&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;layout-content&quot;</span></code>. <code class="docutils literal notranslate"><span class="pre">&quot;layout-type&quot;</span></code> corresponds to the name of the node, <code class="docutils literal notranslate"><span class="pre">&quot;layout-content&quot;</span></code> corresponds to the content between the opening and closing tag. For example</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;layout-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;span&quot;</span><span class="p">,</span>
@@ -127,7 +130,7 @@ It’s also possible to nest the content. The following object will cause
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
+<li><dl>
 <dt><code class="docutils literal notranslate"><span class="pre">&quot;css&quot;</span></code>: A dictionary which is like a typical CSS stylesheet. Example:</dt><dd><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;#image-area&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;align-content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
@@ -148,7 +151,7 @@ It’s also possible to nest the content. The following object will cause
 </div>
 </div></blockquote>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code>: Provides the ability to inject a script plugin into the chat. It comprises another dictionary, which
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;script&quot;</span></code>: Provides the ability to inject a script plugin into the chat. It comprises another dictionary, which
 maps different triggers to scripts or a list of scripts. Scripts can either be a pre-defined one or can be passed by
 link. Example:</p>
 <blockquote>
@@ -162,140 +165,140 @@ link. Example:</p>
 </div></blockquote>
 </li>
 </ul>
-<div class="section" id="triggers">
-<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Permalink to this heading"></a></h2>
+<section id="triggers">
+<h2><span class="section-number">5.1. </span>Triggers<a class="headerlink" href="#triggers" title="Link to this heading"></a></h2>
 <p>A full list of keys is shown in the <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>. There are some pre-defined scripts
 which can be used. Also, several variables may be defined in a trigger:</p>
-<div class="section" id="incoming-text">
-<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Permalink to this heading"></a></h3>
+<section id="incoming-text">
+<h3><span class="section-number">5.1.1. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-text&quot;</span></code><a class="headerlink" href="#incoming-text" title="Link to this heading"></a></h3>
 <p>Displays text messages as they arrive</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value showing whether this was a direct message or visible to the room</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.message</span></code>: The message string of the sent message if any</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.html</span></code>: Tag if the message is marked as HTML</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value showing whether this was a direct message or visible to the room</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.message</span></code>: The message string of the sent message if any</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.html</span></code>: Tag if the message is marked as HTML</p></li>
 </ul>
 </dd>
 <dt>Examples:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;display-text&quot;</span></code>: Prints as plain text</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;markdown&quot;</span></code>: Prints as formatted markdown if tagged as html</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;display-text&quot;</span></code>: Prints as plain text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;markdown&quot;</span></code>: Prints as formatted markdown if tagged as html</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="incoming-image">
-<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Permalink to this heading"></a></h3>
+</section>
+<section id="incoming-image">
+<h3><span class="section-number">5.1.2. </span><code class="docutils literal notranslate"><span class="pre">&quot;incoming-image&quot;</span></code><a class="headerlink" href="#incoming-image" title="Link to this heading"></a></h3>
 <p>Displays images in the chat area as they arrive</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value showing whether this was a direct message or visible to the room</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.image</span></code>: The image URL</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.width</span></code>: The width of the sent image</li>
-<li><code class="docutils literal notranslate"><span class="pre">data.height</span></code>: The height of the sent image</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.user</span></code>: The user who has sent the message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.timestamp</span></code>: The timestamp of the message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.private</span></code>: A boolean value showing whether this was a direct message or visible to the room</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.image</span></code>: The image URL</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.width</span></code>: The width of the sent image</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.height</span></code>: The height of the sent image</p></li>
 </ul>
 </dd>
 <dt>Examples:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;display-image&quot;</span></code>: Displays a simple image</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;display-image&quot;</span></code>: Displays a simple image</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="submit-message">
-<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Permalink to this heading"></a></h3>
+</section>
+<section id="submit-message">
+<h3><span class="section-number">5.1.3. </span><code class="docutils literal notranslate"><span class="pre">&quot;submit-message&quot;</span></code><a class="headerlink" href="#submit-message" title="Link to this heading"></a></h3>
 <p>Called when the user hits RETURN on the typing area</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">text</span></code>: The text which was entered in the typing area</li>
-<li><code class="docutils literal notranslate"><span class="pre">current_user</span></code>: The user who just hit RETURN</li>
-<li><code class="docutils literal notranslate"><span class="pre">current_timestamp</span></code>: The current timestamp</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">text</span></code>: The text which was entered in the typing area</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">current_user</span></code>: The user who just hit RETURN</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">current_timestamp</span></code>: The current timestamp</p></li>
 </ul>
 </dd>
 </dl>
 <p>Examples:
 - <code class="docutils literal notranslate"><span class="pre">&quot;send-message&quot;</span></code>: Sends plain text and commands depending on the entered text
 - <code class="docutils literal notranslate"><span class="pre">&quot;send-intercepted-message&quot;</span></code>: Emits sent text as a command for a bot to intercept.</p>
-</div>
-<div class="section" id="print-history">
-<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Permalink to this heading"></a></h3>
+</section>
+<section id="print-history">
+<h3><span class="section-number">5.1.4. </span><code class="docutils literal notranslate"><span class="pre">&quot;print-history&quot;</span></code><a class="headerlink" href="#print-history" title="Link to this heading"></a></h3>
 <p>Shows previous messages in the chat area after joining a room</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><p>Not all variables in <code class="docutils literal notranslate"><span class="pre">element.data</span></code> may be defined</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">element.event</span></code>: Type of the event</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.user</span></code>: The user who sent the event</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.timestamp</span></code>: The timestamp of the event</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.data.message</span></code>: The message of the text event</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.data.url</span></code>: The URL of an image</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.data.width</span></code>: The width of an image</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.data.height</span></code>: The height of an image</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.receiver</span></code>: The receiver, if it was a private message</li>
-<li><code class="docutils literal notranslate"><span class="pre">element.command</span></code>: The command which was executed</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.event</span></code>: Type of the event</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.user</span></code>: The user who sent the event</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.timestamp</span></code>: The timestamp of the event</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.data.message</span></code>: The message of the text event</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.data.url</span></code>: The URL of an image</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.data.width</span></code>: The width of an image</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.data.height</span></code>: The height of an image</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.receiver</span></code>: The receiver, if it was a private message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element.command</span></code>: The command which was executed</p></li>
 </ul>
 </dd>
 <dt>Examples:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;plain-history&quot;</span></code>: As plain text and images</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;markdown-history&quot;</span></code>: Formatted as markdown if tagged as html</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;attribute-history&quot;</span></code>: Applies previous changes to the layout</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;plain-history&quot;</span></code>: As plain text and images</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;markdown-history&quot;</span></code>: Formatted as markdown if tagged as html</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;attribute-history&quot;</span></code>: Applies previous changes to the layout</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="typing-users">
-<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Permalink to this heading"></a></h3>
+</section>
+<section id="typing-users">
+<h3><span class="section-number">5.1.5. </span><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code><a class="headerlink" href="#typing-users" title="Link to this heading"></a></h3>
 <p>Called when the state of currently typing users is changed</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">users</span></code>: A map of currently typing users, with their ids as keys</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">users</span></code>: A map of currently typing users, with their ids as keys</p></li>
 </ul>
 </dd>
 <dt>Examples:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Shows which users are currently typing</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;typing-users&quot;</span></code>: Shows which users are currently typing</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="plain">
-<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Permalink to this heading"></a></h3>
+</section>
+<section id="plain">
+<h3><span class="section-number">5.1.6. </span><code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code><a class="headerlink" href="#plain" title="Link to this heading"></a></h3>
 <p>Injected as a script file into the site</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Examples:</dt><dd><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;ask-reload&quot;</span></code>: A pop-up asks on page reload if this is the desired action</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;enforce-fullscreen&quot;</span></code>: Page content is grayed out, until a button is clicked that sends user into fullscreen. See <code class="docutils literal notranslate"><span class="pre">enforce-fullscreen_layout.json</span></code> in <code class="docutils literal notranslate"><span class="pre">examples</span></code> for an example layout</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;collapsible-task-instructions&quot;</span></code>: Hides and shows text on user clicks. This is useful for hiding lengthy task instructions until the user clicks on them on demand. See <code class="docutils literal notranslate"><span class="pre">collapsible-instructions_layout.json</span></code> in <code class="docutils literal notranslate"><span class="pre">examples</span></code> for an example layout.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;bounding-boxes&quot;</span></code>: Makes it possible for users to draw rectangles inside a designated drawing area (html element with the id <code class="docutils literal notranslate"><span class="pre">drawing-area</span></code>). Per default, drawn rectangles are not shared between users inside a room. If you wish for all users in a room to share a common canvas give all users inside the room the permission <code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;mouse-tracking&quot;</span></code>: Mouse movement and clicks inside the designated html element with the id <code class="docutils literal notranslate"><span class="pre">tracking-area</span></code> are registered. They can be handled by bots through the <code class="docutils literal notranslate"><span class="pre">mouse</span></code> event.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;live-typing&quot;</span></code>: Chat partners receive a preview of messages that are currently being typed. Typed messages can’t be edited in this mode. If a user started a message and stopped typing for 3sec, it is automatically submitted.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;keylogger&quot;</span></code>: Every keystroke of both users will be logged by slurk under the keyword <code class="docutils literal notranslate"><span class="pre">`keystroke`</span></code> together with a unique timestamp.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ask-reload&quot;</span></code>: A pop-up asks on page reload if this is the desired action</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;enforce-fullscreen&quot;</span></code>: Page content is grayed out, until a button is clicked that sends user into fullscreen. See <code class="docutils literal notranslate"><span class="pre">enforce-fullscreen_layout.json</span></code> in <code class="docutils literal notranslate"><span class="pre">examples</span></code> for an example layout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;collapsible-task-instructions&quot;</span></code>: Hides and shows text on user clicks. This is useful for hiding lengthy task instructions until the user clicks on them on demand. See <code class="docutils literal notranslate"><span class="pre">collapsible-instructions_layout.json</span></code> in <code class="docutils literal notranslate"><span class="pre">examples</span></code> for an example layout.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;bounding-boxes&quot;</span></code>: Makes it possible for users to draw rectangles inside a designated drawing area (html element with the id <code class="docutils literal notranslate"><span class="pre">drawing-area</span></code>). Per default, drawn rectangles are not shared between users inside a room. If you wish for all users in a room to share a common canvas give all users inside the room the permission <code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;mouse-tracking&quot;</span></code>: Mouse movement and clicks inside the designated html element with the id <code class="docutils literal notranslate"><span class="pre">tracking-area</span></code> are registered. They can be handled by bots through the <code class="docutils literal notranslate"><span class="pre">mouse</span></code> event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;live-typing&quot;</span></code>: Chat partners receive a preview of messages that are currently being typed. Typed messages can’t be edited in this mode. If a user started a message and stopped typing for 3sec, it is automatically submitted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;keylogger&quot;</span></code>: Every keystroke of both users will be logged by slurk under the keyword <code class="docutils literal notranslate"><span class="pre">`keystroke`</span></code> together with a unique timestamp.</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="document-ready">
-<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Permalink to this heading"></a></h3>
+</section>
+<section id="document-ready">
+<h3><span class="section-number">5.1.7. </span><code class="docutils literal notranslate"><span class="pre">&quot;document-ready&quot;</span></code><a class="headerlink" href="#document-ready" title="Link to this heading"></a></h3>
 <p>Called when the document is loaded</p>
-<dl class="docutils">
+<dl class="simple">
 <dt>Variables:</dt><dd><ul class="simple">
-<li>Everything defined from <code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code></li>
+<li><p>Everything defined from <code class="docutils literal notranslate"><span class="pre">&quot;plain&quot;</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <p>Additionally, some functions are guaranteed to exist:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">display_message(sender,</span> <span class="pre">time,</span> <span class="pre">message,</span> <span class="pre">privateMessage)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">display_image(sender,</span> <span class="pre">time,</span> <span class="pre">url,</span> <span class="pre">width,</span> <span class="pre">height,</span> <span class="pre">privateMessage)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">display_info(time,</span> <span class="pre">message)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">submit_text(text)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">submit_image(url,</span> <span class="pre">width,</span> <span class="pre">height)</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">submit_command(parameter)</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">display_message(sender,</span> <span class="pre">time,</span> <span class="pre">message,</span> <span class="pre">privateMessage)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">display_image(sender,</span> <span class="pre">time,</span> <span class="pre">url,</span> <span class="pre">width,</span> <span class="pre">height,</span> <span class="pre">privateMessage)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">display_info(time,</span> <span class="pre">message)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">submit_text(text)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">submit_image(url,</span> <span class="pre">width,</span> <span class="pre">height)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">submit_command(parameter)</span></code></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="layout-development-in-practice">
-<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+<section id="layout-development-in-practice">
+<h2><span class="section-number">5.2. </span>Layout development in practice<a class="headerlink" href="#layout-development-in-practice" title="Link to this heading"></a></h2>
 <p>Creating and adding your own layout to Slurk allows you to customize the design and functionality of the waiting and
 chat room without changing the static HTML and CSS files. It is possible to define and format new tags or to work with
 existing ones.</p>
@@ -339,8 +342,8 @@ existing ones.</p>
 </pre></div>
 </div>
 </div></blockquote>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

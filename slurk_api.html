@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>8. REST API for slurk &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -87,21 +90,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="rest-api-for-slurk">
-<span id="slurk-api"></span><h1><span class="section-number">8. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Permalink to this heading"></a></h1>
+  <section id="rest-api-for-slurk">
+<span id="slurk-api"></span><h1><span class="section-number">8. </span>REST API for slurk<a class="headerlink" href="#rest-api-for-slurk" title="Link to this heading"></a></h1>
 <p><a class="reference external" href="slurk_api_rapidoc.html" target="_blank">View in RapiDoc</a></p>
 <p>slurk uses a RESTful API to modify the underlying database. In the link above, the full documentation
 for each method is shown. When the slurk server is running, you can also visit <code class="docutils literal notranslate"><span class="pre">/rapidoc</span></code>, <code class="docutils literal notranslate"><span class="pre">/redoc</span></code>,
 or <code class="docutils literal notranslate"><span class="pre">/swagger-ui</span></code> to see the API and try it out directly.</p>
 <p>The API is more or less sorted in chronological order, as many tables require a previously returned
 value.</p>
-<div class="section" id="layouts-rooms-and-tasks">
-<h2><span class="section-number">8.1. </span>Layouts, Rooms, and Tasks<a class="headerlink" href="#layouts-rooms-and-tasks" title="Permalink to this heading"></a></h2>
+<section id="layouts-rooms-and-tasks">
+<h2><span class="section-number">8.1. </span>Layouts, Rooms, and Tasks<a class="headerlink" href="#layouts-rooms-and-tasks" title="Link to this heading"></a></h2>
 <p>A Layout defines what a room looks like. A room could either be a room which is created by hand,
 or it could be created from a task. For more information on layouts, have a look at <a class="reference internal" href="slurk_layouts.html#slurk-layouts"><span class="std std-ref">Layouts and Plugins</span></a>.</p>
-</div>
-<div class="section" id="users">
-<h2><span class="section-number">8.2. </span>Users<a class="headerlink" href="#users" title="Permalink to this heading"></a></h2>
+</section>
+<section id="users">
+<h2><span class="section-number">8.2. </span>Users<a class="headerlink" href="#users" title="Link to this heading"></a></h2>
 <p>A user is a human user, mostly with very limited permissions, or a bot. Every user needs a
 token to log in. While a token can register multiple users, it’s not possible to assign more
 than one token to a single user. Security and permissions are important aspects to consider when giving access to
@@ -111,21 +114,21 @@ html messages have to be avoided when giving out to human users, as they allow u
 <p>Also, the <code class="docutils literal notranslate"><span class="pre">&quot;api&quot;</span></code>-permissions should not be given to arbitrary or unknown users, as with the api-token, everything
 in the server can be accessed.</p>
 <p>For more information on permissions, see <a class="reference internal" href="slurk_permissions.html#slurk-permissions"><span class="std std-ref">Security and Permissions</span></a>.</p>
-</div>
-<div class="section" id="logging">
-<h2><span class="section-number">8.3. </span>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+</section>
+<section id="logging">
+<h2><span class="section-number">8.3. </span>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h2>
 <p>Almost any action in slurk is logged to evaluate the experiment at a later point. The logging endpoint
 can be used to filter for specific events or even add custom events.</p>
-<dl class="docutils">
+<dl>
 <dt>Note: when working without an external database (Postgres), the timestamps are saved without milliseconds:</dt><dd><div class="line-block">
 <div class="line">External database: <code class="docutils literal notranslate"><span class="pre">2022-11-22T13:32:49.133840</span></code></div>
 <div class="line">Internal database: <code class="docutils literal notranslate"><span class="pre">2022-11-22T13:32:49</span></code></div>
 </div>
 </dd>
 </dl>
-</div>
-<div class="section" id="video-and-audio">
-<h2><span class="section-number">8.4. </span>Video and Audio<a class="headerlink" href="#video-and-audio" title="Permalink to this heading"></a></h2>
+</section>
+<section id="video-and-audio">
+<h2><span class="section-number">8.4. </span>Video and Audio<a class="headerlink" href="#video-and-audio" title="Link to this heading"></a></h2>
 <p>Besides sending images and text messages or change some attribute at the client, slurk can
 connect to a <a class="reference external" href="https://docs.openvidu.io/en/2.19.0/" target="_blank">OpenVidu</a> server. To enable the
 OpenVidu module, see <a class="reference internal" href="slurk_deployment.html#slurk-deployment"><span class="std std-ref">Deployment of the system</span></a>.
@@ -136,8 +139,8 @@ by the API. The returned id then has to be passed to the room, which is used for
 After connecting to the room, the server checks if a user may subscribe or publish to
 the associated session. For this, they may have the <code class="docutils literal notranslate"><span class="pre">&quot;openvidu_role&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;SUBSCRIBER&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;PUBLISHER&quot;</span></code> assigned
 as permission.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Security and Permissions &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -79,8 +82,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="security-and-permissions">
-<span id="slurk-permissions"></span><h1>Security and Permissions<a class="headerlink" href="#security-and-permissions" title="Permalink to this heading"></a></h1>
+  <section id="security-and-permissions">
+<span id="slurk-permissions"></span><h1>Security and Permissions<a class="headerlink" href="#security-and-permissions" title="Link to this heading"></a></h1>
 <p>Security and permissions are important aspects to consider when giving access to
 bots and users. The permission should be set when creating tokens. For example, to
 give the user access to write texts and commands in a room for a specific task, you can set <code class="docutils literal notranslate"><span class="pre">send_message</span></code>
@@ -95,55 +98,51 @@ and <code class="docutils literal notranslate"><span class="pre">send_command</s
 </div>
 <p>Here is a list of permissions that can be granted to a User (bot or human participant):</p>
 <blockquote>
-<div><table border="1" class="docutils align-default">
-<colgroup>
-<col width="29%" />
-<col width="71%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">api</span></code></td>
-<td>Can call the api.</td>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">api</span></code></p></td>
+<td><p>Can call the api.</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_message</span></code></td>
-<td>Can send text messages.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">send_message</span></code></p></td>
+<td><p>Can send text messages.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">send_html_message</span></code></td>
-<td>Can send html messages.</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">send_html_message</span></code></p></td>
+<td><p>Can send html messages.</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_command</span></code></td>
-<td>Can submit commands.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">send_command</span></code></p></td>
+<td><p>Can submit commands.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">send_image</span></code></td>
-<td>Can send images.</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">send_image</span></code></p></td>
+<td><p>Can send images.</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">send_privately</span></code></td>
-<td>Can send private messages.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">send_privately</span></code></p></td>
+<td><p>Can send private messages.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code></td>
-<td>Can receive bounding_box events</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code></p></td>
+<td><p>Can receive bounding_box events</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">broadcast</span></code></td>
-<td>Can broadcast messages.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">broadcast</span></code></p></td>
+<td><p>Can broadcast messages.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">openvidu_role</span></code></td>
-<td>OpenVidu role for the associated session (“SUBSCRIBER” or “PUBLISHER”).</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">openvidu_role</span></code></p></td>
+<td><p>OpenVidu role for the associated session (“SUBSCRIBER” or “PUBLISHER”).</p></td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
-<div class="section" id="some-notes">
-<h2>Some notes:<a class="headerlink" href="#some-notes" title="Permalink to this heading"></a></h2>
+<section id="some-notes">
+<h2>Some notes:<a class="headerlink" href="#some-notes" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li>Commands can be used for text commands (e.g. “/done”) or clickable buttons.
+<li><p>Commands can be used for text commands (e.g. “/done”) or clickable buttons.
 In order to be able to issue them, a participant needs to have the
-<code class="docutils literal notranslate"><span class="pre">send_command</span></code> permission.</li>
-<li>The permissions <code class="docutils literal notranslate"><span class="pre">api</span></code>, <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code>, <code class="docutils literal notranslate"><span class="pre">send_image</span></code> and
-<code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code> are typically only given to bots.</li>
-<li>In order to receive bounding_box events, the bounding-boxes script needs to
-be enabled in the room layout.</li>
+<code class="docutils literal notranslate"><span class="pre">send_command</span></code> permission.</p></li>
+<li><p>The permissions <code class="docutils literal notranslate"><span class="pre">api</span></code>, <code class="docutils literal notranslate"><span class="pre">send_html_message</span></code>, <code class="docutils literal notranslate"><span class="pre">send_image</span></code> and
+<code class="docutils literal notranslate"><span class="pre">receive_bounding_box</span></code> are typically only given to bots.</p></li>
+<li><p>In order to receive bounding_box events, the bounding-boxes script needs to
+be enabled in the room layout.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

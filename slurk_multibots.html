@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>4. Pairing up participants and running multiple rooms &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,13 +89,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="pairing-up-participants-and-running-multiple-rooms">
-<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Permalink to this heading"></a></h1>
+  <section id="pairing-up-participants-and-running-multiple-rooms">
+<span id="slurk-multibots"></span><h1><span class="section-number">4. </span>Pairing up participants and running multiple rooms<a class="headerlink" href="#pairing-up-participants-and-running-multiple-rooms" title="Link to this heading"></a></h1>
 <p>In the following steps you will learn how to let bots and human users enter the slurk waiting room where users will be
 paired up and put into a new task-specific chatroom along with bots. We provide an example bot handling this mechanism:
 The <strong>concierge bot</strong> moves human users from the waiting room to a task room.</p>
-<div class="section" id="create-a-waiting-room-and-a-task">
-<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Permalink to this heading"></a></h2>
+<section id="create-a-waiting-room-and-a-task">
+<h2><span class="section-number">4.1. </span>Create a waiting room and a task<a class="headerlink" href="#create-a-waiting-room-and-a-task" title="Link to this heading"></a></h2>
 <p>First of all, we need a waiting room and a task. For the waiting room, we submit the layout. Let’s take the one
 provided in the slurk-bots repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/waiting_room_layout.json<span class="w"> </span>&gt;<span class="w"> </span>waiting_room_layout.json
@@ -116,9 +119,9 @@ Each task contains information about the number of users required in order to st
 $<span class="w"> </span><span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span>scripts/create_task.sh<span class="w">  </span><span class="s2">&quot;Echo Task&quot;</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="nv">$TASK_LAYOUT_ID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="k">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="assign-bots-to-rooms">
-<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Permalink to this heading"></a></h2>
+</section>
+<section id="assign-bots-to-rooms">
+<h2><span class="section-number">4.2. </span>Assign bots to rooms<a class="headerlink" href="#assign-bots-to-rooms" title="Link to this heading"></a></h2>
 <p>Each bot has special permissions that it requires. For our example bots those are provided as JSON files.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/concierge/concierge_bot_permissions.json<span class="w"> </span>&gt;<span class="w"> </span>concierge_bot_permissions.json
 $<span class="w"> </span>curl<span class="w"> </span>https://raw.githubusercontent.com/clp-research/slurk-bots/master/echo/echo_bot_permissions.json<span class="w"> </span>&gt;<span class="w"> </span>echo_bot_permissions.json
@@ -151,9 +154,9 @@ from the new terminal that contains the echo bot token:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="nv">$ECHO_TOKEN</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_USER</span><span class="o">=</span><span class="nv">$ECHO_USER</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SLURK_PORT</span><span class="o">=</span><span class="m">5000</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">ECHO_TASK_ID</span><span class="o">=</span><span class="nv">$TASK_ID</span><span class="w"> </span>--net<span class="o">=</span><span class="s2">&quot;host&quot;</span><span class="w"> </span>slurk/echo-bot
 </pre></div>
 </div>
-</div>
-<div class="section" id="create-user-tokens-for-the-task">
-<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Permalink to this heading"></a></h2>
+</section>
+<section id="create-user-tokens-for-the-task">
+<h2><span class="section-number">4.3. </span>Create user tokens for the task<a class="headerlink" href="#create-user-tokens-for-the-task" title="Link to this heading"></a></h2>
 <p>Now let’s create two user tokens from the original terminal (run the command twice) and specify the task:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>scripts/create_room_token.sh<span class="w"> </span><span class="nv">$WAITING_ROOM_ID</span><span class="w"> </span>examples/message_permissions.json<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$TASK_ID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.id<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/^&quot;\(.*\)&quot;$/\1/&#39;</span>
 </pre></div>
@@ -161,8 +164,8 @@ from the new terminal that contains the echo bot token:</p>
 <p>The last part of the command beginning with sed strips quotation marks from the token.
 Open two browsers or two private tabs, log in with two different tokens and wait for the concierge bot to move both
 users to a new room. The echo bot will also join this room and reply to every chat message.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1. Slurk: What’s this? &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -85,26 +88,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="slurk-what-s-this">
-<span id="slurk-about"></span><h1><span class="section-number">1. </span>Slurk: What’s this?<a class="headerlink" href="#slurk-what-s-this" title="Permalink to this heading"></a></h1>
+  <section id="slurk-what-s-this">
+<span id="slurk-about"></span><h1><span class="section-number">1. </span>Slurk: What’s this?<a class="headerlink" href="#slurk-what-s-this" title="Link to this heading"></a></h1>
 <p>Many fields of research have profited in the last years from the availability, through so-called “crowdworking platforms”, of a large pool of workers that can do small, web-based tasks. This has helped research in psychology as well as, dramatically so, research in artificial intelligence, where it made possible the collection of large amounts of labeled data from which models can be derived. While the common platforms offer templates for tasks such as image labeling or answering questions, there are no such templates for dialogue tasks, where more than one participant is needed at the same time.</p>
 <p>To facilitate web-based dialogue experiments, we built <strong>slurk</strong>. (Think: “slack for mechanical turk”…) Slurk is a chat server onto which human participants, as well as “bots”, can log on to interact. Conversations happen in <em>rooms</em>, which are closed off to each other: While the server can handle many separate conversations in parallel, a given user will only be in one room and hence in one conversation.</p>
 <p>We were specifically interested in multimodal dialogues, which involve more than just words. A paradigmatic example for such a type of dialogue would be a discussion about an image that is being shown to the users in a room. To enable such a setting, we distinguish in the interface presented to users between what we call the <em>display area</em>, where some media (e.g., an image) can be displayed, and the <em>chat</em> and <em>input</em> area, in which the chat history is shown and the user’s utterance is being composed, respectively. This display area can be controlled by a bot, which might cause the display to change in response to what was said. Bots in slurk have far-reaching control over what human users in a room can type and over what they can see. This provides a way to specify and control a dialogue task programmatically.</p>
-<div class="figure align-center" id="id1">
+<figure class="align-center" id="id1">
 <span id="screenshot-image"></span><a class="reference internal image-reference" href="_images/example_interaction.png"><img alt="_images/example_interaction.png" src="_images/example_interaction.png" style="width: 1030.8px; height: 648.0px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.1 </span><span class="caption-text">An example with two human users, one bot, and an image being shown in the display area</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
-</div>
-<div class="section" id="some-basic-concepts">
-<h2><span class="section-number">1.1. </span>Some basic concepts<a class="headerlink" href="#some-basic-concepts" title="Permalink to this heading"></a></h2>
-<dl class="docutils">
-<dt>Bots</dt><dd>Bots are little client programs (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can
+<figcaption>
+<p><span class="caption-number">Fig. 1.1 </span><span class="caption-text">An example with two human users, one bot, and an image being shown in the display area</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="some-basic-concepts">
+<h2><span class="section-number">1.1. </span>Some basic concepts<a class="headerlink" href="#some-basic-concepts" title="Link to this heading"></a></h2>
+<dl>
+<dt>Bots</dt><dd><p>Bots are little client programs (written in python, and connecting to the slurk server via <cite>socket.io</cite>) that can
 enter rooms as well. They can both interact with human clients (e.g. through text messages or images) and communicate
 with the server by sending commands and responding to socket events. Unlike human users, bots can be in several rooms,
 being responsible for handling certain dialogue <em>tasks</em>. Defining an experimental or data collection setting typically
-includes writing one or multiple bots.</dd>
-<dt>Rooms</dt><dd>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
+includes writing one or multiple bots.</p>
+</dd>
+<dt>Rooms</dt><dd><p>Rooms are collections of users (humans and bots) that can talk to each other. Human users are always in exactly one
 room. The concierge example bot provides the <strong>Waiting Room</strong>, where users wait until a pre-determined number of members
-is reached (let’s say, 2), in which case all members are moved to a newly created task-specific room.</dd>
+is reached (let’s say, 2), in which case all members are moved to a newly created task-specific room.</p>
+</dd>
 <dt>Technical concepts</dt><dd><p><strong>Events</strong>: Slurk is driven by events emitted by the server. All events have a certain type and corresponding
 information, which can be processed by bots and client-side scripts.</p>
 <p><strong>API</strong>: Bots can communicate with the server using a <a class="reference internal" href="slurk_api.html#slurk-api"><span class="std std-ref">REST API for slurk</span></a>, causing the server to emit corresponding
@@ -117,17 +124,17 @@ public server here), access is regulated via tokens. Tokens need to be created i
 logging in with the token) to a specific task/room type.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="a-simple-experiment">
-<h2><span class="section-number">1.2. </span>A simple experiment<a class="headerlink" href="#a-simple-experiment" title="Permalink to this heading"></a></h2>
+</section>
+<section id="a-simple-experiment">
+<h2><span class="section-number">1.2. </span>A simple experiment<a class="headerlink" href="#a-simple-experiment" title="Link to this heading"></a></h2>
 <p>For experiments, we want to invite users to task-specific rooms. Users can take part via tokens which serve as the
 password during the login. When users open the slurk URL, then they will see a login screen initially. Here, users
 may give themselves a name and they must insert the token. The user will then be newly created in the database.</p>
 <p>The user will be automatically transferred to the room for which the token was generated. Therefore, we have to create
 an experiment room before we can generate tokens for an experiment. The sequence is: <code class="docutils literal notranslate"><span class="pre">rooms</span> <span class="pre">-&gt;</span> <span class="pre">tokens</span> <span class="pre">-&gt;</span> <span class="pre">users</span></code>.
 Bots also are represented as users.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

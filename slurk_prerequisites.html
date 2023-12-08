@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2. Prerequisites &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -94,62 +97,62 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="prerequisites">
-<span id="slurk-prerequisites"></span><h1><span class="section-number">2. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h1>
+  <section id="prerequisites">
+<span id="slurk-prerequisites"></span><h1><span class="section-number">2. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h1>
 <p>Slurk was developed and tested on UNIX-systems only. We therefore recommend using it on such or using WSL for Windows.
 The easiest way to use the system is using Docker. For this, <code class="docutils literal notranslate"><span class="pre">docker</span></code> is recommended.</p>
 <ul class="simple">
-<li>If you are operating on Ubuntu, then follow <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a></li>
-<li>If you are operating on Windows 10, then follow <a class="reference internal" href="#label-install-wsl"><span class="std std-ref">Prepare Windows 10</span></a></li>
+<li><p>If you are operating on Ubuntu, then follow <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a></p></li>
+<li><p>If you are operating on Windows 10, then follow <a class="reference internal" href="#label-install-wsl"><span class="std std-ref">Prepare Windows 10</span></a></p></li>
 </ul>
 <p>For other operating systems, please see the <a class="reference external" href="https://docs.docker.com/get-docker/" target="_blank">official docker documentation</a>.</p>
-<div class="section" id="prepare-windows-10">
-<span id="label-install-wsl"></span><h2><span class="section-number">2.1. </span>Prepare Windows 10<a class="headerlink" href="#prepare-windows-10" title="Permalink to this heading"></a></h2>
+<section id="prepare-windows-10">
+<span id="label-install-wsl"></span><h2><span class="section-number">2.1. </span>Prepare Windows 10<a class="headerlink" href="#prepare-windows-10" title="Link to this heading"></a></h2>
 <p>Docker cannot easily run on Windows by default. Thus we enable the Windows Subsystem for Linux.
 Make sure that Windows 10 has the latest updates installed:</p>
 <ul class="simple">
-<li>For x64 systems: Version 1903 or higher, with Build 18362 or higher.</li>
-<li>For ARM64 systems: Version 2004 or higher, with Build 19041 or higher.</li>
+<li><p>For x64 systems: Version 1903 or higher, with Build 18362 or higher.</p></li>
+<li><p>For ARM64 systems: Version 2004 or higher, with Build 19041 or higher.</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This guide follows the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/install-win10" target="_blank">official WSL2 documentation</a>, so have a look into these for more details.
+<p class="admonition-title">Note</p>
+<p>This guide follows the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/install-win10" target="_blank">official WSL2 documentation</a>, so have a look into these for more details.
 These instructions use experimental features for Docker on Windows and thus could be outdated at any time.
 Furthermore, this guide is a response to a <a class="reference external" href="https://github.com/clp-research/slurk/issues/99" target="_blank">Problem with getting an admin token (Ubuntu on WSL)</a>.</p>
 </div>
-<div class="section" id="setting-up-wsl-2">
-<h3><span class="section-number">2.1.1. </span>Setting up WSL 2<a class="headerlink" href="#setting-up-wsl-2" title="Permalink to this heading"></a></h3>
+<section id="setting-up-wsl-2">
+<h3><span class="section-number">2.1.1. </span>Setting up WSL 2<a class="headerlink" href="#setting-up-wsl-2" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
-<li>Type “PowerShell” into the search field. Right-click on the Windows PowerShell and then select <em>run as administrator</em>.</li>
-<li>Enable WSL with the following command:</li>
+<li><p>Type “PowerShell” into the search field. Right-click on the Windows PowerShell and then select <em>run as administrator</em>.</p></li>
+<li><p>Enable WSL with the following command:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>dism.exe<span class="w"> </span>/online<span class="w"> </span>/enable-feature<span class="w"> </span>/featurename:Microsoft-Windows-Subsystem-Linux<span class="w"> </span>/all<span class="w"> </span>/norestart
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Upgrade to WSL2 with the following command:</li>
+<li><p>Upgrade to WSL2 with the following command:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>dism.exe<span class="w"> </span>/online<span class="w"> </span>/enable-feature<span class="w"> </span>/featurename:VirtualMachinePlatform<span class="w"> </span>/all<span class="w"> </span>/norestart
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Restart the system</li>
-<li>Download the <a class="reference external" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank">Linux Kernel update package</a></li>
-<li>Double-click the update package downloaded in the previous step. Follow the installation steps.</li>
-<li>(Optional) If step 6 results in an error <em>update only applies to machines with the Windows subsystem for Linux</em>: Type into the search field “Turn Windows features on or off”. Open the program. Deselect <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Open the program again and this time select <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Try running step 6 again.</li>
-<li>Set WSL2 as the default for linux distributions:</li>
+<li><p>Restart the system</p></li>
+<li><p>Download the <a class="reference external" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank">Linux Kernel update package</a></p></li>
+<li><p>Double-click the update package downloaded in the previous step. Follow the installation steps.</p></li>
+<li><p>(Optional) If step 6 results in an error <em>update only applies to machines with the Windows subsystem for Linux</em>: Type into the search field “Turn Windows features on or off”. Open the program. Deselect <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Open the program again and this time select <em>Virtual Machine Platform</em> and <em>Windows Subsystem for Linux</em> and click OK. Restart your system. Try running step 6 again.</p></li>
+<li><p>Set WSL2 as the default for linux distributions:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wsl<span class="w"> </span>--set-default-version<span class="w"> </span><span class="m">2</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="install-ubuntu-20-04-1-using-the-app-store">
-<h3><span class="section-number">2.1.2. </span>Install Ubuntu-20.04.1 using the App Store<a class="headerlink" href="#install-ubuntu-20-04-1-using-the-app-store" title="Permalink to this heading"></a></h3>
+</section>
+<section id="install-ubuntu-20-04-1-using-the-app-store">
+<h3><span class="section-number">2.1.2. </span>Install Ubuntu-20.04.1 using the App Store<a class="headerlink" href="#install-ubuntu-20-04-1-using-the-app-store" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
-<li>After the installation is complete click <em>Launch</em></li>
-<li>Set a Unix username and password</li>
-<li>Open a Powershell</li>
-<li>Check the used WSL version for each distribution using PS:</li>
+<li><p>After the installation is complete click <em>Launch</em></p></li>
+<li><p>Set a Unix username and password</p></li>
+<li><p>Open a Powershell</p></li>
+<li><p>Check the used WSL version for each distribution using PS:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wsl<span class="w"> </span>--list<span class="w"> </span>--verbose
 NAME<span class="w">                   </span>STATE<span class="w">           </span>VERSION
@@ -157,51 +160,51 @@ Ubuntu-20.04<span class="w">           </span>Running<span class="w">         </
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>Open a shell for the Ubuntu sub-system and follow the <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a> guide.</li>
+<li><p>Open a shell for the Ubuntu sub-system and follow the <a class="reference internal" href="#label-install-ubuntu"><span class="std std-ref">Install docker into Ubuntu</span></a> guide.</p></li>
 </ol>
-</div>
-</div>
-<div class="section" id="install-docker-into-ubuntu">
-<span id="label-install-ubuntu"></span><h2><span class="section-number">2.2. </span>Install docker into Ubuntu<a class="headerlink" href="#install-docker-into-ubuntu" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+<section id="install-docker-into-ubuntu">
+<span id="label-install-ubuntu"></span><h2><span class="section-number">2.2. </span>Install docker into Ubuntu<a class="headerlink" href="#install-docker-into-ubuntu" title="Link to this heading"></a></h2>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This guide follows the <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">official docker documentation</a>, so have a look into these for more details.</p>
+<p class="admonition-title">Note</p>
+<p>This guide follows the <a class="reference external" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">official docker documentation</a>, so have a look into these for more details.</p>
 </div>
 <ol class="arabic simple">
-<li>Uninstall old versions:</li>
+<li><p>Uninstall old versions:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>remove<span class="w"> </span>docker<span class="w"> </span>docker-engine<span class="w"> </span>docker.io<span class="w"> </span>containerd<span class="w"> </span>runc
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Install docker using the repository:</li>
+<li><p>Install docker using the repository:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 $<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>apt-transport-https<span class="w"> </span>ca-certificates<span class="w"> </span>curl<span class="w"> </span>gnupg-agent<span class="w"> </span>software-properties-common
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Add Docker’s official GPG key:</li>
+<li><p>Add Docker’s official GPG key:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>apt-key<span class="w"> </span>add<span class="w"> </span>-
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Use the following command to set up the stable repository:</li>
+<li><p>Use the following command to set up the stable repository:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span><span class="s2">&quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2"> stable&quot;</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>Install the docker engine:</li>
+<li><p>Install the docker engine:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 $<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>docker-ce<span class="w"> </span>docker-ce-cli<span class="w"> </span>containerd.io
 </pre></div>
 </div>
-</div>
-<div class="section" id="potential-after-installation-steps">
-<h2><span class="section-number">2.3. </span>Potential after-installation steps<a class="headerlink" href="#potential-after-installation-steps" title="Permalink to this heading"></a></h2>
+</section>
+<section id="potential-after-installation-steps">
+<h2><span class="section-number">2.3. </span>Potential after-installation steps<a class="headerlink" href="#potential-after-installation-steps" title="Link to this heading"></a></h2>
 <p>Start the docker daemon manually (if not already started):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>service<span class="w"> </span>docker<span class="w"> </span>status
 $<span class="w"> </span>sudo<span class="w"> </span>service<span class="w"> </span>docker<span class="w"> </span>start
@@ -221,40 +224,40 @@ $<span class="w"> </span>sudo<span class="w"> </span>usermod<span class="w"> </s
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>hello-world
 </pre></div>
 </div>
-</div>
-<div class="section" id="checkout-slurk">
-<h2><span class="section-number">2.4. </span>Checkout slurk<a class="headerlink" href="#checkout-slurk" title="Permalink to this heading"></a></h2>
+</section>
+<section id="checkout-slurk">
+<h2><span class="section-number">2.4. </span>Checkout slurk<a class="headerlink" href="#checkout-slurk" title="Link to this heading"></a></h2>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">WSL users need to checkout the project using the WSL otherwise the line-endings are not correct!</p>
+<p class="admonition-title">Warning</p>
+<p>WSL users need to checkout the project using the WSL otherwise the line-endings are not correct!</p>
 </div>
 <ol class="arabic simple">
-<li>Generate a ssh key pair (with defaults):</li>
+<li><p>Generate a ssh key pair (with defaults):</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-keygen
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Upload or copy the generated public key to your <a class="reference external" href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account" target="_blank">github SSH settings</a></li>
-<li>Clone the repository:</li>
+<li><p>Upload or copy the generated public key to your <a class="reference external" href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account" target="_blank">github SSH settings</a></p></li>
+<li><p>Clone the repository:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:clp-research/slurk.git
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Go into the slurk top directory.</li>
+<li><p>Go into the slurk top directory.</p></li>
 </ol>
-</div>
-<div class="section" id="run-with-docker-recommended">
-<h2><span class="section-number">2.5. </span>Run with docker (recommended)<a class="headerlink" href="#run-with-docker-recommended" title="Permalink to this heading"></a></h2>
+</section>
+<section id="run-with-docker-recommended">
+<h2><span class="section-number">2.5. </span>Run with docker (recommended)<a class="headerlink" href="#run-with-docker-recommended" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li>Go into the slurk top directory. Build your slurk docker image:</li>
+<li><p>Go into the slurk top directory. Build your slurk docker image:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span><span class="s2">&quot;slurk/server&quot;</span><span class="w"> </span>-f<span class="w"> </span>Dockerfile<span class="w"> </span>.
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Start the server:</li>
+<li><p>Start the server:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SLURK_DOCKER</span><span class="o">=</span>slurk
 $<span class="w"> </span>scripts/start_server.sh
@@ -262,23 +265,23 @@ $<span class="w"> </span>scripts/start_server.sh
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Fetch the admin token:</li>
+<li><p>Fetch the admin token:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>scripts/read_admin_token.sh
 <span class="m">01234567</span>-89ab-cdef-0123-456789abcdef
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>(Optional) In case the output of the above script is empty, you may find valuable information in the logs:</li>
+<li><p>(Optional) In case the output of the above script is empty, you may find valuable information in the logs:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>logs<span class="w"> </span><span class="nv">$SLURK_DOCKER</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="run-without-docker">
-<h2><span class="section-number">2.6. </span>Run without docker<a class="headerlink" href="#run-without-docker" title="Permalink to this heading"></a></h2>
+</section>
+<section id="run-without-docker">
+<h2><span class="section-number">2.6. </span>Run without docker<a class="headerlink" href="#run-without-docker" title="Link to this heading"></a></h2>
 <ol class="arabic">
-<li><p class="first">(Optional) Create and activate a virtual environment (with Python 3.9).</p>
+<li><p>(Optional) Create and activate a virtual environment (with Python 3.9).</p>
 <blockquote>
 <div><p>With <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html" target="_blank">Miniconda or Conda</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>slurk<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
@@ -292,14 +295,14 @@ $<span class="w"> </span><span class="nb">source</span><span class="w"> </span>.
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install dependencies:</p>
+<li><p>Install dependencies:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Start the server and get the admin token:</p>
+<li><p>Start the server and get the admin token:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>scripts/start_server.sh
 <span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Starting<span class="w"> </span>gunicorn<span class="w"> </span><span class="m">20</span>.1.0
@@ -313,9 +316,9 @@ admin<span class="w"> </span>token:
 </div></blockquote>
 </li>
 </ol>
-</div>
-<div class="section" id="side-notes">
-<h2><span class="section-number">2.7. </span>Side-notes<a class="headerlink" href="#side-notes" title="Permalink to this heading"></a></h2>
+</section>
+<section id="side-notes">
+<h2><span class="section-number">2.7. </span>Side-notes<a class="headerlink" href="#side-notes" title="Link to this heading"></a></h2>
 <p>The installation of the docker-ce using the WSL showed “failures”, but these seem not to have an impact on the docker engine.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Setting<span class="w"> </span>up<span class="w"> </span>docker-ce-cli<span class="w"> </span><span class="o">(</span><span class="m">5</span>:19.03.13~3-0~ubuntu-focal<span class="o">)</span><span class="w"> </span>...
 Setting<span class="w"> </span>up<span class="w"> </span>pigz<span class="w"> </span><span class="o">(</span><span class="m">2</span>.4-1<span class="o">)</span><span class="w"> </span>...
@@ -344,10 +347,11 @@ W:<span class="w"> </span>mdadm:<span class="w"> </span>failed<span class="w"> <
 </div>
 <p>This is discussed in the following issue:</p>
 <blockquote class="pull-quote">
-<div><a class="reference external" href="https://github.com/microsoft/WSL/issues/4903" target="_blank">microsoft/WSL#4903 (mdadm 4.1-2 causes unrecoverable grub config loop in dpkg, apt)</a>
-Spiritually similar #4763 (over there it was LVM). WSL2 does not load the Linux kernel with GRUB (and WSL1 doesn’t load a Linux kernel at all). Linux RAID (mdadm) isn’t applicable for lack of Multiple Disks. Somehow those were installed on your system. Purging those packages should help.</div></blockquote>
-</div>
-</div>
+<div><p><a class="reference external" href="https://github.com/microsoft/WSL/issues/4903" target="_blank">microsoft/WSL#4903 (mdadm 4.1-2 causes unrecoverable grub config loop in dpkg, apt)</a>
+Spiritually similar #4763 (over there it was LVM). WSL2 does not load the Linux kernel with GRUB (and WSL1 doesn’t load a Linux kernel at all). Linux RAID (mdadm) isn’t applicable for lack of Multiple Disks. Somehow those were installed on your system. Purging those packages should help.</p>
+</div></blockquote>
+</section>
+</section>
 
 
            </div>

@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3. Getting Started &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -87,10 +90,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="getting-started">
-<span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
-<div class="section" id="hello-world-a-basic-test-of-the-server">
-<h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Permalink to this heading"></a></h2>
+  <section id="getting-started">
+<span id="slurk-gettingstarted"></span><h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<section id="hello-world-a-basic-test-of-the-server">
+<h2><span class="section-number">3.1. </span>“Hello World”: A basic test of the server<a class="headerlink" href="#hello-world-a-basic-test-of-the-server" title="Link to this heading"></a></h2>
 <p>First, spin up a slurk server. Either use the server from <a class="reference internal" href="slurk_prerequisites.html#slurk-prerequisites"><span class="std std-ref">Prerequisites</span></a> or see <a class="reference internal" href="slurk_deployment.html#slurk-deployment"><span class="std std-ref">Deployment of the system</span></a> for more information on this.</p>
 <p>Next, the admin token is needed. If you are running slurk from docker, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SLURK_TOKEN</span><span class="o">=</span><span class="k">$(</span>scripts/read_admin_token.sh<span class="k">)</span>
@@ -130,15 +133,17 @@ fedcba98-7654-3210-fedc-ba9876543210
 you just generated, and click “enter chatroom”.</p>
 <p>This should transport you to the chat interface, where you then can
 happily type messages which no one will see (apart from you, that is).</p>
-<div class="figure align-center" id="id2">
+<figure class="align-center" id="id2">
 <span id="screenshot-void"></span><a class="reference internal image-reference" href="_images/single_user.png"><img alt="_images/single_user.png" src="_images/single_user.png" style="width: 476.5px; height: 245.75px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
-</div>
+<figcaption>
+<p><span class="caption-number">Fig. 3.1 </span><span class="caption-text">A single user talking to no one in particular</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <p>This has confirmed that the server is working correctly, but so far
 this hasn’t really been very exciting. So we move on.</p>
-</div>
-<div class="section" id="hello-world-hello-other-browser-testing-with-two-browsers">
-<span id="twobrowsers"></span><h2><span class="section-number">3.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Permalink to this heading"></a></h2>
+</section>
+<section id="hello-world-hello-other-browser-testing-with-two-browsers">
+<span id="twobrowsers"></span><h2><span class="section-number">3.2. </span>“Hello World” – “Hello Other Browser”: Testing with two browsers<a class="headerlink" href="#hello-world-hello-other-browser-testing-with-two-browsers" title="Link to this heading"></a></h2>
 <p>Run the steps from the previous section (starting the server, creating
 a token and logging in), and then create an additional token by
 running the create_token script with the same parameters again. <strong>From
@@ -152,9 +157,9 @@ machines, and so you can have a chat with an actual distinct person.)</p>
 <p>This has demonstrated the very basic capabilities – providing a chat
 environment – but so far there has been no use made of the display
 window. Let’s change that by inviting a bot into our chat room.</p>
-</div>
-<div class="section" id="chatting-with-a-bot">
-<h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Permalink to this heading"></a></h2>
+</section>
+<section id="chatting-with-a-bot">
+<h2><span class="section-number">3.3. </span>Chatting with a bot<a class="headerlink" href="#chatting-with-a-bot" title="Link to this heading"></a></h2>
 <p>Without additional environment variables, the server uses an in-memory
 database and resets on every restart of the server. If you restarted the
 server, make sure you have created the layout and the room.</p>
@@ -184,13 +189,15 @@ in our example the echo-bot is used. Start the bot with the provided token</p>
 </pre></div>
 </div>
 <p>After the bot has logged in, you can chat with yourself.</p>
-<div class="figure align-center" id="id3">
+<figure class="align-center" id="id3">
 <span id="id1"></span><a class="reference internal image-reference" href="_images/echo-bot.png"><img alt="_images/echo-bot.png" src="_images/echo-bot.png" style="width: 476.0px; height: 245.75px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Chatting with myself</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
-</div>
-</div>
-<div class="section" id="examining-the-log-files">
-<h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Permalink to this heading"></a></h2>
+<figcaption>
+<p><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Chatting with myself</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="examining-the-log-files">
+<h2><span class="section-number">3.4. </span>Examining the log files<a class="headerlink" href="#examining-the-log-files" title="Link to this heading"></a></h2>
 <p>The point of all this, however, is not just to make interaction
 <em>possible</em>, it is to <em>record</em> these interactions to be able to later
 study them or train models on them.</p>
@@ -211,8 +218,8 @@ bring into the lab. If you want to make use of crowdsourcing, though,
 you will want to be able to automatically pair up participants and
 create task rooms for each pair. This will be explained in the next
 section.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

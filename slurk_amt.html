@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>10. Getting participants from Amazon Mechanical Turk &mdash; slurk 2.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=51b770b3"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,17 +87,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="getting-participants-from-amazon-mechanical-turk">
-<span id="slurk-amt"></span><h1><span class="section-number">10. </span>Getting participants from Amazon Mechanical Turk<a class="headerlink" href="#getting-participants-from-amazon-mechanical-turk" title="Permalink to this heading"></a></h1>
+  <section id="getting-participants-from-amazon-mechanical-turk">
+<span id="slurk-amt"></span><h1><span class="section-number">10. </span>Getting participants from Amazon Mechanical Turk<a class="headerlink" href="#getting-participants-from-amazon-mechanical-turk" title="Link to this heading"></a></h1>
 <p>The main purpose of Slurk is to allow collection of big data on crowd sourcing platforms such as Amazon
 Mechanical Turk (AMT). In this section we will explain how to use Slurk’s functionality in order to publish
 human intelligence tasks (HITs) on AMT, retrieve results and metadata about AMT workers, accept or reject submitted tasks,
 and send payments taking into account dialogue data stored in Slurk.</p>
 <p>The process behind transferring data from AMT to Slurk can be presented as a scheme on the image below.</p>
-<div class="figure align-center" id="id3">
+<figure class="align-center" id="id3">
 <a class="reference internal image-reference" href="_images/slurk_amt.png"><img alt="_images/slurk_amt.png" src="_images/slurk_amt.png" style="width: 362.4px; height: 162.0px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Slurk-AMT integration</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
-</div>
+<figcaption>
+<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Slurk-AMT integration</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <p>Basically, with each HIT we publish a link, which allows workers to enter Slurk.
 These links can be used multiple times, guaranteeing that if worker decides to return the task,
 it will be accessible for the others to complete. Also it significantly reduces amount of time spent for
@@ -107,10 +112,10 @@ Slurk stores data corresponding to the concrete room in a separate .log file. In
 is stored in the MySQL database, which can be used to, for example, invalidate links, which are used by
 malicious players to enter Slurk outside of AMT. With this, we make sure that retrieved data cannot be harmed
 in any way.</p>
-<div class="section" id="building-and-publishing-hits">
-<h2><span class="section-number">10.1. </span>Building and Publishing HITs<a class="headerlink" href="#building-and-publishing-hits" title="Permalink to this heading"></a></h2>
+<section id="building-and-publishing-hits">
+<h2><span class="section-number">10.1. </span>Building and Publishing HITs<a class="headerlink" href="#building-and-publishing-hits" title="Link to this heading"></a></h2>
 <p>In AMT setting, requester (HIT publisher) needs to specify the format that will be used to display HITs to workers.
-Slurk uses HTMLQuestion scheme <a class="footnote-reference" href="#id2" id="id1">[1]</a> as it allows requesters to have more control over the data collection, putting less
+Slurk uses HTMLQuestion scheme <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> as it allows requesters to have more control over the data collection, putting less
 efforts into the process of embedding application with AMT.
 In your XML template you will have to specify structure of your task. It can be a slideshow, a simple HTML webpage with the list
 of instructions, or even a video.</p>
@@ -125,20 +130,24 @@ Links have to be generated with the separate Python script, that accesses your r
 as you want to have for your task.
 Each link is later embedded into the HTML of a HIT webpage, and also can be non-/visible depending on the situation.
 In particular, if worker decides to preview the HIT, he will see the following on the display:</p>
-<div class="figure align-center" id="id4">
+<figure class="align-center" id="id4">
 <a class="reference internal image-reference" href="_images/amt_preview.png"><img alt="_images/amt_preview.png" src="_images/amt_preview.png" style="width: 641.4px; height: 452.4px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 10.2 </span><span class="caption-text">HIT Preview page for Slurk</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
-</div>
+<figcaption>
+<p><span class="caption-number">Fig. 10.2 </span><span class="caption-text">HIT Preview page for Slurk</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <p>Once the HIT accepted, game link is displayed to the player:</p>
-<div class="figure align-center" id="id5">
+<figure class="align-center" id="id5">
 <a class="reference internal image-reference" href="_images/amt_accept.png"><img alt="_images/amt_accept.png" src="_images/amt_accept.png" style="width: 640.8px; height: 429.59999999999997px;" /></a>
-<p class="caption"><span class="caption-number">Fig. 10.3 </span><span class="caption-text">HIT Accept page for Slurk</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
-</div>
+<figcaption>
+<p><span class="caption-number">Fig. 10.3 </span><span class="caption-text">HIT Accept page for Slurk</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <p>Given Slurk, meta information and XML structure of your HITs along with qualification requirements, you can publish your tasks on
 either AMT Sandbox (testing environment on AMT) or AMT itself.</p>
-</div>
-<div class="section" id="reviewing-hits-extracting-data">
-<h2><span class="section-number">10.2. </span>Reviewing HITs, Extracting data<a class="headerlink" href="#reviewing-hits-extracting-data" title="Permalink to this heading"></a></h2>
+</section>
+<section id="reviewing-hits-extracting-data">
+<h2><span class="section-number">10.2. </span>Reviewing HITs, Extracting data<a class="headerlink" href="#reviewing-hits-extracting-data" title="Link to this heading"></a></h2>
 <p>As Figures above indicate, players are required to type a special game token into the respective field.
 This game token is produced by the bots, and allows you to associate a worker with the provided data.
 Slurk is also able to store dialogues in the format of logs along with the MySQL database, which contains
@@ -147,13 +156,13 @@ received data and what it contains.</p>
 <p>In general, players get a game token in the Waiting Room if they were not paired up with another worker.
 It helps us to differentiate between workers who actually participated in the dialogue task and those, who were only waiting
 for someone to join the game:</p>
-<div class="figure align-center">
+<figure class="align-center">
 <a class="reference internal image-reference" href="_images/token_wb.png"><img alt="_images/token_wb.png" src="_images/token_wb.png" style="width: 313.8px; height: 265.2px;" /></a>
-</div>
+</figure>
 <p>Upon task completion, players also receive a special game token, which indicates that they have completed the task.</p>
-<div class="figure align-center">
+<figure class="align-center">
 <a class="reference internal image-reference" href="_images/token_gm.png"><img alt="_images/token_gm.png" src="_images/token_gm.png" style="width: 320.25px; height: 111.75px;" /></a>
-</div>
+</figure>
 <p>These tokens are stored in the log files, which contain all information about the game process. The structure of
 logs in Slurk is build in .json format. Each event (sending images or messages, issuing commands) is stored as a
 separate dictionary inside the log file. Slurk is able to track rooms and players along with the type of event (joining,
@@ -165,14 +174,14 @@ can be wrapped up, and with the help of AMT API used to define the amount of (bo
 <p>In the end we have all necessary elements for analysing our data: log files and database with information about players and tokens.
 Additionally, with the help of several simple scripts, we are able to pay workers depending on the game token that they have submitted.</p>
 <hr class="docutils" />
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For more information on AMT HTMLQuestion Data Scheme, please visit <a class="reference external" href="https://docs.aws.amazon.com/AWSMechTurk/latest/AWSMturkAPI/ApiReference_HTMLQuestionArticle.html" target="_blank">the official documentation</a>.</td></tr>
-</tbody>
-</table>
-</div>
-</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>For more information on AMT HTMLQuestion Data Scheme, please visit <a class="reference external" href="https://docs.aws.amazon.com/AWSMechTurk/latest/AWSMturkAPI/ApiReference_HTMLQuestionArticle.html" target="_blank">the official documentation</a>.</p>
+</aside>
+</aside>
+</section>
+</section>
 
 
            </div>
