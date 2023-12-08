@@ -70,7 +70,8 @@ $(document).ready(() => {
         is_typing = 0;
         let code = e.keyCode || e.which;
         // 13: RETURN key
-        if (code === 13) {
+        if (code === 13 && !e.shiftKey) {
+            e.preventDefault();
             let text = $(e.target).val();
             $(e.target).val("");
             if (text === "") {
