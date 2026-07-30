@@ -18,6 +18,7 @@ function _getTime(timestamp) {
 }
 
 function display_message(user, time, message, privateMessage, html = false) {
+    html = true
     if (self_user === undefined) {
         return;
     }
